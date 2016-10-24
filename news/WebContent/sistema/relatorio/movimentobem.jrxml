@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="movimentobem" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0a4480b-4c1f-4976-b9a6-1dc368c514ad">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="482"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="id" class="java.lang.Integer"/>
+	<parameter name="localorigem" class="java.lang.String"/>
+	<parameter name="localdestino" class="java.lang.String"/>
+	<parameter name="nomeProprietarioDestino" class="java.lang.String"/>
+	<parameter name="cnpjProprietarioDestino" class="java.lang.String"/>
+	<parameter name="nomeTransportadora" class="java.lang.String"/>
+	<parameter name="cnpjTransportadora" class="java.lang.String"/>
+	<parameter name="nomeResponsavelRecepcao" class="java.lang.String"/>
+	<parameter name="cpfResponsavelRecepcao" class="java.lang.String"/>
+	<parameter name="rgResponsavelRecepcao" class="java.lang.String"/>
+	<parameter name="dataemissao" class="java.util.Date"/>
+	<parameter name="datasaida" class="java.util.Date"/>
+	<parameter name="espacoLocado" class="java.lang.String"/>
+	<parameter name="comFrete" class="java.lang.String"/>
+	<parameter name="motivo" class="java.lang.String"/>
+	<parameter name="solicitante" class="java.lang.String"/>
+	<field name="itens" class="java.util.List"/>
+	<variable name="variable1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="110" splitType="Stretch">
+			<image onErrorType="Blank">
+				<reportElement x="13" y="10" width="61" height="59" uuid="805c1488-24d8-451e-96b6-ce068c10d88e"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="37" y="22" width="518" height="20" uuid="a8acbf31-1231-4d90-acd7-7b01ca8fd1c6"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[MOVIMENTAÇÃO DE BENS ENTRE POSTOS/FILIAIS]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="13" y="81" width="530" height="4" forecolor="#999999" backcolor="#999999" uuid="2bc14158-e0a6-483b-bf35-fa2103e08559"/>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="323" splitType="Stretch">
+			<rectangle>
+				<reportElement x="13" y="185" width="532" height="54" uuid="ffdd7315-6150-4e47-87a4-1a12c89cd3cb"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="13" y="43" width="532" height="40" uuid="e42e46a6-acb7-4eb0-ad83-712f3e5164e7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="13" y="97" width="532" height="71" uuid="c53f203b-e33d-426c-9f37-433b6ca18184"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="13" y="31" width="162" height="20" uuid="9e9d0ca0-e56f-4056-8077-8a8f41a6d96f"/>
+				<textElement>
+					<font size="7" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Informações do Local de Origem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="85" width="162" height="20" uuid="e0b7fa12-8c3b-4b45-8f10-6da52d605060"/>
+				<textElement>
+					<font size="7" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Informações do Local de Destino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="172" width="180" height="20" uuid="7e2c758a-3b95-4f0a-a21a-c6336a0236dc"/>
+				<textElement>
+					<font size="7" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Informações da Transportadora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="366" y="5" width="79" height="16" uuid="6a3c6131-7fc8-4ef5-a344-7d654717b833"/>
+				<text><![CDATA[Data da Saída:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="142" width="78" height="14" uuid="e5974b6e-cbb6-4e6f-b161-b9da8b6df244"/>
+				<text><![CDATA[Local é locado?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="155" y="142" width="55" height="14" uuid="a3ab4ca0-a2ca-43a1-90c8-783919196282"/>
+				<text><![CDATA[Proprietário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="142" width="30" height="14" uuid="147e1b39-6bc3-49af-8773-3905f40aa465"/>
+				<text><![CDATA[CNPJ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="192" width="30" height="15" uuid="d9368635-d87c-4992-9cca-89e9162e07f9"/>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="401" y="192" width="30" height="14" uuid="20c8c642-07e0-450b-af0e-7492a80e16df"/>
+				<text><![CDATA[CNPJ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="214" width="61" height="13" uuid="6d6479a6-f2d6-4cf7-81e9-b5a52c6b7c26"/>
+				<text><![CDATA[Com Frete?]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="13" y="256" width="532" height="54" uuid="38266fe5-6b92-4987-baaa-b57631e21f92"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="13" y="243" width="100" height="20" uuid="a4350f74-c851-4a7e-bcbc-c35b68f04acb"/>
+				<textElement>
+					<font size="7" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Finalidade/Motivo]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="13" y="318" width="532" height="2" forecolor="#999999" backcolor="#999999" uuid="3758d07f-b6ee-4847-a2cb-7cbba824c7af"/>
+			</rectangle>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="445" y="5" width="100" height="15" uuid="5c075e95-bf57-48b3-8c95-c5f1254e71c3"/>
+				<textFieldExpression><![CDATA[$P{datasaida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="49" width="505" height="32" uuid="0b62ece6-b92a-44ae-b44a-2c55d9c48b1c"/>
+				<textFieldExpression><![CDATA[$P{localorigem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="103" width="505" height="37" uuid="c8497487-a6f6-41a0-b9b8-fb6355e4572c"/>
+				<textFieldExpression><![CDATA[$P{localdestino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="142" width="185" height="24" uuid="03c6145c-cf37-425f-b6b2-2a85e54bb359"/>
+				<textFieldExpression><![CDATA[$P{nomeProprietarioDestino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="431" y="142" width="98" height="15" uuid="b82efc3d-e8be-45d9-8619-9e32498caccd"/>
+				<textFieldExpression><![CDATA[$P{cnpjProprietarioDestino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="55" y="192" width="338" height="15" uuid="eabfa62a-3ced-4b4f-92cb-43f06b9b3060"/>
+				<textFieldExpression><![CDATA[$P{nomeTransportadora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="431" y="192" width="100" height="15" uuid="14d45ea5-3e70-4453-a786-2571f5050c13"/>
+				<textFieldExpression><![CDATA[$P{cnpjTransportadora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="24" y="263" width="505" height="46" uuid="4c73569d-69d9-4092-a925-dc402aef198f"/>
+				<textFieldExpression><![CDATA[$P{motivo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="5" width="89" height="16" uuid="d45b31c8-56dd-4db0-ba3f-29f53d7a0103"/>
+				<text><![CDATA[Movimento número:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="103" y="5" width="53" height="15" uuid="9afe867c-d572-48a9-b15b-ea48fe349d3a"/>
+				<textFieldExpression><![CDATA[$P{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="82" y="214" width="100" height="13" uuid="13b20c1e-88a3-4771-81bd-e8e896df7d4a"/>
+				<textFieldExpression><![CDATA[$P{comFrete}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="99" y="142" width="41" height="14" uuid="16b9b1bd-4a13-4550-8f14-53150d91911f"/>
+				<textFieldExpression><![CDATA[$P{espacoLocado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<subreport isUsingCache="false">
+				<reportElement x="0" y="1" width="555" height="17" uuid="8bfd3e45-fc05-4423-95fa-1b1c02edb49f"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{itens})]]></dataSourceExpression>
+				<subreportExpression><![CDATA["movimentoitens.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="80">
+			<rectangle>
+				<reportElement x="13" y="18" width="248" height="44" uuid="10476214-d0e2-4dc3-a62d-cd38d3e69701"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="271" y="18" width="274" height="44" uuid="fa955b38-8ebf-4575-afaf-f9187f3be9cc"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="18" y="19" width="100" height="15" uuid="03c45d9c-705f-428c-8acf-2aaebae6fb41"/>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="47" width="30" height="20" uuid="56648fe0-19dc-4eb9-a11d-5522c8771ea1"/>
+				<text><![CDATA[CPF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="33" width="30" height="20" uuid="3c6908de-dbe3-4109-950e-d8137545db18"/>
+				<text><![CDATA[RG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="275" y="19" width="30" height="20" uuid="b5b66473-17a0-4626-810a-e4f6d3b76c04"/>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="271" y="5" width="150" height="13" uuid="acb6c6ab-8b6c-4a30-a6b4-8736786743dd"/>
+				<textElement>
+					<font size="7" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Responsável do Recebimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="5" width="56" height="13" uuid="7b48e7a2-e734-4ce9-9531-64b37d045306"/>
+				<textElement>
+					<font size="7" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Solicitante]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="22" y="32" width="227" height="28" uuid="28e4afa4-62d0-4581-8ffd-403cd8a5b980"/>
+				<textFieldExpression><![CDATA[$P{solicitante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="19" width="238" height="14" uuid="54de255c-7bc9-41de-aaa4-606f457bdbe6"/>
+				<textFieldExpression><![CDATA[$P{nomeResponsavelRecepcao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="33" width="238" height="15" uuid="8105604a-808f-4fa8-9bf0-52aa866be6a9"/>
+				<textFieldExpression><![CDATA[$P{rgResponsavelRecepcao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="47" width="238" height="15" uuid="d0d8e334-344d-4afa-aab5-864ca539903f"/>
+				<textFieldExpression><![CDATA[$P{cpfResponsavelRecepcao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

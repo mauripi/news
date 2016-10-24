@@ -1,0 +1,43 @@
+body{
+	top:0px;
+	margin-top:0px;
+	font: 85% tohoma;		
+}
+
+#tudo {
+background-color: #fff;
+width: 98%;
+margin: 0 auto;
+text-align: center;
+height: 98%;
+
+}
+.rodape{
+	background-color: #FF4500;
+	color: white;
+	font-weight: bold;	
+}
+
+.ui-layout-north{
+    z-index:auto !important;
+    overflow:visible !important;  
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+
+.ui-panelgrid tr, .ui-panelgrid td {
+	border: none !important; 
+	text-align: left;
+	font: 98% verdana;
+	}
+	
+.ui-accordion { width: 100%;}
+.ui-accordion .ui-accordion-header { cursor: pointer; position: relative; margin-top: 1px; zoom: 1; }
+.ui-accordion .ui-accordion-li-fix { display: inline; }
+.ui-accordion .ui-accordion-header-active { border-bottom: 0 !important; }
+.ui-accordion .ui-accordion-header a {font-size: 8px; padding: .5em .5em .5em 2em; }
+.ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
+.ui-accordion .ui-accordion-content {font-size: 18px; padding: 1em 2.2em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; }
+.ui-accordion .ui-accordion-content-active { display: block; }

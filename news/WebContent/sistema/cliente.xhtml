@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - COMPRAS</ui:define>
+<ui:define name="conteudo">
+
+
+<f:facet name="header">Cadastro de Clientes</f:facet>
+<h:form id="formCad">
+	<p:panel rendered="#{acessoBean.temAcessoCliente}">
+		<p:panelGrid columns="3">
+			<h:outputLabel value="Nome"/> 
+			<h:outputLabel value="CNPJ / CPF"/>
+			<h:outputLabel value="Endereço completo"/>
+			<p:inputText value="#{clienteMB.cli.nome}" placeholder="Nome completo do cliente" size="50" disabled="#{clienteMB.controlaCadastro eq 0}"/>
+			<p:inputMask mask="99999999999?999"  value="#{clienteMB.cli.cnpjcpf}" placeholder="Informe o cnpj ou cpf" size="50" disabled="#{clienteMB.controlaCadastro eq 0}"/>
+			<p:inputText value="#{clienteMB.cli.endereco}" placeholder="Informe o endereço" size="50" disabled="#{clienteMB.controlaCadastro eq 0}"/>			
+			<f:facet name="footer">
+				<p:commandButton value="Contatos"  onclick="PF('dlg2').show();" update=":formCont:cont" disabled="#{clienteMB.controlaCadastro != 2}"/>			
+			</f:facet>
+		</p:panelGrid>
+		<f:facet name="footer">
+			<p:panelGrid columns="6" style="border: none !important; ">
+				<p:commandButton value="Novo" action="#{clienteMB.novo}" update=":formCad" />
+				<p:commandButton value="Editar" action="#{clienteMB.edita}" update=":formCad" disabled="#{clienteMB.cli.id==null}" />
+				<p:commandButton value="Remover" action="#{clienteMB.exclui}" disabled="#{clienteMB.cli.id==null}" update=":formCad" />
+				<p:commandButton value="Limpar" action="#{clienteMB.limpaCadastro}" update=":formCad" />
+				<p:commandButton value="Imprimir" ajax="false" action="${clienteMB.imprimir}" disabled="#{clienteMB.cli.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
+				<p:commandButton value="Gravar" action="#{clienteMB.grava}" update=":formCad,:formMsg" />
+			</p:panelGrid>
+		</f:facet>
+<hr></hr>
+	    <p:dataTable id="cli" var="a" value="#{clienteMB.clientes}" selectionMode="single" 
+	    		rows="10" paginator="true" paginatorPosition="bottom"
+	    		selection="#{clienteMB.cliSel}" rowKey="#{a.id}" emptyMessage="">
+	    	<f:facet name="header">Clientes cadastrados</f:facet>
+			<p:ajax event="rowSelect" listener="#{clienteMB.selecao}" update=":formCad" />
+	        <p:column headerText="Nome" width="30%">
+	            <h:outputText value="#{a.nome}" />
+	        </p:column>
+	        <p:column headerText="CNPJ / CPF" width="20%">
+	            <h:outputText value="#{a.cnpjcpf}" />
+	        </p:column>
+	        <p:column headerText="Endereço" width="50%">
+	            <h:outputText value="#{a.endereco}" />
+	        </p:column>	        
+	    </p:dataTable>
+	</p:panel>
+</h:form>
+
+<h:form id="formCont" style="font-size:small;">
+	<p:dialog header="Contatos do cliente" widgetVar="dlg2"  height="400" width="800" closable="true" closeOnEscape="true">
+	   <p:commandButton value="Novo" action="#{clienteMB.newContact}" update="cont"/>
+	   <p:dataTable id="cont" var="c" value="#{clienteMB.contatos}" editable="true" editMode="cell" widgetVar="cellContato" emptyMessage="Não há contatos">
+
+	      <p:ajax event="cellEdit" listener="#{clienteMB.onCellEdit}" update=":formMsg" />
+          
+		   <p:column headerText="Nome" width="30%">
+	           <p:cellEditor>
+	               <f:facet name="output"><h:outputText value="#{c.nome}" /></f:facet>
+	               <f:facet name="input"><p:inputText value="#{c.nome}" style="width:96%" label="Nome"/></f:facet>
+	           </p:cellEditor>
+	       </p:column>
+		   <p:column headerText="E-mail" width="30%">
+	           <p:cellEditor>
+	               <f:facet name="output"><h:outputText value="#{c.email}" /></f:facet>
+	               <f:facet name="input"><p:inputText value="#{c.email}" style="width:96%" label="E-mail"/></f:facet>
+	           </p:cellEditor>
+	       </p:column>	       
+		   <p:column headerText="Telefone" width="15%">
+	           <p:cellEditor>
+	               <f:facet name="output"><h:outputText value="#{c.tel1}" /></f:facet>
+	               <f:facet name="input"><p:inputText value="#{c.tel1}" style="width:96%" label="Telefone"/></f:facet>
+	           </p:cellEditor>
+	       </p:column>	       
+		   <p:column headerText="Telefone2" width="15%">
+	           <p:cellEditor>
+	               <f:facet name="output"><h:outputText value="#{c.tel2}" /></f:facet>
+	               <f:facet name="input"><p:inputText value="#{c.tel2}" style="width:96%" label="Telefone2"/></f:facet>
+	           </p:cellEditor>
+	       </p:column>		       
+            <p:column headerText="" style="text-align:center" width="10%">
+                <p:commandButton value="X" update="cont" alt="Remover" label="Remover">
+                    <p:collector value="#{c}" removeFrom="#{clienteMB.contatos}" unique="true"/>
+                </p:commandButton>
+            </p:column>	       
+	   </p:dataTable>
+	   <f:facet name="footer">
+	   		<p:commandButton value="Fechar" onclick="PF('dlg2').hide();" />
+	   </f:facet>
+	</p:dialog> 
+</h:form>
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

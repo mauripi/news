@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - ENGENHARIA</ui:define>
+<ui:define name="conteudo">
+<ui:debug hotkey="x"/>
+<f:facet name="header">Cadastro dos Rateios</f:facet>
+
+<h:form id="formCad">
+	<p:panel rendered="#{acessoBean.temAcessoControleSinal}"  style="width:50%;">
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Praça"/>   
+	        <p:autoComplete id="pra" value="#{notadebitoMB.praca}" completeMethod="#{notadebitoMB.completePraca}" size="50"
+	        		disabled="#{notadebitoMB.controlaCadastro eq 0}" placeholder="Digite o nome da Praça" 
+                    var="d" itemLabel="#{d.nome}" itemValue="#{d}" converter="pracaConverter" forceSelection="true"
+                    required="true" requiredMessage="Informe a Praça" />
+
+			<h:outputLabel value="Mês"/> 
+			
+			<p:inputText value="#{notadebitoMB.debito.mes}"  size="8" maxlength="2" disabled="#{notadebitoMB.controlaCadastro eq 0}"/>
+
+			<h:outputLabel value="Ano"/> 
+			<p:inputText value="#{notadebitoMB.debito.ano}"  size="8" maxlength="4" disabled="#{notadebitoMB.controlaCadastro eq 0}"/>
+			<h:outputLabel value="Valor"/> 
+			<p:inputText id="vlr" value="#{notadebitoMB.debito.valor}" size="13" disabled="#{notadebitoMB.controlaCadastro == 0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+			</p:inputText>							
+
+		</p:panelGrid>
+		<f:facet name="footer">
+			<p:panelGrid columns="6" style="border: none !important; ">
+				<p:commandButton value="Novo" action="#{notadebitoMB.novo}" update=":formCad" />
+				<p:commandButton value="Remover" action="#{notadebitoMB.exclui}" disabled="#{notadebitoMB.debito.id==null}" update=":formCad" />
+				<p:commandButton value="Limpar" action="#{notadebitoMB.limpaCadastro}" update=":formCad" />
+				<p:commandButton value="Gravar" action="#{notadebitoMB.grava}" update=":formCad,:formMsg" />
+			</p:panelGrid>
+		</f:facet>
+		<br></br>
+		<hr></hr>
+	    <p:dataTable id="tbdesp" var="d" value="#{notadebitoMB.debitos}" selectionMode="single" 
+	     	selection="#{notadebitoMB.debitoSel}" rowKey="#{d.id}" emptyMessage="">
+	    	<f:facet name="header">Gastos cadastrado</f:facet>
+			<p:ajax event="rowSelect" listener="#{notadebitoMB.selecao}" update=":formCad" />
+			
+	        <p:column headerText="Mes" width="8%"  filterBy="#{d.mes}"  filterMatchMode="contains">
+	            <h:outputText value="#{d.mes}" />
+	        </p:column>
+	        <p:column headerText="Ano" width="10%" filterBy="#{d.ano}"  filterMatchMode="contains">
+	            <h:outputText value="#{d.ano}" />
+	        </p:column>	        			
+	        <p:column headerText="Praça" width="40%" filterBy="#{d.praca.nome}"  filterMatchMode="contains">
+	            <h:outputText value="#{d.praca.nome}" />
+	        </p:column>              	 
+	        <p:column headerText="Valor" style="width:9%;text-align: right;">
+				<h:outputText value="#{d.valor}" style="ttext-align: right;">
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>	
+		    </p:column>	   	               	        
+	    </p:dataTable>
+	</p:panel>
+</h:form>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="6000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

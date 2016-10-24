@@ -1,0 +1,29 @@
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header  {
+	/*height: 20px !important;
+	border-radius:0 !important;*/
+}
+.ui-widget input, .ui-widget select, .ui-widget textarea {
+    font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
+    font-size: 1.5em !important;   
+}
+
+.ui-widget label{
+	font-weight: bold;
+	font-size: 1.0em !important;
+}
+
+.oneMenu  > *{
+	/*height: 20px !important;*/
+	border-radius:0 !important;	
+	font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
+    font-size: 1.5em !important; 
+}
+
+.ui-datatable thead th, .ui-datatable tfoot td{
+	/*font-size: 0.8em !important;*/
+}
+
+
+.ui-datatable .ui-datatable-header {
+	/*font-size: 0.8em !important;*/
+}

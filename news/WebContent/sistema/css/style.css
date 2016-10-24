@@ -1,0 +1,152 @@
+body{
+	top:0px;
+	margin-top:0px;
+	font: 0.5em tohoma;		
+}
+
+.ui-datatable-odd {
+    background: #ffffff;
+}
+
+.ui-datatable-even {
+    background: #F2F5F9;
+}
+
+#tudo {
+background-color: #fff;
+width: 98%;
+margin: 0 auto;
+text-align: center;
+height: 98%;
+
+}
+.rodape{
+	background-color: #FF4500;
+	color: white;
+	font-weight: bold;
+	
+}
+#formrel{
+	position:absolute;
+	top:30%;
+	left:40%;
+	margin-top:-50px;
+	margin-left:-50px;
+}
+
+/*-http://www.webstandards.blog.br/exemplos/alinhamento-horizontal-vertical-css-relativo-elemento.html*/
+.form {
+	/*background-color:#F7F6F1;
+	border:2px solid #CCC;*/
+	font: 85% arial, hevetica, sans-serif;
+	padding:5px;margin: 5px; 
+	padding-left:20px;
+	padding-right:20px;
+	text-align: left !important;
+}
+
+.form fieldset {
+	background-color: silver;
+	border: solid 1px window;
+	font: 90% arial, hevetica, sans-serif;
+	padding:2px;
+	
+}
+
+.bt {
+	float: left;
+	text-align: left;
+	padding:2px;
+	margin:2px;
+	margin-right: 10px;
+	vertical-align:middle;
+}
+
+.label {
+	float: left;
+	text-align: left;
+	padding:2px;
+	margin:2px;
+	margin-right: 10px;
+	font
+}
+
+.input {
+	border:1px solid #CCC;
+	font:140% "Trebuchet MS";
+	vertical-align:middle;
+	display: block;
+	float: left;
+	margin:2px;
+	margin-right: 10px;
+}
+.form br {clear: left;}
+
+.painel{
+	background-color: #696969;
+	border: none !important;
+	text-align: center !important;
+	vertical-align: top;
+
+}
+
+.panelFat tr, .panelFat td{
+	background-color: #E8E8E8 !important;
+	color: red;
+	font-weight: bold;
+	font-family: fantasy; 
+	text-align: right;
+	width: 100%;
+}
+
+.cadAddFollowup tr, .cadAddFollowup td {
+	background-color: #E8E8E8 !important;
+	color: red;
+	font-weight: bold;
+	font-family: fantasy; 
+}
+.fat tr, .fat td {
+	width: 100%;
+	background-color: #E8E8E8 !important;
+	color: red;
+	font-weight: bold;
+	font-family: fantasy; 
+	text-align:left !important;
+	font-size: 90%;
+	border: none !important;
+}
+
+.cotAddProduto tr, .cotAddProduto td {
+	/*background-color: #696969 !important;*/
+	color: white;
+	font-weight: bold;
+	font-family: fantasy; 
+}
+.mm tr, .mm td {
+    background-color: #E8E8E8 !important;
+    border: none !important;
+}
+
+.ui-layout-north{
+    z-index:auto !important;
+    overflow:visible !important;  
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+
+.ui-panelgrid tr, .ui-panelgrid td {
+	border: none !important; 
+	text-align: left;
+	font: 98% verdana;
+}
+		
+.ui-accordion { width: 100%;}
+.ui-accordion .ui-accordion-header { cursor: pointer; position: relative; margin-top: 1px; zoom: 1; }
+.ui-accordion .ui-accordion-li-fix { display: inline; }
+.ui-accordion .ui-accordion-header-active { border-bottom: 0 !important; }
+.ui-accordion .ui-accordion-header a {font-size: 12px; padding: .5em .5em .5em 2em; }
+.ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
+.ui-accordion .ui-accordion-content {font-size: 18px; padding: 0.2em 2.2em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; }
+.ui-accordion .ui-accordion-content-active { display: block; }

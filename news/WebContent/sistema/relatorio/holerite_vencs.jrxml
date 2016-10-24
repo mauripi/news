@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="holerite_vencs" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f63596fe-9599-4a9f-b1f6-88f7221a10cc">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="311"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="22d37401-8a88-4b92-ace6-8fc35cada03e"/>
+	<parameter name="base" class="java.lang.Object"/>
+	<field name="codigo" class="java.lang.Integer"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="referencia" class="java.lang.Double"/>
+	<field name="provento" class="java.lang.Double"/>
+	<field name="desconto" class="java.lang.Double"/>
+	<variable name="subSemImp" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement uuid="f887e801-11c6-4567-b584-c1f5797be1f2" x="317" y="10" width="51" height="14"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Referência]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="88bf97f5-e70c-461c-9949-a88d442e0420" x="23" y="9" width="500" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="e1302634-48ca-4bb9-903f-618ca30aaa00" x="74" y="10" width="238" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1e9387f8-bdff-483a-b784-a82565f7c164" x="29" y="10" width="31" height="14"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="47285542-fc1e-41fc-bac6-d52998a20769" x="462" y="10" width="51" height="14"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descontos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2591aa84-59e5-449c-a6a8-37f4a1ab575b" x="388" y="10" width="51" height="14"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proventos]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="db216353-d29b-4b2d-b399-d9c446bc21a6" x="23" y="23" width="500" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField>
+				<reportElement uuid="b56a2902-b7ff-4a4b-9ba8-60c62c74d68e" x="29" y="0" width="31" height="14"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="74767f79-7069-40d5-a1c1-0e4f7b580ad6" x="74" y="0" width="238" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement uuid="531c7fb4-d607-4381-acdf-896dc570e85a" x="317" y="0" width="51" height="14"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{referencia}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement uuid="2ef43098-6a3b-4c6b-ac08-9c239319cd2b" x="388" y="0" width="51" height="14"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{provento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement uuid="99ee3e3d-89c9-4342-ac6a-c14ed7ce821b" x="462" y="0" width="51" height="14"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{desconto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

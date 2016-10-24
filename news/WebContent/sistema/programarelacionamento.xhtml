@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - MARKETING</ui:define>
+<ui:define name="conteudo">
+
+<f:facet name="header">Relacionamento de Programas Ibope X Midia Mais</f:facet>
+<h:form id="formRela">
+<p:panel rendered="true" style="width:70%;">
+
+   <p:dataTable id="tb" var="r" value="#{programarelacionamentoMB.relacionamento}" editable="true" editMode="cell" widgetVar="cellCars">
+       <f:facet name="header">
+           Relacionamento de Programas Ibope X Midia Mais
+       </f:facet>
+ 
+       <p:column headerText="Midia Mais">
+             <h:outputText value="#{r.programamidiamais.nome}" />
+       </p:column>
+ 
+       <p:column headerText="Ibope">
+           <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{r.programaibope.nome}" /></f:facet>
+               
+               <f:facet name="input"><p:autoComplete id="ib" value="#{r.programaibope}" converter="programaibopeConverter" maxResults="15"
+       						completeMethod="#{programarelacionamentoMB.completeNumber}" effect="fade" var="i" itemLabel="#{i.codigoibope} - #{i.nome}" itemValue="#{i}"
+       						 /></f:facet>
+           </p:cellEditor>
+       </p:column>
+
+   </p:dataTable>
+<f:facet name="footer"> <p:commandButton value="Gravar" action="#{programarelacionamentoMB.gravar}" update=":formRela,:formMsg"/> </f:facet>
+</p:panel>
+</h:form>	
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

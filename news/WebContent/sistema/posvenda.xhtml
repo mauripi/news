@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - MARKETING</ui:define>
+<ui:define name="conteudo">
+
+<f:facet name="header">Pós Vendas</f:facet>
+<p:panel rendered="true">
+	<h:form id="formTb">
+		<p:panelGrid columns="6">
+			<h:outputLabel value="Mês Inicial" style="padding-rigth : 15px;"/>
+			<h:outputLabel value="Ano Inicial" style="padding-rigth: 15px;"/>
+			<h:outputLabel value="Mês Final" style="padding-rigth : 15px;"/>
+			<h:outputLabel value="Ano Final" style="padding-rigth: 15px;"/>
+			<h:outputLabel value="" style="padding-rigth : 15px;"/>
+			<h:outputLabel value="" style="padding-rigth: 15px;"/>	
+								
+	        <p:selectOneMenu id="mesi" value="#{posvendaMB.mesi}" style="width:85px">
+	            <f:selectItem itemLabel="" itemValue="0" />
+	            <f:selectItem itemLabel="Janeiro" itemValue="1" />
+	            <f:selectItem itemLabel="Fevereiro" itemValue="2" />
+	            <f:selectItem itemLabel="Março" itemValue="3" />
+	            <f:selectItem itemLabel="Abril" itemValue="4" />
+	            <f:selectItem itemLabel="Maio" itemValue="5" />
+	            <f:selectItem itemLabel="Junho" itemValue="6" />
+	            <f:selectItem itemLabel="Julho" itemValue="7" />
+	            <f:selectItem itemLabel="Agosto" itemValue="8" />
+	            <f:selectItem itemLabel="Setembro" itemValue="9" />
+	            <f:selectItem itemLabel="Ourubro" itemValue="10" />
+	            <f:selectItem itemLabel="Novembro" itemValue="11" />
+	            <f:selectItem itemLabel="Dezembro" itemValue="12" />
+	        </p:selectOneMenu>
+	        
+	        <p:selectOneMenu id="anoi" value="#{posvendaMB.anoi}" style="width:85px">
+	            <f:selectItem itemLabel="2015" itemValue="2015" />
+	            <f:selectItem itemLabel="2016" itemValue="2016" />
+	            <f:selectItem itemLabel="2017" itemValue="2017" />
+	            <f:selectItem itemLabel="2018" itemValue="2018" />
+	            <f:selectItem itemLabel="2019" itemValue="2019" />
+	        </p:selectOneMenu>
+	        
+	        <p:selectOneMenu id="mesf" value="#{posvendaMB.mesf}" style="width:85px">
+	            <f:selectItem itemLabel="" itemValue="0" />
+	            <f:selectItem itemLabel="Janeiro" itemValue="1" />
+	            <f:selectItem itemLabel="Fevereiro" itemValue="2" />
+	            <f:selectItem itemLabel="Março" itemValue="3" />
+	            <f:selectItem itemLabel="Abril" itemValue="4" />
+	            <f:selectItem itemLabel="Maio" itemValue="5" />
+	            <f:selectItem itemLabel="Junho" itemValue="6" />
+	            <f:selectItem itemLabel="Julho" itemValue="7" />
+	            <f:selectItem itemLabel="Agosto" itemValue="8" />
+	            <f:selectItem itemLabel="Setembro" itemValue="9" />
+	            <f:selectItem itemLabel="Ourubro" itemValue="10" />
+	            <f:selectItem itemLabel="Novembro" itemValue="11" />
+	            <f:selectItem itemLabel="Dezembro" itemValue="12" />
+	        </p:selectOneMenu>
+	        
+	        <p:selectOneMenu id="anof" value="#{posvendaMB.anof}" style="width:85px">
+	            <f:selectItem itemLabel="2015" itemValue="2015" />
+	            <f:selectItem itemLabel="2016" itemValue="2016" />
+	            <f:selectItem itemLabel="2017" itemValue="2017" />
+	            <f:selectItem itemLabel="2018" itemValue="2018" />
+	            <f:selectItem itemLabel="2019" itemValue="2019" />
+	        </p:selectOneMenu>
+			
+			<p:commandButton value="Ok" action="#{posvendaMB.listar}" update="tb" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" />
+		    <h:commandLink>
+		        <p:graphicImage value="img/excel.png" />
+		        <p:dataExporter type="xls" target="tb" fileName="posvendas" pageOnly="true"/>
+		    </h:commandLink>			
+		</p:panelGrid>
+	
+		<p:dataTable id="tb" var="p" value="#{posvendaMB.posvendas}">
+
+        <p:columnGroup type="header">
+            <p:row>
+                <p:column rowspan="2" headerText="Data" />
+                <p:column rowspan="2" headerText="Hora" />
+                <p:column rowspan="2" headerText="Mês" />
+                <p:column rowspan="2" headerText="Ano" />
+                <p:column rowspan="2" headerText="Duração" />
+                <p:column rowspan="2" headerText="Programa" />
+                <p:column rowspan="2" headerText="Cliente"  filterBy="#{p.cliente}" filterMatchMode="contains"/>
+                <p:column rowspan="2" headerText="Título" />
+                <p:column colspan="4" headerText="Live / Total de Domicilios" />
+                <p:column colspan="4" headerText="Live / Total de Individuos" />
+            </p:row>
+            <p:row>
+                <p:column colspan="1" headerText="Rat% (Pond.)" />
+                <p:column colspan="1" headerText="Rat# (Media(Pond.))" />
+                <p:column colspan="1" headerText="Conv% (Soma)" />
+                <p:column colspan="1" headerText="Conv# (Soma)" />  
+                <p:column colspan="1" headerText="Rat% (Pond.)" />
+                <p:column colspan="1" headerText="Rat# (Media(Pond.))" />
+                <p:column colspan="1" headerText="Conv% (Soma)" />
+                <p:column colspan="1" headerText="Conv# (Soma)" />                
+            </p:row>
+
+        </p:columnGroup>
+
+	        <p:column width="2%" headerText="Data">
+				<h:outputText value="#{p.data}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>	            
+	        </p:column>		 
+		    <p:column width="2%" headerText="Hora" >
+		        <h:outputText value="#{p.hora}" />
+		    </p:column>		 
+		    <p:column width="1%" headerText="Mês" >
+		        <h:outputText value="#{posvendaMB.nomeMes(p.mes)}"  />
+		    </p:column>		 
+		    <p:column width="0.5%" headerText="Ano">
+		        <h:outputText value="#{p.ano}" />
+		    </p:column>
+	        <p:column width="2%" headerText="Duração">
+	            <h:outputText value="#{p.duracao}" >
+	            	<f:convertNumber type="number" pattern="#000000"/>	           																
+				</h:outputText>	 
+	        </p:column>		 
+		    <p:column width="20%" headerText="Programa" filterBy="#{p.programamidiamais}" filterMatchMode="contains">
+		        <h:outputText value="#{p.programamidiamais}" />
+		    </p:column>		 
+		    <p:column  width="15%" headerText="Cliente" filterBy="#{p.cliente}" filterMatchMode="contains">
+		        <h:outputText value="#{p.cliente}" />
+		    </p:column>		 
+		    <p:column width="15%" headerText="Título">
+		        <h:outputText value="#{p.titulo}" />
+		    </p:column>
+		    		    
+		    <p:column width="0.5%" headerText="Rat% (Pond.)">
+		        <h:outputText value="#{p.dratper}" />
+		    </p:column>		
+		    <p:column width="0.5%" headerText="Rat# (Media(Pond.))">
+		        <h:outputText value="#{p.dratabs}" />
+		    </p:column>	
+		    <p:column width="0.5%" headerText="Conv% (Soma)">
+		        <h:outputText value="#{p.dcovper}" />
+		    </p:column>	
+		    <p:column width="0.5%" headerText="Conv# (Soma)">
+		        <h:outputText value="#{p.dcovabs}" />
+		    </p:column>	
+		    <p:column width="0.5%" headerText="Rat% (Pond.)">
+		        <h:outputText value="#{p.iratper}" />
+		    </p:column>	
+		    <p:column width="0.5%" headerText="Rat# (Media(Pond.))">
+		        <h:outputText value="#{p.iratabs}" />
+		    </p:column>	
+		    <p:column width="0.5%" headerText="Conv% (Soma)">
+		        <h:outputText value="#{p.icovper}" />
+		    </p:column>	
+		    <p:column width="0.5%" headerText="Conv# (Soma)">
+		        <h:outputText value="#{p.icovabs}" />
+		    </p:column>	
+		    		    		    		    		    		    
+		</p:dataTable>
+		
+	
+	</h:form>	
+</p:panel>
+
+<p:dialog modal="false" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false"  >
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

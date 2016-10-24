@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core"  
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+</h:head>
+    	
+<h:body>
+	
+<ui:composition template="templates/geral.xhtml">
+  <ui:define name="titulo">RECORD NEWS</ui:define>
+	<ui:define name="conteudo">
+
+	<p:panel id="panel" rendered="#{acessoBean.temAcessoUsuario}">
+		<h:form  id="formCad" style="width:90%;font-size: 110%;">
+	
+				<p:panelGrid columns="4">
+					<h:outputLabel value="Cód."/>
+					<h:outputLabel value="Nome"/>
+					<h:outputLabel value="Chapa"/>
+					<h:outputLabel value="CPF"/>
+					<p:outputLabel value="#{usuarioMB.login.id}" disabled="#{usuarioMB.controlaCadastro==0}" size="5"/>
+					<p:inputText value="#{usuarioMB.login.nome}" disabled="#{usuarioMB.controlaCadastro==0}" size="50"/>				
+					<p:inputText  value="#{usuarioMB.login.chapa}" disabled="#{usuarioMB.controlaCadastro==0}" size="8"/>
+					<p:inputText  value="#{usuarioMB.login.cpf}" disabled="#{usuarioMB.controlaCadastro==0}" size="15"/>				
+				</p:panelGrid>
+				<p:panelGrid columns="4">				
+					<h:outputLabel value="E-mail"/>
+					<h:outputLabel value="Filial"/>
+					<h:outputLabel value="Centro de Custo"/>
+					<h:outputLabel value="Ativo"/>
+					<p:inputText  value="#{usuarioMB.login.email}" disabled="#{usuarioMB.controlaCadastro==0}" size="40"/>				
+					<p:selectOneMenu value="#{usuarioMB.login.filial}" converter="filialConverter" disabled="#{usuarioMB.controlaCadastro==0}">
+						<f:selectItems value="#{usuarioMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
+					</p:selectOneMenu>	
+					<p:selectOneMenu value="#{usuarioMB.login.custo}" converter="ccustoConverter" disabled="#{usuarioMB.controlaCadastro==0}">
+						<f:selectItems value="#{usuarioMB.centroCustos}" var="c" itemLabel="#{c.nome}" itemValue="#{c}" />
+					</p:selectOneMenu>						
+					<p:selectBooleanCheckbox value="#{usuarioMB.login.ativo}"   disabled="#{usuarioMB.controlaCadastro==0}"/>	
+				</p:panelGrid>
+				<br></br>
+				<div class="ui-grid ui-grid-responsive">
+				    <div class="ui-grid-row">
+				        <div class="ui-grid-col-6">
+							<p:panelGrid columns="3" rendered="#{acessoBean.temAcessoUsuariosPrestacao}">
+								<f:facet name="header">Vincular usuários as Permissões de Prestação</f:facet>
+							    <p:pickList id="pk" value="#{usuarioMB.usuariosPrestacao}" 
+							    	var="u" itemLabel="#{u.nome}" itemValue="#{u}"  disabled="#{usuarioMB.controlaCadastro==0}"
+							    	showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" 
+							    	converter="loginConverter"/>
+							    <h:outputLabel value=""/>
+							</p:panelGrid>					
+						</div>
+				        <div class="ui-grid-col-6">
+							<p:panelGrid columns="3" rendered="#{acessoBean.temAcessoUsuariosAcessos}">
+								<f:facet name="header">Permissão aos Módulos</f:facet>
+							    <p:pickList id="pkm" value="#{usuarioMB.usuariosModulos}" 
+							    	var="m" itemLabel="#{m.nome}" itemValue="#{m}"  disabled="#{usuarioMB.controlaCadastro==0}"
+							    	showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" 
+							    	converter="moduloConverter">
+							    	<p:ajax event="transfer" listener="#{usuarioMB.onTransfer}" update="formMsg" />
+							    </p:pickList>
+							</p:panelGrid>						
+						</div>
+				    </div>
+				</div>
+	 			<p:panelGrid columns="1">
+					<f:facet name="footer">					
+						<p:commandButton value="Novo" action="#{usuarioMB.novo}" update=":formCad"/>
+						<p:commandButton value="Resetar Senha" action="#{usuarioMB.resetarSenha}"  update=":formCad,:formMsg"/>
+						<p:commandButton value="Cancelar" action="#{usuarioMB.limpaCadastro}" update=":formCad" />
+						<p:commandButton value="Gravar" action="${usuarioMB.grava}" update=":formCad,:formMsg,:form_tb" />
+						<p:commandButton value="Selecionar Usuário" onclick="PF('dgSel').show()" update=":formCad"/>							
+					</f:facet>
+				</p:panelGrid>
+		</h:form> 	
+	</p:panel>
+
+    <h:form id="formMsg" style="font-size:small;">                      
+        <p:growl id="msg" showDetail="true" life="4000"/> 
+    </h:form>
+
+	<p:dialog id="dgSel" widgetVar="dgSel" appendTo="@(body)" modal="true" resizable="false" header="Seleção de Usuários">
+		<h:form id="form_tb" style="font-size: 0.9em !important;" >
+			<p:panel style="width:350px;">
+				<p:dataTable id="tb" var="u" value="#{usuarioMB.logins}" 			  
+			               paginator="true" paginatorPosition="bottom" rows="15" rowKey="#{u.id}"
+			               selectionMode="single" resizableColumns="true" filteredValue=""						
+							emptyMessage="Nenhum registro encontrado!">
+			          <p:ajax event="rowSelect" listener="#{usuarioMB.usuarioSelecionado}" update=":formCad" oncomplete="PF('dgSel').hide()"/>
+			          
+			           <p:column filterBy="#{u.nome}" headerText="Nome" filterMatchMode="contains" >
+							<h:outputText value="#{u.nome}" /> 
+			            </p:column>  					
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+	
+	</p:dialog>
+
+	</ui:define>			
+
+</ui:composition>
+	
+</h:body>	
+
+</html>

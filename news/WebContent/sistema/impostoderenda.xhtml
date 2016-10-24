@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core"  
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - RH</ui:define>
+<ui:define name="conteudo">
+<f:facet name="header">Acesso aos Informes de Rendimento do Imposto de Renda</f:facet>
+<p:panel rendered="#{acessoBean.temAcessoImpostoDeRenda}" style="background: transparent !important;border: 0 !important;">
+	
+<center>
+	<h:form id="form" style="width: 30%;text-align: center;">
+	    <p:dataTable id="tb" var="i" value="#{informeBean.informes}">
+	        <f:facet name="header">
+	            Informes
+	        </f:facet>
+	        <p:column headerText="Ano" style="width:32px;text-align: center">
+	            <h:outputText value="#{i.ano}" />
+	        </p:column>
+	        <p:column style="width:32px;text-align: center" headerText="Visualizar">
+	             <p:commandButton update=":formD" oncomplete="PF('inf').show()" icon="ui-icon-search" title="View">
+	                <f:setPropertyActionListener value="#{i}" target="#{informeBean.irrf}" />
+	            </p:commandButton>
+	        </p:column>
+	    </p:dataTable>
+	</h:form>
+</center>
+</p:panel>
+<h:form id="formD">
+   <p:dialog header="Informe de Rendimento" widgetVar="inf" showEffect="fade" hideEffect="fade" width="900" height="600" rendered="#{acessoBean.temAcessoImpostoDeRenda}">
+		<object type="application/pdf" data="#{request.contextPath}/sistema/rh/ir/#{informeBean.irrf.ano}/#{informeBean.irrf.chapa}.pdf?pfdrid_c=true" height="500px" width="100%">
+            Seu navegador não pode exibir o pdf ou o arquivo não existe.
+        </object>
+   </p:dialog>
+</h:form>
+<h:form>
+	<p:remoteCommand action="#{informeBean.listarInformes}" autoRun="true" update=":form"/>
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - FINANCEIRO</ui:define>
+<ui:define name="conteudo">
+
+<f:facet name="header">Importação de Fluxo Diário</f:facet>
+<p:panel rendered="true" style="width:70%;">
+
+<h:form>
+	<p:panelGrid columns="1">
+		<h:outputText value="Selecione o arquivo."/>
+	    <p:fileUpload fileUploadListener="#{fluxodiarioMB.handleFileUpload}" mode="advanced" 
+	    	dragDropSupport="false" sizeLimit="1000000" fileLimit="1" 
+	    	label="Selecionar" uploadLabel="Importar" cancelLabel="Cancelar"/>
+	</p:panelGrid>
+</h:form>	
+<br></br>
+<br></br>
+<h:form>
+	<p:panelGrid columns="2">
+		<h:outputLabel value="Mês" style="padding-rigth : 15px;"/>
+        <p:selectOneMenu id="mes" value="#{fluxodiarioMB.mes}" style="width:125px">
+            <f:selectItem itemLabel="" itemValue="0" />
+            <f:selectItem itemLabel="Janeiro" itemValue="1" />
+            <f:selectItem itemLabel="Fevereiro" itemValue="2" />
+            <f:selectItem itemLabel="Março" itemValue="3" />
+            <f:selectItem itemLabel="Abril" itemValue="4" />
+            <f:selectItem itemLabel="Maio" itemValue="5" />
+            <f:selectItem itemLabel="Junho" itemValue="6" />
+            <f:selectItem itemLabel="Julho" itemValue="7" />
+            <f:selectItem itemLabel="Agosto" itemValue="8" />
+            <f:selectItem itemLabel="Setembro" itemValue="9" />
+            <f:selectItem itemLabel="Outubro" itemValue="10" />
+            <f:selectItem itemLabel="Novembro" itemValue="11" />
+            <f:selectItem itemLabel="Dezembro" itemValue="12" />
+        </p:selectOneMenu>
+        
+		<h:outputLabel value="Ano" style="padding-rigth: 15px;"/>
+        <p:selectOneMenu id="ano" value="#{fluxodiarioMB.ano}" style="width:125px">
+            <f:selectItem itemLabel="2016" itemValue="2016" />
+            <f:selectItem itemLabel="2017" itemValue="2017" />
+            <f:selectItem itemLabel="2015" itemValue="2015" />
+        </p:selectOneMenu>
+	</p:panelGrid>
+	<br></br>
+	<p:panelGrid columns="7" >
+		<h:outputLabel value="Data" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Documento" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Histórico" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Entrada" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Saída" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Saldo" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Tipo de Custo" style="padding-rigth : 15px;"/>	
+		
+        <p:selectOneMenu id="dt" value="#{fluxodiarioMB.campoData}" style="width:55px">
+        	<f:selectItem itemLabel="" itemValue="" />
+            <f:selectItems value="#{fluxodiarioMB.campos}" />
+        </p:selectOneMenu>		
+        <p:selectOneMenu id="doc" value="#{fluxodiarioMB.campoDoc}" style="width:55px">
+        	<f:selectItem itemLabel="" itemValue="" />
+            <f:selectItems value="#{fluxodiarioMB.campos}" />
+        </p:selectOneMenu>	
+        
+        <p:selectOneMenu id="his" value="#{fluxodiarioMB.campohis}" style="width:55px">
+        	<f:selectItem itemLabel="" itemValue="" />
+            <f:selectItems value="#{fluxodiarioMB.campos}" />
+        </p:selectOneMenu>	
+        
+        <p:selectOneMenu id="ent" value="#{fluxodiarioMB.campoEnt}" style="width:55px">
+        	<f:selectItem itemLabel="" itemValue="" />
+            <f:selectItems value="#{fluxodiarioMB.campos}" />
+        </p:selectOneMenu>	   
+        
+        <p:selectOneMenu id="sai" value="#{fluxodiarioMB.campoSai}" style="width:55px">
+        	<f:selectItem itemLabel="" itemValue="" />
+            <f:selectItems value="#{fluxodiarioMB.campos}" />
+        </p:selectOneMenu>	 
+        
+        <p:selectOneMenu id="sal" value="#{fluxodiarioMB.campoSal}" style="width:55px">
+        	<f:selectItem itemLabel="" itemValue="" />
+            <f:selectItems value="#{fluxodiarioMB.campos}" />
+        </p:selectOneMenu>	 
+        
+        <p:selectOneMenu id="tip" value="#{fluxodiarioMB.campoTipo}" style="width:55px">
+        	<f:selectItem itemLabel="" itemValue="" />
+            <f:selectItems value="#{fluxodiarioMB.campos}" />
+        </p:selectOneMenu>	                                              
+	</p:panelGrid>	
+	<br></br>
+		<p:commandButton value="Enviar" ajax="false"  action="#{fluxodiarioMB.importar}" update=":formMsg"/>
+</h:form>	
+	
+</p:panel>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

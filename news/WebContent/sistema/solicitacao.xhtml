@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
+<ui:define name="conteudo">
+
+
+<h:form id="formtb">
+	<p:commandButton onclick="PF('dgCad').show()" action="#{solicitacaoMB.novo}" value="Nova Solicitação" title="Nova Solicitação"  update=":formCad"/>
+ 	<br></br>                    
+	<br></br>
+    <p:dataTable id="tb" var="s" value="#{solicitacaoMB.solicitacoes}" rows="20" paginator="true" emptyMessage="">
+    	<f:facet name="header">Solicitações Efetuadas</f:facet>
+
+       <p:column headerText="Nº" width="3%">
+            <h:outputText value="#{s.id}" />
+       </p:column>	 			
+       <p:column headerText="Abertura" style="width:5%;">
+             <h:outputText value="#{s.dataabertura}">
+			<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+		  </h:outputText>
+          </p:column>
+        <p:column headerText="Descrição do problema" width="47%" filterBy="#{s.descricao}" filterMatchMode="contains">
+            <h:outputText value="#{s.descricao}" />
+        </p:column>	      
+        <p:column headerText="Categoria" width="10%"> 
+            <h:outputText value="#{s.categoria}" />
+        </p:column>
+        <p:column headerText="Area" width="10%">
+            <h:outputText value="#{s.area.descricao}" />
+        </p:column>
+        <p:column headerText="Situação" width="10%">
+            <h:outputText value="#{solicitacaoMB.buscaStatus(s.historicos)}" />
+        </p:column>
+        <p:column style="width:8%;text-align: center">
+             <p:commandButton update=":formEdit" action="#{solicitacaoMB.edita}" icon="ui-icon-pencil"  rendered="#{solicitacaoMB.naoPodeEditar(s.historicos)}"
+             		title="Interagir" oncomplete="PF('dgEdit').show()" >
+                <f:setPropertyActionListener value="#{s}" target="#{solicitacaoMB.solicitacao}" />
+            </p:commandButton>
+
+             <p:commandButton update=":formHist" value="históriocos"  rendered="#{!solicitacaoMB.naoPodeEditar(s.historicos)}"  
+             		title="Historico" oncomplete="PF('dgHist').show()" >
+                <f:setPropertyActionListener value="#{s}" target="#{solicitacaoMB.solicitacao}" />
+            </p:commandButton>
+        </p:column>
+               
+    </p:dataTable>
+
+</h:form>
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Nova Solicitação" resizable="false" >
+<h:form id="formCad" style="width:120 %;">
+
+<div class="ui-grid ui-grid-responsive">
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-12">
+
+			<div class="ui-grid ui-grid-responsive">
+			    <div class="ui-grid-row">
+			        <div class="ui-grid-col-6">
+						<h:panelGrid columns="1"  >
+							<h:outputLabel value="Processo"/>
+							<p:selectOneMenu id="cat" value="#{solicitacaoMB.categoriaSelecionada}"  >
+								<f:selectItem itemLabel="#{solicitacaoMB.categoriaSelecionada}" itemValue="#{solicitacaoMB.categoriaSelecionada}" />
+								<f:selectItems value="#{solicitacaoMB.categorias}"/>
+								<p:ajax  listener="#{solicitacaoMB.atualizaAreas}" update=":formCad:tipo" />
+							</p:selectOneMenu>									
+						</h:panelGrid>						
+					</div>
+			        <div class="ui-grid-col-6">
+						<h:panelGrid columns="1"  >
+							<h:outputLabel value="Categoria"/>								
+							<p:selectOneMenu id="tipo" value="#{solicitacaoMB.area}"  converter="areaSolicitacaoConverter">
+								<f:selectItems  value="#{solicitacaoMB.areas}" var="a"  itemLabel="#{a.descricao}" itemValue="#{a}" />
+							</p:selectOneMenu>						
+						</h:panelGrid>						
+					</div>
+			    </div>
+			</div>
+
+			<div class="ui-grid ui-grid-responsive">
+			    <div class="ui-grid-row">
+			        <div class="ui-grid-col-12">
+						<h:panelGrid columns="1"  >	
+							<h:outputLabel value="Favorecido"/>
+			     			<p:autoComplete id="fav"  value="#{solicitacaoMB.favorecido}" converter="loginConverter" forceSelection="true" size="50"
+			     						completeMethod="#{solicitacaoMB.completeText}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>
+						</h:panelGrid>	        
+			        </div>
+			    </div>
+			</div>
+		
+
+			<div class="ui-grid ui-grid-responsive">
+			    <div class="ui-grid-row">
+			        <div class="ui-grid-col-6">
+						<h:panelGrid columns="1"  >
+							<h:outputLabel value="Data"/>
+							<p:calendar value="#{solicitacaoMB.solicitacao.dataabertura}"  maxdate="#{solicitacaoMB.today}" locale="pt_BR" pattern="dd/MM/yyyy"  disabled="#{!solicitacaoMB.eAtendente}"/>
+						</h:panelGrid>						
+					</div>
+			        <div class="ui-grid-col-6">
+						<h:panelGrid columns="1"  >
+							<h:outputLabel value="Hora"/>								
+							<p:calendar id="time" value="#{solicitacaoMB.solicitacao.horaabertura}" pattern="HH:mm" timeOnly="true" locale="pt_BR"  disabled="#{!solicitacaoMB.eAtendente}"/>															
+						</h:panelGrid>						
+					</div>
+			    </div>
+			</div>
+			
+
+			<br></br>
+			<h:panelGrid columns="1" style="widht:100%;" >
+				<h:outputLabel value="Descrição do problema"/>
+				<p:inputTextarea id="descricao" value="#{solicitacaoMB.solicitacao.descricao}" rows="3" autoResize="" cols="50"
+					maxlength="1000" required="true" counter="display" counterTemplate="restam {0} caracteres." requiredMessage="Obrigatório preenchimento da descrição."/>
+				<h:outputText id="display" />	
+				<br></br>		
+				<p:commandButton  value="Anexar arquivo" oncomplete="PF('dgUp').show()"/>
+				<br></br>
+			</h:panelGrid>	
+		
+			<div class="ui-grid ui-grid-responsive">
+			    <div class="ui-grid-row">
+			        <div class="ui-grid-col-12">
+						<h:panelGrid columns="1"  >	
+							<h:outputLabel value="Emails Adicionias (*** separe os emails com ponto-e-vírgula (;) )"/>
+							<p:inputText id="eadci" type="email" value="#{solicitacaoMB.solicitacao.emailsadicionais}" size="50"/>
+						</h:panelGrid>	        
+			        </div>
+			    </div>
+			</div>
+		
+			<br></br>
+		</div>
+    </div>
+</div>
+<p:panelGrid columns="2"  layout="grid" >
+	<p:commandButton value="Enviar" action="#{solicitacaoMB.gravaNova}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
+	<p:commandButton value="Cancelar" action="#{solicitacaoMB.limpaCadastro}"  oncomplete="PF('dgCad').hide()"/>
+</p:panelGrid>
+</h:form>
+</p:dialog>
+
+<p:dialog id="dgEdit" widgetVar="dgEdit" appendTo="@(body)" modal="true" header="Interação na Solicitação" resizable="false" width="60%;" height="220px;">
+	<h:form id="formEdit" >
+		<p:panel style="width:800px;">
+			<p:panelGrid columns="5" >
+				<p:outputLabel value="Solicitação:"/>
+				<p:outputLabel value="Aberta em:"/>
+				<p:outputLabel value="Hora:"/>
+				<p:outputLabel value="Processo:"/>
+				<p:outputLabel value="Categoria:"/>	
+				<h:outputText value="#{solicitacaoMB.solicitacao.id}"/>
+	            <h:outputText value="#{solicitacaoMB.solicitacao.dataabertura}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>				
+	            <h:outputText value="#{solicitacaoMB.solicitacao.horaabertura}">
+					<f:convertDateTime pattern="HH:mm" />
+				</h:outputText>			
+				<h:outputText value="#{solicitacaoMB.solicitacao.categoria}"/>
+				<h:outputText value="#{solicitacaoMB.solicitacao.area.descricao}"/>
+			</p:panelGrid>
+			<br></br>
+			<p:dataTable id="tbEdit" var="h" value="#{solicitacaoMB.ordenarHistorico()}"  
+					emptyMessage="" style="widht:560px;" scrollable="true" resizableColumns="false" scrollHeight="65%">
+		        <p:column headerText="Data" width="7%;">
+	              <h:outputText value="#{h.data}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  </h:outputText>
+				</p:column>
+				<p:column headerText="Hora" width="5%;">
+	              <h:outputText value="#{h.hora}">
+					<f:convertDateTime pattern="HH:mm" locale="pt_BR"/>
+				  </h:outputText>				  
+	            </p:column>
+		        <p:column headerText="Descrição" width="180px;">
+		            <h:outputText value="#{h.descricao}" />
+		        </p:column>	      
+		        <p:column headerText="Atendente" width="100px;">
+		            <h:outputText value="#{solicitacaoMB.primeiroNome(h.atendente.login.nome)}" />
+		        </p:column>	
+		        <p:column headerText="Status" width="80px;">
+		            <h:outputText value="#{solicitacaoMB.buscaStatusHistorico(h)}" />
+		        </p:column>	 
+		        <p:column headerText="Baixar" style="width:32px;text-align: center">
+				    <p:commandButton ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" disabled="#{solicitacaoMB.habilitaDownload(h.arquivo)}"
+				    	actionListener="#{solicitacaoMB.baixarArquivo(h.arquivo)}" icon="ui-icon-arrowthick-1-s">
+				        <p:fileDownload value="#{solicitacaoMB.fileDownload}" />
+				    </p:commandButton>
+		        </p:column>		       		       		       			 	
+			</p:dataTable>
+			<br></br>
+			<br></br>
+			<f:facet name="footer">
+				<p:panelGrid columns="6">
+					<p:commandButton value="Adicionar Informação" action="#{solicitacaoMB.novaInteracao}" update=":formMsg,:formInfor" oncomplete="PF('dgInfor').show()"/>
+					<p:commandButton value="Cancelar Solicitação" action="#{solicitacaoMB.cancelar}" update=":formCancel" oncomplete="PF('dgCancel').show()"/>
+					<p:commandButton value="Solicitar FeedBack" action="#{solicitacaoMB.solicitacaoFeedback}" update=":formMsg,:formEdit,:formCad,:formtb" oncomplete="PF('dgEdit').hide()"/>							
+					<p:commandButton value="Sair" action="#{solicitacaoMB.limpaCadastro}"  oncomplete="PF('dgEdit').hide()"/>
+				</p:panelGrid>
+			</f:facet>
+			
+		</p:panel>
+	</h:form>
+</p:dialog>
+
+<p:dialog id="dgHist" widgetVar="dgHist" appendTo="@(body)" modal="true" header="Histórico da Solicitação" resizable="false" width="40%;" height="200px;">
+	<h:form id="formHist" >
+		<p:panel style="width:600px;">
+			<p:panelGrid columns="5" >
+				<p:outputLabel value="Solicitação:"/>
+				<p:outputLabel value="Aberta em:"/>
+				<p:outputLabel value="Hora:"/>
+				<p:outputLabel value="Processo:"/>
+				<p:outputLabel value="Categoria:"/>	
+				<h:outputText value="#{solicitacaoMB.solicitacao.id}"/>
+	            <h:outputText value="#{solicitacaoMB.solicitacao.dataabertura}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>				
+	            <h:outputText value="#{solicitacaoMB.solicitacao.horaabertura}">
+					<f:convertDateTime pattern="HH:mm" />
+				</h:outputText>			
+				<h:outputText value="#{solicitacaoMB.solicitacao.categoria}"/>
+				<h:outputText value="#{solicitacaoMB.solicitacao.area.descricao}"/>
+			</p:panelGrid>
+			<br></br>
+			<p:dataTable id="tbHist" var="h" value="#{solicitacaoMB.ordenarHistorico()}"  
+					emptyMessage="" style="widht:460px;" scrollable="true" resizableColumns="false" scrollHeight="65%">
+		       <p:column headerText="Data - Hora" width="20%;">
+	              <h:outputText value="#{h.data}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  </h:outputText>
+				  <h:outputText value=" - "/>
+	              <h:outputText value="#{h.hora}">
+					<f:convertDateTime pattern="HH:mm" locale="pt_BR"/>
+				  </h:outputText>				  
+	           </p:column>
+		       <p:column headerText="Descrição" width="40%;">
+		            <h:outputText value="#{h.descricao}" />
+		       </p:column>	      
+		       <p:column headerText="Atendente" width="20%;">
+		            <h:outputText value="#{h.atendente.login.nome}" />
+		       </p:column>	
+		       <p:column headerText="Status" width="20%;">
+		            <h:outputText value="#{solicitacaoMB.buscaStatusHistorico(h)}" />
+		       </p:column>	 		       			 	
+			</p:dataTable>
+			<br></br>
+			<f:facet name="footer">
+				<p:panelGrid columns="6">
+					<p:commandButton value="Sair" action="#{solicitacaoMB.limpaCadastro}"  oncomplete="PF('dgHist').hide()"/>
+				</p:panelGrid>
+			</f:facet>
+			
+		</p:panel>
+	</h:form>
+</p:dialog>
+
+<p:dialog id="dgCancel" widgetVar="dgCancel" appendTo="@(body)" modal="true" header="Cancelar Solicitação" resizable="false" width="40%;">
+	<h:form id="formCancel" >
+		<p:panel>
+			<p:panelGrid columns="1" >
+				<h:outputLabel value="Solicitação nº: #{solicitacaoMB.solicitacao.id}"/>
+				<h:outputText value="Motivo do cancelamento."/>
+				<p:inputTextarea id="motCanc" value="#{solicitacaoMB.novaInteracao.descricao}" rows="4" autoResize="" cols="30"
+					maxlength="1000" required="true" requiredMessage="Informe o motivo" counter="display" counterTemplate="restam {0} caracteres."/>
+				<h:outputText id="display" />	
+				<p:commandButton value="Salvar" action="#{solicitacaoMB.solicitacaoCancelar}" process="@all"
+					update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCancel').hide()"/>
+				
+			</p:panelGrid>
+		</p:panel>
+	</h:form>
+</p:dialog>
+
+<p:dialog id="dgInfor" widgetVar="dgInfor" appendTo="@(body)" modal="true" header="Adicionar Informações à Solicitação" resizable="false" width="40%;">
+	<h:form id="formInfor" >
+		<p:panel>
+			<p:panelGrid columns="1" >
+				<h:outputLabel value="Solicitação nº: #{solicitacaoMB.solicitacao.id}"/>
+				<h:outputText value="Descrição."/>
+				<p:inputTextarea id="motCanc" value="#{solicitacaoMB.novaInteracao.descricao}" rows="4" autoResize="" cols="30"
+					maxlength="1000" required="true" requiredMessage="Informe o motivo" counter="display" counterTemplate="restam {0} caracteres."/>
+				<h:outputText id="display" />	
+				<br></br>		
+				<p:commandButton  value="Anexar arquivo" oncomplete="PF('dgUp').show()"/>			
+			</p:panelGrid>
+			<f:facet name="footer">
+				<p:commandButton value="Salvar" action="#{solicitacaoMB.adicionarInteracao}" update=":formMsg,:formEdit,:formCad,:formtb" oncomplete="PF('dgInfor').hide()"/>			
+			</f:facet>
+		</p:panel>
+	</h:form>
+</p:dialog>	
+
+
+<p:dialog id="dgUp" widgetVar="dgUp" appendTo="@(body)" modal="true">
+	<h:form id="formUp">
+	    <p:fileUpload fileUploadListener="#{solicitacaoMB.handleFileUpload}" mode="advanced" skinSimple="true" 
+	    	dragDropSupport="true" sizeLimit="10000000" fileLimit="1" style="widht:90%;" allowTypes="/(\.|\/)(zip|rar)$/"
+	    	label="Selecionar arquivo" uploadLabel="Enviar" cancelLabel="Cancelar" invalidFileMessage="Arquivo inválido, somente .zip ou .rar "
+	    	invalidSizeMessage="Tamanho de arquivo não permitido. Max. 10Mb." oncomplete="PF('dgUp').hide()" update=":formMsg"/>
+			<h:outputText  value="** Somente arquivos compactados .zip ou .rar"/>				
+	</h:form>
+</p:dialog>
+
+<p:dialog modal="false" widgetVar="statusDialog" header="Aguarde..." draggable="false" closable="false" resizable="false"  appendTo="@(body)">
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
+			
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="5000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+
+<script type="text/javascript">
+function start() {
+    PF('statusDialog').show();
+}
+ 
+function stop() {
+    PF('statusDialog').hide();
+}
+</script>
+</h:body>	
+
+</html>

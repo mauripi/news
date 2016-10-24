@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    
+ <h:head>
+<link rel="stylesheet" href="templates/style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/primefaces.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/showcase.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/form.css" type="text/css" media="screen" />
+ </h:head>
+ 
+ <h:body>
+<h:form id="formTroca">
+   	<p:panelGrid columns="2" >
+    	<h:outputLabel value="Nova Senha: "/>
+    	<p:inputText value="#{acessoBean.senha1}" type="password"/>	    	
+    	<h:outputLabel value="Re-digite: "/>
+    	<p:inputText value="#{acessoBean.senha2}" type="password"/>
+    	<f:facet name="footer">
+			<p:commandButton value="Salvar" action="#{acessoBean.alterarSenha}" update=":formMsg"/>		    	
+    	</f:facet>
+   	</p:panelGrid>				
+</h:form>
+<h:form id="formMsg" style="font-size:small;">                      
+   <p:growl id="msg" showDetail="true" sticky="false" life="3000"/>
+</h:form> 	
+	
+</h:body>
+    
+</html>
+                    

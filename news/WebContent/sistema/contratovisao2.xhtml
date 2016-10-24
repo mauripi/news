@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:pe="http://primefaces.org/ui/extensions"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - COMPRAS</ui:define>
+<ui:define name="conteudo">
+
+<f:facet name="header">Controle de Contratos</f:facet>
+<p:panel>
+
+	<h:form id="form">
+	<pe:masterDetail id="masterDetail" level="#{visaogerencialcontratoMB.pnl}"> 
+		<pe:masterDetailLevel level="1" levelLabel="Espécie do Contrato">
+			<p:panel id="a" rendered="#{visaogerencialcontratoMB.pnl eq 1}">
+	           	<p:panelGrid columns="1">
+					<p:commandButton value="Fornecedores (Compra)" action="#{visaogerencialcontratoMB.filtraTipoDeContratoPorEspecie(1)}" update=":form"/>
+			        <p:commandButton value="Clientes (Venda)" action="#{visaogerencialcontratoMB.filtraTipoDeContratoPorEspecie(2)}" update=":form"/>
+	           	</p:panelGrid>				
+			</p:panel>
+       </pe:masterDetailLevel>	
+       <pe:masterDetailLevel level="2" levelLabel="Tipo de Contrato">
+		<p:panel id="b" rendered="#{visaogerencialcontratoMB.pnl eq 2}">
+       	   <p:orderList value="#{visaogerencialcontratoMB.tipos}" var="t" controlsLocation="none" 
+       	   		itemLabel="#{t.descricao}" itemValue="#{t}" converter="tipoContratoConverter">
+       	   		<p:ajax event="select" listener="#{visaogerencialcontratoMB.filtraPorEspecieTipo}" update=":form"/>
+       	   </p:orderList>	
+		</p:panel>
+		</pe:masterDetailLevel>
+		<pe:masterDetailLevel level="3" levelLabel="Fornecedores / Clientes">
+		<p:panel id="c" rendered="#{visaogerencialcontratoMB.pnl eq 3}">
+       	   <p:orderList value="#{visaogerencialcontratoMB.fornecedores}" var="f" controlsLocation="none" rendered="#{visaogerencialcontratoMB.especie eq 1}"
+       	   		itemLabel="#{f.nome}" itemValue="#{f}" converter="fornecedorConverter">
+       	   		<p:ajax event="select" listener="#{visaogerencialcontratoMB.filtraPorEspecieTipoCliFor}" update=":form"/>
+       	   </p:orderList>
+       	   <p:orderList value="#{visaogerencialcontratoMB.clientes}" var="c" controlsLocation="none" rendered="#{visaogerencialcontratoMB.especie eq 2}"
+       	   		itemLabel="#{c.nome}" itemValue="#{c}" converter="clienteConverter">
+       	   		<p:ajax event="select" listener="#{visaogerencialcontratoMB.filtraPorEspecieTipoCliFor}" update=":form"/>
+       	   </p:orderList>       	   				
+		</p:panel>
+		</pe:masterDetailLevel>
+		<pe:masterDetailLevel level="4" levelLabel="Contratos">				
+		<p:panel id="d" rendered="#{visaogerencialcontratoMB.pnl eq 4}">
+		    <p:dataTable id="ctr" var="c" value="#{visaogerencialcontratoMB.contratosSelecionados}" selectionMode="single" 
+		    	selection="#{visaogerencialcontratoMB.contratoSelecionado}" rowKey="#{c.id}" emptyMessage="" rows="5" paginator="true" paginatorPosition="bottom">
+		    	<f:facet name="header">Contratos cadastrados</f:facet>
+
+		        <p:column headerText="Objetivo" width="40%">
+		            <h:outputText value="#{c.objeto}" />
+		        </p:column>	 	       
+		        <p:column headerText="Início" style="width:12%;">
+	              <h:outputText value="#{c.inicio}">
+					 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  </h:outputText>
+	            </p:column>	 
+		        <p:column headerText="Fim" style="width:12%;">
+	              <h:outputText value="#{c.fim}">
+					 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  </h:outputText>
+	            </p:column>	                        
+		        <p:column headerText="Valor" style="width:9%;text-align: right;">
+					<h:outputText value="#{c.valor}" style="ttext-align: right;">
+						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+					</h:outputText>	
+			    </p:column>	          
+		    </p:dataTable>
+
+		</p:panel>
+		</pe:masterDetailLevel>
+		</pe:masterDetail>
+	</h:form>
+</p:panel>	
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

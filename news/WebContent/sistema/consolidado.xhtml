@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+        <style type="text/css">
+            .old {
+                background-color: #fca752 !important;
+                background-image: none !important;
+                color: #000000 !important;
+            }
+        </style>
+
+</h:head>
+   	
+<h:body >
+<h:form>
+<p:remoteCommand action="#{consolidadoMB.init}" autoRun="true"/>
+</h:form>
+<h:form id="cons">
+	<p:selectOneMenu id="ano" value="#{consolidadoMB.ano}"  style="width:130px;" >	
+		<f:selectItem itemLabel="2016" itemValue="2016"/>
+		<f:selectItem itemLabel="2015" itemValue="2015"/>
+		<p:ajax event="change" listener="#{consolidadoMB.init}" update="cons"/>
+	</p:selectOneMenu>
+    <p:dataTable id="tbsd" var="v" value="#{consolidadoMB.totais}" styleClass="consolidado" rowStyleClass="#{v.clacta eq 6 ? 'old' : null}"
+    	reflow="true" rendered="#{acessoBean.temAcessoConsolidado}">
+        <f:facet name="header">
+             Demonstrativo Consolidado - Receitas x Despesas #{consolidadoMB.ano}<br></br>
+        </f:facet>
+    
+         <f:facet name="header">
+             Resultado
+        </f:facet>
+     
+        <p:column headerText="" style="width:425px;text-align: right;">
+           <h:outputText value="#{consolidadoMB.buscaDescricaoTotais(v.clacta)}" style="font-size: 0.9em !important;font-weight: bold;"/>
+        </p:column>        
+        <p:column headerText="Jan" style="text-align: right;">
+			<h:outputText value="#{v.janeiro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.janeiro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	
+        </p:column>
+         <p:column headerText="Fev" style="text-align: right;">
+			<h:outputText value="#{v.fevereiro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.fevereiro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>				
+        </p:column>
+         <p:column headerText="Mar" style="text-align: right;">
+			<h:outputText value="#{v.marco}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.marco != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+         <p:column headerText="Abr" style="text-align: right;">
+			<h:outputText value="#{v.abril}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.abril != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+         <p:column headerText="Mai" style="text-align: right;">
+			<h:outputText value="#{v.maio}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.maio != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+         <p:column headerText="Jun" style="text-align: right;">
+			<h:outputText value="#{v.junho}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.junho != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+ 
+         <p:column headerText="Jul" style="text-align: right;">
+			<h:outputText value="#{v.julho}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.julho != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	
+        </p:column>
+        <p:column headerText="Ago" style="text-align: right;">
+ 			<h:outputText value="#{v.agosto}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.agosto != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	        
+        </p:column>
+        <p:column headerText="Set" style="text-align: right;">
+			<h:outputText value="#{v.setembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.setembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Out" style="text-align: right;">
+			<h:outputText value="#{v.outubro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.outubro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Nov" style="text-align: right;">
+			<h:outputText value="#{v.novembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.novembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Dez" style="text-align: right;">
+			<h:outputText value="#{v.dezembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.dezembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+ 
+ </p:dataTable>
+<br></br>
+<br></br>
+    <p:dataTable id="tbRec" var="v" value="#{consolidadoMB.viewsReceita}" styleClass="consolidado" reflow="true" rendered="#{acessoBean.temAcessoConsolidado}">
+    
+         <f:facet name="header">
+             Receitas 
+        </f:facet>
+     
+        <p:column style="width:30px">
+            <p:rowToggler />
+        </p:column>
+        <p:column headerText="Contábil" style="width:80px">
+            <h:outputText value="#{v.clacta}" style="font-size: 0.85em !important;font-weight: bold;"/>
+        </p:column>
+        <p:column headerText="Descrição" style="width:275px">
+            <h:outputText value="#{consolidadoMB.buscaDescricao(v.clacta)}" style="font-size: 0.85em !important;font-weight: bold;"/>
+        </p:column>        
+        <p:column headerText="Jan" style="text-align: right;">
+			<h:outputText value="#{v.janeiro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.janeiro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	
+        </p:column>
+         <p:column headerText="Fev" style="text-align: right;">
+			<h:outputText value="#{v.fevereiro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.fevereiro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>				
+        </p:column>
+         <p:column headerText="Mar" style="text-align: right;">
+			<h:outputText value="#{v.marco}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.marco != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+         <p:column headerText="Abr" style="text-align: right;">
+			<h:outputText value="#{v.abril}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.abril != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+         <p:column headerText="Mai" style="text-align: right;">
+			<h:outputText value="#{v.maio}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.maio != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+         <p:column headerText="Jun" style="text-align: right;">
+			<h:outputText value="#{v.junho}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.junho != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+ 
+         <p:column headerText="Jul" style="text-align: right;">
+			<h:outputText value="#{v.julho}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.julho != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	
+        </p:column>
+        <p:column headerText="Ago" style="text-align: right;">
+ 			<h:outputText value="#{v.agosto}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.agosto != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	        
+        </p:column>
+        <p:column headerText="Set" style="text-align: right;">
+			<h:outputText value="#{v.setembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.setembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Out" style="text-align: right;">
+			<h:outputText value="#{v.outubro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.outubro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Nov" style="text-align: right;">
+			<h:outputText value="#{v.novembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.novembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Dez" style="text-align: right;">
+			<h:outputText value="#{v.dezembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.dezembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+ 
+ 
+ 
+        <p:rowExpansion>
+		    <p:dataTable id="tbRecA" var="v1" value="#{v.analiticos}" >
+     			
+		        <p:column style="width:30px">
+		            
+		        </p:column>
+		        <p:column style="width:80px" headerText="Contábil">
+					<p:commandLink actionListener="#{consolidadoMB.observacaoConta(v1.clacta)}" update=":formDth" oncomplete="PF('dgObs').show()" >			    
+						<h:outputText value="#{v1.clacta}" style="font-size: 0.85em !important;"/> 
+					</p:commandLink>			        					 
+		        </p:column>
+		        <p:column style="width:275px" headerText="Descrição">
+					<p:commandLink actionListener="#{consolidadoMB.observacaoConta(v1.clacta)}" update=":formDth" oncomplete="PF('dgObs').show()" >				    
+						<h:outputText value="#{consolidadoMB.buscaDescricao(v1.clacta)}" style="font-size: 0.85em !important;"/>   
+					</p:commandLink>			        		        	  
+		        </p:column> 		        
+
+		        <p:column style="text-align: right;" headerText="Jan" >
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 1)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.janeiro != 0.0}">				    
+						<h:outputText value="#{v1.janeiro}" style="font-size: 0.85em !important;" rendered="#{v1.janeiro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Fev">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 2)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.fevereiro != 0.0}">				    
+						<h:outputText value="#{v1.fevereiro}" style="font-size: 0.85em !important;" rendered="#{v1.fevereiro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Mar">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 3)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.marco != 0.0}">				    
+						<h:outputText value="#{v1.marco}" style="font-size: 0.85em !important;" rendered="#{v1.marco != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+		        
+		        <p:column style="text-align: right;" headerText="Abr">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 4)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.abril != 0.0}">				    
+						<h:outputText value="#{v1.abril}" style="font-size: 0.85em !important;" rendered="#{v1.abril != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Mai">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 5)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.maio != 0.0}">				    
+						<h:outputText value="#{v1.maio}" style="font-size: 0.85em !important;" rendered="#{v1.maio != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Jun">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 6)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.junho != 0.0}">				    
+						<h:outputText value="#{v1.junho}" style="font-size: 0.85em !important;" rendered="#{v1.junho != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+		       
+		        <p:column style="text-align: right;" headerText="Jul">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 7)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.julho != 0.0}">				    
+						<h:outputText value="#{v1.julho}" style="font-size: 0.85em !important;" rendered="#{v1.julho != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Ago">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 8)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.agosto != 0.0}">				    
+						<h:outputText value="#{v1.agosto}" style="font-size: 0.85em !important;" rendered="#{v1.agosto != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Set">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 9)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.setembro != 0.0}">				    
+						<h:outputText value="#{v1.setembro}" style="font-size: 0.85em !important;" rendered="#{v1.setembro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Out">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 10)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.outubro != 0.0}">				    
+						<h:outputText value="#{v1.outubro}" style="font-size: 0.85em !important;" rendered="#{v1.outubro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Nov">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 11)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.novembro != 0.0}">				    
+						<h:outputText value="#{v1.novembro}" style="font-size: 0.85em !important;" rendered="#{v1.novembro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Dez">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(v1.clacta, 12)}" oncomplete="PF('dgRazao').show()" rendered="#{v1.dezembro != 0.0}">				    
+						<h:outputText value="#{v1.dezembro}" style="font-size: 0.85em !important;" rendered="#{v1.dezembro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+
+		 		 
+		 </p:dataTable>
+        </p:rowExpansion>
+    </p:dataTable>
+
+<br></br>
+
+    <p:dataTable id="tbDesp" var="d" value="#{consolidadoMB.viewsDespesa}" styleClass="consolidado" reflow="true" rendered="#{acessoBean.temAcessoConsolidado}">
+    
+         <f:facet name="header">
+             Despesas
+        </f:facet>
+     
+        <p:column style="width:30px">
+            <p:rowToggler />
+        </p:column>
+        <p:column headerText="Contábil" style="width:80px">
+            <h:outputText value="#{d.clacta}" style="font-size: 0.85em !important;font-weight: bold;"/>
+        </p:column>
+        <p:column headerText="Descrição" style="width:275px">
+            <h:outputText value="#{consolidadoMB.buscaDescricao(d.clacta)}" style="font-size: 0.85em !important;font-weight: bold;"/>
+        </p:column>        
+        <p:column headerText="Jan" style="text-align: right;">
+			<h:outputText value="#{d.janeiro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.janeiro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	
+        </p:column>
+         <p:column headerText="Fev" style="text-align: right;">
+			<h:outputText value="#{d.fevereiro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.fevereiro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>				
+        </p:column>
+         <p:column headerText="Mar" style="text-align: right;">
+			<h:outputText value="#{d.marco}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.marco != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+         <p:column headerText="Abr" style="text-align: right;">
+			<h:outputText value="#{d.abril}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.abril != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+         <p:column headerText="Mai" style="text-align: right;">
+			<h:outputText value="#{d.maio}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.maio != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+         <p:column headerText="Jun" style="text-align: right;">
+			<h:outputText value="#{d.junho}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.junho != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+ 
+         <p:column headerText="Jul" style="text-align: right;">
+			<h:outputText value="#{d.julho}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.julho != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	
+        </p:column>
+        <p:column headerText="Ago" style="text-align: right;">
+ 			<h:outputText value="#{d.agosto}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.agosto != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	        
+        </p:column>
+        <p:column headerText="Set" style="text-align: right;">
+			<h:outputText value="#{d.setembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.setembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Out" style="text-align: right;">
+			<h:outputText value="#{d.outubro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.outubro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Nov" style="text-align: right;">
+			<h:outputText value="#{d.novembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.novembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Dez" style="text-align: right;">
+			<h:outputText value="#{d.dezembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{d.dezembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+ 
+ 
+ 
+        <p:rowExpansion>
+		    <p:dataTable id="tbDespA" var="d1" value="#{d.analiticos}" >
+     			
+		        <p:column style="width:30px">
+		            
+		        </p:column>
+		        <p:column style="width:80px" headerText="Contábil">
+					<p:commandLink actionListener="#{consolidadoMB.observacaoConta(d1.clacta)}" update=":formDth" oncomplete="PF('dgObs').show()" >			    
+						<h:outputText value="#{d1.clacta}" style="font-size: 0.85em !important;"/> 
+					</p:commandLink>			        					 
+		        </p:column>
+		        <p:column style="width:275px" headerText="Descrição">
+					<p:commandLink actionListener="#{consolidadoMB.observacaoConta(d1.clacta)}" update=":formDth" oncomplete="PF('dgObs').show()" >				    
+						<h:outputText value="#{consolidadoMB.buscaDescricao(d1.clacta)}" style="font-size: 0.85em !important;"/>   
+					</p:commandLink>			        		        	  
+		        </p:column> 		        
+
+		        <p:column style="text-align: right;" headerText="Jan" >
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 1)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.janeiro != 0.0}">				    
+						<h:outputText value="#{d1.janeiro}" style="font-size: 0.85em !important;" rendered="#{d1.janeiro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Fev">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 2)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.fevereiro != 0.0}">				    
+						<h:outputText value="#{d1.fevereiro}" style="font-size: 0.85em !important;" rendered="#{d1.fevereiro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Mar">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 3)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.marco != 0.0}">				    
+						<h:outputText value="#{d1.marco}" style="font-size: 0.85em !important;" rendered="#{d1.marco != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+		        
+		        <p:column style="text-align: right;" headerText="Abr">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 4)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.abril != 0.0}">				    
+						<h:outputText value="#{d1.abril}" style="font-size: 0.85em !important;" rendered="#{d1.abril != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Mai">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 5)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.maio != 0.0}">				    
+						<h:outputText value="#{d1.maio}" style="font-size: 0.85em !important;" rendered="#{d1.maio != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Jun">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 6)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.junho != 0.0}">				    
+						<h:outputText value="#{d1.junho}" style="font-size: 0.85em !important;" rendered="#{d1.junho != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+		       
+		        <p:column style="text-align: right;" headerText="Jul">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 7)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.julho != 0.0}">				    
+						<h:outputText value="#{d1.julho}" style="font-size: 0.85em !important;" rendered="#{d1.julho != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Ago">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 8)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.agosto != 0.0}">				    
+						<h:outputText value="#{d1.agosto}" style="font-size: 0.85em !important;" rendered="#{d1.agosto != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Set">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 9)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.setembro != 0.0}">				    
+						<h:outputText value="#{d1.setembro}" style="font-size: 0.85em !important;" rendered="#{d1.setembro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Out">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 10)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.outubro != 0.0}">				    
+						<h:outputText value="#{d1.outubro}" style="font-size: 0.85em !important;" rendered="#{d1.outubro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Nov">
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 11)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.novembro != 0.0}">				    
+						<h:outputText value="#{d1.novembro}" style="font-size: 0.85em !important;" rendered="#{d1.novembro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+		        <p:column style="text-align: right;" headerText="Dez" >
+					<p:commandLink  update=":formRazao" action="#{consolidadoMB.celulaSelecionada(d1.clacta, 12)}" oncomplete="PF('dgRazao').show()" rendered="#{d1.dezembro != 0.0}">				    
+						<h:outputText value="#{d1.dezembro}" style="font-size: 0.85em !important;" rendered="#{d1.dezembro != 0.0}">
+							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+						</h:outputText>	
+					</p:commandLink>		        
+		        </p:column>
+
+
+		 		 
+		 </p:dataTable>
+        </p:rowExpansion>
+    </p:dataTable>
+</h:form>
+
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+
+<h:form id="formDth">
+	<p:dialog header="#{consolidadoMB.contaSelecionada.clacta}  - #{consolidadoMB.buscaDescricao(consolidadoMB.contaSelecionada.clacta)}" widgetVar="dgObs" width="600" rendered="#{acessoBean.temAcessoConsolidado}">
+	    
+		<p:dataTable var="o" value="#{consolidadoMB.contasObservacao}" emptyMessage="Não há observações.">
+			<f:facet name="header">
+				#{contaSelecionada.clacta }
+			</f:facet>
+		    <p:column headerText="Mês/Ano" width="10">
+		        <h:outputText value="#{consolidadoMB.nomeMes(o.mes)} / #{o.ano}" />
+		    </p:column>	 
+		    <p:column headerText="Observações" width="90">
+		        <h:outputText value="#{o.observacao}" />
+		    </p:column>
+		    
+		</p:dataTable>
+	</p:dialog>
+</h:form>
+
+<h:form id="formRazao">
+	<p:dialog header="#{consolidadoMB.descricaoRazao}" widgetVar="dgRazao" width="600" height="500" modal="true" appendTo="@(body)" rendered="#{acessoBean.temAcessoConsolidado}">
+		<p:ajax event="close" listener="#{consolidadoMB.limpaRazao}" oncomplete="PF('dgRazao').hide()" update=":formRazao"/>
+		<p:dataTable var="l" value="#{consolidadoMB.razoes}" emptyMessage="Não há registros." style="font-size:12px">
+		
+	       <p:column headerText="Data" style="width:15%;">
+              <h:outputText value="#{l.data}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			  </h:outputText>
+           </p:column>
+			<p:column headerText="Histórico">
+				<h:outputText value="#{l.historico}"/>
+			</p:column>
+			<p:column headerText="Valor" style="text-align: right;width:18%;">
+				<h:outputText value="#{l.valor}">
+					<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>	           																
+				</h:outputText>				
+			</p:column>	
+	        <p:columnGroup type="footer">
+	            <p:row>
+	                <p:column colspan="2" style="text-align:right;font-size: 1em !important;" footerText="Total:" />
+
+			        <p:column style="text-align: right;font-size: 1em !important;">
+			      	  	<f:facet name="footer">
+							<h:outputText value="#{consolidadoMB.totalRazao}"  style="font-size: 1em !important;" >
+								<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencyCode="BRL"/>	           																
+							</h:outputText>	
+						</f:facet>
+			        </p:column> 
+	            </p:row>
+	        </p:columnGroup>			
+		</p:dataTable>
+
+	</p:dialog>
+</h:form>
+
+
+</h:body>	
+
+</html>

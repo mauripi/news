@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - CONTABILIDADE</ui:define>
+<ui:define name="conteudo">
+<f:facet name="header">Manutenção do Consolidado</f:facet>
+<p:panel rendered="true" style="background: transparent !important;border: 0 !important;">
+
+	<h:form>
+<div class="ui-grid ui-grid-responsive">
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-3">
+			<p:commandLink style="border:1px;" action="importconsolidado.jsp" title="Importar períodos">
+			    <p:graphicImage value="img/import.jpg" />
+			</p:commandLink>        
+        </div>
+        <div class="ui-grid-col-3" style="border:1px;border-color: black;">
+			<p:commandLink style="border:1px;border-color: black;" action="observacaoconsolidado.jsp" title="Adicionar Comentários na Conta">
+			    <p:graphicImage value="img/observacao.jpg"/>
+			</p:commandLink>	        
+        </div>
+        <div class="ui-grid-col-3">
+			<h:commandLink style="border:1px;" target="_blank" action="consolidado.jsp" title="Consolidado" >
+			    <p:graphicImage value="img/consolidado.jpg" />
+			</h:commandLink>        
+        </div>
+        <div class="ui-grid-col-3">
+        
+        </div>
+    </div>
+</div>
+
+		
+	</h:form>	
+	
+</p:panel>
+<p:dialog modal="false" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false"  >
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

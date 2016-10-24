@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="movimentoitens" pageWidth="595" pageHeight="842" columnWidth="561" leftMargin="14" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3ce715ad-d1aa-48f9-a357-f03132797068">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="patrimonio" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="nomeFornecedor" class="java.lang.String"/>
+	<field name="notafiscal" class="java.lang.String"/>
+	<field name="numpla" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="53" height="15" uuid="531195f8-82cb-4519-9bc3-3297475b775e"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Patrimônio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="339" y="0" width="126" height="15" uuid="04c85c0c-c188-48ba-98c5-1171c10ee30e"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fornecedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="108" y="0" width="97" height="15" uuid="a8c5ab00-abe7-4632-8178-1cb67a276e40"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="476" y="0" width="45" height="15" uuid="46689e18-4d1b-4ac0-9f66-0ffccaeed291"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nota Fiscal]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="13" width="521" height="1" uuid="a8951c74-7b2f-4935-95d6-1ea0ce484eee"/>
+			</line>
+			<staticText>
+				<reportElement x="54" y="0" width="53" height="13" uuid="e44c2bb9-48ba-4826-831c-aa6697ab9786"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Plaqueta]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="53" height="12" uuid="30b36a3e-c232-48f0-96a7-15d88864c88a"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patrimonio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="108" y="0" width="230" height="12" uuid="3b56c3a5-c037-4cf9-83e1-c14fd0131dd6"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="339" y="0" width="142" height="12" uuid="0df8d10c-5ee4-4abf-a817-ae7dba50e451"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomeFornecedor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="478" y="0" width="70" height="12" uuid="c6bf94bb-d6e3-40bb-b3f4-826a76588bfd"/>
+				<textElement>
+					<font size="8" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{notafiscal}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="54" y="0" width="53" height="12" uuid="8e8107cd-de6a-4d16-a1fa-2c9faaaddac2"/>
+				<textElement>
+					<font size="8" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numpla}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - DIRETORIA</ui:define>
+<ui:define name="conteudo">
+
+<f:facet name="header">Controle de Atividades da Engenharia</f:facet>
+
+<p:panel id="panel" rendered="#{acessoBean.temAcessoControleTarefaVisao}">
+	<h:form id="formTb">
+	    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+	        <p:outputLabel for="flt" value="Filtro" />
+	        <p:selectOneRadio id="flt" value="#{controletarefaMB.filtro}">
+	        	<p:ajax event="change" listener="#{controletarefaMB.filtragem}" update="tb"/>
+	            <f:selectItem itemLabel="Em Andamento" itemValue="0" />
+	            <f:selectItem itemLabel="Finalizados" itemValue="1" />
+	            <f:selectItem itemLabel="Todos" itemValue="2" />
+	        </p:selectOneRadio>
+	    </h:panelGrid>
+ 		  
+	    <p:dataTable id="tb" var="trf" value="#{controletarefaMB.tarefasFiltradas}" emptyMessage="">
+	        <f:facet name="header">
+	            Atividades
+	        </f:facet>
+
+	        <p:column headerText="Atividade" style="width:25%;"  filterBy="#{trf.atividade}"  filterMatchMode="contains">
+	            <h:outputText value="#{trf.atividade}" />
+	        </p:column>
+	        <p:column headerText="Responsável" style="width:15%;">
+	            <h:outputText value="#{trf.responsavel}" />
+	        </p:column>
+	        <p:column headerText="Inicio" style="width:8%;" sortBy="#{trf.datainicio}">
+				<h:outputText value="#{trf.datainicio}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>
+	         </p:column>
+	         <p:column headerText="Conclusão" style="width:8%;" sortBy="#{trf.datafim}">
+				<h:outputText value="#{trf.datafim}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>
+	         </p:column> 
+			<p:column headerText="Orçamento" style="text-align: right;width:15%;" sortBy="#{trf.valor}" >
+				<h:outputText value="#{controletarefaMB.simboloMoeda(trf.moeda)}"/>
+				<h:outputText value="#{trf.valor}">
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />	           																
+				</h:outputText>				
+			</p:column>	          
+	        <p:column headerText="Progresso" style="width:15%;">
+	            <p:progressBar value="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim)}" labelTemplate="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim)}%" displayOnly="true"/>
+	        </p:column>	 
+	        <p:column headerText="Observações" style="width:40%;" sortBy="#{trf.valor}">
+	            <h:outputText value="#{trf.observacao}" />
+	        </p:column>	    
+	        <p:column headerText="Aprovação" style="width:20%;">
+	            <p:inputSwitch value="#{trf.aprovado}" onLabel="Aprovado" offLabel="Não Approvado">
+                 	<p:ajax listener="#{controletarefaMB.atualizaAprovacao(trf.aprovado, trf)}" update=":formTb" />
+        		</p:inputSwitch>
+	        </p:column>		                              
+	    </p:dataTable>
+	</h:form>
+</p:panel>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

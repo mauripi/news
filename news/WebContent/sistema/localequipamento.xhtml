@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
+<ui:define name="conteudo">
+<f:facet name="header">Cadastro de Locais de Equipamentos</f:facet>
+
+
+<h:form id="formCad">
+	<p:panel rendered="#{acessoBean.temAcessoLocalEquipamentos}" style="width:40%;">
+		<p:panelGrid columns="1">
+			<h:outputLabel value="Descrição"/> 
+			<p:inputText value="#{localequipamentoMB.local.descricao}" placeholder="Descrição do Local" size="50" maxlength="100" disabled="#{localequipamentoMB.controlaCadastro eq 0}"/>			
+		</p:panelGrid>
+		<f:facet name="footer">
+			<p:panelGrid columns="6" style="border: none !important; ">
+				<p:commandButton value="Novo" action="#{localequipamentoMB.novo}" update=":formCad" />
+				<p:commandButton value="Remover" action="#{localequipamentoMB.exclui}" disabled="#{localequipamentoMB.local.id==null}" update=":formCad" />
+				<p:commandButton value="Limpar" action="#{localequipamentoMB.limpaCadastro}" update=":formCad" />
+				<p:commandButton value="Gravar" action="#{localequipamentoMB.grava}" update=":formCad,:formMsg" />
+			</p:panelGrid>
+		</f:facet>
+		<br></br>
+		<hr></hr>
+	    <p:dataTable id="local" var="l" value="#{localequipamentoMB.locais}" selectionMode="single" paginator="true" paginatorPosition="bottom" rows="10"
+	    		selection="#{localequipamentoMB.localSel}" rowKey="#{l.id}" emptyMessage="">
+	    	<f:facet name="header">Locais cadastrados</f:facet>
+			<p:ajax event="rowSelect" listener="#{localequipamentoMB.selecao}" update=":formCad" />
+	        <p:column headerText="Descrição" width="40%" filterBy="#{l.descricao}" filterMatchMode="contains">
+	            <h:outputText value="#{l.descricao}" />
+	        </p:column>
+	    </p:dataTable>
+	</p:panel>
+</h:form>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

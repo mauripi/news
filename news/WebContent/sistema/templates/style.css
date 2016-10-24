@@ -1,0 +1,75 @@
+
+.ui-layout-north{
+    z-index:auto !important;
+    overflow:visible !important;  
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+/*
+.ui-widget{font-size:100% !important;}
+*/
+.norte .ui-layout-unit-header{
+
+}
+
+.ui-layout-unit-content{
+	/*background-image:url('news2.jpg');
+background: #DFE4E6 !important;*/
+}
+
+.ui-layout-west {
+	/*background-image:url('news2.jpg');*/
+    padding: 0.2em 0em;
+    border: 0px none;
+    overflow: hidden !important;
+}
+
+.west .ui-layout-unit-content{
+   background: #1f3063 !important; /* old #3e5795 */
+}
+
+
+.center .ui-layout-unit-content{
+   background-image:url('news2.jpg');
+   background-size: 100% 100%;
+}
+
+.norte .ui-layout-unit-content{
+ /*  background: #38C !important;
+   height: 10%; */
+}
+
+.ui-widget,.ui-widget .ui-widget {
+font-size: 93% !important;
+
+}
+
+.ui-datatable {
+    display: table;
+}
+
+.ui-datatable table {
+    table-width: auto !important;
+}
+
+.holer .ui-panelgrid tr, .ui-panelgrid td {
+	border: none !important; 	
+	font: 90% verdana;
+	
+}
+.headerEmpresa{
+	border: none !important;
+	text-align: left;
+}
+.headerDireita{
+	text-align: right;
+}
+.ui-panelgrid tr, .ui-panelgrid td {
+	border: none !important;
+}
+
+
+
+

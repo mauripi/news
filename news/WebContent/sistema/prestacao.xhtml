@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core"  
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - Financeiro</ui:define> 
+<ui:define name="conteudo">
+
+		<f:facet name="header">Prestações de Contas</f:facet>
+<h:form id="formCad">
+<p:panel rendered="#{acessoBean.temAcessoPrestacaoDeContas}" style="border:0 !important;">
+	<p:fieldset style="width:50%;border:0 !important;">
+		Clique aqui <spam><p:commandButton value="#{prestacaoMB.colaborador.nome}"  oncomplete="PF('dgSelUser').show()" update=":formSel"/></spam> para alterar o colaborador.
+		<br></br><br></br>
+		<p:panelGrid columns="6" layout="grid" style="border:0 !important;">
+			<p:commandButton value="Novo" action="#{prestacaoMB.novo}" update=":formCad" />
+			<p:commandButton value="Editar" action="#{prestacaoMB.edita}" update=":formCad" disabled="#{prestacaoMB.prestacao.id==null}" />
+			<p:commandButton value="Remover" action="#{prestacaoMB.exclui}" disabled="#{prestacaoMB.prestacao.id==null}" update=":formCad,:formMsg" />
+			<p:commandButton value="Limpar" action="#{prestacaoMB.limpaCadastro}" update=":formCad" />
+			<p:commandButton value="Imprimir" ajax="false" action="${prestacaoMB.imprimir}" disabled="#{prestacaoMB.prestacao.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
+			<p:commandButton value="Gravar" action="${prestacaoMB.grava}" update=":formCad,:formMsg" />
+		</p:panelGrid>	
+	</p:fieldset>	
+		
+
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Motivo da Despesa *"/>				
+			<p:inputTextarea value="#{prestacaoMB.prestacao.motivodespesa}" style="width:500px;" maxlength="500" 
+				disabled="#{prestacaoMB.controlaCadastro==0}" rows="1"/>
+		</p:panelGrid>
+		<br></br>
+		<p:panelGrid columns="1">
+	        <p:selectOneRadio id="tipo" value="#{prestacaoMB.tipo}"  disabled="#{prestacaoMB.controlaCadastro==0}">
+	            <f:selectItem itemLabel="Adiantamento" itemValue="1" />
+	            <f:selectItem itemLabel="Reembolso Direto" itemValue="2" />
+	            <p:ajax event="change" update="tipo gridContainer :formCad:dts" />
+	        </p:selectOneRadio>
+		</p:panelGrid>			
+		<p:outputPanel id="gridContainer" layout="block" >							
+			<p:panelGrid id="dts" columns="4" rendered="#{prestacaoMB.tipo==1}">	
+		        <h:outputLabel value="Data do Adiantamento *" rendered="#{prestacaoMB.tipo==1}"/>			
+				<p:calendar value="#{prestacaoMB.prestacao.dataadiantamento}"  maxdate="#{prestacaoMB.today}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" disabled="#{prestacaoMB.controlaCadastro==0}"/>								
+		        <h:outputLabel value="Valor do Adiantamento *"/>			
+				<p:inputText value="#{prestacaoMB.prestacao.valoradiantado}" size="10" disabled="#{prestacaoMB.controlaCadastro==0}" >
+				 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+				</p:inputText>					
+			</p:panelGrid>	
+		</p:outputPanel>
+		<br></br>
+
+		<p:panelGrid columns="5">
+			<h:outputLabel value="Data da Nota"/>
+			<h:outputLabel value="Num.Doc."/>
+	        <h:outputLabel value="Valor da Nota"/>			
+			<h:outputLabel value="Fornecedor"/>
+			<h:outputLabel value=""/>
+			<p:calendar id="dt" value="#{prestacaoMB.despesa.data}" locale="pt_BR" pattern="dd/MM/yyyy" maxdate="#{prestacaoMB.today}"  size="11" disabled="#{prestacaoMB.controlaCadastro==0}" />				
+			<p:inputText  id="nd" value="#{prestacaoMB.despesa.documento}" size="10" disabled="#{prestacaoMB.controlaCadastro==0}"/>					
+			<p:inputText id="vl" value="#{prestacaoMB.despesa.valor}" size="10" disabled="#{prestacaoMB.controlaCadastro==0}" >
+			 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+			</p:inputText>	
+			<p:inputText  id="ds" value="#{prestacaoMB.despesa.descricao}" size="40" disabled="#{prestacaoMB.controlaCadastro==0}"/>	
+		    <p:commandButton value="Adicionar" action="#{prestacaoMB.addDespesa}" update="dt,nd,vl,ds,desp,:formMsg" disabled="#{prestacaoMB.controlaCadastro==0}" />
+		</p:panelGrid>
+		
+		<p:panelGrid columns="1">
+		   <p:dataTable id="desp" var="d" value="#{prestacaoMB.prestacao.despesas}" emptyMessage="" widgetVar="desp" style="width:50%;">
+		       <f:facet name="header">
+		           RELAÇÃO DE COMPROVANTES DE DESPESAS
+		       </f:facet>
+			 
+		       <p:column headerText="Data" style="width:15%;">
+	              <h:outputText value="#{d.data}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  </h:outputText>
+	          </p:column>			 
+	          <p:column headerText="Nº NF/CF" style="width:15%;">
+	              <h:outputText value="#{d.documento}" />
+		      </p:column>
+	          <p:column headerText="Valor" style="width:15%;text-align: right;">
+				<h:outputText value="#{d.valor}" style="text-align: right;">
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>	
+		      </p:column>
+	          <p:column headerText="Fornecedor" style="width:65%;">
+	              <h:outputText value="#{d.descricao}" />
+		      </p:column>	
+	       	  <p:column style="width:64px;text-align: center">
+	               <p:commandButton update=":formCad:dt,:formCad:nd,:formCad:vl,:formCad:ds,:formCad:desp" icon="ui-icon-pencil" title="Editar"  disabled="#{prestacaoMB.controlaCadastro==0}">
+	                  <f:setPropertyActionListener value="#{d}" target="#{prestacaoMB.despesa}" />
+	                  <p:collector value="#{d}" removeFrom="#{prestacaoMB.prestacao.despesas}" />
+	              </p:commandButton>
+	               <p:commandButton action="#{prestacaoMB.calculaTotais}" update=":formCad:dt,:formCad:nd,:formCad:vl,:formCad:ds,:formCad:desp" icon="ui-icon-trash" title="Remover"  disabled="#{prestacaoMB.controlaCadastro==0}">
+	                  <p:collector value="#{d}" addTo="#{prestacaoMB.despesaParaRemover}" />
+	                  <p:collector value="#{d}" removeFrom="#{prestacaoMB.prestacao.despesas}" />
+	              </p:commandButton>			              
+	          </p:column>			      			      
+		   </p:dataTable>
+		</p:panelGrid>
+
+
+	<f:facet name="footer">	
+		<p:panelGrid columns="4"  layout="grid" style="text-align:center;font-stretch: narrower !important;font-weight: bold !important;width:50%;">
+			<h:outputLabel value="VALOR DO ADIANTAMENTO" style="font-stretch: narrower !important;font-weight: bold !important;"/>						
+			<h:outputLabel value="TOTAL DE DESPESAS" style="font-stretch: narrower !important;font-weight: bold !important;"/>
+			<h:outputLabel value="TOTAL A RESTITUIR" style="font-stretch: narrower !important;font-weight: bold !important;"/>
+			<h:outputLabel value="TOTAL A RECEBER" style="font-stretch: narrower !important;font-weight: bold !important;"/>
+			<h:outputText value="#{prestacaoMB.prestacao.valoradiantado}" style="font-size: large !important;font-weight: bold !important;">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	
+			<h:outputText value="#{prestacaoMB.totalDespesa}" style="font-size: large !important;font-weight: bold !important;">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>
+			<h:outputText value="#{prestacaoMB.totalRestituir}" style="font-size: large !important;font-weight: bold !important;">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>
+			<h:outputText value="#{prestacaoMB.totalReceber}" style="font-size: large!important;font-weight: bold !important;">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>
+		</p:panelGrid>				
+	</f:facet>
+</p:panel>
+</h:form>
+
+<p:dialog id="dgSelUser" widgetVar="dgSelUser" appendTo="@(body)" modal="true" header="Seleção de Colaborador" resizable="false" width="50%">
+		<h:form id="formSel" >
+
+			<p:panelGrid columns="1" style="text-align: left !important;">
+		        <p:selectOneMenu id="sel" value="#{prestacaoMB.colaborador}" converter="loginConverter" >
+		        	<p:ajax event="change" update=":formCad,:formSel" listener="#{prestacaoMB.colaboradorSelececionado}"/>
+		            <f:selectItems value="#{prestacaoMB.colaboradores}" itemLabel="#{c.nome}" itemValue="#{c}" var="c" />
+		        </p:selectOneMenu>	
+	        </p:panelGrid>	
+
+
+			<p:dataTable id="tb" var="p" value="#{prestacaoMB.prestacoes}" rows="3" paginator="true" paginatorPosition="bottom"
+					emptyMessage="Não há prestações." style="border:0 !important;">
+	           	<f:facet name="header">Últimas Prestações</f:facet>
+
+	          <p:column headerText="Nº" style="width:10%;">
+	              <h:outputText value="#{p.id}" />
+		      </p:column>
+		      
+		       <p:column headerText="Data de Criação" style="width:15%;">
+	              <h:outputText value="#{p.dataCriacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  </h:outputText>
+	          </p:column>	
+	          		      
+	          <p:column headerText="Motivo" style="width:60%;">
+	              <h:outputText value="#{p.motivodespesa}" />
+		      </p:column>
+	
+	          <p:column headerText="" style="width:15%;"> 
+                <p:commandButton value="Selecionar" action="#{prestacaoMB.prestacaoSelecionada}" update=":formCad" oncomplete="PF('dgSelUser').hide();"> 
+                	<f:setPropertyActionListener value="#{p}" target="#{prestacaoMB.prestacao}" />
+                </p:commandButton> 
+	          </p:column>		
+			</p:dataTable>
+
+		</h:form>
+</p:dialog>	
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

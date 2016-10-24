@@ -1,0 +1,30 @@
+/* ------------------------------
+global styles
+------------------------------ */
+{
+	border:0 !important;
+}
+
+.holer.ui-panelgrid tr, .ui-panelgrid td {
+	border: none !important; 
+	text-align: left;
+	font: 598% verdana;
+}
+
+.ui-panel {  
+    top: 0;
+    padding: 0;
+     
+}  
+
+.headerEmpresa.ui-panelgrid{
+	/*font-size: 10px;*/
+	top: 0;
+    padding: 0;
+    line-height: 20%;
+}
+
+.headerDireita.ui-panelgrid{
+	font-size: 8px;
+	text-align: right !important;
+}

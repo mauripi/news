@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core"  
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+</h:head>
+    	
+<h:body>
+	
+<ui:composition template="templates/geral.xhtml">
+  <ui:define name="titulo">RECORD NEWS</ui:define>
+	<ui:define name="conteudo">
+<p:layout fullPage="false" rendered="#{acessoBean.temAcessoUsuario}">
+
+	<p:layoutUnit position="center" header="Cadastro de Usuários" style="border: none !important; ">
+		<h:form  id="formCad" style="width:100%;font-size: 110%;">
+			<p:panel id="panel">
+
+				<p:panelGrid columns="3">
+					<h:outputLabel value="Nome"/>
+					<h:outputLabel value="Chapa"/>
+					<h:outputLabel value="CPF"/>
+					<p:inputText value="#{usuarioMB.login.nome}" disabled="#{usuarioMB.controlaCadastro==0}" size="50"/>				
+					<p:inputText id="chapa" value="#{usuarioMB.login.chapa}" disabled="#{usuarioMB.controlaCadastro==0}" size="7" maxlength="6" validatorMessage="Chapa: Somente números são permitidos.">
+						<f:validateRegex pattern="[0-9]+$" for="chapa"/>
+					</p:inputText>
+					<p:inputText id="cpf" value="#{usuarioMB.login.cpf}" disabled="#{usuarioMB.controlaCadastro==0}" size="10" maxlength="11" validatorMessage="CPF: Somente números são permitidos.">
+						<f:validateRegex pattern="[0-9]+$"/>
+					</p:inputText>
+				</p:panelGrid>
+				<p:panelGrid columns="4">				
+					<h:outputLabel value="E-mail"/>
+					<h:outputLabel value="Filial"/>
+					<h:outputLabel value="Centro de Custo"/>
+					<h:outputLabel value="Ativo"/>
+					<p:inputText  value="#{usuarioMB.login.email}" disabled="#{usuarioMB.controlaCadastro==0}" size="40"/>				
+					<p:selectOneMenu value="#{usuarioMB.login.filial}" converter="filialConverter" disabled="#{usuarioMB.controlaCadastro==0}">
+						<f:selectItems value="#{usuarioMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
+					</p:selectOneMenu>	
+					<p:selectOneMenu value="#{usuarioMB.login.custo}" converter="ccustoConverter" disabled="#{usuarioMB.controlaCadastro==0}">
+						<f:selectItems value="#{usuarioMB.centroCustos}" var="c" itemLabel="#{c.nome}" itemValue="#{c}" />
+					</p:selectOneMenu>						
+					<p:selectBooleanCheckbox value="#{usuarioMB.login.ativo}"   disabled="#{usuarioMB.controlaCadastro==0}"/>	
+				</p:panelGrid>
+				<f:facet name="footer">
+					<p:panelGrid columns="6">
+						<p:commandButton value="Novo" action="#{usuarioMB.novo}" update=":formCad"/>
+						<p:commandButton value="Editar" action="#{usuarioMB.edita}" update=":formCad" disabled="#{usuarioMB.login.id==null}"/>
+						<p:commandButton value="Resetar Senha" action="#{usuarioMB.resetarSenha}" disabled="#{usuarioMB.login.id==null}" update=":formCad,:formMsg"/>
+						<p:commandButton value="Cancelar" action="#{usuarioMB.limpaCadastro}" update=":formCad" disabled="#{usuarioMB.login.id==null}"/>
+						<p:commandButton value="Gravar" action="${usuarioMB.grava}" update=":formCad,:formMsg,:form_tb" disabled="#{usuarioMB.controlaCadastro==0}"/>
+					</p:panelGrid>			
+				</f:facet>
+			</p:panel>
+		</h:form> 	
+<br></br>
+		<h:form id="form_tb" style="font-size: 0.9em !important;">
+
+			<p:dataTable id="tb" var="u" value="#{usuarioMB.logins}"			  
+		               paginator="true" paginatorPosition="bottom" rows="20" rowKey="#{u.id}"
+		               selectionMode="single" resizableColumns="true" filteredValue=""						
+						emptyMessage="Nenhum registro encontrado!">
+		          <p:ajax event="rowSelect" listener="#{usuarioMB.usuarioSelecionado}" update=":formCad" />
+	
+		           <p:column filterBy="#{u.chapa}" headerText="Matrícula" filterMatchMode="contains" sortBy="#{u.chapa}" style="width:10%;text-align:center;">
+						<h:outputText value="#{u.chapa}" /> 
+		            </p:column>  		          
+		           <p:column filterBy="#{u.nome}" headerText="Nome" filterMatchMode="contains" sortBy="#{u.nome}" style="width:40%;text-align:left;" filterStyle="width:80%;text-align:left;">
+						<h:outputText value="#{u.nome}" /> 
+		            </p:column>  
+		           <p:column headerText="CPF" style="width:15%;text-align:center;">
+						<h:outputText value="#{u.cpf}" /> 
+		            </p:column>  		            		            					
+		           <p:column  headerText="Filial" sortBy="#{u.filial.id}" style="width:15%;text-align:left;">
+						<h:outputText value="#{u.filial.id} - #{u.filial.nome}"/> 
+		            </p:column>  
+		           <p:column  headerText="E-mail" style="width:20%;text-align:left;">
+						<h:outputText value="#{u.email}"/> 
+		            </p:column> 		            
+			</p:dataTable>
+		</h:form>
+	
+	</p:layoutUnit>
+</p:layout>
+    <h:form id="formMsg" style="font-size:small;">                      
+        <p:growl id="msg" showDetail="true" life="4000"/> 
+    </h:form>
+
+	</ui:define>			
+
+</ui:composition>
+	
+</h:body>	
+
+</html>

@@ -1,0 +1,16 @@
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;
+    background-color: black;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+       font-style: italic;font-weight: bold;
+}
+
+div.texto4 {
+	width:100%;
+	position:absolute;	top:6px;	left:6px;	color:#f00;	font: 110% "arial black", Helvetica, sans-serif;
+	
+}

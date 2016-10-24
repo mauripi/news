@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core"  
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - RH</ui:define>
+<ui:define name="conteudo">
+<f:facet name="header">Holerites dos Funcionários</f:facet>
+<p:panel  rendered="#{acessoBean.temAcessoHoleriteselecao}" style="background: transparent !important;border: 0 !important;">
+
+	<center>
+		<h:form id="formSelecao" >  
+		    <p:dataTable id="funcs" var="f" value="#{holeriteBean.funcionarios}" paginator="true"  rowKey="#{f.id}"
+		              selection="#{holeriteBean.funcionarioSelecionado}" emptyMessage=""
+		              selectionMode="single"  paginatorPosition="bottom" style="width:60%;">  
+		  
+		        <p:ajax event="rowSelect" listener="#{holeriteBean.usuarioSelecionado}"   
+		                    update=":form:bases" oncomplete="PF('selecaoPeriodo').show()" />  
+		   
+		        <f:facet name="header">  
+		            Selecione um funcionário para a vizualização 
+		        </f:facet>  
+		  
+		        <p:column headerText="Chapa" filterBy="#{f.chapa}" footerText="Registros selecionados"  
+                	filterMatchMode="contains" filterStyle="width:60%;" style="width:10%;">  
+		            #{f.chapa}  
+		        </p:column>  
+		  
+		        <p:column  filterBy="#{f.cpf}" headerText="CPF" style="width:20%;">  
+		            #{f.cpf}  
+		        </p:column>  
+		  
+		        <p:column  filterBy="#{f.nome}" headerText="Nome do Funcionario" style="width:70%;">  
+		            #{f.nome}  
+		        </p:column>  
+		 
+		    </p:dataTable>  
+		</h:form>
+	</center>
+</p:panel>	
+<h:form id="form" style="width: 50%;text-align: center;" >
+	<p:dialog id="selecaoPeriodo" widgetVar="selecaoPeriodo" header="Seleção do Período" height="400" width="650" rendered="#{acessoBean.temAcessoHoleriteselecao}" >
+		<p:panelGrid columns="1">
+			<h:outputLabel value="Selecione o Ano."/>
+			<p:selectOneMenu value="#{holeriteBean.ano}" style="width:120px;">
+				<f:selectItem itemLabel="2016" itemValue="2016"/>			
+				<f:selectItem itemLabel="2015" itemValue="2015"/>
+				<f:selectItem itemLabel="2014" itemValue="2014"/>
+				<f:selectItem itemLabel="2013" itemValue="2013"/>
+				<p:ajax event="change" listener="#{holeriteBean.carregaSelecaoDosPeriodosFuncionario}" update="bases"/>
+			</p:selectOneMenu>
+		</p:panelGrid>	
+		<br></br>
+		<p:dataTable id="bases" var="b" value="#{holeriteBean.bases}" paginator="true" rows="10" paginatorPosition="bottom">
+		  	<f:facet name="header" >#{holeriteBean.funcionarioSelecionado.nome} - Chapa: #{holeriteBean.funcionarioSelecionado.chapa}</f:facet>
+			<p:column headerText="Mês/Ano">
+				<h:outputText value="#{b.mes}/#{b.ano}" />
+			</p:column>
+			<p:column headerText="Função">
+				<h:outputText value="#{b.funcao}"/>
+			</p:column>
+			<p:column headerText="Visualizar">
+	               <p:commandButton id="selectButton" action="#{holeriteBean.getHoleriteFuncionario}" icon="ui-icon-search" update=":dgForm" oncomplete="PF('visual').show()">
+	               		<f:setPropertyActionListener value="#{b}" target="#{holeriteBean.baseSelecionada}" />             		
+	               </p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</p:dialog>
+</h:form>
+		
+<h:form id="dgForm">
+	<p:dialog id="visual" widgetVar="visual" header="Visualização do Holerite" height="400" width="650" rendered="#{acessoBean.temAcessoHoleriteselecao}">
+		<p:panel>
+			<p:panelGrid columns="3" style="padding:0;margin: 0;width: 100%" styleClass="holer">
+				<img src="../img/logo.jpg" alt="" height="60px;" />
+				<p:panelGrid columns="1" >
+					<h:outputLabel value="Empregador"/>
+					<h:outputLabel value="REDE MULHER DE TELEVISÃO LTDA"/>
+					<h:outputLabel value="#{holeriteBean.funcionarioSelecionado.filial.endereco}"/>
+					<h:outputLabel value="CNPJ: #{holeriteBean.funcionarioSelecionado.filial.cnpj}"/>
+				</p:panelGrid>
+				<p:panelGrid columns="1" >
+					<h:outputLabel value="RECIBO DE PAGAMENTO DE SALÁRIO"/>
+					<h:outputLabel value="Referente ao Mês / Ano"/>
+					<h:outputLabel value="#{holeriteBean.baseSelecionada.mes} / #{holeriteBean.baseSelecionada.ano}" />					
+				</p:panelGrid>
+			</p:panelGrid>
+		</p:panel>
+		<p:panel>
+			<p:panelGrid columns="4" style="font-size:8px;width: 100%;" styleClass="headerDados" >
+				<p:column style=" width: 10%">
+					<p:outputLabel value="CHAPA" />			
+				</p:column>
+				<p:column style=" width: 40%">
+					<p:outputLabel value="NOME DO FUNCIONÁRIO" />			
+				</p:column>				
+				<p:column style=" width: 10%">
+					<p:outputLabel value="CBO"/>			
+				</p:column>
+				<p:column style=" width: 40%">
+					<p:outputLabel value="FUNÇÃO"/>			
+				</p:column>						
+				<p:column style=" width: 10%">
+					<p:outputLabel value="#{holeriteBean.baseSelecionada.chapa}" />	
+				</p:column>
+				<p:column style=" width: 40%">
+					<p:outputLabel value="#{holeriteBean.funcionarioSelecionado.nome}" />			
+				</p:column>				
+				<p:column style=" width: 10%">
+					<p:outputLabel value="#{holeriteBean.baseSelecionada.cbo}"/>			
+				</p:column>
+				<p:column style=" width: 40%">
+					<p:outputLabel value="#{holeriteBean.baseSelecionada.funcao}"/>			
+				</p:column>					
+								
+			</p:panelGrid>
+		</p:panel>
+		<p:panel>
+			<p:dataTable id="hol" var="h" value="#{holeriteBean.holerites}" 
+					style="font-size:10px"  scrollHeight="150">
+				<p:column headerText="Cód" style="width:5%">  
+          			<h:outputText value="#{h.codigo}" />  
+        		</p:column> 
+				<p:column headerText="Descrição" style="width:75%">  
+          			<h:outputText value="#{h.descricao}" />  
+        		</p:column> 
+ 				<p:column headerText="Ref." style="width:10%">  
+          			<h:outputText value="#{h.referencia}" style="float: right;">
+ 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+          			</h:outputText>   
+        		</p:column> 
+ 				<p:column headerText="Provento" style="width:20%">  
+          			<h:outputText value="#{h.provento}" style="float: right;">
+ 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+          			</h:outputText> 
+        		</p:column> 
+				<p:column headerText="Desconto" style="width:20%">  
+          			<h:outputText value="#{h.desconto}" style="float: right;">
+ 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+          			</h:outputText>   
+        		</p:column> 
+		        <p:columnGroup type="footer">  
+		            <p:row>  
+		                <p:column colspan="3" footerText="Totais:"  
+		                                style="text-align:right"  />  
+		  
+		                <p:column>
+		                	<f:facet name="footer">
+			          			<h:outputText value="#{holeriteBean.totalProvento}" style="float: right;">
+			 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+			          			</h:outputText>
+		          			</f:facet> 		                
+		                </p:column>  
+
+		                <p:column>
+		                	<f:facet name="footer">
+			          			<h:outputText value="#{holeriteBean.totalDesconto}" style="float: right;">
+			 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+			          			</h:outputText>
+		          			</f:facet> 		                
+		                </p:column>  
+
+		            </p:row> 
+		            <p:row>  
+		                <p:column colspan="3" footerText="Liquido a Receber:"  
+		                                style="text-align:right"  />  
+ 
+		                <p:column colspan="2">
+		                	<f:facet name="footer">
+			          			<h:outputText value="#{holeriteBean.totalLiquido}" style="float: center;font-size:small;">
+			 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+			          			</h:outputText>
+		          			</f:facet> 		                
+		                </p:column> 
+		            </p:row>		             
+		        </p:columnGroup>          		        		       		       		        		
+			</p:dataTable>
+		</p:panel>		
+		<p:panel>
+			<p:panelGrid columns="4" style="font-size:8px;width: 100%" >
+				<p:column style=" width: 25%">
+					<p:outputLabel value="Salário Base" />			
+				</p:column>
+				<p:column style=" width: 25%">
+					<p:outputLabel value="Base INSS" />			
+				</p:column>				
+				<p:column style=" width:25%">
+					<p:outputLabel value="Base FGTS"/>			
+				</p:column>
+				<p:column style=" width: 25%">
+					<p:outputLabel value="FGTS do Mês"/>			
+				</p:column>						
+				<p:column style=" width: 25%">	
+					<h:outputText value="#{holeriteBean.baseSelecionada.salarioBase}">
+ 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+          			</h:outputText>						
+				</p:column>
+				<p:column style=" width: 25%">		
+					<h:outputText value="#{holeriteBean.baseSelecionada.baseINSS}">
+ 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+          			</h:outputText>		
+				</p:column>				
+				<p:column style=" width: 25%">		
+					<h:outputText value="#{holeriteBean.baseSelecionada.baseFGTS}">
+ 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+          			</h:outputText>		
+				</p:column>
+				<p:column style=" width: 25%">
+					<h:outputText value="#{holeriteBean.fgtsMes}">
+ 						<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+          			</h:outputText>			
+				</p:column>					
+								
+			</p:panelGrid>
+		</p:panel>		
+		<f:facet name="footer">
+			<p:commandButton ajax="false" value="Imprimir" icon="ui-icon-print" style="font-size: small;"
+			 action="#{holeriteBean.getImprimirHoleriteFuncionario}" onclick="this.form.target='_blank'" />
+		</f:facet>
+	</p:dialog>
+
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

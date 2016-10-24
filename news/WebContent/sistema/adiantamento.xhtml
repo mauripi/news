@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - FINANCEIRO</ui:define>
+<ui:define name="conteudo">
+
+<h:form id="formtb">
+	<p:commandButton action="#{adiantamentoMB.novo}" value="Novo Adiantamento" title="Nova Adiantamento" oncomplete="PF('dgCad').show()" update=":formCad"/>
+ 	<br></br>                    
+	<br></br>
+    <p:dataTable id="tb" var="a" value="#{adiantamentoMB.adiantamentos}" selectionMode="single" selection="#{adiantamentoMB.adiantamento}" rowKey="#{a}" 
+    		rows="20" paginator="true" emptyMessage="" paginatorPosition="bottom">
+    	<f:facet name="header">Adiantamentos Efetuadas</f:facet>
+
+	   <p:ajax event="rowSelect" listener="#{adiantamentoMB.onRowSelect}" update=":formMsg,:formCad,dgCad" oncomplete="PF('dgCad').show();"/>
+       <p:column headerText="Nº" width="3%">
+            <h:outputText value="#{a.id}" />
+       </p:column>	 			
+       <p:column headerText="Data" style="width:5%;">
+          <h:outputText value="#{a.data}">
+			  <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+		  </h:outputText>
+       </p:column>       
+	   <p:column headerText="Valor" style="text-align: right;width:7%;">
+			<h:outputText value="#{a.valor}">
+				<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />	           																
+			</h:outputText>				
+	   </p:column>	          
+       <p:column headerText="Motivo" style="width:60%;"  >
+            <h:outputText value="#{a.motivo}" />
+       </p:column>	         
+       <p:column headerText="Favorecido" style="width:20%;"  >
+            <h:outputText value="#{a.favorecido.nome}" />
+       </p:column>	               
+    </p:dataTable>
+
+</h:form>
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="#{adiantamentoMB.lblDialogo}" resizable="false" width="60%;" height="220px;">
+<h:form id="formCad" style="width:120 %;">
+
+	<p:panelGrid columns="2" style="width:500px;">
+		<h:outputLabel value="Favorecido"/>
+		<p:autoComplete id="fav"  value="#{adiantamentoMB.favorecido}" converter="loginConverter" forceSelection="true" size="50"
+			completeMethod="#{adiantamentoMB.completeText}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>
+        <h:outputLabel value="Data do Adiantamento"/>			
+		<p:calendar value="#{adiantamentoMB.adiantamento.data}"  maxdate="#{adiantamentoMB.today}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" disabled="true"/>								
+        <h:outputLabel value="Valor"/>			
+		<p:inputText value="#{adiantamentoMB.adiantamento.valor}" size="10" disabled="#{adiantamentoMB.controlaCadastro==0}" >
+		 	 <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+		</p:inputText>				
+		<h:outputLabel value="Motivo"/>
+		<h:panelGrid columns="1" style="widht:100%;" >
+		<p:inputTextarea id="mot" value="#{adiantamentoMB.motivo}" rows="3" autoResize="" cols="50"
+				maxlength="500" required="true" counter="display" counterTemplate="restam {0} caracteres." requiredMessage="Obrigatório preenchimento do motivo."/>
+			<h:outputText id="display" />
+		</h:panelGrid>
+		<h:outputLabel value="Observações"/>
+		<h:panelGrid columns="1" style="widht:100%;" >
+		<p:inputTextarea id="obs" value="#{adiantamentoMB.adiantamento.observacao}" rows="3" autoResize="" cols="50"
+				maxlength="500" counter="display2" counterTemplate="restam {0} caracteres."/>
+			<h:outputText id="display2" />
+		</h:panelGrid>
+	<f:facet name="footer">		
+		<p:commandButton value="#{adiantamentoMB.lblBotao}" action="#{adiantamentoMB.grava}" onclick="PrimeFaces.monitorDownload(start, stop);" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
+		<p:commandButton value="Cancelar" action="#{adiantamentoMB.limpaCadastro}"  oncomplete="PF('dgCad').hide()"/>
+	</f:facet>
+	</p:panelGrid>
+
+</h:form>
+</p:dialog>
+
+			
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="5000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+
+<script type="text/javascript">
+function start() {
+    PF('statusDialog').show();
+}
+ 
+function stop() {
+    PF('statusDialog').hide();
+}
+</script>
+</h:body>	
+</html>

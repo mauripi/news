@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
+<ui:define name="conteudo">
+
+<p:panel >
+	<h:form id="formtb">
+
+	    <h:panelGrid columns="6" style="margin-bottom:10px" cellpadding="5">	        
+	        <p:selectBooleanCheckbox value="#{solicitacaofechadaMB.filial1}">
+	            <p:ajax update=":formtb:tb"  listener="#{solicitacaofechadaMB.listarPorFilial}"/>
+	        </p:selectBooleanCheckbox>
+	        <p:outputLabel value="Matriz" />
+	        <p:selectBooleanCheckbox value="#{solicitacaofechadaMB.filial2}">
+	            <p:ajax update=":formtb:tb"  listener="#{solicitacaofechadaMB.listarPorFilial}"/>
+	        </p:selectBooleanCheckbox>
+	        <p:outputLabel value="Araraquara" />
+	        <p:selectBooleanCheckbox value="#{solicitacaofechadaMB.filial3}">
+	            <p:ajax update=":formtb:tb"  listener="#{solicitacaofechadaMB.listarPorFilial}"/>
+	        </p:selectBooleanCheckbox>               
+	        <p:outputLabel value="Manaus" />	        
+
+	    </h:panelGrid>	
+	    <p:dataTable id="tb" var="s" value="#{solicitacaofechadaMB.solicitacoes}"   paginator="true" rows="25"
+	    	selectionMode="single" selection="#{solicitacaofechadaMB.solicitacao}" rowKey="#{s}" emptyMessage="">
+
+        	<p:ajax event="rowSelect" listener="#{solicitacaofechadaMB.onRowSelect}" update=":formMsg,:formEdit" oncomplete="PF('dgEdit').show();"/>
+
+	       <p:column headerText="Nº" width="4%">
+	            <h:outputText value="#{s.id}" />
+	       </p:column>	 			
+	       <p:column headerText="Abertura" style="width:12%;">
+              <h:outputText value="#{s.dataabertura}">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			  </h:outputText>
+           </p:column>
+	       <p:column headerText="Hora" style="width:7%;">
+              <h:outputText value="#{s.horaabertura}">
+				<f:convertDateTime pattern="HH:mm" locale="pt_BR"/>
+			  </h:outputText>
+           </p:column>           
+	        <p:column headerText="Solicitante" width="25%">
+	            <h:outputText value="#{s.solicitante.nome}" />
+	        </p:column>	   
+	        <p:column headerText="Favorecido" width="25%">
+	            <h:outputText value="#{s.favorecido.nome}" />
+	        </p:column>	  	        
+	        <p:column headerText="Descrição do problema" width="57%">
+	            <h:outputText value="#{s.descricao}" />
+	        </p:column>	   	        	           
+	        <p:column headerText="Categoria" width="15%"> 
+	            <h:outputText value="#{s.categoria}" />
+	        </p:column>
+	        <p:column headerText="Area" width="10%">
+	            <h:outputText value="#{s.area.descricao}" />
+	        </p:column>
+	        <p:column headerText="Situação" width="10%">
+	            <h:outputText value="#{solicitacaofechadaMB.buscaStatus(s.historicos)}" />
+	        </p:column>	               
+	    </p:dataTable>
+	</h:form>
+</p:panel>		
+
+<h:form id="formEdit" >
+	<p:dialog id="dgEdit" widgetVar="dgEdit" appendTo="@(body)" modal="true" header="Interação na Solicitação" resizable="false" >
+		<p:panel style="width:800px;height:400px;">
+			<p:panelGrid columns="6" >
+				<h:outputText value="Solicitação:" style="font-weight: bold"/>
+				<h:outputText value="#{solicitacaofechadaMB.solicitacao.id}"/>
+				<h:outputText value="Aberta em:" style="font-weight: bold"/>
+	            <h:outputText value="#{solicitacaofechadaMB.solicitacao.dataabertura}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>				
+				<h:outputText value="Hora:" style="font-weight: bold"/>
+	            <h:outputText value="#{solicitacaofechadaMB.solicitacao.horaabertura}">
+					<f:convertDateTime pattern="HH:mm" locale="pt_BR"/>
+				</h:outputText>			
+				<h:outputText value="Categoria:" style="font-weight: bold"/>
+				<h:outputText value="#{solicitacaofechadaMB.solicitacao.categoria}"/>
+				<h:outputText value="Área:" style="font-weight: bold"/>	
+				<h:outputText value="#{solicitacaofechadaMB.solicitacao.area.descricao}"/>
+				<h:outputText value="Solicitante:" style="font-weight: bold"/>	
+				<h:outputText value="#{solicitacaofechadaMB.solicitacao.solicitante.nome}"/>
+			</p:panelGrid>
+			<br></br>
+			<br></br>
+			
+			<p:dataTable id="tbEdit" var="h" value="#{solicitacaofechadaMB.ordenarHistorico()}" rows="5" 
+					emptyMessage=""  scrollRows="20" scrollable="true" liveScroll="true" scrollHeight="250" style="margin-bottom:0">
+		       <f:facet name="header">Históricos da Solicitação</f:facet>
+		       
+		       <p:column headerText="Data" style="width:12%;">
+	              <h:outputText value="#{h.data}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  </h:outputText>
+			   </p:column>
+			   <p:column headerText="Hora" style="width:7%;"> 
+	              <h:outputText value="#{h.hora}">
+					<f:convertDateTime pattern="HH:mm" locale="pt_BR"/>
+				  </h:outputText>				  
+	           </p:column>
+		       <p:column headerText="Descrição" style="width:45%;">
+		            <h:outputText value="#{h.descricao}" />
+		       </p:column>	      
+		       <p:column headerText="Atendente" style="width:13%;">
+		            <h:outputText value="#{solicitacaofechadaMB.primeiroNome(h.atendente.login.nome)}" />
+		       </p:column>	
+		       <p:column headerText="Status" style="width:20%;">
+		            <h:outputText value="#{solicitacaofechadaMB.buscaStatusHistorico(h)}" />
+		       </p:column>	 
+		       <p:column headerText="Baixar" style="width:32px;text-align: center">
+				    <p:commandButton  ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" disabled="#{solicitacaofechadaMB.habilitaDownload(h.arquivo)}"
+				    	actionListener="#{solicitacaofechadaMB.baixarArquivo(h.arquivo)}" icon="ui-icon-arrowthick-1-s">
+				        <p:fileDownload value="#{solicitacaofechadaMB.fileDownload}" />
+				    </p:commandButton>
+		       </p:column>			       
+		       		       			 	
+			</p:dataTable>
+			<br></br>
+			
+		</p:panel>
+		<f:facet name="footer">
+			<p:panelGrid columns="6">		
+				<p:commandButton value="Sair" action="#{solicitacaofechadaMB.limpaCadastro}"  oncomplete="PF('dgEdit').hide()"/>
+			</p:panelGrid>
+		</f:facet>
+	</p:dialog>
+</h:form>
+	
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="5000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

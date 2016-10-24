@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
+<ui:define name="conteudo">
+<div class="ui-grid ui-grid-responsive">
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-2">
+			<p:panel header="Estatísticas">
+
+				<p:panelGrid columns="1">
+					<f:facet name="header">Matriz</f:facet>
+					Aberta = #{tipainelMB.quantidadeAbertoMatriz}<br></br>
+					Em andamento = #{tipainelMB.quantidadeEmAndamentoMatriz}<br></br>
+					Pauados = #{tipainelMB.quantidadePausadoMatriz}<br></br>
+					Em transferencia = #{tipainelMB.quantidadeEmTransferenciaMatriz}<br></br>
+					Resolvidos = #{tipainelMB.quantidadeResolvidaMatriz}
+				</p:panelGrid>		
+				<p:panelGrid columns="1">
+					<f:facet name="header">Araraquara</f:facet>
+					Aberta = #{tipainelMB.quantidadeAbertoAraraquara}<br></br>
+					Em andamento = #{tipainelMB.quantidadeEmAndamentoAraraquara}<br></br>
+					Pauados = #{tipainelMB.quantidadePausadoAraraquara}<br></br>
+					Em transferencia = #{tipainelMB.quantidadeEmTransferenciaAraraquara}<br></br>
+					Resolvidos = #{tipainelMB.quantidadeResolvidaAraraquara}
+				</p:panelGrid>						
+				<p:panelGrid columns="1">
+					<f:facet name="header">Tempo médio atendimento</f:facet>
+					Matriz = 5min<br></br>
+					Araraquara = 5min
+				</p:panelGrid>						
+			</p:panel>
+		</div>
+        <div class="ui-grid-col-8">
+		    <h:form>
+		        <p:dashboard id="board" model="#{tipainelMB.dashmodel}">   
+		            <p:panel id="solicitacao" header="Solicitações">
+		           		<p:commandButton value="Abertas"  actionListener="#{acessoBean.tiSolicitacaoAbertas}" class="ui-menuitem-link ui-corner-all"/><p></p>
+			           	<p:commandButton value="Fechadas"  actionListener="#{acessoBean.tiSolicitacaoFechadas}" class="ui-menuitem-link ui-corner-all"/><p></p>
+			           	<p:commandButton value="Tipos"  actionListener="#{acessoBean.tiAreaSolicitacao}" class="ui-menuitem-link ui-corner-all"/>
+		          
+		            </p:panel>
+		 
+		            <p:panel id="atendente" header="Atendente">
+					    <p:commandButton value="Atendentes" actionListener="#{acessoBean.tiAtendente}" class="ui-menuitem-link ui-corner-all"
+					     rendered="#{acessoBean.temAcessoAtendentes}"/>
+		            </p:panel>
+		 
+		            <p:panel id="equipamento" header="Equipamento">
+		            	<p:commandButton value="Equipamentos"  actionListener="#{acessoBean.tiEquipamento}" class="ui-menuitem-link ui-corner-all" rendered="#{acessoBean.temAcessoEquipamentos}"/>
+		            </p:panel>
+		 
+		            <p:panel id="relatorio" header="Relatório">
+		                <h:outputText value="Relatório" />
+		            </p:panel>
+		 
+		            <p:panel id="licenca" header="Licença">
+					    <p:commandButton value="Licenças" actionListener="#{acessoBean.tiLicenca}" class="ui-menuitem-link ui-corner-all" rendered="#{acessoBean.temAcessoLicenca}"/>                
+		            </p:panel>
+		            
+		            <p:panel id="local" header="Locais">
+					    <p:commandButton value="Locais"  actionListener="#{acessoBean.tiLocalEquipamento}" class="ui-menuitem-link ui-corner-all" rendered="#{acessoBean.temAcessoLocalEquipamentos}"/>            
+		            </p:panel>           
+		
+		            <p:panel id="procedimento" header="Manuais e Procedimentos">
+					    <ui>
+					    	<li>Proc 1</li>
+					    	<li>Proc 2</li>
+					    	<li>Proc 3</li>
+					    </ui>            
+		            </p:panel>               
+		        </p:dashboard>
+		    </h:form>
+
+        <div class="ui-grid-col-2">
+			<p:panel header="Últimos chamados">
+
+			</p:panel>
+		
+		</div>
+    </div>
+    </div>
+</div>
+
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

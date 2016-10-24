@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core"  
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS</ui:define>
+<ui:define name="conteudo">
+<f:facet name="header">Movimentação de Patrimônios</f:facet>
+
+<h:form id="formCad">
+
+		<p:panel style="overflow-y: auto;height: 100%;">
+
+		<f:facet name="footer">
+			<p:panelGrid columns="7"  style="border: none !important;">	
+				<p:commandButton value="Novo" action="#{movimentobemMB.novo}" update=":formCad" disabled="#{movimentobemMB.controlaCadastro == 1 || movimentobemMB.movimentobem.id != null}"/>	
+	            <p:commandButton value="Salvar"  action="#{movimentobemMB.grava}" update=":formMsg,:formCad" disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+	            <p:commandButton value="Selecionar" oncomplete="PF('dgSelecao').show()" action="#{movimentobemMB.listarParaUsersContabilidade}"  update=":formSelecao"  />
+				<p:commandButton value="Imprimir" ajax="false" action="#{movimentobemMB.imprimir}" disabled="#{movimentobemMB.movimentobem.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
+	            <p:commandButton value="Excluir" action="#{movimentobemMB.exclui}" update=":formMsg,:formCad"  disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+	            <p:commandButton value="Cancelar" action="#{movimentobemMB.limpaCadastro}" update=":formCad" disabled="#{movimentobemMB.controlaCadastro == 0}"/>					
+	            <p:commandButton value="Visualizar Anexos" update=":formAnexo" oncomplete="PF('envdoc').show()" disabled="#{movimentobemMB.controlaCadastro == 0}"/>					
+
+			</p:panelGrid>
+		</f:facet>				
+			<p:panelGrid columns="2" >		
+				<h:outputLabel value="Local e endereço de Origem"/>
+				<h:outputLabel value="Local e endereço de Destino"/>
+				<p:inputTextarea value="#{movimentobemMB.movimentobem.localOrigem}" cols="50"  autoResize="false" 
+					rows="3" maxlength="500" disabled="#{movimentobemMB.controlaCadastro == 0}"/>	
+				<p:inputTextarea value="#{movimentobemMB.movimentobem.localDestino}" cols="50"  
+					autoResize="false" rows="3" maxlength="500" disabled="#{movimentobemMB.controlaCadastro == 0}"/>				
+			</p:panelGrid>
+			<p:panelGrid columns="3" >
+				<h:outputLabel value="Local de destino é locado?"/>	        
+	        	<h:outputLabel value="Razão do proprietário posto destino"/>
+				<h:outputLabel value="CNPJ do proprietário posto destino"/>
+		        <p:selectOneRadio value="#{movimentobemMB.movimentobem.espacoLocado}" disabled="#{movimentobemMB.controlaCadastro == 0}">
+		            <f:selectItem itemLabel="Sim" itemValue="1" />
+		            <f:selectItem itemLabel="Não" itemValue="0" />
+		        </p:selectOneRadio>
+				<p:inputText value="#{movimentobemMB.movimentobem.nomeProprietarioDestino}" size="40" maxlength="100" disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+				<p:inputText value="#{movimentobemMB.movimentobem.cnpjProprietarioDestino}" size="40" maxlength="20" disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+			</p:panelGrid>
+			<p:panelGrid columns="3" >
+	
+				<h:outputLabel value="Transportadora"/>
+				<h:outputLabel value="CNPJ da transportadora"/>
+				<h:outputLabel value="Com Frete?"/>
+				<p:inputText value="#{movimentobemMB.movimentobem.nomeTransportadora}" size="40" maxlength="100" disabled="#{movimentobemMB.controlaCadastro == 0}" />
+				<p:inputText value="#{movimentobemMB.movimentobem.cnpjTransportadora}" disabled="#{movimentobemMB.controlaCadastro == 0}" maxlength="14"/>
+		        <p:selectOneRadio value="#{movimentobemMB.movimentobem.comFrete}" disabled="#{movimentobemMB.controlaCadastro == 0}">
+		            <f:selectItem itemLabel="Sim" itemValue="1" />
+		            <f:selectItem itemLabel="Não" itemValue="0" />
+		        </p:selectOneRadio>
+	
+				<h:outputLabel value="Responsável pelo recebimento"/>
+				<h:outputLabel value="CPF do responsável"/>
+				<h:outputLabel value="RG do responsável"/>
+				<p:inputText value="#{movimentobemMB.movimentobem.nomeResponsavelRecepcao}"  size="40" maxlength="100" disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+				<p:inputText id="cpf" value="#{movimentobemMB.movimentobem.cpfResponsavelRecepcao}" disabled="#{movimentobemMB.controlaCadastro == 0}" 
+							maxlength="11">
+					<f:validator validatorId="cpfValidator" />
+				</p:inputText>
+				<p:inputText value="#{movimentobemMB.movimentobem.rgResponsavelRecepcao}" disabled="#{movimentobemMB.controlaCadastro == 0}" maxlength="14"/>
+			</p:panelGrid>
+			<p:panelGrid columns="2" >								
+				<h:outputLabel value="Data de saída"/>
+				<h:outputLabel value="Finalidade/Motivo/Observações"/>
+				<p:calendar value="#{movimentobemMB.data}"  locale="pt_BR" pattern="dd/MM/yyyy" size="10"  disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+				<p:inputTextarea value="#{movimentobemMB.movimentobem.motivo}" cols="60" autoResize="false" rows="4" maxlength="1500" disabled="#{movimentobemMB.controlaCadastro == 0}"/>				
+			</p:panelGrid>
+			<br></br>
+			<hr></hr>
+			<p:panelGrid columns="2" id="upload">	
+				<h:outputLabel value="Selecione o arquivo a ser importado."/>
+				<h:outputLabel value="Descrição do arquivo."/>
+				<p:fileUpload fileUploadListener="#{movimentobemMB.handleFileUpload}" 
+				       mode="advanced" dragDropSupport="false" disabled="#{movimentobemMB.controlaCadastro == 0}"
+				       multiple="false" update=":formMsg,:formCad:temAnexo" sizeLimit="30000000" process=":formCad:temAnexo"
+				       fileLimit="1" allowTypes="/(\.|\/)(pdf)$/" 
+				       fileLimitMessage="Permitido apenas 1 arquivo por vez."
+				       invalidFileMessage="Tipo de Arquivo inválido. Somente pdf."
+				       invalidSizeMessage="Tamanho do arquivo não permitido. Limite 30 Mb."
+				       cancelLabel="Cancelar" uploadLabel="Enviar" label="Selecionar" />	
+				<p:inputText value="#{movimentobemMB.descricao}" size="30" maxlength="50"  disabled="#{movimentobemMB.controlaCadastro == 0}"/> 
+			</p:panelGrid>		
+			<p:panelGrid columns="1">
+				<h:outputLabel id="temAnexo" value="#{movimentobemMB.nomeDoArquivoAnexado}" />
+			</p:panelGrid>
+			<br></br>
+			<p:fieldset legend="Relação dos patrimônios a serem movimentados" >
+				<p:panelGrid columns="4">
+					<h:outputLabel value="Nº Patrimônio"/>
+					<h:outputLabel value=""/>			
+					<h:outputLabel value="Descrição do Patrimonio"/>
+					<h:outputLabel value=""/>						
+					<p:inputText id="codigo" value="#{movimentobemMB.codigo}" maxlength="6" size="10" disabled="#{movimentobemMB.controlaCadastro == 0}"/>	
+					<p:commandButton value="buscar" action="#{movimentobemMB.encontrarBem}" update="nomebem" disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+					<p:inputText id="nomebem" value="#{movimentobemMB.nomeBem}" size="40" disabled="#{movimentobemMB.patrimonios.size()!=0 || movimentobemMB.controlaCadastro == 0}"/>		
+					<p:commandButton value="Adiciona Item" action="#{movimentobemMB.addItem}" disabled="#{movimentobemMB.controlaCadastro == 0}" update=":formMsg,tbItens,codigo,nomebem"/>				
+				</p:panelGrid>	
+				<br></br>
+				<p:dataTable id="tbItens" var="i" value="#{movimentobemMB.itens}" emptyMessage="Nenhum item adicionado." style="width:50%">
+				    <p:column headerText="Código" width="15%">
+				        <h:outputText value="#{i.patrimonio}" />
+				    </p:column>
+				    <p:column headerText="Plaqueta" width="15%">
+				        <h:outputText value="#{i.numpla}" />
+				    </p:column>				 
+				    <p:column headerText="Descrição">
+				        <h:outputText value="#{i.descricao}" />
+				    </p:column>
+	
+		            <p:column headerText="Remover" width="60px;">
+		                <p:commandButton action="#{movimentobemMB.addItensRemovido(i)}" icon="ui-icon-trash" update="tbItens" process="tbItens">
+		                    <p:collector value="#{i}" removeFrom="#{movimentobemMB.itens}" unique="true"/>
+		                </p:commandButton>
+		            </p:column>
+				</p:dataTable>	
+			</p:fieldset>
+		</p:panel>																				
+</h:form>
+
+<p:dialog id="dgSelecao" widgetVar="dgSelecao" appendTo="@(body)" modal="true" header="Patrimônios Movimentados" width="70%;" resizable="false">
+	<h:form id="formSelecao" style="width:800px;">
+
+	    <p:dataTable id="tb" var="m" value="#{movimentobemMB.movimentos}"  rows="8" paginator="true" paginatorPosition="bottom">
+
+	        <p:column headerText="Id" width="7%">
+	            <h:outputText value="#{m.id}" />
+	        </p:column>
+	        <p:column headerText="Solicitante" width="25%"  filterBy="#{m.solicitante.nome}"  filterMatchMode="contains">
+	            <h:outputText value="#{m.solicitante.nome}" />
+	        </p:column>	        
+	        <p:column headerText="Data Saída" width="18%">
+				<h:outputText value="#{m.datasaida}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>	            
+	        </p:column>
+	        <p:column headerText="Origem" width="35%">
+	            <h:outputText value="#{m.localOrigem}" />
+	        </p:column>
+	        <p:column headerText="Destino" width="35%">
+	            <h:outputText value="#{m.localDestino}" >
+	            	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>	 
+	        </p:column>
+	        
+	        <p:column style="width:32px;text-align: center">
+	             <p:commandButton update=":formCad" action="#{movimentobemMB.selecao}" oncomplete="PF('dgSelecao').hide()" icon="ui-icon-pencil" title="Editar">
+	                <f:setPropertyActionListener value="#{m}" target="#{movimentobemMB.movimentobem}" />
+	            </p:commandButton>
+	        </p:column>
+	    </p:dataTable>
+
+	</h:form>
+</p:dialog>
+
+<p:dialog header="Anexos" widgetVar="envdoc" showEffect="fade" hideEffect="fade" width="65%" appendTo="@(body)" modal="true">
+	<h:form id="formAnexo">
+
+	    <p:dataTable id="tbd" var="d" value="#{movimentobemMB.movimentobem.documentos}">
+	        <f:facet name="header">
+	            Anexos
+	        </f:facet> 
+
+	        <p:column headerText="Descrição">
+	            <h:outputText value="#{d.descricao}" />
+	        </p:column>
+	        <p:column style="width:32px;text-align: center">
+	             <p:commandButton update=":formD" value="#{movimentobemMB.selectDocumento(d)}" oncomplete="PF('arq').show()" icon="ui-icon-search" title="Visualizar">
+	                <f:setPropertyActionListener value="#{d}" target="#{movimentobemMB.documento}" />
+	            </p:commandButton>
+	        </p:column>
+	    </p:dataTable>
+	    
+		<p:panelGrid columns="1">
+			<p:commandButton value="Salvar Arquivo" action="#{movimentobemMB.salvarArquivo}" update=":formAnexo:tbd,:formMsg"/>
+		</p:panelGrid>	
+	</h:form>
+</p:dialog>
+
+<p:dialog header="Documento" widgetVar="arq" showEffect="fade" hideEffect="fade" width="900" height="600"  appendTo="@(body)" modal="true">	
+	<h:form id="formD">
+		<object type="application/pdf" data="#{request.contextPath}/temp/contabil/#{movimentobemMB.movimentobem.id}/#{movimentobemMB.documento.arquivo}?pfdrid_c=true" height="500px" width="100%">
+	        Seu navegador não pode exibir o pdf ou o arquivo não existe.
+	    </object>	
+	</h:form>
+</p:dialog>
+
+<p:dialog modal="false" widgetVar="statusDialog" header="Aguarde, salvando..." draggable="false" closable="false" resizable="false"  >
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="6000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

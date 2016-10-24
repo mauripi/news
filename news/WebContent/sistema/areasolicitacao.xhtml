@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
+<ui:define name="conteudo">
+
+<f:facet name="header">Cadastro de Tipos de Solicitação</f:facet>
+
+<h:form id="formCad">
+	<p:panel  style="width:40%;">
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Categoria"/>
+			<p:selectOneMenu id="cat" value="#{areaSolicitacaoMB.categoriaSelecionada}" style="widht:90%;" disabled="#{areaSolicitacaoMB.controlaCadastro == 0}">
+				<f:selectItem itemLabel="#{areaSolicitacaoMB.categoriaSelecionada}" itemValue="#{areaSolicitacaoMB.categoriaSelecionada}" />
+				<f:selectItems value="#{areaSolicitacaoMB.categorias}"/>
+			</p:selectOneMenu>			
+			<h:outputLabel value="Tipo"/>
+			<p:inputText value="#{areaSolicitacaoMB.area.descricao}" size="30" maxlength="50" disabled="#{areaSolicitacaoMB.controlaCadastro == 0}" />		
+		</p:panelGrid>
+		<f:facet name="footer">
+			<p:panelGrid columns="6" style="border: none !important; ">
+				<p:commandButton value="Novo" action="#{areaSolicitacaoMB.novo}" update=":formCad" />
+				<p:commandButton value="Limpar" action="#{areaSolicitacaoMB.limpaCadastro}" update=":formCad" />
+				<p:commandButton value="Excluir" action="#{areaSolicitacaoMB.exclui}" update=":formCad,:formMsg" />
+				<p:commandButton value="Gravar" action="#{areaSolicitacaoMB.grava}" update=":formCad,:formMsg" />
+			</p:panelGrid>
+		</f:facet>
+		<br></br>
+		<hr></hr>
+	    <p:dataTable id="area" var="a" value="#{areaSolicitacaoMB.areas}" selectionMode="single" 
+	    
+	     	selection="#{areaSolicitacaoMB.areaSel}" rowKey="#{a.id}" emptyMessage="">
+	    	<f:facet name="header">Tipos cadastrados</f:facet>
+			<p:ajax event="rowSelect" listener="#{areaSolicitacaoMB.selecao}" update=":formCad" />
+			<p:column headerText="Area" width="35%">
+	            <h:outputText value="#{a.categoria}" />
+	        </p:column>
+	        <p:column headerText="Tipo" width="35%">
+	            <h:outputText value="#{a.descricao}" />
+	        </p:column>
+
+	    </p:dataTable>				
+	    
+	</p:panel>
+</h:form>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="5000"/>
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

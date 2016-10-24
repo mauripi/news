@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
+<ui:define name="conteudo">
+
+<f:facet name="header">Controle de Equipamentos da TI</f:facet>
+
+<h:form id="formCad">
+	<p:panel id="panel" rendered="#{acessoBean.temAcessoEquipamentos}"  style="width:70%;">
+		<p:panelGrid columns="6" >
+			<h:outputLabel value="Tipo"/>
+			<h:outputLabel value="Marca"/>
+			<h:outputLabel value="Modelo"/>
+			<h:outputLabel value="Série"/>
+			<h:outputLabel value="Patrimônio"/>
+			<h:outputLabel value="Filial"/>			
+	        <p:selectOneMenu id="tp" value="#{equipamentoMB.tipoEquipamento}"  disabled="#{equipamentoMB.controlaCadastro eq 0}" styleClass="oneMenu" converter="tipoEquipamentoConverter">
+				<p:ajax event="change" listener="#{equipamentoMB.selecaoTipoEquipamento}" update="imem, ihd, ihn, pk"/>
+	            <f:selectItems value="#{equipamentoMB.tipoEquipamentos}" var="t" itemLabel="#{t.descricao}" itemValue="#{t}" />
+	        </p:selectOneMenu>			
+			<p:inputText value="#{equipamentoMB.equipamento.marca}" placeholder="Marca" size="20" disabled="#{equipamentoMB.controlaCadastro eq 0}"
+				required="true" requiredMessage="Informe a marca do equipamento"/>
+			<p:inputText value="#{equipamentoMB.equipamento.modelo}" placeholder="Modelo" size="20" disabled="#{equipamentoMB.controlaCadastro eq 0}"
+				required="true" requiredMessage="Informe o modelo do equipamento"/>
+			<p:inputText value="#{equipamentoMB.equipamento.serie}" placeholder="Série" size="20" disabled="#{equipamentoMB.controlaCadastro eq 0}"
+				required="true" requiredMessage="Informe a série do equipamento"/>
+			<p:inputText value="#{equipamentoMB.equipamento.patrimonio}" placeholder="Patrimonio" size="10" disabled="#{equipamentoMB.controlaCadastro eq 0}"/>			
+			<p:selectOneMenu value="#{equipamentoMB.equipamento.filial}" converter="filialConverter" disabled="#{equipamentoMB.controlaCadastro==0}">
+				<f:selectItems value="#{equipamentoMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
+			</p:selectOneMenu>	
+		</p:panelGrid>
+		<p:panelGrid columns="6" >
+			<h:outputLabel value="Local"/>	
+			<h:outputLabel value="Observações"/>
+			<h:outputLabel value="Merória (Gb)"/>	
+			<h:outputLabel value="HD (Gb)"/>
+			<h:outputLabel value="HostName"/>	
+			<h:outputLabel value="IP"/>	
+			<p:selectOneMenu id="loc" value="#{equipamentoMB.equipamento.local}" converter="localequipamentoConverter" disabled="#{equipamentoMB.controlaCadastro==0}">
+				<f:selectItems value="#{equipamentoMB.locais}" var="l" itemLabel="#{l.descricao}" itemValue="#{l}" />
+			</p:selectOneMenu>						
+			<p:inputText value="#{equipamentoMB.equipamento.observacao}" placeholder="Observações" size="50" maxlength="300" disabled="#{equipamentoMB.controlaCadastro eq 0}"/>								 
+			<p:inputText id="imem" value="#{equipamentoMB.equipamento.memoria}" placeholder="Memória (GB)" size="5" disabled="#{equipamentoMB.controlaCadastro eq 0 or !equipamentoMB.exibeCampoMemoriaHD}"/>
+			<p:inputText id="ihd" value="#{equipamentoMB.equipamento.hd}" placeholder="HD (GB)" size="5" disabled="#{equipamentoMB.controlaCadastro eq 0 or !equipamentoMB.exibeCampoMemoriaHD}" />			
+			<p:inputText id="ihn" value="#{equipamentoMB.equipamento.host}" placeholder="Host Name" size="5" disabled="#{equipamentoMB.controlaCadastro eq 0 or !equipamentoMB.exibeCampoMemoriaHD}" />			
+			<p:inputMask value="#{equipamentoMB.equipamento.ip}" mask="999.999.999.999" placeholder="IP" size="15" disabled="#{equipamentoMB.controlaCadastro eq 0}"/>	 
+ 		</p:panelGrid>
+		<p:panelGrid columns="3" rendered="#{acessoBean.temAcessoEquipamentos}">
+			<f:facet name="header">Licenças</f:facet>
+		    <p:pickList id="pk" value="#{equipamentoMB.equipamentoLicencas}" 
+		    	var="l" itemLabel="#{l.descricao}" itemValue="#{l}"  disabled="#{equipamentoMB.controlaCadastro eq 0 or !equipamentoMB.exibeCampoMemoriaHD}"
+		    	showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" 
+		    	converter="licencaConverter">
+		    		<p:ajax event="transfer" listener="#{equipamentoMB.onTransfer}" update="pk" />
+		    	    <f:facet name="sourceCaption">Disponíveis</f:facet>
+        			<f:facet name="targetCaption">Do Equipamento</f:facet>
+		    </p:pickList>
+		</p:panelGrid>		
+		<f:facet name="footer">
+			<p:panelGrid columns="6" style="border: none !important; ">
+				<p:commandButton value="Novo" action="#{equipamentoMB.novo}" update=":formCad" />
+				<p:commandButton value="Remover" action="#{equipamentoMB.exclui}" disabled="#{equipamentoMB.equipamento.id==null}" update=":formCad,:formMsg" />
+				<p:commandButton value="Limpar" action="#{equipamentoMB.limpaCadastro}" update=":formCad" />
+				<p:commandButton value="Gravar" action="#{equipamentoMB.grava}" update=":formCad,:formMsg" />
+			</p:panelGrid>		
+	<p:panel rendered="#{acessoBean.temAcessoEquipamentos}"  style="width:50%;">
+	    <p:dataTable id="tb" var="e" value="#{equipamentoMB.equipamentos}" selectionMode="single"
+	    		 selection="#{equipamentoMB.equipamentoSel}" rowKey="#{e.id}" emptyMessage="">
+	    	<f:facet name="header">Equipamentos cadastrados</f:facet>
+			<p:ajax event="rowSelect" listener="#{equipamentoMB.selecao}" update=":formCad" />
+			
+	        <p:column headerText="Tipo" width="20%">
+	            <h:outputText value="#{e.tipo.descricao}" />
+	        </p:column>	      
+        
+	        <p:column headerText="Marca" width="30%">
+	            <h:outputText value="#{e.marca}" />
+	        </p:column>
+	        <p:column headerText="Modelo" width="10%">
+	            <h:outputText value="#{e.modelo}" />
+	        </p:column>
+	        <p:column headerText="Série" width="30%">
+	            <h:outputText value="#{e.serie}" />
+	        </p:column>
+
+	               
+	    </p:dataTable>
+	</p:panel>	
+		</f:facet>
+	</p:panel>	
+
+	
+</h:form>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

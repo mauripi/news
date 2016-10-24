@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core"  
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS</ui:define>
+<ui:define name="conteudo">
+<f:facet name="header">Requisição de Contrato</f:facet>
+
+<h:form id="formCad">
+	<p:panel >
+		<p:panelGrid columns="2">
+		
+			<h:outputLabel value="Tipo de Contrato"/>
+			<h:outputLabel value="Confeccionado por"/>
+	        <p:selectOneMenu id="tipo" value="#{requisicaocontratoMB.requisicao.tipo}" style="width:155px"  disabled="#{requisicaocontratoMB.controlaCadastro == 0}">
+	            <f:selectItem itemLabel="" itemValue="" />
+	            <f:selectItem itemLabel="Serviços" itemValue="Serviços" />
+	            <f:selectItem itemLabel="Permuta" itemValue="Permuta" />
+	            <f:selectItem itemLabel="Licenciamento de Programa" itemValue="Licenciamento de Programa" />
+	            <f:selectItem itemLabel="Carta Acordo" itemValue="Carta Acordo" />	            
+	            <f:selectItem itemLabel="Outros" itemValue="Outros" />	            
+	        </p:selectOneMenu>		
+	        <p:selectOneRadio id="intext" value="#{requisicaocontratoMB.requisicao.internoexterno}"  disabled="#{requisicaocontratoMB.controlaCadastro == 0}">
+	            <f:selectItem itemLabel="Interno - Record News" itemValue="1" />
+	            <f:selectItem itemLabel="Externo - Empresa em Questão (Obs.: Será enviado internamente para análise jurídica)" itemValue="2" />
+	        </p:selectOneRadio>
+		</p:panelGrid>
+		<p:panelGrid columns="3">
+			<h:outputLabel value="Solicitante"/>
+			<h:outputLabel value="Departamento"/>
+			<h:outputLabel value="Data"/>
+			<p:inputText value="#{requisicaocontratoMB.requisicao.solicitante}" maxlength="30" size="30" disabled="#{requisicaocontratoMB.controlaCadastro == 0}" />	
+			<p:inputText value="#{requisicaocontratoMB.requisicao.departamento}" maxlength="30" size="30" disabled="#{requisicaocontratoMB.controlaCadastro == 0}" />				
+			<p:calendar value="#{requisicaocontratoMB.today}"  locale="pt_BR" pattern="dd/MM/yyyy" size="8" disabled="true" />				
+		</p:panelGrid>		
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Razão Social"/>
+			<h:outputLabel value="CNPJ"/>
+			<p:inputText value="#{requisicaocontratoMB.requisicao.razaosocial}" maxlength="150" size="50" disabled="#{requisicaocontratoMB.controlaCadastro == 0}" />	
+			<p:inputText value="#{requisicaocontratoMB.requisicao.cnpj}" maxlength="19" size="20" disabled="#{requisicaocontratoMB.controlaCadastro == 0}" />				
+		</p:panelGrid>		
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Contato"/>
+			<h:outputLabel value="Telefone"/>
+			<p:inputText value="#{requisicaocontratoMB.requisicao.contato}" maxlength="100" size="50" disabled="#{requisicaocontratoMB.controlaCadastro == 0}" />	
+			<p:inputText value="#{requisicaocontratoMB.requisicao.telefone}" maxlength="30" size="20" disabled="#{requisicaocontratoMB.controlaCadastro == 0}" />				
+		</p:panelGrid>
+		<p:panelGrid columns="3">
+			<h:outputLabel value="E-mail"/>
+			<h:outputLabel value="Vigência"/>
+			<h:outputLabel value="Valor"/>			
+			<p:inputText value="#{requisicaocontratoMB.requisicao.email}" maxlength="50" size="42" disabled="#{requisicaocontratoMB.controlaCadastro == 0}" />				
+			<p:inputText value="#{requisicaocontratoMB.requisicao.vigencia}" maxlength="30" size="10" disabled="#{requisicaocontratoMB.controlaCadastro == 0}" />				
+			<p:inputText value="#{requisicaocontratoMB.requisicao.valor}" size="9" disabled="#{requisicaocontratoMB.controlaCadastro == 0}" >
+			 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+			</p:inputText>
+		</p:panelGrid>		
+		<p:panelGrid columns="1" >					
+			<h:outputLabel value="Observação"/>
+			<p:inputTextarea value="#{requisicaocontratoMB.requisicao.observacao}" maxlength="1500" cols="75" rows="2" disabled="#{requisicaocontratoMB.controlaCadastro == 0}"/>	
+		</p:panelGrid>
+		<br>
+		</br>		
+		<f:facet name="footer">
+			<p:panelGrid columns="5" style="border: none !important;">
+				<p:commandButton value="Novo" action="#{requisicaocontratoMB.novo}" update=":formCad" disabled="#{requisicaocontratoMB.controlaCadastro == 1 || requisicaocontratoMB.requisicao.id != null}"/>	
+	            <p:commandButton value="Salvar" action="#{requisicaocontratoMB.grava}" update=":formMsg,:formCad" disabled="#{requisicaocontratoMB.controlaCadastro == 0}"/>
+	            <p:commandButton value="Selecionar"  update=":formSelecao" oncomplete="PF('dgSelecao').show()" />
+	            <p:commandButton value="Imprimir"  ajax="false" action="${requisicaocontratoMB.imprimir}" disabled="#{requisicaocontratoMB.requisicao.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
+	            <p:commandButton value="Cancelar" action="#{requisicaocontratoMB.limpaCadastro}" update=":formCad" disabled="#{requisicaocontratoMB.controlaCadastro == 0}"/>					
+			</p:panelGrid>
+		</f:facet>																					
+	</p:panel>
+</h:form>
+
+<p:dialog id="dgSelecao" widgetVar="dgSelecao" appendTo="@(body)" modal="true" header="Selecionar Requisição" width="40%;" resizable="false">
+	<h:form id="formSelecao" style="width:600px;">
+
+	    <p:dataTable id="tb" var="r" value="#{requisicaocontratoMB.requisicoes}">
+
+	        <p:column headerText="Registro" width="8%">
+	            <h:outputText value="#{r.id}" />
+	        </p:column>
+	        <p:column headerText="Data" width="12%">
+				<h:outputText value="#{r.datarequisicao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>	            
+	        </p:column>
+	        <p:column headerText="Razão Social" width="60%">
+	            <h:outputText value="#{r.razaosocial}" />
+	        </p:column>
+	        <p:column headerText="Valor" width="12%">
+	            <h:outputText value="#{r.valor}" >
+	            	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>	 
+	        </p:column>
+	        <p:column style="width:32px;text-align: center">
+	             <p:commandButton update=":formCad" action="#{requisicaocontratoMB.selecao}" oncomplete="PF('dgSelecao').hide()" icon="ui-icon-pencil" title="Editar">
+	                <f:setPropertyActionListener value="#{r}" target="#{requisicaocontratoMB.requisicao}" />
+	            </p:commandButton>
+	        </p:column>
+	    </p:dataTable>
+
+	</h:form>
+</p:dialog>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="6000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

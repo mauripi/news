@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html   xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+<title><ui:insert name="titulo"></ui:insert></title>
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+<script type="text/javascript" src="js/padraoPtBr.js"></script>
+<link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" />
+</h:head>      
+
+<h:body>
+<div id="tudo"> 
+<p:layout fullPage="true">
+
+	<p:layoutUnit position="north" size="130" closable="false"  style="border:0 !important;text-align: left;" >
+		<div style="width: 100%;position:relative; ;top: 0;" >
+			<img src="../img/logo.jpg" alt="" height="80px;" />
+		</div>
+		<h:form style="font:80%">		
+		    <p:menubar id="menu" style="font:80% Trebuchet MS;border: none !important;" autoDisplay="false" >  
+				<p:menuitem value="Home" url="rh.jsf" icon="ui-icon-home"/> 	  	    
+		        <p:submenu label="Meu Perfil">  
+		        	<p:submenu label="Meus dados" >  
+		        		<p:menuitem value="Trocar Senha" /> 
+		        		<p:menuitem value="Holerite" action="#{moduloBean.paginaHolerite}" rendered="#{moduloBean.exibePaginaHolerite}"/>
+		        	</p:submenu> 
+			        <p:submenu label="Documentos Disponíveis" >  
+		        	</p:submenu> 
+					<p:menuitem value="Fale com o RH" />  		        	
+		        </p:submenu>  
+		        <p:submenu label="Serviços">  
+		        	<p:submenu label="Formulários" >  
+		        		<p:menuitem value="Acerto de Ponto" />
+		        	</p:submenu>         			        	 	        
+		        </p:submenu> 
+		        <p:menuitem value="Fale com o RH" />   		  		
+		  		<p:submenu label="Sobre" icon="ui-icon-print" >  
+			        <p:menuitem value="Sobre o Sistema" url="#" onclick="dgSobre.show()"/>			        
+		        </p:submenu>  
+		  		
+		        <p:submenu label="Fechar" icon="ui-icon-circle-close">  
+					<p:menuitem value="Módulos" url="../news.jsf" icon="ui-icon-home"/> 	  	
+			        <p:menuitem value="Sair do Sistema" actionListener="#{acessoBean.sair}" id="sair" icon="ui-icon-close" />
+		        </p:submenu>  
+		    </p:menubar> 
+			<p:separator/>
+		</h:form>     		
+	<div style="float: left;">
+		<h:outputLabel value="#{acessoBean.msgBoasVindas}. " style="font-size:70%;"/>
+	</div>
+	</p:layoutUnit>
+
+	<p:layoutUnit position="center" style="border:0 !important">
+		<ui:insert name="conteudo"/>
+	</p:layoutUnit>
+	
+</p:layout>
+</div>  
+<h:form id="sist">
+<p:dialog id="dgSobre" widgetVar="dgSobre" header="Sobre Sistema" position="center center">
+	<p:panelGrid columns="2">
+		<p:graphicImage value="img/logo.jpg" width="131" height="73"/>
+		<p:panelGrid columns="1">
+			<p:outputLabel value="RECORD NEWS" style="font-size: 140%;font-style: italic;font-weight: bold;"/>
+			<p:outputLabel value="Sistema Desenvolvido por:" style="font-size: 110%;font-weight: bold;"/>
+			<p:outputLabel value="Departamento de Tecnologia da Informação "/>
+			<p:outputLabel value="Versão: 1.082013(16)"/>
+		</p:panelGrid>
+		
+	</p:panelGrid>
+</p:dialog>
+</h:form>         
+</h:body>      
+</html>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - Financeiro</ui:define>
+<ui:define name="conteudo">
+<f:facet name="header">Acompanhamento dos Custos</f:facet>	
+<h:form>
+<p:panelGrid columns="3">
+	<h:outputLabel value="Ano" style="padding-rigth: 15px;"/>
+       <p:selectOneMenu id="ano" value="#{fluxodiarioMB.ano}" style="width:125px">
+           <f:selectItem itemLabel="2015" itemValue="2015" />
+           <f:selectItem itemLabel="2016" itemValue="2016" />
+       </p:selectOneMenu>
+       <p:commandButton value="Exibir" action="#{fluxodiarioMB.exibir}" update=":formTb:tb,:formTb:chart" />
+</p:panelGrid>
+<br></br>
+
+</h:form>
+<h:form id="formTb"> 
+<p:panelGrid columns="2">
+
+    <p:dataTable id="tb" var="c" value="#{fluxodiarioMB.custos}" 
+    			rowKey="#{c}" style="width:550px;" emptyMessage="registro não encontrado!">
+    			
+        <p:column headerText="Mês" width="50">
+            <h:outputText value="#{fluxodiarioMB.nomeMes(c.mes)}" />
+        </p:column>
+         
+        <p:column headerText="Fixo" style="text-align: right;" width="100">
+			<p:commandLink  update=":formLanc" action="#{fluxodiarioMB.celulaSelecionada(c.mes,'f')}" oncomplete="PF('dgLanc').show()" >
+				<h:outputText value="#{c.fixo}" style="font-size: 1em !important;" >
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>						    
+			</p:commandLink>         
+
+        </p:column>
+        <p:column headerText="Variável" style="text-align: right;" width="100">
+ 			<p:commandLink  update=":formLanc" actionListener="#{fluxodiarioMB.celulaSelecionada(c.mes,'v')}" oncomplete="PF('dgLanc').show()" >
+				<h:outputText value="#{c.variavel}" style="font-size: 1em !important;" >
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	          																
+				</h:outputText>						    
+			</p:commandLink> 
+        </p:column>        
+        <p:column headerText="Investimento" style="text-align: right;" width="100">
+			<p:commandLink  update=":formLanc" actionListener="#{fluxodiarioMB.celulaSelecionada(c.mes,'i')}" oncomplete="PF('dgLanc').show()" >
+				<h:outputText value="#{c.investimento}" style="font-size: 1em !important;">
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>						    
+			</p:commandLink>
+        </p:column> 
+     </p:dataTable>
+
+	<p:chart id="chart" type="line" model="#{fluxodiarioMB.areaModel}" style="height:500px;width:700px;" />
+
+</p:panelGrid>
+
+    
+</h:form>
+
+<h:form id="formLanc">
+	<p:dialog widgetVar="dgLanc" width="50%" height="500"  appendTo="@(body)" modal="true">
+	<f:facet name="header">#{fluxodiarioMB.descricaoTipo}</f:facet>
+		<p:dataTable var="l" value="#{fluxodiarioMB.detalhes}" >
+		
+	       <p:column headerText="Data" style="width:15%;">
+              <h:outputText value="#{l.data}">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			  </h:outputText>
+           </p:column>
+			<p:column headerText="Descrição" style="width:73%;">
+				<h:outputText value="#{l.historico}"/>
+			</p:column>
+			<p:column headerText="Valor" style="text-align: right;width:15%;">
+				<h:outputText value="#{l.saida}">
+					<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>	           																
+				</h:outputText>				
+			</p:column>						
+		</p:dataTable>
+	</p:dialog>
+</h:form>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

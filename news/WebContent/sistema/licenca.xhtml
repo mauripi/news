@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - COMPRAS</ui:define>
+<ui:define name="conteudo">
+
+<f:facet name="header">Cadastro de Licenças</f:facet>
+
+<h:form id="formCad">
+	<p:panel rendered="#{acessoBean.temAcessoLicenca}"  style="width:50%;">
+		<p:panelGrid columns="4">
+			<h:outputLabel value="Descrição"/> 
+			<h:outputLabel value="Chave"/>
+			<h:outputLabel value="Validade"/>
+			<h:outputLabel value="Quantidade"/>
+			<p:inputText value="#{licencaMB.lic.descricao}" placeholder="Descrição da Licença" size="50" maxlength="100" disabled="#{licencaMB.controlaCadastro eq 0}"/>
+			<p:inputText value="#{licencaMB.lic.chave}" placeholder="Descrição da Licença" size="20" maxlength="60" disabled="#{licencaMB.controlaCadastro eq 0}"/>
+			<p:calendar value="#{licencaMB.lic.validade}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" disabled="#{licencaMB.controlaCadastro eq 0}"/>								
+			<p:inputText value="#{licencaMB.lic.qtd}" placeholder="Quant." size="5" disabled="#{licencaMB.controlaCadastro eq 0}"/>
+		</p:panelGrid>
+		<f:facet name="footer">
+			<p:panelGrid columns="6" style="border: none !important; ">
+				<p:commandButton value="Novo" action="#{licencaMB.novo}" update=":formCad" />
+				<p:commandButton value="Remover" action="#{licencaMB.exclui}" disabled="#{licencaMB.lic.id==null}" update=":formCad" />
+				<p:commandButton value="Limpar" action="#{licencaMB.limpaCadastro}" update=":formCad" />
+				<p:commandButton value="Gravar" action="#{licencaMB.grava}" update=":formCad,:formMsg" />
+			</p:panelGrid>
+		</f:facet>
+		<br></br>
+		<hr></hr>
+	    <p:dataTable id="lic" var="l" value="#{licencaMB.licencas}" selectionMode="single" 
+	     	selection="#{licencaMB.licSel}" rowKey="#{l.id}" emptyMessage="">
+	    	<f:facet name="header">Licenças cadastrados</f:facet>
+			<p:ajax event="rowSelect" listener="#{licencaMB.selecao}" update=":formCad" />
+	        <p:column headerText="Descrição" width="40%">
+	            <h:outputText value="#{l.descricao}" />
+	        </p:column>
+	        <p:column headerText="Chave" width="20%">
+	            <h:outputText value="#{l.chave}" />
+	        </p:column>
+	       <p:column headerText="Validade" style="width:20%;">
+                	  <h:outputText value="#{l.validade}">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			  </h:outputText>
+          </p:column> 
+	        <p:column headerText="Quantidade" width="20%">
+	            <h:outputText value="#{l.qtd}" />
+	        </p:column>	 	            
+	    </p:dataTable>
+	</p:panel>
+</h:form>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

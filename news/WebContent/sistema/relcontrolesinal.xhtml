@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+        <style type="text/css">
+            .old {
+                background-color: #fca752 !important;
+                background-image: none !important;
+                color: #000000 !important;
+            }
+        </style>
+</h:head>
+   	
+<h:body >
+<h:form>
+<p:commandButton value="Imprimir Planilha"  update="all" action="#{relcontrolesinalMB.listarAll}"  oncomplete="PF('dlg2').show();"/>
+</h:form>
+<br></br>
+<p:spacer />
+<p:panel>
+<h:form id="rel">
+<br></br>
+	<p:panelGrid>
+		<p:autoComplete id="posto" value="#{relcontrolesinalMB.posto}" completeMethod="#{relcontrolesinalMB.completePosto}" size="30"
+					 placeholder="Digite o posto"
+		           var="p" itemLabel="#{p.nome}" itemValue="#{p}" converter="postoConverter" forceSelection="true" />			
+		<p:commandButton value="Ok" action="#{relcontrolesinalMB.listar}" update="tx,ar"/>
+
+	</p:panelGrid>
+	
+	    <p:dataTable id="tx" var="c" value="#{relcontrolesinalMB.tx}" rowKey="#{c.id}" emptyMessage="" >
+
+	    	<f:facet name="header"><h:outputText value="TX" /></f:facet>
+
+	        <p:column headerText="Técnico" width="15%;">
+              <h:outputText value="#{c.tecnico}"/>
+			</p:column>       
+	       
+	        <p:column headerText="Problema" width="20%;">
+	            <h:outputText value="#{c.problema}" />
+	        </p:column>			       
+	        <p:column headerText="Data do Problema" width="10%;">
+	            <h:outputText value="#{c.dataproblema}" >
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			   </h:outputText>
+	        </p:column>	
+	        <p:column headerText="Data Solução" width="10%;">
+	            <h:outputText value="#{c.datasolucao}" >
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			   </h:outputText>
+	        </p:column>	
+	        <p:column headerText="Solução" width="20%;">
+	            <h:outputText value="#{c.solucao}" />
+	        </p:column>	
+	        <p:column headerText="Pendência" width="20%;">
+	            <h:outputText value="#{c.pendencia}" />
+	        </p:column>	
+	        <p:column headerText="Corretiva Preventiva" width="15%;">
+	            <h:outputText value="#{c.tipomanutencao}" />
+	        </p:column>	
+	        <p:column headerText="Próxima Preventiva" width="10%;">
+	            <h:outputText value="#{c.proximapreventiva}" >
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>
+	        </p:column>		   
+	        <p:column headerText="Valor Atendimento" width="15%;">
+				<h:outputText value="#{c.valoratendimento}" style="text-align: right;">
+					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>	           																
+				</h:outputText>		            
+	        </p:column>	
+	        <p:column headerText="Compra de Peça" width="8%;">
+	            <h:outputText value="#{c.comprapeca}" />
+	        </p:column>		  
+	        <p:column headerText="Valor Peça" width="15%;">
+				<h:outputText value="#{c.valorpeca}" style="text-align: right;">
+					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>	           																
+				</h:outputText>		     
+	        </p:column>	
+                   	        	        	               
+	    </p:dataTable>
+
+<br></br>
+
+	    <p:dataTable id="ar" var="c" value="#{relcontrolesinalMB.ar}" rowKey="#{c.id}" emptyMessage="" >
+
+	    	<f:facet name="header"><h:outputText value="Ar Condicionado" /></f:facet>
+
+	        <p:column headerText="Técnico" width="15%;">
+              <h:outputText value="#{c.tecnico}"/>
+			</p:column>       
+	       
+	        <p:column headerText="Problema" width="20%;">
+	            <h:outputText value="#{c.problema}" />
+	        </p:column>			       
+	        <p:column headerText="Data do Problema" width="10%;">
+	            <h:outputText value="#{c.dataproblema}" >
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			   </h:outputText>
+	        </p:column>	
+	        <p:column headerText="Data Solução" width="10%;">
+	            <h:outputText value="#{c.datasolucao}" >
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			   </h:outputText>
+	        </p:column>	
+	        <p:column headerText="Solução" width="20%;">
+	            <h:outputText value="#{c.solucao}" />
+	        </p:column>	
+	        <p:column headerText="Pendência" width="20%;">
+	            <h:outputText value="#{c.pendencia}" />
+	        </p:column>	
+	        <p:column headerText="Corretiva Preventiva" width="15%;">
+	            <h:outputText value="#{c.tipomanutencao}" />
+	        </p:column>	
+	        <p:column headerText="Próxima Preventiva" width="10%;">
+	            <h:outputText value="#{c.proximapreventiva}" >
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>
+	        </p:column>		   
+	        <p:column headerText="Valor Atendimento" width="15%;">
+				<h:outputText value="#{c.valoratendimento}" style="text-align: right;">
+					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>	           																
+				</h:outputText>		            
+	        </p:column>	
+	        <p:column headerText="Compra de Peça" width="8%;">
+	            <h:outputText value="#{c.comprapeca}" />
+	        </p:column>		  
+	        <p:column headerText="Valor Peça" width="15%;">
+				<h:outputText value="#{c.valorpeca}" style="text-align: right;">
+					<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>	           																
+				</h:outputText>		     
+	        </p:column>	
+                   	        	        	               
+	    </p:dataTable>
+
+
+</h:form>
+</p:panel>
+
+<p:dialog header="Impressão" widgetVar="dlg2" modal="true">
+<h:form id="all">
+	<h:commandLink >
+		<p:button value="Imprimir" />
+	    <p:dataExporter type="xls" target="tbAll" fileName="Controle_de_Sinais" 
+	    	 postProcessor="#{relcontrolesinalMB.postProcessXLS}" pageOnly="true"/>
+	</h:commandLink>
+    <p:dataTable id="tbAll" var="c" value="#{relcontrolesinalMB.controlesinais}" rowKey="#{c.id}" emptyMessage="" >
+
+        <p:column headerText="Posto" width="15%;">
+             <h:outputText value="#{c.posto.nome}"/>
+		</p:column>
+		
+        <p:column headerText="Técnico" width="15%;">
+             <h:outputText value="#{c.tecnico}"/>
+		</p:column>       
+       
+        <p:column headerText="Problema" width="20%;">
+            <h:outputText value="#{c.problema}" />
+        </p:column>			       
+        <p:column headerText="Data do Problema" width="10%;">
+            <h:outputText value="#{c.dataproblema}" >
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+		   </h:outputText>
+        </p:column>	
+        <p:column headerText="Data Solução" width="10%;">
+            <h:outputText value="#{c.datasolucao}" >
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+		   </h:outputText>
+        </p:column>	
+        <p:column headerText="Solução" width="20%;">
+            <h:outputText value="#{c.solucao}" />
+        </p:column>	
+        <p:column headerText="Pendência" width="20%;">
+            <h:outputText value="#{c.pendencia}" />
+        </p:column>	
+        <p:column headerText="Corretiva Preventiva" width="15%;">
+            <h:outputText value="#{c.tipomanutencao}" />
+        </p:column>	
+        <p:column headerText="Próxima Preventiva" width="10%;">
+            <h:outputText value="#{c.proximapreventiva}" >
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			</h:outputText>
+        </p:column>		   
+        <p:column headerText="Valor Atendimento" width="15%;">
+			<h:outputText value="#{c.valoratendimento}" style="text-align: right;">
+				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>	           																
+			</h:outputText>		            
+        </p:column>	
+        <p:column headerText="Compra de Peça" width="8%;">
+            <h:outputText value="#{c.comprapeca}" />
+        </p:column>		  
+        <p:column headerText="Valor Peça" width="15%;">
+			<h:outputText value="#{c.valorpeca}" style="text-align: right;">
+				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>	           																
+			</h:outputText>		     
+        </p:column>	
+                  	        	        	               
+    </p:dataTable>
+
+</h:form>
+</p:dialog> 
+
+</h:body>	
+
+</html>

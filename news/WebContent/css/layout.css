@@ -1,0 +1,106 @@
+/* ------------------------------
+global styles
+------------------------------ */
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+
+body {
+	margin: 0;
+	padding: 0;
+	font: 85% arial, hevetica, sans-serif;
+	}
+
+a:link { color: #B52C07; }
+a:visited { color: #b93411; }
+a:focus { color: #000; }
+a:hover { color: #7d8206; }
+a:active { color: red; }
+h1, h2, h3, h4, h5, h6 { margin: 0 0 .5em; }
+
+h2 {
+	color: #B52C07;
+	font: 140% georgia, times, "times new roman", serif;
+	}
+
+h2 a { text-decoration: none; }
+
+h3 {
+	color: #7d8206;
+	font: 110% georgia, times, "times new roman", serif;
+	}
+
+
+#tudo{}
+
+#header {
+	height: 100px;
+	width: 100%;
+	position: relative;
+  	background-color: white;
+	}
+
+#header h1 {
+	position: relative;
+	left: 140px;
+	}
+	
+#logo{
+	position: absolute;
+	left: 10px;	
+}
+#titulo{
+	width: 400px;
+	margin: 0 auto;	
+}
+/* ------------------------------
+menu styles
+------------------------------ */
+
+#menu {
+	background: aqua;
+	color: #272900;
+	padding: 2px 0;
+	margin:auto;
+	margin-bottom: 22px;
+	left: 140px;
+	width: 100%;
+	}
+
+#menu ul {
+	margin: 0 0 0 20px auto;
+	padding: 0;
+	list-style-type: none;
+	border-left: 1px solid #C4C769;
+	}
+
+#menu li {
+	display: inline;
+	padding: 0 10px;
+	border-right: 1px solid #C4C769;
+	}
+
+#menu li a {
+	text-decoration: none;
+	color: #272900;
+	}
+
+#menu li a:hover {
+	text-decoration: none;
+	color: #fff;
+	background-color: #272900;
+	}
+
+/* ------------------------------
+container styles
+------------------------------ */
+
+#conteudo{
+	margin: 1em auto;
+	width: 100%;
+	text-align: left;
+	background: white;	
+}
