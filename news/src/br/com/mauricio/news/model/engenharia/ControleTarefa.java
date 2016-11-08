@@ -48,7 +48,7 @@ public class ControleTarefa implements Serializable{
 	private Login usuarioaprovacao;
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date dataaprovacao;
-	@Column(length=10)
+	@Column(length=250)
 	private String patrimonio;
 	
 	public Integer getId() {

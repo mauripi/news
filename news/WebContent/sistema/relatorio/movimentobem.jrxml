@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="movimentobem" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0a4480b-4c1f-4976-b9a6-1dc368c514ad">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="482"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="id" class="java.lang.Integer"/>
 	<parameter name="localorigem" class="java.lang.String"/>
@@ -116,7 +116,7 @@
 			<rectangle>
 				<reportElement x="13" y="318" width="532" height="2" forecolor="#999999" backcolor="#999999" uuid="3758d07f-b6ee-4847-a2cb-7cbba824c7af"/>
 			</rectangle>
-			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+			<textField pattern="MM/dd/yyyy">
 				<reportElement x="445" y="5" width="100" height="15" uuid="5c075e95-bf57-48b3-8c95-c5f1254e71c3"/>
 				<textFieldExpression><![CDATA[$P{datasaida}]]></textFieldExpression>
 			</textField>

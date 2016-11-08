@@ -31,12 +31,10 @@
 			<p:inputText id="rsp" value="#{controletarefaMB.tarefa.responsavel}" placeholder="Responsavel" maxlength="100"  style="width:130px;"
 				required="true" requiredMessage="Informe o Responsável" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
 		</p:panelGrid>
-		<p:panelGrid columns="5" >		
+		<p:panelGrid columns="3" >		
 			<h:outputLabel value="Início"/>
 			<h:outputLabel value="Conclusão"/>
 			<h:outputLabel value="Orçamento"/>
-			<h:outputLabel value="Nº Patrimônio"/>
-	        <h:outputLabel for="moeda" value="Moeda" />
 			<p:calendar id="dti" value="#{controletarefaMB.tarefa.datainicio}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
 				required="true" requiredMessage="Informe o início da Tarefa" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
 			<p:calendar id="dtf" value="#{controletarefaMB.tarefa.datafim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
@@ -44,13 +42,18 @@
 			<p:inputText id="vlr" value="#{controletarefaMB.tarefa.valor}" size="13" disabled="#{controletarefaMB.controlaCadastro == 0}">
 				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
 			</p:inputText>		
-			<p:inputText value="#{controletarefaMB.tarefa.patrimonio}" maxlength="10" size="10" disabled="#{controletarefaMB.controlaCadastro==0}" />					
+	    </p:panelGrid>
+		<p:panelGrid columns="2" >		
+			<h:outputLabel value="Nº Patrimônio"/>
+	        <h:outputLabel for="moeda" value="Moeda" />
+			<p:inputText value="#{controletarefaMB.tarefa.patrimonio}" maxlength="250" size="50" disabled="#{controletarefaMB.controlaCadastro==0}" />					
 	        <p:selectOneRadio id="moeda" value="#{controletarefaMB.tarefa.moeda}">
 	            <f:selectItem itemLabel="R$" itemValue="1" />
 	            <f:selectItem itemLabel="US$" itemValue="2" />
 	            <f:selectItem itemLabel="€" itemValue="3" />
 	        </p:selectOneRadio>
-	    </p:panelGrid>
+	    </p:panelGrid>	    
+	    
 	    <p:panelGrid columns="2" >
 			<h:outputLabel value="Observação"/>
 			<p:inputTextarea id="obs" value="#{controletarefaMB.tarefa.observacao}" counter="display" counterTemplate="{0} carecteres restantes." autoResize="true"

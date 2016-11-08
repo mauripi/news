@@ -33,7 +33,7 @@ public class ItemMovimento  implements Serializable{
 	private MovimentoBem movimentobem;
     @Column(length=30)  
     private String numpla;
-
+    private Double quantidade;
     
     public Integer getId() {
 		return id;
@@ -80,6 +80,12 @@ public class ItemMovimento  implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	public Double getQuantidade() {
+		return quantidade;
+	}
+	public void setQuantidade(Double quantidade) {
+		this.quantidade = quantidade;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -96,6 +102,8 @@ public class ItemMovimento  implements Serializable{
 		result = prime * result + ((numpla == null) ? 0 : numpla.hashCode());
 		result = prime * result
 				+ ((patrimonio == null) ? 0 : patrimonio.hashCode());
+		result = prime * result
+				+ ((quantidade == null) ? 0 : quantidade.hashCode());
 		return result;
 	}
 	@Override
@@ -142,7 +150,13 @@ public class ItemMovimento  implements Serializable{
 				return false;
 		} else if (!patrimonio.equals(other.patrimonio))
 			return false;
+		if (quantidade == null) {
+			if (other.quantidade != null)
+				return false;
+		} else if (!quantidade.equals(other.quantidade))
+			return false;
 		return true;
-	}	
-	
+	}
+
+
 }

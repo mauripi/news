@@ -1,7 +1,6 @@
 package br.com.mauricio.news.ln.financeiro;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -61,12 +60,7 @@ public class PrestacaoLN implements Serializable {
 		p.setColaborador((Login) daol.findById(Login.class, p.getColaborador().getId()));
 		p.setUsuarioAlteracao((Login) daol.findById(Login.class, p.getUsuarioAlteracao().getId()));
 		dao.update(p);	
-		for(int i=0;i<p.getDespesas().size();i++){
-			p.getDespesas().get(i).setUsuarioAlteracao(p.getUsuarioCriacao());
-			p.getDespesas().get(i).setDataAlteracao(new Date(System.currentTimeMillis()));
-			p.getDespesas().get(i).setPrestacaoconta(p);
-			daod.update(p.getDespesas().get(i));
-		}		
+
 		if(despesaParaRemover.size()>0)
 			for(Despesa d:despesaParaRemover)
 				daod.delete(daod.findById(Despesa.class, d.getId()));

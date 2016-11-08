@@ -51,7 +51,7 @@ public class ControleSinal  implements Serializable{
 	private Posto posto;
 	@Column(length=100)
 	private String arquivo;
-	@Column(length=10)
+	@Column(length=250)
 	private String patrimonio;
 	
 	public Integer getId() {

@@ -102,15 +102,20 @@
 			</p:panelGrid>
 			<br></br>
 			<p:fieldset legend="Relação dos patrimônios a serem movimentados" >
-				<p:panelGrid columns="4">
+				<p:panelGrid columns="5">
 					<h:outputLabel value="Nº Patrimônio"/>
 					<h:outputLabel value=""/>			
 					<h:outputLabel value="Descrição do Patrimonio"/>
-					<h:outputLabel value=""/>						
+					<h:outputLabel value="Quantidade"/>
+					<h:outputLabel value=""/>
 					<p:inputText id="codigo" value="#{movimentobemMB.codigo}" maxlength="6" size="10" disabled="#{movimentobemMB.controlaCadastro == 0}"/>	
 					<p:commandButton value="buscar" action="#{movimentobemMB.encontrarBem}" update="nomebem" disabled="#{movimentobemMB.controlaCadastro == 0}"/>
 					<p:inputText id="nomebem" value="#{movimentobemMB.nomeBem}" size="40" disabled="#{movimentobemMB.patrimonios.size()!=0 || movimentobemMB.controlaCadastro == 0}"/>		
-					<p:commandButton value="Adiciona Item" action="#{movimentobemMB.addItem}" disabled="#{movimentobemMB.controlaCadastro == 0}" update=":formMsg,tbItens,codigo,nomebem"/>				
+					<p:inputText id="qtdbem" value="#{movimentobemMB.qtdBem}" size="10" disabled="#{movimentobemMB.controlaCadastro == 0}" maxlength="5">
+						<f:convertNumber type="number" minFractionDigits="0" maxFractionDigits="0"/>
+					</p:inputText>											
+					<p:commandButton value="Adiciona Item" action="#{movimentobemMB.addItem}" disabled="#{movimentobemMB.controlaCadastro == 0}" 
+							update=":formMsg,tbItens,codigo,nomebem,qtdbem"/>				
 				</p:panelGrid>	
 				<br></br>
 				<p:dataTable id="tbItens" var="i" value="#{movimentobemMB.itens}" emptyMessage="Nenhum item adicionado." style="width:50%">
@@ -123,7 +128,11 @@
 				    <p:column headerText="Descrição">
 				        <h:outputText value="#{i.descricao}" />
 				    </p:column>
-	
+				    <p:column headerText="Quantidade" width="10%">
+				        <h:outputText value="#{i.quantidade}">
+				        	<f:convertNumber type="number" minFractionDigits="0" maxFractionDigits="0"/>
+				        </h:outputText>
+				    </p:column>	
 		            <p:column headerText="Remover" width="60px;">
 		                <p:commandButton action="#{movimentobemMB.addItensRemovido(i)}" icon="ui-icon-trash" update="tbItens" process="tbItens">
 		                    <p:collector value="#{i}" removeFrom="#{movimentobemMB.itens}" unique="true"/>

@@ -64,7 +64,7 @@ public class PrestacaoBean implements Serializable {
 	}
 
 	public void novo(){
-		this.prestacao = new PrestacaoConta();
+		limpaCadastro();
 		this.prestacao.setDespesas(new ArrayList<Despesa>());
 		controlaCadastro=1;
 	}
@@ -198,6 +198,11 @@ public class PrestacaoBean implements Serializable {
 					mensagens();
 				}else{
 					despesa.setPrestacaoconta(prestacao);
+					despesa.setUsuarioCriacao(funcionario);
+					despesa.setDataCriacao(new Date(System.currentTimeMillis()));
+					despesa.setUsuarioAlteracao(funcionario);
+					despesa.setDataAlteracao(new Date(System.currentTimeMillis()));
+					despesa.setRemovido(0);
 					this.prestacao.getDespesas().add(despesa);
 					calculaTotais();
 					despesa=new Despesa();

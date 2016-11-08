@@ -72,7 +72,7 @@
 			 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
 			</p:inputText>	
 			<p:inputText  id="ds" value="#{prestacaoMB.despesa.descricao}" size="40" disabled="#{prestacaoMB.controlaCadastro==0}"/>	
-		    <p:commandButton value="Adicionar" action="#{prestacaoMB.addDespesa}" update="dt,nd,vl,ds,desp,:formMsg" disabled="#{prestacaoMB.controlaCadastro==0}" />
+		    <p:commandButton value="Adicionar" action="#{prestacaoMB.addDespesa}" update="dt,nd,vl,ds,desp,totais,:formMsg" disabled="#{prestacaoMB.controlaCadastro==0}" />
 		</p:panelGrid>
 		
 		<p:panelGrid columns="1">
@@ -112,7 +112,7 @@
 
 
 	<f:facet name="footer">	
-		<p:panelGrid columns="4"  layout="grid" style="text-align:center;font-stretch: narrower !important;font-weight: bold !important;width:50%;">
+		<p:panelGrid columns="4"  layout="grid" style="text-align:center;font-stretch: narrower !important;font-weight: bold !important;width:50%;" id="totais">
 			<h:outputLabel value="VALOR DO ADIANTAMENTO" style="font-stretch: narrower !important;font-weight: bold !important;"/>						
 			<h:outputLabel value="TOTAL DE DESPESAS" style="font-stretch: narrower !important;font-weight: bold !important;"/>
 			<h:outputLabel value="TOTAL A RESTITUIR" style="font-stretch: narrower !important;font-weight: bold !important;"/>
