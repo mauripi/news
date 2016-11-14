@@ -16,6 +16,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.FlowEvent;
 
 import br.com.mauricio.news.ln.GenericLN;
 import br.com.mauricio.news.ln.contabil.MovimentoBemLN;
@@ -55,7 +56,7 @@ public class MovimentoBemBean implements Serializable {
 	private InputStream is;
 	private String descricao="";
 	private Double qtdBem;
-	
+	private boolean skip;
        
 	@PostConstruct
 	public void init(){
@@ -114,40 +115,45 @@ public class MovimentoBemBean implements Serializable {
 	}
 	
 	public void addItem(){
-		if(patrimonios.size()>0){
-			for(Patrimonio p: patrimonios){
-				ItemMovimento item = new ItemMovimento();
-				item.setDescricao(p.getDesbem());
-				item.setNotafiscal(p.getNumdoc());
-				item.setPatrimonio(p.getCodbem());
-				item.setNomeFornecedor(p.getNomfor());
-				item.setNumpla(p.getNumpla());
-				item.setMovimentobem(movimentobem);
-				itens.add(item);
-			}
-			patrimonios = new ArrayList<Patrimonio>();
-			codigo="";
-			nomeBem="";
-			qtdBem=null;
+		if(qtdBem==null){
+			msgs.add("Informe a quantidade de bens.");
+			mensagens(msgs);
 		}else{
-			if(nomeBem.length()>0||codigo.length()>0){
-				ItemMovimento item = new ItemMovimento();
-				item.setDescricao(nomeBem.toUpperCase());
-				item.setPatrimonio(codigo.toUpperCase());
-				item.setNumpla(codigo.toUpperCase());
-				item.setMovimentobem(movimentobem);
-				item.setQuantidade(qtdBem);
-				itens.add(item);	
+			if(patrimonios.size()>0){
+				for(Patrimonio p: patrimonios){
+					ItemMovimento item = new ItemMovimento();
+					item.setDescricao(p.getDesbem());
+					item.setNotafiscal(p.getNumdoc());
+					item.setPatrimonio(p.getCodbem());
+					item.setNomeFornecedor(p.getNomfor());
+					item.setNumpla(p.getNumpla());
+					item.setMovimentobem(movimentobem);
+					itens.add(item);
+				}
+				patrimonios = new ArrayList<Patrimonio>();
 				codigo="";
 				nomeBem="";
 				qtdBem=null;
 			}else{
-				msgs=new ArrayList<String>();
-				if(codigo.length()<1)
-					msgs.add("Informe o codigo do patrimonio");
-				if(nomeBem.length()<1)
-					msgs.add("Informe a descrição do patrimonio");
-				mensagens(msgs);				
+				if(nomeBem.length()>0||codigo.length()>0){
+					ItemMovimento item = new ItemMovimento();
+					item.setDescricao(nomeBem.toUpperCase());
+					item.setPatrimonio(codigo.toUpperCase());
+					item.setNumpla(codigo.toUpperCase());
+					item.setMovimentobem(movimentobem);
+					item.setQuantidade(qtdBem);
+					itens.add(item);	
+					codigo="";
+					nomeBem="";
+					qtdBem=null;
+				}else{
+					msgs=new ArrayList<String>();
+					if(codigo.length()<1)
+						msgs.add("Informe o codigo do patrimonio");
+					if(nomeBem.length()<1)
+						msgs.add("Informe a descrição do patrimonio");
+					mensagens(msgs);				
+				}
 			}
 		}
 	}
@@ -157,6 +163,7 @@ public class MovimentoBemBean implements Serializable {
 	}
 	
  	public String grava(){
+ 		/*
 		if(validaCampos()){
 			MovimentoBemLN ln = new MovimentoBemLN();			
 			movimentobem.setSolicitante(usuario);
@@ -177,6 +184,7 @@ public class MovimentoBemBean implements Serializable {
 		}else{
 			mensagens(msgs);
 		}
+		*/
 		return "movimentobem";
 	}
 	
@@ -211,43 +219,7 @@ public class MovimentoBemBean implements Serializable {
 		if(usuario==null){
 			msgs.add("Usuário inválido.");
 			v=false;
-		}
-		if(data==null){ 
-			msgs.add("Data de saída inválida.");
-			v=false;
-		}
-		if(movimentobem.getLocalDestino().length()<1){
-			msgs.add("Informe local de Destino.");
-			v=false;
-		}
-		if(movimentobem.getLocalOrigem().length()<1){
-			msgs.add("Informe local de Origem.");
-			v=false;
-		}
-		if(movimentobem.getNomeResponsavelRecepcao().length()<1){
-			msgs.add("Informe o Responsável pelo recebimento.");
-			v=false;
 		}	
-		if(movimentobem.getMotivo().length()<1){
-			msgs.add("Informe o motivo da movimentação.");
-			v=false;
-		}	
-		if(movimentobem.getCnpjProprietarioDestino().length()>0 && !ValidaCNPJ.isValidCNPJ(movimentobem.getCnpjProprietarioDestino())){
-			msgs.add("Cnpj do Proprietario do Local de Destino inválido.");
-			return false;
-		}
-		if(movimentobem.getCnpjTransportadora().length()>0 && !ValidaCNPJ.isValidCNPJ(movimentobem.getCnpjTransportadora())){
-			msgs.add("Cnpj da Transportadora inválido.");
-			return false;
-		}
-		if(movimentobem.getCpfResponsavelRecepcao().length()>0 && !ValidaCPF.isValidCPF(movimentobem.getCpfResponsavelRecepcao())){
-			msgs.add("CPF inválido.");
-			return false;
-		}
-		if(itens.size()<1){
-			msgs.add("Adicione os itens a serem movimentados.");
-			return false;
-		}		
 		return v;		
 	}
 	
@@ -262,6 +234,7 @@ public class MovimentoBemBean implements Serializable {
 		nomeDoArquivoAnexado="";
 		descricao="";
 		is = null;
+		msgs = new ArrayList<String>();
 	}
 
 	public void selecao(){
@@ -332,10 +305,68 @@ public class MovimentoBemBean implements Serializable {
 	private void mensagens(List<String> ms) {
         FacesContext context = FacesContext.getCurrentInstance(); 
         for(String m:ms)
-        	context.addMessage(null, new FacesMessage("",m));  	
-		
+        	context.addMessage(null, new FacesMessage(m,m));  			
 	}
-  	
+     
+    public String onFlowProcess(FlowEvent event) {
+    	if(controlaCadastro!=0){
+	        if(skip) {
+	            skip = false;   //reset in case user goes back
+	            return "confirm";
+	        }
+	        else {
+	        	msgs = new ArrayList<String>();
+	        	if(event.getOldStep().equals("gerais")){
+	        		if(movimentobem.getLocalOrigem().length()<1){
+	        			msgs.add("Informe local de Origem.");
+	        		}
+	        		if(movimentobem.getLocalDestino().length()<1){
+	        			msgs.add("Informe local de Destino.");
+	        		}
+	        		if(movimentobem.getNomeProprietarioDestino().length()==0){
+	        			msgs.add("Informe o Proprietario do Local de Destino.");
+	        		}
+	        		if(movimentobem.getCnpjProprietarioDestino().length()==0){
+	        			msgs.add("Caso não haja CNPJ, favor informar o número de cadastro da Matriz (02344518000178).");
+	        		}       	
+	        		if(movimentobem.getCnpjProprietarioDestino().length()>0 && !ValidaCNPJ.isValidCNPJ(movimentobem.getCnpjProprietarioDestino())){
+	        			msgs.add("Cnpj do Proprietario do Local de Destino inválido.");
+	        		} 
+	        		if(movimentobem.getNomeResponsavelRecepcao().length()<1){
+	        			msgs.add("Informe o Responsável pelo recebimento.");
+	        		}	
+	        		if(movimentobem.getMotivo().length()<1){
+	        			msgs.add("Informe o motivo da movimentação.");
+	        		}	
+	        		if(movimentobem.getCnpjTransportadora().length()>0 && !ValidaCNPJ.isValidCNPJ(movimentobem.getCnpjTransportadora())){
+	        			msgs.add("Cnpj da Transportadora inválido.");
+	        		}
+	        		if(movimentobem.getCpfResponsavelRecepcao().length()>0 && !ValidaCPF.isValidCPF(movimentobem.getCpfResponsavelRecepcao())){
+	        			msgs.add("CPF inválido.");
+	        		}     		       		
+	        		if(data==null){ 
+	        			msgs.add("Data de saída inválida.");
+	        		}
+	        		if(msgs.size()>0){
+	        			mensagens(msgs);
+	        			return event.getOldStep();
+	        		}
+	        	}
+	        	if(event.getOldStep().equals("patrimonios")){
+	        		if(itens.size()<1){
+	        			msgs.add("Adicione os itens a serem movimentados.");
+	        		}
+	        		if(msgs.size()>0){
+	        			mensagens(msgs);
+	        			return event.getOldStep();
+	        		}       		
+	        	}        			
+	            return event.getNewStep();
+	        }
+    	}
+		return "gerais";
+    }	
+	
 	public void mensagens(){
         FacesContext context = FacesContext.getCurrentInstance();  	          
         context.addMessage(null, new FacesMessage("",msg));  		
@@ -548,5 +579,12 @@ public class MovimentoBemBean implements Serializable {
 	public void setQtdBem(Double qtdBem) {
 		this.qtdBem = qtdBem;
 	}
-
+	
+    public boolean isSkip() {
+        return skip;
+    }
+ 
+    public void setSkip(boolean skip) {
+        this.skip = skip;
+    }
 }
