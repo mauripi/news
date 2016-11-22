@@ -170,13 +170,17 @@ public class PrestacaoBean implements Serializable {
 			for(Despesa d:prestacao.getDespesas())
 				totalDespesa =totalDespesa + d.getValor();
 		
-		if(prestacao.getValoradiantado()>=totalDespesa){
-			totalRestituir =prestacao.getValoradiantado()-totalDespesa;
-			totalReceber = new Double("0.0");
-		}else{
-			totalRestituir = new Double("0.0");
-			totalReceber=totalDespesa-prestacao.getValoradiantado();			
-		}
+    	if(prestacao.getValoradiantado()!=null){
+			if(prestacao.getValoradiantado()>=totalDespesa){
+				totalRestituir =prestacao.getValoradiantado()-totalDespesa;
+				totalReceber = new Double("0.0");
+			}else{
+				totalRestituir = new Double("0.0");
+				totalReceber=totalDespesa-prestacao.getValoradiantado();			
+			}
+    	}else{
+    		prestacao.setValoradiantado(new Double("0.0"));
+    	}
 	}
 
 	public String dataFormatada(Date d){

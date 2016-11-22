@@ -3,6 +3,7 @@ package br.com.mauricio.news.dao.rh;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import org.joda.time.DateTime;
@@ -46,12 +47,18 @@ public class BaseDao{
 	}
 	
 	public String getUltimaFuncao(Login l){
-		
+		Object funcao;
 		String sql="select funcao from base where chapa= :chapa and "
 				+ " mes=(select max(m.mes) from base m where m.ano=(select max(c.ano) from base c)) "
 				+ "and ano=(select max(a.ano) from base a) ";
-		Object funcao = this.manager.createNativeQuery(sql)
-				.setParameter("chapa",l.getChapa()).getSingleResult();				
+		try{
+			funcao = this.manager.createNativeQuery(sql).setParameter("chapa",l.getChapa()).getSingleResult();		
+		}catch(NoResultException e){
+			 sql="select funcao from base where chapa= :chapa and "
+					+ " mes=(select max(m.mes-1) from base m where m.ano=(select max(c.ano) from base c)) "
+					+ "and ano=(select max(a.ano) from base a) ";	
+			funcao = this.manager.createNativeQuery(sql).setParameter("chapa",l.getChapa()).getSingleResult();
+		}
 		return (String) funcao;
 	}
 	

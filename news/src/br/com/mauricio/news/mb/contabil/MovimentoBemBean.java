@@ -163,7 +163,7 @@ public class MovimentoBemBean implements Serializable {
 	}
 	
  	public String grava(){
- 		/*
+ 		
 		if(validaCampos()){
 			MovimentoBemLN ln = new MovimentoBemLN();			
 			movimentobem.setSolicitante(usuario);
@@ -184,7 +184,7 @@ public class MovimentoBemBean implements Serializable {
 		}else{
 			mensagens(msgs);
 		}
-		*/
+		
 		return "movimentobem";
 	}
 	

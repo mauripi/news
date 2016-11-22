@@ -382,8 +382,10 @@ public class SolicitacaoLN implements Serializable {
 		sb.append("<p>&nbsp;</p>");
 		sb.append("<p>&nbsp;</p>");
 		sb.append("<p><strong>Solicita&ccedil;&atilde;o no.:</strong> "+ solicitacao.getId() +"</p>");
-		sb.append("<p><strong>Solicita&ccedil;&atilde;o:</strong> "+ solicitacao.getDescricao() +"</p>");
-		sb.append("<p><strong>Status:</strong> "+ buscaStatus(h) +"</p>");
+		String status = buscaStatus(h);  
+		if(!status.equals("Aberta"));
+			sb.append("<p><strong>Solicita&ccedil;&atilde;o:</strong> "+ solicitacao.getDescricao() +"</p>");
+		sb.append("<p><strong>Status:</strong> "+ status +"</p>");
 		sb.append("<p><strong>Descri&ccedil;&atilde;o:</strong> "+ h.getDescricao() +"</p>");
 		sb.append("<p><strong>Solicitante:</strong> "+ h.getSolicitacao().getSolicitante().getNome() +"</p>");
 		sb.append("<p><strong>Favorecido:</strong> "+ h.getSolicitacao().getFavorecido().getNome() +"</p>");
@@ -413,8 +415,10 @@ public class SolicitacaoLN implements Serializable {
 		sb.append("<p>&nbsp;</p>");
 		sb.append("<p>&nbsp;</p>");
 		sb.append("<p><strong>Solicita&ccedil;&atilde;o no.:</strong> "+ solicitacao.getId() +"</p>");
-		sb.append("<p><strong>Solicita&ccedil;&atilde;o:</strong> "+ solicitacao.getDescricao() +"</p>");
-		sb.append("<p><strong>Status:</strong> "+ buscaStatus(h) +"</p>");
+		String status = buscaStatus(h);  
+		if(!status.equals("Aberta"));
+			sb.append("<p><strong>Solicita&ccedil;&atilde;o:</strong> "+ solicitacao.getDescricao() +"</p>");
+		sb.append("<p><strong>Status:</strong> "+ status +"</p>");
 		sb.append("<p><strong>Descri&ccedil;&atilde;o:</strong> "+ h.getDescricao() +"</p>");
 		sb.append("<p><strong>Solicitante:</strong> "+ h.getSolicitacao().getSolicitante().getNome() +"</p>");
 		sb.append("<p><strong>Favorecido:</strong> "+ h.getSolicitacao().getFavorecido().getNome() +"</p>");
@@ -444,8 +448,10 @@ public class SolicitacaoLN implements Serializable {
 		sb.append("<p>&nbsp;</p>");
 		sb.append("<p>&nbsp;</p>");
 		sb.append("<p><strong>Solicita&ccedil;&atilde;o no.:</strong> "+ solicitacao.getId() +"</p>");
-		sb.append("<p><strong>Solicita&ccedil;&atilde;o:</strong> "+ solicitacao.getDescricao() +"</p>");
-		sb.append("<p><strong>Status:</strong> "+ buscaStatus(h) +"</p>");
+		String status = buscaStatus(h);  
+		if(!status.equals("Aberta"));
+			sb.append("<p><strong>Solicita&ccedil;&atilde;o:</strong> "+ solicitacao.getDescricao() +"</p>");
+		sb.append("<p><strong>Status:</strong> "+ status +"</p>");
 		sb.append("<p><strong>Descri&ccedil;&atilde;o:</strong> "+ h.getDescricao() +"</p>");
 		sb.append("<p><strong>Altera&ccedil;&atilde;o na classifica&ccedil;&atilde;o:</strong> </p>");
 		sb.append("<p><strong>Processo:</strong> "+ h.getSolicitacao().getCategoria() +"</p>");
