@@ -13,7 +13,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<columnHeader>
-		<band height="18" splitType="Stretch">
+		<band height="15" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="53" height="15" uuid="531195f8-82cb-4519-9bc3-3297475b775e"/>
 				<textElement>
@@ -62,7 +62,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="16" splitType="Stretch">
+		<band height="13" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="0" y="0" width="53" height="12" uuid="30b36a3e-c232-48f0-96a7-15d88864c88a"/>
 				<textElement>
@@ -105,9 +105,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="0" y="13" width="521" height="1" uuid="18e67235-19d5-4d0f-8296-58c608eebc70"/>
-			</line>
 		</band>
 	</detail>
 </jasperReport>

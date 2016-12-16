@@ -116,7 +116,7 @@
 			<rectangle>
 				<reportElement x="13" y="318" width="532" height="2" forecolor="#999999" backcolor="#999999" uuid="3758d07f-b6ee-4847-a2cb-7cbba824c7af"/>
 			</rectangle>
-			<textField pattern="MM/dd/yyyy">
+			<textField pattern="dd/MM/yyyy">
 				<reportElement x="445" y="5" width="100" height="15" uuid="5c075e95-bf57-48b3-8c95-c5f1254e71c3"/>
 				<textFieldExpression><![CDATA[$P{datasaida}]]></textFieldExpression>
 			</textField>

@@ -55,7 +55,7 @@ public class MovimentoBemBean implements Serializable {
 	private String nomeDoArquivoAnexado;
 	private InputStream is;
 	private String descricao="";
-	private Double qtdBem;
+	private Double qtdBem=new Double("0.0");
 	private boolean skip;
        
 	@PostConstruct
@@ -133,7 +133,7 @@ public class MovimentoBemBean implements Serializable {
 				patrimonios = new ArrayList<Patrimonio>();
 				codigo="";
 				nomeBem="";
-				qtdBem=null;
+				qtdBem=new Double("0.0");
 			}else{
 				if(nomeBem.length()>0||codigo.length()>0){
 					ItemMovimento item = new ItemMovimento();
@@ -145,7 +145,7 @@ public class MovimentoBemBean implements Serializable {
 					itens.add(item);	
 					codigo="";
 					nomeBem="";
-					qtdBem=null;
+					qtdBem=new Double("0.0");
 				}else{
 					msgs=new ArrayList<String>();
 					if(codigo.length()<1)
