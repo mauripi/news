@@ -55,9 +55,21 @@ public class MovimentoBemLN implements Serializable {
 		MovimentoBemDao dao = new MovimentoBemDao();
 		return dao.listaPorUsuario(usuario);
 	}
-		
+
+	public void gerarRelatorio(MovimentoBem m) {
+		RelMovimentoBemLN rel = new RelMovimentoBemLN();
+		try {
+			rel.geraRelatorio(m,1);
+		} catch (IOException e) {
+			//msg = msg + " Mas não foi possivel gerar relatório.";
+			System.out.println(e.getLocalizedMessage() + " MovimentoBemLN.gerarRelatorio() IOException");
+			//mensagens();
+		}
+	}	
+	
 	public void enviarEmail(MovimentoBem m, String caminho){
 		List<String> destinatarios = new ArrayList<String>();
+		
 		destinatarios.add("acorrea@recordnews.com.br");
 		destinatarios.add("flettieri@recordnews.com.br");
 		destinatarios.add("aarias@recordnews.com.br");
@@ -65,6 +77,7 @@ public class MovimentoBemLN implements Serializable {
 		if(ValidaEmail.validar(m.getSolicitante().getEmail()))
 			destinatarios.add(m.getSolicitante().getEmail());
 		
+		gerarRelatorio(m);
 		File file = new File("C:\\windows\\temp\\contabil\\"+"movimentobem_"+m.getId()+".pdf");
 		List<File> anexos = new ArrayList<File>();
 		anexos.add(file);
@@ -79,6 +92,8 @@ public class MovimentoBemLN implements Serializable {
 		Email email = new Email("Intranet Record News", destinatarios, "Movimentação de Patrimônio", montaCorpodoEmail(m),anexos);
 		email.start();
 	}
+
+	
 	
 	private String montaCorpodoEmail(MovimentoBem m){
 		StringBuilder sb = new StringBuilder();

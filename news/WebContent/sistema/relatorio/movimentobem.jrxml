@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="movimentobem" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0a4480b-4c1f-4976-b9a6-1dc368c514ad">
 	<property name="ireport.zoom" value="2.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="462"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="id" class="java.lang.Integer"/>
 	<parameter name="localorigem" class="java.lang.String"/>
@@ -167,7 +167,7 @@
 		</band>
 	</pageHeader>
 	<detail>
-		<band height="19" splitType="Stretch">
+		<band height="21" splitType="Stretch">
 			<subreport isUsingCache="false">
 				<reportElement x="0" y="1" width="555" height="17" uuid="8bfd3e45-fc05-4423-95fa-1b1c02edb49f"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{itens})]]></dataSourceExpression>

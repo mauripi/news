@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="baixabem" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="15" rightMargin="15" topMargin="15" bottomMargin="15" uuid="fc5a50e5-660f-469b-a3d3-2297751c3fe9">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<property name="ireport.zoom" value="4.715895382000005"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="54"/>
+	<property name="ireport.y" value="86"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -44,6 +44,7 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
+	<field name="itens" class="java.util.List"/>
 	<variable name="variable1" class="java.lang.Integer" calculation="Count">
 		<variableExpression><![CDATA[$P{list}]]></variableExpression>
 	</variable>
@@ -189,7 +190,7 @@
 			</textField>
 			<subreport isUsingCache="false">
 				<reportElement x="2" y="153" width="563" height="12" uuid="71174447-b128-4121-8de9-397628d65d1d"/>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{list})]]></dataSourceExpression>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{itens})]]></dataSourceExpression>
 				<subreportExpression><![CDATA["baixabem_relacao.jasper"]]></subreportExpression>
 			</subreport>
 			<line>

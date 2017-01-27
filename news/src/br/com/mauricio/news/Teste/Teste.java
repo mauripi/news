@@ -3,22 +3,25 @@ package br.com.mauricio.news.Teste;
 import java.io.IOException;
 import java.util.List;
 
-import br.com.mauricio.news.dao.contabil.MCTB001Dao;
-import br.com.mauricio.news.model.contabil.MCTB001;
-import br.com.mauricio.news.model.contabil.MCTB002;
+import br.com.mauricio.news.dao.MCLIFORERPDao;
+import br.com.mauricio.news.model.MCLIFOR;
 
 public class Teste {
 
-	public static void main(String[] args) {
-		MCTB001Dao custodao = new MCTB001Dao();
-		try {
-			List<MCTB001> lancamentos = custodao.obterLancamentos(2016, 11);
-			List<MCTB002> custos = custodao.obterCcu();
-			for(MCTB002 c:custos)
-				System.out.println(c.getPaiccu());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void main(String[] args) throws IOException {
+		MCLIFORERPDao dao = new MCLIFORERPDao();
+		String s = "02344518000178";
+		String filtro="2";
+		String nome="TELEVISÃO";
+		List<MCLIFOR> xs = dao.getCliFor(nome,filtro);
+		
+		for(MCLIFOR x:xs)
+			if(x.getClifor().equals(1))
+				System.out.println("CLIENTE:  - "+x.getCodcli()+ "  - "+x.getNomraz()+ "  - "+x.getClifor());
+			else
+				System.out.println("FORNECEDOR:  - "+x.getCodfor()+ "  - "+x.getNomraz()+ "  - "+x.getClifor());
+			
+
 	}
 
 }

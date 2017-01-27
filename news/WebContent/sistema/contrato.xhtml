@@ -16,179 +16,168 @@
    	
 <h:body>
 <ui:composition template="templates/geral.xhtml">
-<ui:define name="titulo">RECORD NEWS - COMPRAS</ui:define>
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
 <ui:define name="conteudo">
+<f:facet name="header">Controle de Contratos</f:facet>
 
-<f:facet name="header">Controle de Vigência de Contratos</f:facet>
+<p:panel>
+	<h:form id="formtb">	
+	    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 
-<h:form id="formCad">
-	<p:panel id="panel" rendered="#{acessoBean.temAcessoContrato}">
-		<p:panelGrid columns="4" >
-			<h:outputLabel value="Número"/>
-			<h:outputLabel value="Objeto"/>
-			<h:outputLabel value="Espécie"/>
-			<h:outputLabel value="Tipo"/>
-			<h:outputText value="#{contratoMB.contrato.id}"/>
-			<p:inputText id="obj" value="#{contratoMB.contrato.objeto}" placeholder="Objetivo do contrato" size="60" disabled="#{contratoMB.controlaCadastro eq 0}"
-				required="true" requiredMessage="Informe o objetivo do contrato"/>
-	        <p:selectOneMenu id="especie" value="#{contratoMB.contrato.especie}" style="width:130px;"
-	        	disabled="#{contratoMB.controlaCadastro eq 0}" styleClass="oneMenu">
-	        	<p:ajax event="change" listener="#{contratoMB.atualizaEspecie}" update="forn,cli"  />
-	            <f:selectItem itemLabel="Selecione a Espécie do Contrato" itemValue="0" />
-	            <f:selectItem itemLabel="Compra" itemValue="1" />
-	            <f:selectItem itemLabel="Venda" itemValue="2" />
-	        </p:selectOneMenu>
-	        <p:selectOneMenu id="tp" value="#{contratoMB.tipoContrato}"  disabled="#{contratoMB.controlaCadastro eq 0}" style="width:130px;"
-	        		styleClass="oneMenu" converter="tipoContratoConverter">
-	            <f:selectItems value="#{contratoMB.tipoContratos}" var="t" itemLabel="#{t.descricao}" itemValue="#{t}" />
-	        </p:selectOneMenu>
-		</p:panelGrid>
-		<p:panelGrid columns="3" >
-			<h:outputLabel value="Fornecedor" for="forn" />
-			<h:outputLabel value="Cliente" for="cli" />
-			<h:outputLabel value="Advogado" for="adv" />
-	        <p:autoComplete id="forn" value="#{contratoMB.fornecedor}" completeMethod="#{contratoMB.completeFornecedor}" size="50"
-	        		disabled="#{contratoMB.controlaCadastro eq 0 || contratoMB.contrato.especie ne 1}" placeholder="Digite o Fornecedor"
-                    var="f" itemLabel="#{f.nome}" itemValue="#{f}" converter="fornecedorConverter" forceSelection="true"
-                    required="true" requiredMessage="Informe o fornecedor" />
+	    </h:panelGrid>
+		<br></br>   
+			<p:commandButton onclick="PF('dgCad').show()" action="#{contratoMB.novo}" value="Novo Contrato" title="Novo"  update=":formCad"/>
+			<p></p>
+		<br></br>   			
+	    <p:dataTable id="tb" var="c" value="#{contratoMB.contratos}"   
+	    	selectionMode="single" selection="#{contratoMB.contrato}" rowKey="#{s}" emptyMessage="">
 
-	        <p:autoComplete id="cli" value="#{contratoMB.cliente}" completeMethod="#{contratoMB.completeCliente}" size="50"
-	        		disabled="#{contratoMB.controlaCadastro eq 0 || contratoMB.contrato.especie ne 2}" placeholder="Digite o Cliente"
-                    var="c" itemLabel="#{c.nome}" itemValue="#{c}" converter="clienteConverter" forceSelection="true" 
-                    required="true" requiredMessage="Informe o cliente"/>
+        	<p:ajax event="rowSelect" listener="#{contratoMB.onRowSelect}" update=":formMsg" oncomplete="PF('dgEdit').show();"/>
 
-	        <p:inputText id="adv" value="#{contratoMB.contrato.advogado}" disabled="#{contratoMB.controlaCadastro eq 0}" placeholder="Digite o Advogado" 
-	        	required="true" requiredMessage="Informe o advogado do contrato"/>
- 		</p:panelGrid>
- 		<p:panelGrid columns="4" >
-			<h:outputLabel for="dtiv" value="Data Início"/>
-			<h:outputLabel for="dtif" value="Data Término"/>
-			<h:outputLabel for="vlr" value="Valor"/>
-			<h:outputLabel for="obs" value="Observações"/>
-	        
-			<p:calendar id="dtiv" value="#{contratoMB.dataInicioVigencia}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
-				disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato"/>								
-			<p:calendar id="dtif" value="#{contratoMB.dataFimVigencia}" locale="pt_BR" pattern="dd/MM/yyyy" size="11"
-				 disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato"/>								
-			<p:inputText id="vlr" value="#{contratoMB.valor}" disabled="#{contratoMB.controlaCadastro==0}"  size="10" required="true" requiredMessage="Informe o valor do contrato">
-				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-			</p:inputText>							
-			<p:inputTextarea id="obs" value="#{contratoMB.contrato.observacao}" rows="1" placeholder="Observações do contrato" 
-				disabled="#{contratoMB.controlaCadastro eq 0}" style="width:500px;"  required="true" requiredMessage="Informe as observações do contrato"/>	
-		</p:panelGrid>
- 		<p:panelGrid columns="3" >
-	        <h:outputLabel value="Enviar E-mail? " />
-	        <h:outputLabel value="Dias de Antecedência " />
-	        <h:outputLabel value="Contrato Ativo? " />	        
-	        <p:selectBooleanCheckbox value="#{contratoMB.contrato.enviarEmail}" disabled="#{contratoMB.controlaCadastro eq 0}"/>
-			<p:inputText id="dem" value="#{contratoMB.contrato.diasParaInicioEmail}" disabled="#{contratoMB.controlaCadastro==0}" size="2">
-				<f:convertNumber type="number" minFractionDigits="0" maxFractionDigits="0"/>
-			</p:inputText>
-			<p:selectBooleanCheckbox value="#{contratoMB.contrato.ativo}" disabled="#{contratoMB.controlaCadastro eq 0}"/>	
-		</p:panelGrid>		
-		<f:facet name="footer">
-			<p:panelGrid columns="6" style="border: none !important; ">
-				<p:commandButton value="Novo" action="#{contratoMB.novo}" update=":formCad" />
-				<p:commandButton value="Remover" action="#{contratoMB.exclui}" disabled="#{contratoMB.contrato.id==null}" update=":formCad,:formMsg" />
-				<p:commandButton value="Cancelar" action="#{contratoMB.limpaCadastro}" update=":formCad" />
-				<p:commandButton value="Salvar" action="#{contratoMB.grava}" update=":formCad,:formMsg" />
-			</p:panelGrid>		
-		</f:facet>
-		<hr></hr>
-		<p:panelGrid columns="4" id="upload">	
-			<h:outputLabel value="Selecione o arquivo a ser importado."/>
-			<h:outputLabel value="Descrição do arquivo."/>
-			<h:outputLabel value=""/>
-			<h:outputLabel value=""/>
-			<p:fileUpload fileUploadListener="#{contratoMB.handleFileUpload}" 
-			       mode="advanced" dragDropSupport="false" disabled="#{contratoMB.controlaCadastro != 2}"
-			       multiple="false" update=":formMsg" sizeLimit="30000000" 
-			       fileLimit="1" allowTypes="/(\.|\/)(pdf)$/"
-			       fileLimitMessage="Permitido apenas 1 arquivo por vez."
-			       invalidFileMessage="Tipo de Arquivo inválido. Somente pdf."
-			       invalidSizeMessage="Tamanho do arquivo não permitido. Limite 30 Mb."
-			       cancelLabel="Cancelar" uploadLabel="Enviar" label="Selecionar" />	
-			<p:inputText value="#{contratoMB.descricao}" size="30" maxlength="50"  disabled="#{contratoMB.controlaCadastro != 2}"/> 	
-			<p:commandButton value="Salvar Arquivo" action="#{contratoMB.salvarArquivo}" update=":formCad:upload,:formMsg" disabled="#{contratoMB.controlaCadastro != 2}"/>
-			<p:commandButton value="Vizualizar" update=":formT" oncomplete="PF('arqSel').show()"  title="Vizualizar" disabled="#{contratoMB.controlaCadastro != 2}"/>
-		</p:panelGrid>		
-		<hr></hr>
-	    <p:dataTable id="ctr" var="c" value="#{contratoMB.contratos}" selectionMode="single" 
-	    	selection="#{contratoMB.contratoSel}" rowKey="#{c.id}" emptyMessage="" rows="15" paginator="true" paginatorPosition="bottom">
-	    	<f:facet name="header">Contratos cadastrados</f:facet>
-			<p:ajax event="rowSelect" listener="#{contratoMB.selecao}" update=":formCad" />
-
-	        <p:column headerText="Número" width="5%" filterBy="#{c.id}" filterStyle="width:30%">
+	       <p:column headerText="Nº" width="6%">
 	            <h:outputText value="#{c.id}" />
-	        </p:column>
-       
-	        <p:column headerText="Início" style="width:12%;">
+	       </p:column>	 
+	       <p:column headerText="Tipo" width="20%">
+	            <h:outputText value="#{c.tipocontrato.descricao}" />
+	       </p:column>	 	       	
+	       <p:column headerText="Origem" width="6%">
+	            <h:outputText value="#{c.origem eq 'C' ?  'Compra' : 'Venda'}" />
+	       </p:column>	
+	        <p:column headerText="Início Vigênc." style="width:12%;">
               <h:outputText value="#{c.inicio}">
 				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 			  </h:outputText>
-            </p:column>	 
-	        <p:column headerText="Fim" style="width:12%;">
+            </p:column>		       
+	        <p:column headerText="Fim Vigênc." style="width:12%;">
               <h:outputText value="#{c.fim}">
 				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 			  </h:outputText>
-            </p:column>	                        
-	        <p:column headerText="Valor" style="width:9%;text-align: right;">
-				<h:outputText value="#{c.valor}" style="ttext-align: right;">
-					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
-				</h:outputText>	
-		    </p:column>	          
-	        <p:column headerText="Forncecedor" width="20%" filterBy="#{c.fornecedor.nome}">
-	            <h:outputText value="#{c.fornecedor.nome}" />
-	        </p:column>
-	        <p:column headerText="Fornecedor CNPJ/CPF" width="12%">
-	            <h:outputText value="#{c.fornecedor.cnpjcpf}" />
-	        </p:column>
-	        <p:column headerText="Cliente" width="20%" filterBy="#{c.cliente.nome}">
-	            <h:outputText value="#{c.cliente.nome}" />
-	        </p:column>
-	        <p:column headerText="Cliente CNPJ/CPF" width="12%">
-	            <h:outputText value="#{c.cliente.cnpjcpf}" />
-	        </p:column>	        
-	        <p:column headerText="Objetivo" width="40%">
+            </p:column>		        	
+	       <p:column headerText="Cliente / Fornecedor" width="25%">
+	            <h:outputText value="#{c.mclifor.nomfan}" />
+	       </p:column>	   
+	       <p:column headerText="Objeto" width="30%">
 	            <h:outputText value="#{c.objeto}" />
-	        </p:column>	 	               
+	       </p:column>		           		
 	    </p:dataTable>
-	</p:panel>		
-</h:form>
+	</h:form>
+</p:panel>	
 
-<p:dialog header="Visualizar documentos" widgetVar="arqSel" showEffect="fade" hideEffect="fade" width="500" height="200"  appendTo="@(body)" modal="true">
-	<h:form id="formT">
-	    <p:dataTable id="tbd" var="d" value="#{contratoMB.contrato.documentos}" emptyMessage="Não há documento anexo.">
-	        <f:facet name="header">
-	            Anexos
-	        </f:facet>
-
-	        <p:column headerText="Descrição">
-	            <h:outputText value="#{d.descricao}" />
-	        </p:column>
-	        <p:column style="width:32px;text-align: center">
-	             <p:commandButton update=":formD" oncomplete="PF('arq').show()" icon="ui-icon-search" title="Visualizar">
-	                <f:setPropertyActionListener value="#{d}" target="#{contratoMB.documento}" />
-	            </p:commandButton>
-	        </p:column>
-	    </p:dataTable>
-
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" >
+	<h:form id="formCad" style="width:120 %;">
+		<p:panel>
+			<p:wizard flowListener="#{contratoMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo"  >
+		        <p:tab id="gerais" title="Dados Gerais" >
+            		<p:panel header="Dados Gerais" >
+		            	<p:messages autoUpdate="true"/>
+						<p:panelGrid columns="2" >
+							<p:outputLabel value="Contrato nro.:"/>
+							<p:outputLabel value="#{contratoMB.contrato.id}"/>	
+							<p:outputLabel value="Origem:"/>
+					        <p:selectOneMenu value="#{contratoMB.contrato.origem}">
+					            <f:selectItem itemLabel="Compra" itemValue="C" />
+					            <f:selectItem itemLabel="Venda" itemValue="V" />
+					        </p:selectOneMenu>
+					        
+							<p:outputLabel value="Objeto:"/>
+							<p:inputText id="obj" value="#{contratoMB.contrato.objeto}" placeholder="Objetivo do contrato" size="60" disabled="#{contratoMB.controlaCadastro eq 0}"
+								required="true" requiredMessage="Informe o objetivo do contrato"/>
+							<p:outputLabel value="Tipo do Contrato:"/>
+					        <p:selectOneMenu id="tp" value="#{contratoMB.tipoContrato}"  disabled="#{contratoMB.controlaCadastro eq 0}" style="width:130px;"
+					        		styleClass="oneMenu" converter="tipoContratoConverter">
+					            <f:selectItems value="#{contratoMB.tipoContratos}" var="t" itemLabel="#{t.descricao}" itemValue="#{t}" />
+					        </p:selectOneMenu>	
+							<p:outputLabel value="Cliente / Fornecedor:"/>		        
+					        <p:autoComplete id="clifor" value="#{contratoMB.contrato.mclifor}" completeMethod="#{contratoMB.completeCliFor}"
+			                        var="cl" itemLabel="#{cl.nomfan}" itemValue="#{cl}" converter="mcliforConverter" forceSelection="true" />
+							<h:outputLabel for="dtiv" value="Data Início:"/>
+							<p:calendar id="dtiv" value="#{contratoMB.contrato.inicio}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
+								disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato"/>												
+							<h:outputLabel for="dtif" value="Data Término:"/>		        
+							<p:calendar id="dtif" value="#{contratoMB.contrato.fim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11"
+								 disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato"/>								
+					        <p:outputLabel value="Contrato Ativo:"/>
+					        <p:selectBooleanCheckbox value="#{contratoMB.contrato.ativo}" />								
+						</p:panelGrid>
+		            </p:panel>
+		        </p:tab>	
+				<p:tab id="anexos" title="Aditivos" >	
+            		<p:panel header="Aditivos" >
+		            	<p:messages autoUpdate="true"/>						        
+		            </p:panel>
+		        </p:tab>	
+				<p:tab id="skd" title="Agendamentos" >	
+            		<p:panel header="Agendamentos" >
+		            	<p:messages autoUpdate="true"/>
+		            	<p:panelGrid columns="2">
+							<p:outputLabel value="Dias para aviso:"/>	
+							<p:inputText />	  
+							<p:outputLabel value="Repetir envio:"/>	
+					        <p:selectOneMenu value="#{contratoMB.contrato.origem}">
+					        	<f:selectItem itemLabel="Não repetir" itemValue="0" />
+					            <f:selectItem itemLabel="Um dia" itemValue="1" />
+					            <f:selectItem itemLabel="Dois dias" itemValue="2" />
+					            <f:selectItem itemLabel="Três dias" itemValue="3" />
+					            <f:selectItem itemLabel="Quatro dias" itemValue="4" />	
+					            <f:selectItem itemLabel="Cinco dias" itemValue="5" />
+					            <f:selectItem itemLabel="Seis dias" itemValue="6" />
+					            <f:selectItem itemLabel="Sete dias" itemValue="7" />						            
+					            <f:selectItem itemLabel="Dez dias" itemValue="10" />
+					            <f:selectItem itemLabel="Quinze dias" itemValue="15" />
+					            <f:selectItem itemLabel="Vinte dias" itemValue="20" />					            				            
+					        </p:selectOneMenu> 
+							<p:outputLabel value="Assunto do e-mail"/>	
+							<p:inputText />	
+							<p:outputLabel value="Mensagem :"/>	
+							<p:inputTextarea maxlength="300" rows="2"/>													        	
+				        </p:panelGrid>	
+						<p:inputText size="30" placeholder="Digite aqui o e-mail"/>
+						<p:commandButton value="Add"/>	
+    <p:dataList value="#{dataListView.cars3}" var="car" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
+        <f:facet name="header">
+            Paginator
+        </f:facet>
+        <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:10px">
+            <f:setPropertyActionListener value="#{car}" target="#{dataListView.selectedCar}" />
+            <h:outputText value="#{car.brand}, #{car.year}" />
+        </p:commandLink>
+        <h:outputText value="#{car.brand}, #{car.year}" style="display:inline-block"/>
+    </p:dataList>						
+										        							          						        
+		            </p:panel>
+		        </p:tab>		        	        					
+			</p:wizard>
+			<f:facet name="footer">
+				<p:panelGrid columns="2" >
+					<p:commandButton value="Salvar" action="#{contratoMB.grava}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
+					<p:commandButton value="Cancelar"  oncomplete="PF('dgCad').hide()"/>
+				</p:panelGrid>
+			</f:facet>
+			
+		</p:panel>
 	</h:form>
 </p:dialog>
 
-<h:form id="formD">
-	<p:dialog header="Documento" widgetVar="arq" showEffect="fade" hideEffect="fade" width="900" height="600"  appendTo="@(body)" modal="true">	
-		<object type="application/pdf" data="#{request.contextPath}/temp/compras/#{contratoMB.documento.contrato.id}/#{contratoMB.documento.arquivo}?pfdrid_c=true" height="500px" width="100%">
-	        Seu navegador não pode exibir o pdf ou o arquivo não existe.
-	    </object>	
-	</p:dialog>
-</h:form>
 
+<p:dialog modal="false" widgetVar="statusDialog" header="Aguarde..." draggable="false" closable="false" resizable="false"  appendTo="@(body)">
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
+	
 <h:form id="formMsg">                      
-    <p:growl id="msg" showDetail="true" life="4000"/> 
+    <p:growl id="msg" showDetail="true" life="8000"/> 
 </h:form>
 </ui:define>
 </ui:composition>	
+
+<script type="text/javascript">
+function start() {
+    PF('statusDialog').show();
+}
+ 
+function stop() {
+    PF('statusDialog').hide();
+}
+</script>
 </h:body>	
 
 </html>

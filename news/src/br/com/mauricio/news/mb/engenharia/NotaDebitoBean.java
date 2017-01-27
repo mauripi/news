@@ -13,7 +13,7 @@ import javax.faces.context.FacesContext;
 import br.com.mauricio.news.ln.GenericLN;
 import br.com.mauricio.news.ln.engenharia.NotaDebitoEnergiaLN;
 import br.com.mauricio.news.model.engenharia.NotaDebitoEnergia;
-import br.com.mauricio.news.model.engenharia.Praca;
+import br.com.mauricio.news.model.engenharia.MENGLOC;
 /**
 *
 * @author MAURICIO CRUZ
@@ -27,8 +27,8 @@ public class NotaDebitoBean  implements Serializable {
 	private NotaDebitoEnergia debitoSel;
 	private List<NotaDebitoEnergia> debitos = new ArrayList<NotaDebitoEnergia>();
 	private GenericLN<NotaDebitoEnergia> gln;
-	private Praca praca;
-	private List<Praca> pracas = new ArrayList<Praca>();
+	private MENGLOC mengloc;
+	private List<MENGLOC> menglocs = new ArrayList<MENGLOC>();
 	private int controlaCadastro = 0;
 	private String msg;
 	private List<String> msgs;
@@ -36,7 +36,7 @@ public class NotaDebitoBean  implements Serializable {
 	@PostConstruct
 	public void init(){
 		debito = new NotaDebitoEnergia();
-		listarPraca();
+		listarLoc();
 		listar();		
 	}
 
@@ -45,9 +45,9 @@ public class NotaDebitoBean  implements Serializable {
 		debitos = gln.listWithoutRemoved("notadebitopraca", "mes,ano desc");
 	}
 
-	public void listarPraca(){
-		GenericLN<Praca> glnd = new GenericLN<Praca>();
-		pracas = glnd.listWithoutRemoved("praca", "nome");
+	public void listarLoc(){
+		GenericLN<MENGLOC> glnd = new GenericLN<MENGLOC>();
+		menglocs = glnd.listWithoutRemoved("mengloc", "nome");
 	}
 	
 	public void novo(){
@@ -102,7 +102,7 @@ public class NotaDebitoBean  implements Serializable {
 	private boolean validaCampos(){
 		msgs = new ArrayList<String>();
 		boolean v=true;
-		debito.setPraca(praca);
+		debito.setMengloc(mengloc);
 		if(debito.getMes()<=0||debito.getMes()>12){
 			msgs.add("Informe o mês entre 1 e 12.");
 			v = false;
@@ -133,21 +133,21 @@ public class NotaDebitoBean  implements Serializable {
 	public void limpaCadastro(){
 		debito = debitoSel = new NotaDebitoEnergia();
 		controlaCadastro=0;
-		praca=new Praca();
+		mengloc=new MENGLOC();
 	}
 
 	public void selecao(){
 		debito = debitoSel;
-		praca = debito.getPraca();
+		mengloc = debito.getMengloc();
 		controlaCadastro=0;
 		edita();
 	}
 	
-    public List<Praca> completePraca(String query) {
-        List<Praca> filtered = new ArrayList<Praca>(); 
-        for (int i = 0; i < pracas.size(); i++) 
-            if(pracas.get(i).getNome().toLowerCase().contains(query.toLowerCase()))
-                filtered.add(pracas.get(i));              
+    public List<MENGLOC> completeLoc(String query) {
+        List<MENGLOC> filtered = new ArrayList<MENGLOC>(); 
+        for (int i = 0; i < menglocs.size(); i++) 
+            if(menglocs.get(i).getNome().toLowerCase().contains(query.toLowerCase()))
+                filtered.add(menglocs.get(i));              
         return filtered;
     }
     
@@ -161,44 +161,7 @@ public class NotaDebitoBean  implements Serializable {
         for(String m:ms)
         	context.addMessage(null, new FacesMessage("",m));  		
 	}	
-
 /*==================/GETTERS E SETTERS/===========================*/
-
-	public GenericLN<NotaDebitoEnergia> getGln() {
-		return gln;
-	}
-
-	public void setGln(GenericLN<NotaDebitoEnergia> gln) {
-		this.gln = gln;
-	}
-
-	public int getControlaCadastro() {
-		return controlaCadastro;
-	}
-
-	public void setControlaCadastro(int controlaCadastro) {
-		this.controlaCadastro = controlaCadastro;
-	}
-
-	public String getMsg() {
-		return msg;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	public List<String> getMsgs() {
-		return msgs;
-	}
-
-	public void setMsgs(List<String> msgs) {
-		this.msgs = msgs;
-	}
 
 	public NotaDebitoEnergia getDebito() {
 		return debito;
@@ -224,20 +187,56 @@ public class NotaDebitoBean  implements Serializable {
 		this.debitos = debitos;
 	}
 
-	public Praca getPraca() {
-		return praca;
+	public GenericLN<NotaDebitoEnergia> getGln() {
+		return gln;
 	}
 
-	public void setPraca(Praca praca) {
-		this.praca = praca;
+	public void setGln(GenericLN<NotaDebitoEnergia> gln) {
+		this.gln = gln;
 	}
 
-	public List<Praca> getPracas() {
-		return pracas;
+	public MENGLOC getMengloc() {
+		return mengloc;
 	}
 
-	public void setPracas(List<Praca> pracas) {
-		this.pracas = pracas;
+	public void setMengloc(MENGLOC mengloc) {
+		this.mengloc = mengloc;
+	}
+
+	public List<MENGLOC> getMenglocs() {
+		return menglocs;
+	}
+
+	public void setMenglocs(List<MENGLOC> menglocs) {
+		this.menglocs = menglocs;
+	}
+
+	public int getControlaCadastro() {
+		return controlaCadastro;
+	}
+
+	public void setControlaCadastro(int controlaCadastro) {
+		this.controlaCadastro = controlaCadastro;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
+	public List<String> getMsgs() {
+		return msgs;
+	}
+
+	public void setMsgs(List<String> msgs) {
+		this.msgs = msgs;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 }

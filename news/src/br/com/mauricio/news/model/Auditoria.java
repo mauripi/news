@@ -1,5 +1,9 @@
 package br.com.mauricio.news.model;
 
+/**
+*
+* @author MAURICIO CRUZ
+*/
 import java.util.Date;
 
 import javax.persistence.Column;

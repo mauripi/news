@@ -13,12 +13,20 @@ import javax.servlet.http.HttpServletRequest;
 public class Conexao {
 
 	public EntityManager getEntityManager(){
+		EntityManager manager;
+		EntityManagerFactory factory;
 		FacesContext fc = FacesContext.getCurrentInstance();
 		ExternalContext ec = fc.getExternalContext();
 		HttpServletRequest request = (HttpServletRequest) ec.getRequest();
-		EntityManager manager = (EntityManager) request.getAttribute("EntityManager");
+		if(request!=null){
+			manager = (EntityManager) request.getAttribute("EntityManager");
+		}else{
+			factory = Persistence.createEntityManagerFactory("news");
+			manager = factory.createEntityManager();
+		}
+		
 		if(!manager.isOpen()){
-			EntityManagerFactory factory = Persistence.createEntityManagerFactory("news");
+			factory = Persistence.createEntityManagerFactory("news");
 			manager = factory.createEntityManager();
 		}			
 		return manager;		

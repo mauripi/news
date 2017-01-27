@@ -14,6 +14,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.event.FlowEvent;
+
 import net.sf.jasperreports.engine.JRException;
 import br.com.mauricio.news.ln.RelatorioLN;
 import br.com.mauricio.news.ln.financeiro.PrestacaoLN;
@@ -40,7 +42,8 @@ public class PrestacaoBean implements Serializable {
 	private Double totalRestituir = new Double("0.0");	
 	private Double totalReceber = new Double("0.0");
 	private int tipo=1;
-	
+	private boolean skip;
+	private List<String> msgs;
 	
 	@PostConstruct
 	public void init(){
@@ -155,11 +158,11 @@ public class PrestacaoBean implements Serializable {
 	
 	public void prestacaoSelecionada(){
 		calculaTotais();
-		controlaCadastro=0;
 		if(prestacao.getDataadiantamento()==null&&(prestacao.getValoradiantado()==0.0||prestacao.getValoradiantado()==null))
 			tipo=2;
 		else
 			tipo=1;
+		edita();
 	}
 	
 	public void calculaTotais() {
@@ -218,6 +221,42 @@ public class PrestacaoBean implements Serializable {
 	public void removeDespesa(){
 		this.prestacao.getDespesas().remove(despesa);
 	}	
+
+    public String onFlowProcess(FlowEvent event) {
+	   	if(controlaCadastro!=0){
+	       if(skip) {
+	            skip = false;   //reset in case user goes back
+	            return "confirm";
+	        }else {
+	        	msgs = new ArrayList<String>();
+	        	if(event.getOldStep().equals("gerais")){
+	        		if(tipo==1)
+	        			if(this.prestacao.getDataadiantamento()==null)
+	        				msgs.add("Informe a Data do Adiantamento.");
+	        		if(this.prestacao.getMotivodespesa().length()==0)
+	        			msgs.add("Informe o motivo da despesa.");	        		
+	        		if(msgs.size()>0){
+	        			mensagens(msgs);
+	        			return event.getOldStep();
+	        		}
+	        	}
+	        	if(event.getOldStep().equals("cmprvts")){
+	        		if(msgs.size()>0){
+	        			mensagens(msgs);
+	        			return event.getOldStep();
+	        		}       		
+	        	}        			
+	            return event.getNewStep();
+	        }
+	   	}
+		return "gerais";
+   }	
+		
+	private void mensagens(List<String> ms) {
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        for(String m:ms)
+        	context.addMessage(null, new FacesMessage(m,m));  			
+	}
 	
 	public void mensagens(){
         FacesContext context = FacesContext.getCurrentInstance();  	          
@@ -341,6 +380,14 @@ public class PrestacaoBean implements Serializable {
 
 	public void setDespesaParaRemover(List<Despesa> despesaParaRemover) {
 		this.despesaParaRemover = despesaParaRemover;
+	}
+
+	public boolean isSkip() {
+		return skip;
+	}
+
+	public void setSkip(boolean skip) {
+		this.skip = skip;
 	}
 
 }

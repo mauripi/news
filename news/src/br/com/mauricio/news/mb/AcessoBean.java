@@ -284,12 +284,12 @@ public class AcessoBean implements Serializable {
 		}
 	}
 
-	public void praca() throws IOException{
+	public void engloc() throws IOException{
 		if (this.login.getId()==null){
 			sair();
 		}else{
 			FacesContext cx = FacesContext.getCurrentInstance();
-			cx.getExternalContext().redirect("praca.jsf");
+			cx.getExternalContext().redirect("engloc.jsf");
 		}
 	}
 	

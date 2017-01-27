@@ -1,7 +1,7 @@
 package br.com.mauricio.news.mb.contabil;
 
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.FlowEvent;
 
 import net.sf.jasperreports.engine.JRException;
 import br.com.mauricio.news.ln.FilialLN;
@@ -26,7 +26,7 @@ import br.com.mauricio.news.model.CCusto;
 import br.com.mauricio.news.model.Filial;
 import br.com.mauricio.news.model.Login;
 import br.com.mauricio.news.model.contabil.BaixaBem;
-import br.com.mauricio.news.model.contabil.DocBaixaBem;
+import br.com.mauricio.news.model.contabil.ItemBaixaBem;
 import br.com.mauricio.news.model.contabil.Patrimonio;
 import br.com.mauricio.news.model.contabil.TipoBaixa;
 
@@ -39,8 +39,11 @@ public class BaixaBemBean implements Serializable {
 	private BaixaBem baixabemSel = new BaixaBem();
 	private GenericLN<BaixaBem> gln = new GenericLN<BaixaBem>();
 	private List<BaixaBem> baixabens = new ArrayList<BaixaBem>();
+	private List<ItemBaixaBem> itens = new ArrayList<ItemBaixaBem>();
+	private List<ItemBaixaBem> itensRemovido = new ArrayList<ItemBaixaBem>();
 	private int controlaCadastro = 0;
 	private String msg;
+	private List<String> msgs;
 	private Login usuario = new Login();
 	private List<CCusto> centroCustos;
 	private List<CCusto> custosFilial;
@@ -49,12 +52,13 @@ public class BaixaBemBean implements Serializable {
     private List<Patrimonio> patrimonios = new ArrayList<Patrimonio>();
     private String codigo;
     private Date data = new Date();
-    private DocBaixaBem documento = new DocBaixaBem();
-    private List<DocBaixaBem> documentos = new ArrayList<DocBaixaBem>();
-	private String CAMINHO_DO_ARQUIVO = "C:\\ARQUIVOS_INTRANET\\CONTABILIDADE\\BAIXABEM\\";
-	private String nomeArquivo;
-	private InputStream is;
+
+
 	private String descricao="";
+	private boolean skip;
+	private Double totalCompra;
+	private Double totalResidual;
+	private Boolean isVenda=false;
 	
 	
 	@PostConstruct
@@ -124,9 +128,16 @@ public class BaixaBemBean implements Serializable {
 	public void encontrarBem(){
 		BaixaBemLN ln = new BaixaBemLN();
 		patrimonios = ln.obterPatrimonios(codigo, data);
-		if(patrimonios.size()>0){
+		if(patrimonios.size()<1){
+			msg = "Nenhum registro encontrado para este número de patrimônio. ";
+			baixabem.setDataaquisicao(null);
+			baixabem.setDescricaoBem("");
+			baixabem.setVlraquisicao(null);
+			baixabem.setVlrresidual(null);
+			mensagens();	
+		}else{
 			for(Patrimonio p: patrimonios){
-				if(p.getCodbem().contains("-00")){
+				if(p.getNumpla().contains("-00")){
 					baixabem.setDataaquisicao(p.getDataqi());
 					baixabem.setDescricaoBem(p.getDesbem());
 					baixabem.setVlraquisicao(p.getVlrbas());
@@ -134,16 +145,35 @@ public class BaixaBemBean implements Serializable {
 					baixabem.setPatrimonio(p.getCodbem());
 				}
 			}
-		}else{
-			msg = "Nenhum registro encontrado para este número de patrimônio. Preencha os campos com as informações.";
-			baixabem.setDataaquisicao(null);
-			baixabem.setDescricaoBem("");
-			baixabem.setVlraquisicao(null);
-			baixabem.setVlrresidual(null);
-			mensagens();	
+			totalCompra = new Double("0.0");
+			totalResidual = new Double("0.0");
+			for(Patrimonio p: patrimonios){
+				ItemBaixaBem item = new ItemBaixaBem();
+				item.setDescricao(p.getDesbem());
+				item.setNotafiscal(p.getNumdoc());
+				item.setPatrimonio(p.getCodbem());
+				item.setNomeFornecedor(p.getNomfor());
+				item.setNumpla(p.getNumpla());
+				item.setVlraquisicao(p.getVlrbas());
+				item.setVlrresidual(p.getVlrres());
+				item.setQuantidade(new Double("0"));
+				item.setDataaquisicao(p.getDataqi());
+				item.setDatavenda(data);
+				item.setBaixabem(baixabem);
+				totalCompra = totalCompra+p.getVlrbas();
+				totalResidual = totalResidual+p.getVlrres();
+				itens.add(item);
+			}
+			patrimonios = new ArrayList<Patrimonio>();
 		}
 	}
 	
+	public void addItensRemovido(ItemBaixaBem i){
+		totalCompra = totalCompra-i.getVlraquisicao();
+		totalResidual = totalResidual-i.getVlrresidual();		
+		itensRemovido.add(i);
+	}	
+
 	public void grava(){	
 		if(validaCampos()){
 			gln = new GenericLN<BaixaBem>();
@@ -152,11 +182,7 @@ public class BaixaBemBean implements Serializable {
 			baixabem.setDataemissao(new Date());
 			baixabem.setTipoBaixa(tipoBaixa);
 			baixabem.setJustificativa(acresentaJustificativa());
-			if(patrimonios.size()<1){
-				baixabem.setPatrimonio(codigo);	
-			}else{
-				populaAgregados();
-			}
+			baixabem.setItens(itens);
 
 			if(controlaCadastro==1)					
 				msg = gln.add(baixabem);
@@ -194,8 +220,8 @@ public class BaixaBemBean implements Serializable {
 	private void enviaEmailBemExcluido(BaixaBem b) {
 		BaixaBemLN bln = new BaixaBemLN();
 		bln.enviarEmailExclusao(b);
-	}
-	
+	}	
+
 	public void gerarRelatorio() {
 		RelBaixaBemLN rel = new RelBaixaBemLN();
 		try {
@@ -205,32 +231,6 @@ public class BaixaBemBean implements Serializable {
 			System.out.println(e.getLocalizedMessage() + " BaixaBemBean.gerarRelatorio() IOException");
 			mensagens();
 		}
-	}
-
-	private void populaAgregados() {
-		baixabem.setAgregados(null);
-		List<BaixaBem> agregados = new ArrayList<BaixaBem>();
-		for(Patrimonio p: patrimonios){
-			if(!p.getCodbem().contains("-00")){
-				BaixaBem b = new BaixaBem();
-				b.setSolicitante(baixabem.getSolicitante());
-				b.setCcusto(baixabem.getCcusto());
-				b.setFilial(baixabem.getFilial());
-				b.setDatavenda(baixabem.getDatavenda());
-				b.setVlrvenda(0.0);
-				b.setDataemissao(baixabem.getDataemissao());
-				b.setJustificativa(baixabem.getJustificativa());
-				b.setTipoBaixa(baixabem.getTipoBaixa());
-				
-				b.setDataaquisicao(p.getDataqi());
-				b.setDescricaoBem(p.getDesbem());
-				b.setPatrimonio(p.getCodbem());
-				b.setVlraquisicao(p.getVlrbas());
-				b.setVlrresidual(p.getVlrres());
-				agregados.add(b);
-			}
-		}
-		baixabem.setAgregados(agregados);
 	}
 
 	private String acresentaJustificativa(){
@@ -245,12 +245,63 @@ public class BaixaBemBean implements Serializable {
 		}
 		return sb.toString();		
 	}
-	
+
+	public void limpaCadastro(){
+		baixabem = baixabemSel = new BaixaBem();
+		patrimonios=new ArrayList<Patrimonio>();
+		data = new Date();
+		codigo="";
+		controlaCadastro=0;
+		tipoBaixa = null;
+		baixabem.setFilial(filiais.get(0));
+		carregaCentroCustosDaFilial();
+		totalCompra = new Double("0.0");
+		totalResidual = new Double("0.0");
+		itens = new ArrayList<ItemBaixaBem>();
+		itensRemovido = new ArrayList<ItemBaixaBem>();		
+	}
+
+	public void selecao(){
+		baixabemSel = baixabem;
+		usuario = baixabem.getSolicitante();
+		data = baixabem.getDatavenda();
+		tipoBaixa = baixabem.getTipoBaixa();
+		itens = baixabem.getItens();
+		totalCompra = new Double("0.0");
+		totalResidual = new Double("0.0");
+		
+		for(ItemBaixaBem i:itens){
+			if(i.getNumpla().contains("-00")){
+				String scod[] = i.getNumpla().split("-");
+				codigo=scod[0];
+			}
+			totalCompra = totalCompra+i.getVlraquisicao();
+			totalResidual = totalResidual+i.getVlrresidual();
+		}
+		
+		
+		//String sjus[] = baixabem.getJustificativa().replace("*", ";").split("   ;");
+		//baixabem.setJustificativa(sjus[0]);
+		//encontrarBem();
+		controlaCadastro=0;
+		///exibeArquivo();
+		
+		edita();
+	}
+
+  	public SelectItem[] getTiposBaixa() {
+  		SelectItem[] items=null;
+  		int i = 0;
+		items = new SelectItem[TipoBaixa.values().length];
+		for(TipoBaixa t: TipoBaixa.values()) 
+			items[i++] = new SelectItem(t, t.name());
+	 	return items;
+ 	}
+
 	private boolean validaCampos(){
 		if(usuario==null)
 			return false;
-		if(tipoBaixa==null)
-			return false;
+
 		if(baixabem.getJustificativa()==null)
 			return false;		
 		if(baixabem.getVlrvenda()==null)
@@ -261,85 +312,55 @@ public class BaixaBemBean implements Serializable {
 		return true;		
 	}
 	
-	public void limpaCadastro(){
-		baixabem = baixabemSel = new BaixaBem();
-		patrimonios=new ArrayList<Patrimonio>();
-		data = new Date();
-		codigo="";
-		controlaCadastro=0;
-		tipoBaixa = null;
-		baixabem.setFilial(filiais.get(0));
-		carregaCentroCustosDaFilial();
-	}
-
-	public void selecao(){
-		baixabemSel = baixabem;
-		usuario = baixabem.getSolicitante();
-		data = baixabem.getDatavenda();
-		tipoBaixa = baixabem.getTipoBaixa();
-		String scod[] = baixabem.getPatrimonio().split("-");
-		codigo=scod[0];
-		String sjus[] = baixabem.getJustificativa().replace("*", ";").split("   ;");
-		baixabem.setJustificativa(sjus[0]);
-		encontrarBem();
-		controlaCadastro=0;
-		exibeArquivo();
-		edita();
-	}
-
-  	public SelectItem[] getTiposBaixa() {
-  		SelectItem[] items=null;
-  		int i = 0;
-		items = new SelectItem[TipoBaixa.values().length];
-		for(TipoBaixa t: TipoBaixa.values()) 
-			items[i++] = new SelectItem(t, t.name());
-
-	 	return items;
-
- 	}
-
-  	
-	private void exibeArquivo(){
-		BaixaBemLN ln = new BaixaBemLN();
-		ln.carregaArquivo(baixabem,caminho());		
+    public String onFlowProcess(FlowEvent event) {
+	   	if(controlaCadastro!=0){
+	       if(skip) {
+	            skip = false;   //reset in case user goes back
+	            return "confirm";
+	        }else {
+	        	msgs = new ArrayList<String>();
+	        	if(event.getOldStep().equals("gerais")){
+	        		if(tipoBaixa==null)
+	        			msgs.add("Informe o tipo de baixa.");
+	        		else
+	        			if(tipoBaixa==TipoBaixa.VENDA)
+	        				isVenda=true;
+	        			else
+	        				isVenda=false;
+	        		if(msgs.size()>0){
+	        			mensagens(msgs);
+	        			return event.getOldStep();
+	        		}
+	        	}
+	        	if(event.getOldStep().equals("patrimonios")){
+	        		if(itens.size()<1)
+	        			msgs.add("Adicione os patrimônios");
+	        		if(msgs.size()>0){
+	        			mensagens(msgs);
+	        			return event.getOldStep();
+	        		}       		
+	        	} 
+	        	if(event.getOldStep().equals("just")){
+	        		if(baixabem.getJustificativa()==null)
+	        			msgs.add("Adicione a justificativa");
+	        		if(msgs.size()>0){
+	        			mensagens(msgs);
+	        			return event.getOldStep();
+	        		}       		
+	        	} 	        	
+	        	
+	            return event.getNewStep();
+	        }
+	   	}
+		return "gerais";
+   }	
+	
+	private void mensagens(List<String> ms) {
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        for(String m:ms)
+        	context.addMessage(null, new FacesMessage(m,m));  			
 	}
 	
-	private String caminho(){
-		return CAMINHO_DO_ARQUIVO +baixabem.getId()+"\\";
-	}
-
-	public void handleFileUpload(FileUploadEvent event) throws IOException {
-		is=event.getFile().getInputstream();
-    	if(is!=null){
-    		nomeArquivo =  event.getFile().getFileName();
-    		BaixaBemLN ln = new BaixaBemLN();    
-			msg = ln.recebeArquivoUpload(is,nomeArquivo,caminho());				
-			if(msg!=""){
-				msg = "Arquivo não importado. Ocorreu erro no recebimento do arquivo.";
-				mensagens();
-			}
-		} else{
-			System.out.println("is é null em BaixaBemBean.handleFileUpload(FileUploadEvent event)");
-		}
-    }
-
-	public void salvarArquivo(){
-		if(descricao.length()>1){		
-			BaixaBemLN ln = new BaixaBemLN();    
-			documento = new DocBaixaBem();
-			documento.setArquivo(nomeArquivo);
-			documento.setBaixabem(baixabem);
-			documento.setDescricao(descricao);
-	    	msg = ln.salvarDocumeto(documento);	
-	    	documentos.add(documento);
-	    	baixabem.getDocumentos().add(documento);
-	    	mensagens();   	
-	    	descricao="";
-		}else{
-			msg="Informe a descrição do arquivo.";
-			mensagens();
-		}
-    }
 
 	public void mensagens(){
         FacesContext context = FacesContext.getCurrentInstance();  	          
@@ -487,22 +508,6 @@ public class BaixaBemBean implements Serializable {
 		this.data = data;
 	}
 
-	public String getNomeArquivo() {
-		return nomeArquivo;
-	}
-
-	public void setNomeArquivo(String nomeArquivo) {
-		this.nomeArquivo = nomeArquivo;
-	}
-
-	public InputStream getIs() {
-		return is;
-	}
-
-	public void setIs(InputStream is) {
-		this.is = is;
-	}
-
 	public String getDescricao() {
 		return descricao;
 	}
@@ -511,20 +516,52 @@ public class BaixaBemBean implements Serializable {
 		this.descricao = descricao;
 	}
 
-	public DocBaixaBem getDocumento() {
-		return documento;
+	public boolean isSkip() {
+		return skip;
 	}
 
-	public void setDocumento(DocBaixaBem documento) {
-		this.documento = documento;
+	public void setSkip(boolean skip) {
+		this.skip = skip;
 	}
 
-	public List<DocBaixaBem> getDocumentos() {
-		return documentos;
+	public List<ItemBaixaBem> getItens() {
+		return itens;
 	}
 
-	public void setDocumentos(List<DocBaixaBem> documentos) {
-		this.documentos = documentos;
+	public void setItens(List<ItemBaixaBem> itens) {
+		this.itens = itens;
+	}
+
+	public List<ItemBaixaBem> getItensRemovido() {
+		return itensRemovido;
+	}
+
+	public void setItensRemovido(List<ItemBaixaBem> itensRemovido) {
+		this.itensRemovido = itensRemovido;
+	}
+
+	public Double getTotalCompra() {
+		return totalCompra;
+	}
+
+	public void setTotalCompra(Double totalCompra) {
+		this.totalCompra = totalCompra;
+	}
+
+	public Double getTotalResidual() {
+		return totalResidual;
+	}
+
+	public void setTotalResidual(Double totalResidual) {
+		this.totalResidual = totalResidual;
+	}
+
+	public Boolean getIsVenda() {
+		return isVenda;
+	}
+
+	public void setIsVenda(Boolean isVenda) {
+		this.isVenda = isVenda;
 	}
 
 }

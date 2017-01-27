@@ -42,7 +42,7 @@ background: #DFE4E6 !important;*/
 }
 
 .ui-widget,.ui-widget .ui-widget {
-font-size: 93% !important;
+font-size: small !important;
 
 }
 
@@ -56,7 +56,7 @@ font-size: 93% !important;
 
 .holer .ui-panelgrid tr, .ui-panelgrid td {
 	border: none !important; 	
-	font: 90% verdana;
+	font: 100% verdana;
 	
 }
 .headerEmpresa{

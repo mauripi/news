@@ -109,11 +109,12 @@ public class AdiantamentoLN implements Serializable{
 	public void enviarEmail(Adiantamento adto){
 		gerarRelatorio(adto);
 		List<String> dest = new ArrayList<String>();
-		
+
 		dest.add("lrnascimento@recordnews.com.br");
 		dest.add("ecoletto@recordnews.com.br");
 		dest.add("eksouza@recordnews.com.br ");
 		dest.add("ctsouza@recordnews.com.br");
+
 		
 		if(ValidaEmail.validar(adto.getFavorecido().getEmail()))
 			dest.add(adto.getFavorecido().getEmail());
@@ -123,6 +124,7 @@ public class AdiantamentoLN implements Serializable{
 			
 		if(ValidaEmail.validar(adto.getFavorecido().getEmail()))
 			dest.add(adto.getFavorecido().getEmail());
+		gerarRelatorio(adto);
 		File file = new File("C:\\Windows\\Temp\\financeiro\\"+"adiantamento"+adto.getId()+".pdf");
 		List<File> anexos = new ArrayList<File>();
 		anexos.add(file);		

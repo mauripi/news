@@ -92,9 +92,10 @@ public class AdiantamentoBean  implements Serializable {
 			gln = new GenericLN<Adiantamento>();
 			if(controlaCadastro==2)	
 				msg = gln.update(adiantamento);
-			if(controlaCadastro==1)
+			if(controlaCadastro==1){
 				msg = gln.add(adiantamento);	
-			enviarEmail();
+				enviarEmail();
+			}
 			mensagens();
 			listar();
 			limpaCadastro();	
@@ -104,8 +105,7 @@ public class AdiantamentoBean  implements Serializable {
 		}
 	}
 	
-	
-	private void enviarEmail() {
+	public void enviarEmail() {
 		AdiantamentoLN ln = new AdiantamentoLN();
 		ln.enviarEmail(adiantamento);
 	}

@@ -10,6 +10,7 @@ public class ViewNotaDebito implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String praca;
+	private Integer tiploc;
 	private Double janeiro = new Double("0.0");
 	private Double fevereiro = new Double("0.0");
 	private Double marco = new Double("0.0");
@@ -102,6 +103,12 @@ public class ViewNotaDebito implements Serializable {
 	public void setDezembro(Double dezembro) {
 		this.dezembro = dezembro;
 	}
+	public Integer getTiploc() {
+		return tiploc;
+	}
+	public void setTiploc(Integer tiploc) {
+		this.tiploc = tiploc;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -123,6 +130,7 @@ public class ViewNotaDebito implements Serializable {
 		result = prime * result + ((praca == null) ? 0 : praca.hashCode());
 		result = prime * result
 				+ ((setembro == null) ? 0 : setembro.hashCode());
+		result = prime * result + ((tiploc == null) ? 0 : tiploc.hashCode());
 		return result;
 	}
 	@Override
@@ -199,7 +207,12 @@ public class ViewNotaDebito implements Serializable {
 				return false;
 		} else if (!setembro.equals(other.setembro))
 			return false;
+		if (tiploc == null) {
+			if (other.tiploc != null)
+				return false;
+		} else if (!tiploc.equals(other.tiploc))
+			return false;
 		return true;
 	}
-	
+
 }

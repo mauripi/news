@@ -22,7 +22,9 @@ public class NotaDebitoConsolidadoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private NotaDebitoEnergiaLN ln;
 	private Integer ano;
-	private List<ViewNotaDebito> debitos = new ArrayList<ViewNotaDebito>();
+	private List<ViewNotaDebito> debitos1 = new ArrayList<ViewNotaDebito>();
+	private List<ViewNotaDebito> debitos2 = new ArrayList<ViewNotaDebito>();
+	private List<ViewNotaDebito> all = new ArrayList<ViewNotaDebito>();
 	 private Map<Integer, Integer> anos;
 	
 	@PostConstruct
@@ -34,7 +36,12 @@ public class NotaDebitoConsolidadoBean implements Serializable {
 	
 	public void listar(){
 		ln = new NotaDebitoEnergiaLN();
-		debitos = ln.getNotaDebitoConsolidados(ano);
+		all = ln.getNotaDebitoConsolidados(ano);
+		for(ViewNotaDebito v:all)
+			if(v.getTiploc()==1)
+				debitos1.add(v);
+			else
+				debitos2.add(v);
 	}
 
 	
@@ -74,12 +81,28 @@ public class NotaDebitoConsolidadoBean implements Serializable {
 		this.anos = anos;
 	}
 
-	public List<ViewNotaDebito> getDebitos() {
-		return debitos;
+	public List<ViewNotaDebito> getDebitos1() {
+		return debitos1;
 	}
 
-	public void setDebitos(List<ViewNotaDebito> debitos) {
-		this.debitos = debitos;
+	public void setDebitos1(List<ViewNotaDebito> debitos1) {
+		this.debitos1 = debitos1;
+	}
+
+	public List<ViewNotaDebito> getDebitos2() {
+		return debitos2;
+	}
+
+	public void setDebitos2(List<ViewNotaDebito> debitos2) {
+		this.debitos2 = debitos2;
+	}
+
+	public List<ViewNotaDebito> getAll() {
+		return all;
+	}
+
+	public void setAll(List<ViewNotaDebito> all) {
+		this.all = all;
 	}
 
 	public static long getSerialversionuid() {

@@ -16,6 +16,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.mauricio.news.model.contabil.BaixaBem;
+import br.com.mauricio.news.model.contabil.ItemBaixaBem;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -33,8 +34,8 @@ public class RelBaixaBemLN implements Serializable{
 		
 		String CAMINHO_PARA_SALVAR_ARQUIVO = "C:\\windows\\temp\\contabil\\";
 
-
-		List<BaixaBem> list = montaListaBem(b);
+		List<BaixaBem> list = new ArrayList<BaixaBem>();
+		list.add(b);
 	
 		String nomeRelatorio = "baixabem.jasper";	
 	    JRBeanCollectionDataSource jrds = new JRBeanCollectionDataSource(list);
@@ -44,7 +45,14 @@ public class RelBaixaBemLN implements Serializable{
 	    ExternalContext ec = fc.getExternalContext();
 		   
 	    File reportFile = new File(ec.getRealPath("/sistema/relatorio/" +nomeRelatorio));
-	   
+
+		Double totalCompra = new Double("0.0");
+		Double totalResidual = new Double("0.0");	    
+	    for (ItemBaixaBem i:b.getItens()){
+			totalCompra = totalCompra+i.getVlraquisicao();
+			totalResidual = totalResidual+i.getVlrresidual();	    	
+	    }
+	    
 	    param.put("id", b.getId()); 
 	    param.put("filial", b.getFilial().getNome()); 
 	    param.put("ccusto", b.getCcusto().getNome()); 
@@ -54,7 +62,8 @@ public class RelBaixaBemLN implements Serializable{
 	    param.put("dtvenda", b.getDatavenda());
 	    param.put("dtemissao", b.getDataemissao());
 	    param.put("vlrvenda", b.getVlrvenda());
-	    param.put("list", list);
+	    param.put("vlrtotalcompra", totalCompra);
+	    param.put("vlrtotalresidual", totalResidual);
 
 	    // para resolver o problema da moeda
 	    param.put("REPORT_LOCALE", new Locale("pt", "BR"));
@@ -76,14 +85,13 @@ public class RelBaixaBemLN implements Serializable{
 		        } catch (IOException ex) {}
 		    }
 		}
-
-
 	}
 
 	@SuppressWarnings({ "unchecked" })
 	public void imprimir(BaixaBem b) throws IOException, JRException{
 
-		List<BaixaBem> list = montaListaBem(b);
+		List<BaixaBem> list = new ArrayList<BaixaBem>();
+		list.add(b);
 	
 		String nomeRelatorio = "baixabem.jasper";	
 	    JRBeanCollectionDataSource jrds = new JRBeanCollectionDataSource(list);
@@ -93,7 +101,14 @@ public class RelBaixaBemLN implements Serializable{
 	    ExternalContext ec = fc.getExternalContext();
 		   
 	    File reportFile = new File(ec.getRealPath("/sistema/relatorio/" +nomeRelatorio));
-	   
+
+		Double totalCompra = new Double("0.0");
+		Double totalResidual = new Double("0.0");	    
+	    for (ItemBaixaBem i:b.getItens()){
+			totalCompra = totalCompra+i.getVlraquisicao();
+			totalResidual = totalResidual+i.getVlrresidual();	    	
+	    }
+	    
 	    param.put("id", b.getId()); 
 	    param.put("filial", b.getFilial().getNome()); 
 	    param.put("ccusto", b.getCcusto().getNome()); 
@@ -103,7 +118,8 @@ public class RelBaixaBemLN implements Serializable{
 	    param.put("dtvenda", b.getDatavenda());
 	    param.put("dtemissao", b.getDataemissao());
 	    param.put("vlrvenda", b.getVlrvenda());
-	    param.put("list", list);
+	    param.put("vlrtotalcompra", totalCompra);
+	    param.put("vlrtotalresidual", totalResidual);
 
 	    // para resolver o problema da moeda
 	    param.put("REPORT_LOCALE", new Locale("pt", "BR"));
@@ -116,47 +132,6 @@ public class RelBaixaBemLN implements Serializable{
 	    JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);  
 	    FacesContext.getCurrentInstance().responseComplete();  
 	}
-	
-	private List<BaixaBem> montaListaBem(BaixaBem bem) {		
-		List<BaixaBem> list = new ArrayList<BaixaBem>();	
-		BaixaBem b = new BaixaBem();
-		
-		b.setSolicitante(bem.getSolicitante());
-		b.setCcusto(bem.getCcusto());
-		b.setFilial(bem.getFilial());
-		b.setDatavenda(bem.getDatavenda());
-		b.setVlrvenda(bem.getVlrvenda());
-		b.setDataemissao(bem.getDataemissao());
-		b.setJustificativa(bem.getJustificativa());
-		b.setTipoBaixa(bem.getTipoBaixa());
-		
-		b.setDataaquisicao(bem.getDataaquisicao());
-		b.setDescricaoBem(bem.getDescricaoBem());
-		b.setPatrimonio(bem.getPatrimonio());
-		b.setVlraquisicao(bem.getVlraquisicao());
-		b.setVlrresidual(bem.getVlrresidual());
-		list.add(b);
-		for(int i=0;i<bem.getAgregados().size();i++){
-			BaixaBem bx = new BaixaBem();
-			bx.setSolicitante(bem.getAgregados().get(i).getSolicitante());
-			bx.setCcusto(bem.getAgregados().get(i).getCcusto());
-			bx.setFilial(bem.getAgregados().get(i).getFilial());
-			bx.setDatavenda(bem.getAgregados().get(i).getDatavenda());
-			bx.setVlrvenda(bem.getAgregados().get(i).getVlrvenda());
-			bx.setDataemissao(bem.getAgregados().get(i).getDataemissao());
-			bx.setJustificativa(bem.getAgregados().get(i).getJustificativa());
-			bx.setTipoBaixa(bem.getAgregados().get(i).getTipoBaixa());
-			
-			bx.setDataaquisicao(bem.getAgregados().get(i).getDataaquisicao());
-			bx.setDescricaoBem(bem.getAgregados().get(i).getDescricaoBem());
-			bx.setPatrimonio(bem.getAgregados().get(i).getPatrimonio());
-			bx.setVlraquisicao(bem.getAgregados().get(i).getVlraquisicao());
-			bx.setVlrresidual(bem.getAgregados().get(i).getVlrresidual());
-			list.add(bx);			
-		}
-		return list;
-	}
-
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;

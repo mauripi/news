@@ -100,6 +100,7 @@ public class MCTB001Dao {
 	}
 	
 	
+	
 	public EntityManagerFactory getFactory() {
 		return factory;
 	}

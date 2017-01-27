@@ -36,7 +36,7 @@ public class FluxoDiarioBean implements Serializable {
 
 	private static final long serialVersionUID = -5434138924149662559L;
 	private Integer mes;
-	private Integer ano;
+	private Integer ano=2017;
 	private String msg;
 	private String descricaoTipo;
 	private String nomeArquivo;

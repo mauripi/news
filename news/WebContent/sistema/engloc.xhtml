@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - ENGENHARIA</ui:define>
+<ui:define name="conteudo">
+
+<f:facet name="header">Cadastro dos Locais</f:facet>
+
+<h:form id="formCad">
+	<p:panel rendered="#{acessoBean.temAcessoControleSinal}"  style="width:50%;">
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Local"/> 
+			<p:inputText value="#{menglocMB.mengloc.nome}" placeholder="Nome da Praça" size="50" maxlength="100" disabled="#{menglocMB.controlaCadastro eq 0}"/>
+	        <p:outputLabel for="tipo" value="Tipo do Local" />
+	        <p:selectOneMenu id="tipo" value="#{menglocMB.mengloc.tiploc}" style="width:125px"  disabled="#{menglocMB.controlaCadastro eq 0}">
+	            <f:selectItem itemLabel="Praça" itemValue="1" />
+	            <f:selectItem itemLabel="Posto" itemValue="2" />
+	        </p:selectOneMenu>
+		</p:panelGrid>
+		<f:facet name="footer">
+			<p:panelGrid columns="6" style="border: none !important; ">
+				<p:commandButton value="Novo" action="#{menglocMB.novo}" update=":formCad" />
+				<p:commandButton value="Remover" action="#{menglocMB.exclui}" disabled="#{menglocMB.mengloc.id==null}" update=":formCad" />
+				<p:commandButton value="Limpar" action="#{menglocMB.limpaCadastro}" update=":formCad" />
+				<p:commandButton value="Gravar" action="#{menglocMB.grava}" update=":formCad,:formMsg" />
+			</p:panelGrid>
+		</f:facet>
+		<br></br>
+		<hr></hr>
+	    <p:dataTable id="desp" var="d" value="#{menglocMB.menglocs}" selectionMode="single" 
+	     	selection="#{menglocMB.menglocSel}" rowKey="#{d.id}" emptyMessage="">
+	    	<f:facet name="header">Locais cadastrado</f:facet>
+			<p:ajax event="rowSelect" listener="#{menglocMB.selecao}" update=":formCad" />
+	        <p:column headerText="Descrição" width="40%">
+	            <h:outputText value="#{d.nome}" />
+	        </p:column>  
+	        <p:column headerText="Descrição" width="40%">
+	            <h:outputText value="#{d.tiploc eq 1 ? 'Praça' : 'Posto'}" />
+	        </p:column>	                 
+	    </p:dataTable>
+	</p:panel>
+</h:form>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

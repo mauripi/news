@@ -20,7 +20,6 @@ import br.com.mauricio.news.dao.contabil.BaixaBemDao;
 import br.com.mauricio.news.dao.contabil.BemDao;
 import br.com.mauricio.news.model.Login;
 import br.com.mauricio.news.model.contabil.BaixaBem;
-import br.com.mauricio.news.model.contabil.DocBaixaBem;
 import br.com.mauricio.news.model.contabil.Patrimonio;
 import br.com.mauricio.news.util.Email;
 import br.com.mauricio.news.util.SaveFile;
@@ -186,13 +185,6 @@ public class BaixaBemLN implements Serializable {
         if (!folder.exists())
             folder.mkdirs();	
 	}	
-
-	public String salvarDocumeto(DocBaixaBem documento) {
-        GenericDao<DocBaixaBem> ddao = new GenericDao<DocBaixaBem>(manager);
-    	ddao.save(documento);
-		return "Documento salvo.";   		
-	}
-
 	
 	
 	

@@ -1,4 +1,4 @@
-package br.com.mauricio.news.model.engenharia;
+package br.com.mauricio.news.model;
 
 import java.io.Serializable;
 
@@ -13,27 +13,29 @@ import javax.persistence.PersistenceUnit;
 * @author MAURICIO CRUZ
 */
 @PersistenceUnit(unitName="news")
-@Entity(name="praca")
-public class Praca implements Serializable{
+@Entity(name="tipocontrato")
+public class TipoContrato implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	@GeneratedValue
 	@Id
 	private Integer id;
-	@Column(length=100,nullable=false)
-	private String nome;
+	@Column(length=40)
+	private String descricao;
 
+	
+	
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getNome() {
-		return nome;
+	public String getDescricao() {
+		return descricao;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -42,8 +44,9 @@ public class Praca implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result
+				+ ((descricao == null) ? 0 : descricao.hashCode());
+		result = prime * result + id;
 		return result;
 	}
 	@Override
@@ -54,18 +57,15 @@ public class Praca implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Praca other = (Praca) obj;
-		if (id == null) {
-			if (other.id != null)
+		TipoContrato other = (TipoContrato) obj;
+		if (descricao == null) {
+			if (other.descricao != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!descricao.equals(other.descricao))
 			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
+		if (id != other.id)
 			return false;
 		return true;
 	}
-
+	
 }

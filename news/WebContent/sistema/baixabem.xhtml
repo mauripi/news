@@ -20,91 +20,195 @@
 <f:facet name="header">Baixa de Bem</f:facet>
 
 <h:form id="formCad">
-	<p:panel >
-		<p:panelGrid columns="4">
-		
-			<h:outputLabel value="Filial"/>
-			<h:outputLabel value="Centro de Custo"/>
-			<h:outputLabel value="Tipo de Baixa"/>
-			<h:outputLabel value="Data da Baixa"/>
 
-			<p:selectOneMenu id="fil" value="#{baixabemMB.baixabem.filial}" converter="filialConverter" style="width:130px;" disabled="#{baixabemMB.controlaCadastro == 0}">
-				<f:selectItems value="#{baixabemMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
-				<p:ajax event="change" listener="#{baixabemMB.carregaCentroCustosDaFilial}" update="cst"/>
-			</p:selectOneMenu>									
+	<p:panel>
+	    <p:wizard flowListener="#{baixabemMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo" >
+	   
+	        <p:tab id="gerais" title="Dados Gerais" >
+	            <p:panel header="Dados Gerais" >
+	            	<p:messages autoUpdate="true"/>
+					<p:panelGrid columns="2">	
+						<h:outputLabel value="Registro nro.:" />
+						<h:outputLabel value="#{baixabemMB.baixabem.id}" />		
+						<h:outputLabel value="Filial"/>
+						<p:selectOneMenu id="fil" value="#{baixabemMB.baixabem.filial}" converter="filialConverter" style="width:130px;" disabled="#{baixabemMB.controlaCadastro == 0}">
+							<f:selectItems value="#{baixabemMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
+							<p:ajax event="change" listener="#{baixabemMB.carregaCentroCustosDaFilial}" update="cst"/>
+						</p:selectOneMenu>									
+						<h:outputLabel value="Centro de Custo"/>
+						<p:selectOneMenu id="cst" value="#{baixabemMB.baixabem.ccusto}" converter="ccustoConverter" style="width:130px;" disabled="#{baixabemMB.controlaCadastro == 0}">
+							<f:selectItems value="#{baixabemMB.custosFilial}" var="c" itemLabel="#{c.nome}" itemValue="#{c}" />
+						</p:selectOneMenu>						
+						<h:outputLabel value="Tipo de Baixa"/>
+						<p:selectOneMenu id="cat" value="#{baixabemMB.tipoBaixa}"  style="width:100px;" disabled="#{baixabemMB.controlaCadastro == 0}" >
+							<f:selectItem itemLabel="#{baixabemMB.tipoBaixa}" itemValue="#{baixabemMB.tipoBaixa}" />
+							<f:selectItems value="#{baixabemMB.tiposBaixa}"/>
+						</p:selectOneMenu>
+						<h:outputLabel value="Data da Baixa"/>
+						<p:calendar value="#{baixabemMB.data}"  locale="pt_BR" pattern="dd/MM/yyyy" size="12" disabled="#{baixabemMB.controlaCadastro == 0}" />
+					</p:panelGrid>
+			   	</p:panel>     	
+			</p:tab>
 
-			<p:selectOneMenu id="cst" value="#{baixabemMB.baixabem.ccusto}" converter="ccustoConverter" style="width:130px;" disabled="#{baixabemMB.controlaCadastro == 0}">
-				<f:selectItems value="#{baixabemMB.custosFilial}" var="c" itemLabel="#{c.nome}" itemValue="#{c}" />
-			</p:selectOneMenu>						
+			<p:tab id="patrimonios" title="Patrimônios">	
+				<p:panel header="Patrimônios" id="ptrs">
+					<p:messages autoUpdate="true"/>	
+					<p:panelGrid columns="3" >
+						<h:outputLabel value="Nº Patrimônio"/>
+						<p:inputText value="#{baixabemMB.codigo}" maxlength="6" size="12" disabled="#{baixabemMB.controlaCadastro == 0}" />				
+						<p:commandButton value="Adicionar" action="#{baixabemMB.encontrarBem}" update=":formMsg,:formCad,:formCad:ptrs"  onstart="PF('status').show()" onsuccess="PF('status').hide()" disabled="#{baixabemMB.controlaCadastro == 0}"/>
+					</p:panelGrid>
+					<p:panelGrid columns="2" id="dados" rendered="false">
+						<h:outputLabel value="Data da Aquisição"/>
+						<p:calendar id="dtaqui" value="#{baixabemMB.baixabem.dataaquisicao}"  locale="pt_BR" pattern="dd/MM/yyyy" size="12" disabled="#{baixabemMB.patrimonios.size()!=0 || baixabemMB.controlaCadastro == 0}"/>
+						<h:outputLabel value="Descrição"/>
+						<p:inputText value="#{baixabemMB.baixabem.descricaoBem}" size="55" disabled="#{baixabemMB.patrimonios.size()!=0 || baixabemMB.controlaCadastro == 0}" />		
+						<h:outputLabel value="Valor Total de Compra"/>
+						<p:inputText value="#{baixabemMB.totalCompra}" size="12" disabled="true" >
+						 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+						</p:inputText>								
+						<h:outputLabel value="Valor Residual"/>
+						<p:inputText value="#{baixabemMB.totalResidual}" size="12" disabled="true" >
+						 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+						</p:inputText>	
+					</p:panelGrid>
+					<br></br>
+					<p:dataTable id="tbItens" var="i" value="#{baixabemMB.itens}" emptyMessage="Nenhum item adicionado." style="width:50%">
+					    <p:column headerText="Código" width="12%">
+					        <h:outputText value="#{i.patrimonio}" />
+					    </p:column>
+					    <p:column headerText="Plaqueta" width="12%">
+					        <h:outputText value="#{i.numpla}" />
+					    </p:column>				 
+					    <p:column headerText="Descrição">
+					        <h:outputText value="#{i.descricao}" />
+					    </p:column>
+				        <p:column headerText="Aquisição" style="width:15%;">
+			               <h:outputText value="#{i.dataaquisicao}">
+							   <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+						   </h:outputText>
+			            </p:column>					    
+					    <p:column headerText="Vlr.Compra" width="15%">
+					        <h:outputText value="#{i.vlraquisicao}">
+					        	<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>
+					        </h:outputText>
+					    </p:column>					    
+					    <p:column headerText="Vlr.Residual" width="15%">
+					        <h:outputText value="#{i.vlrresidual}">
+					        	<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>
+					        </h:outputText>
+					    </p:column>						    
+			            <p:column headerText="Remover" width="60px;">
+			                <p:commandButton action="#{baixabemMB.addItensRemovido(i)}" icon="ui-icon-trash" update="tbItens,:formCad:dados,:formCad:ptrs" process="tbItens">
+			                    <p:collector value="#{i}" removeFrom="#{baixabemMB.itens}" unique="true"/>
+			                </p:commandButton>
+			            </p:column>
+					</p:dataTable>											
+				</p:panel>				
+			</p:tab>
+			
+	        <p:tab id="just" title="Justificativas">
+	        	<p:panel header="Justificativas" >
+	        	<p:messages autoUpdate="true"/>
+					<p:panelGrid columns="2" >		
+						<h:outputLabel value="Valor de Venda" rendered="#{baixabemMB.isVenda}"/>
+						<p:inputText value="#{baixabemMB.baixabem.vlrvenda}" size="9" disabled="#{baixabemMB.controlaCadastro == 0}" rendered="#{baixabemMB.isVenda}">	
+						 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+						</p:inputText>				
+						<h:outputLabel value="Justificativa"/>
+						<p:inputTextarea value="#{baixabemMB.baixabem.justificativa}" cols="42" rows="4" disabled="#{baixabemMB.controlaCadastro == 0}" />	
+					</p:panelGrid>
+	        	</p:panel>
+	        </p:tab>	        		
+
+	        <p:tab id="confirm" title="Confirmação">
+	            <p:panel header="Confirmação">
+	                <h:panelGrid id="confirmation" columns="2" columnClasses="grid,grid">
+	                    <h:panelGrid columns="2" columnClasses="label, value">
+	                        <h:outputLabel value="Filial: " />
+	                        <h:outputText value="#{baixabemMB.baixabem.filial.nome}" styleClass="outputLabel"/>
+	 
+	                        <h:outputLabel value="Centro de Custo: " />
+	                        <h:outputText value="#{baixabemMB.baixabem.ccusto.nome}" styleClass="outputLabel"/>
+	 
+	                        <h:outputLabel value="Tipo de Baixa: " />
+	                        <h:outputText value="#{baixabemMB.tipoBaixa}" styleClass="outputLabel"/>
 	
-			<p:selectOneMenu id="cat" value="#{baixabemMB.tipoBaixa}"  style="width:100px;" disabled="#{baixabemMB.controlaCadastro == 0}" >
-				<f:selectItem itemLabel="#{baixabemMB.tipoBaixa}" itemValue="#{baixabemMB.tipoBaixa}" />
-				<f:selectItems value="#{baixabemMB.tiposBaixa}"/>
-			</p:selectOneMenu>
-						
-			<p:calendar value="#{baixabemMB.data}"  locale="pt_BR" pattern="dd/MM/yyyy" size="8" disabled="#{baixabemMB.controlaCadastro == 0}" />
-		</p:panelGrid>
-		
-		<p:panelGrid columns="5" >
-			<h:outputLabel value="Nº Patrimônio"/>
-			<p:inputText value="#{baixabemMB.codigo}" maxlength="6" size="6" disabled="#{baixabemMB.controlaCadastro == 0}" />				
-			<p:commandButton value="buscar" action="#{baixabemMB.encontrarBem}" update=":formMsg,:formCad"  onstart="PF('status').show()" onsuccess="PF('status').hide()" disabled="#{baixabemMB.controlaCadastro == 0}"/>
-			<h:outputLabel value="Data da Aquisição"/>
-			<p:calendar id="dtaqui" value="#{baixabemMB.baixabem.dataaquisicao}"  locale="pt_BR" pattern="dd/MM/yyyy" size="8" disabled="#{baixabemMB.patrimonios.size()!=0 || baixabemMB.controlaCadastro == 0}"/>
-		</p:panelGrid>
-		<p:panelGrid columns="3" id="dados" >
-			<h:outputLabel value="Descrição"/>
-			<h:outputLabel value="Valor de Compra"/>
-			<h:outputLabel value="Valor Residual"/>
-			<p:inputText value="#{baixabemMB.baixabem.descricaoBem}" size="55" disabled="#{baixabemMB.patrimonios.size()!=0 || baixabemMB.controlaCadastro == 0}" />		
-			<p:inputText value="#{baixabemMB.baixabem.vlraquisicao}" size="9" disabled="#{baixabemMB.patrimonios.size()!=0 || baixabemMB.controlaCadastro == 0}" >
-			 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
-			</p:inputText>								
-			<p:inputText value="#{baixabemMB.baixabem.vlrresidual}" size="9" disabled="#{baixabemMB.patrimonios.size()!=0 || baixabemMB.controlaCadastro == 0}" >
-			 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
-			</p:inputText>								
-		</p:panelGrid>
-		<p:panelGrid columns="4" >		
-			<h:outputLabel value="Valor de Venda"/>
-			<p:inputText value="#{baixabemMB.baixabem.vlrvenda}" size="9" disabled="#{baixabemMB.controlaCadastro == 0}">	
-			 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
-			</p:inputText>				
-			<h:outputLabel value="Justificativa"/>
-			<p:inputTextarea value="#{baixabemMB.baixabem.justificativa}" cols="42" rows="4" disabled="#{baixabemMB.controlaCadastro == 0}"/>	
-		</p:panelGrid>
-		<p:panelGrid columns="1">				
-		</p:panelGrid>				
+	                        <h:outputLabel value="Data da Baixa: " />
+	                        <h:outputText value="#{baixabemMB.data}" styleClass="outputLabel">
+	                        	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  			</h:outputText>
+				  				 
+	                        <h:outputLabel value="Valor Total de Aquisição: " />
+					        <h:outputText value="#{baixabemMB.totalCompra}">
+					        	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+					        </h:outputText>	 
+					        
+	                        <h:outputLabel value="Valor Residual Total: " />
+					        <h:outputText value="#{baixabemMB.totalResidual}">
+					        	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+					        </h:outputText>
+					        	
+	                        <h:outputLabel value="Valor de Venda: " />
+					        <h:outputText value="#{baixabemMB.baixabem.vlrvenda}">
+					        	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+					        </h:outputText>
+					        	 
+	                        <h:outputLabel value="Justificativa: " />
+	                        <h:outputText value="#{baixabemMB.baixabem.justificativa}" styleClass="outputLabel"/>
+	                        
+						</h:panelGrid>
+	                </h:panelGrid>
+					<h:panelGrid columns="2" columnClasses="label, value">
+	                       
+						<p:dataTable  var="i" value="#{baixabemMB.itens}"  emptyMessage="" style="width:50%">
+						    <f:facet name="header">Patrimônios</f:facet>
+						    <p:column headerText="Código" width="15%">
+						        <h:outputText value="#{i.patrimonio}" />
+						    </p:column>
+						    <p:column headerText="Plaqueta" width="15%">
+						        <h:outputText value="#{i.numpla}" />
+						    </p:column>				 
+						    <p:column headerText="Descrição">
+						        <h:outputText value="#{i.descricao}" />
+						    </p:column>
+						    <p:column headerText="Vlr.Compra" width="15%">
+						        <h:outputText value="#{i.vlraquisicao}">
+						        	<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>
+						        </h:outputText>
+						    </p:column>					    
+						    <p:column headerText="Vlr.Residual" width="15%">
+						        <h:outputText value="#{i.vlrresidual}">
+						        	<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>
+						        </h:outputText>
+						    </p:column>						    
+					    </p:dataTable>
+						<h:outputText value="" />						
+	
+	               </h:panelGrid>
+                   <br></br>
+                   <br></br>
+					<f:facet name="footer">
+			            <p:commandButton value="Salvar" action="#{baixabemMB.grava}" update=":formMsg,:formCad" icon="ui-icon-disk"  onstart="PF('status').show()" onsuccess="PF('status').hide()" disabled="#{baixabemMB.controlaCadastro == 0}"/>					
+					</f:facet>
+	            </p:panel>
+	        </p:tab>
+	
+		</p:wizard>
+
+		<br></br>
 		<f:facet name="footer">
-		
-		<hr></hr>
-		<p:panelGrid columns="4" id="upload" rendered="false">	
-			<h:outputLabel value="Selecione o arquivo a ser importado."/>
-			<h:outputLabel value="Descrição do arquivo."/>
-			<h:outputLabel value=""/>
-			<h:outputLabel value=""/>  
-			<p:fileUpload fileUploadListener="#{baixabemMB.handleFileUpload}" 
-			       mode="advanced" dragDropSupport="false" disabled="#{baixabemMB.controlaCadastro != 2}"
-			       multiple="false" update=":formMsg" sizeLimit="30000000" 
-			       fileLimit="1" allowTypes="/(\.|\/)(pdf)$/"
-			       fileLimitMessage="Permitido apenas 1 arquivo por vez."
-			       invalidFileMessage="Tipo de Arquivo inválido. Somente pdf."
-			       invalidSizeMessage="Tamanho do arquivo não permitido. Limite 30 Mb."
-			       cancelLabel="Cancelar" uploadLabel="Enviar" label="Localizar" />	
-			<p:inputText value="#{baixabemMB.descricao}" size="30" maxlength="50"  disabled="#{baixabemMB.controlaCadastro != 2}"/> 	
-			<p:commandButton value="Salvar Arquivo" action="#{baixabemMB.salvarArquivo}" update=":formCad:upload,:formMsg"/>
-			<p:commandButton value="Vizualizar" update=":formT" oncomplete="PF('arqSel').show()"  title="Vizualizar" disabled="#{baixabemMB.baixabem.documentos.size() eq 0}"/>
-		</p:panelGrid>		
-		
-		<p:panelGrid columns="6" layout="grid" style="width:40%;">		
-			<p:commandButton value="Novo" action="#{baixabemMB.novo}" update=":formCad" disabled="#{baixabemMB.controlaCadastro == 1 || baixabemMB.baixabem.id != null}"/>	
-            <p:commandButton value="Salvar" action="#{baixabemMB.grava}" update=":formMsg,:formCad"   onstart="PF('status').show()" onsuccess="PF('status').hide()" disabled="#{baixabemMB.controlaCadastro == 0}"/>
-            <p:commandButton value="Selecionar"  update=":formSelecao" oncomplete="PF('dgSelecao').show()" />
-			<p:commandButton value="Imprimir" ajax="false" action="${baixabemMB.imprimir}" disabled="#{baixabemMB.baixabem.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
-            <p:commandButton value="Excluir" action="#{baixabemMB.exclui}" update=":formMsg,:formCad"  disabled="#{baixabemMB.controlaCadastro == 0}"/>
-            <p:commandButton value="Cancelar" action="#{baixabemMB.limpaCadastro}" update=":formCad" disabled="#{baixabemMB.controlaCadastro == 0}"/>					
-		</p:panelGrid>
+			<p:panelGrid columns="6" layout="grid" style="width:40%;">		
+				<p:commandButton value="Novo" action="#{baixabemMB.novo}" update=":formCad" disabled="#{baixabemMB.controlaCadastro == 1 || baixabemMB.baixabem.id != null}"/>	
+	            <p:commandButton value="Selecionar"  update=":formSelecao" oncomplete="PF('dgSelecao').show()" />
+				<p:commandButton value="Imprimir" ajax="false" action="${baixabemMB.imprimir}" disabled="#{baixabemMB.baixabem.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
+	            <p:commandButton value="Excluir" action="#{baixabemMB.exclui}" update=":formMsg,:formCad"  disabled="#{baixabemMB.controlaCadastro == 0 || baixabemMB.baixabem.id == null}"/>
+	            <p:commandButton value="Cancelar" action="#{baixabemMB.limpaCadastro}" update=":formCad" disabled="#{baixabemMB.controlaCadastro == 0}"/>					
+			</p:panelGrid>
 		</f:facet>																					
+		
 	</p:panel>
+
 </h:form>
 
 
@@ -113,18 +217,18 @@
 
 	    <p:dataTable id="tb" var="bem" value="#{baixabemMB.baixabens}" rows="10" paginator="true" >
 
-	        <p:column headerText="Registro" width="8%">
+	        <p:column headerText="Registro" >
 	            <h:outputText value="#{bem.id}" />
 	        </p:column>
-	        <p:column headerText="Data Venda" width="12%">
+	        <p:column headerText="Data Venda"  priority="3">
 				<h:outputText value="#{bem.datavenda}">
 					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 				</h:outputText>	            
 	        </p:column>
-	        <p:column headerText="Descrição" width="60%">
+	        <p:column headerText="Descrição" width="40%" priority="2">
 	            <h:outputText value="#{bem.descricaoBem}" />
 	        </p:column>
-	        <p:column headerText="Valor Venda" width="12%">
+	        <p:column headerText="Valor Venda"  priority="4">
 	            <h:outputText value="#{bem.vlrvenda}" >
 	            	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
 				</h:outputText>	 
@@ -138,34 +242,6 @@
 
 	</h:form>
 </p:dialog>
-
-<p:dialog header="Visualizar documentos" widgetVar="arqSel" showEffect="fade" hideEffect="fade" width="500" height="200"  appendTo="@(body)" modal="true">
-	<h:form id="formT">
-	    <p:dataTable id="tbd" var="d" value="#{baixabemMB.baixabem.documentos}">
-	        <f:facet name="header">
-	            Anexos
-	        </f:facet> 
-
-	        <p:column headerText="Descrição">
-	            <h:outputText value="#{d.descricao}" />
-	        </p:column>
-	        <p:column style="width:32px;text-align: center">
-	             <p:commandButton update=":formD" oncomplete="PF('arq').show()" icon="ui-icon-search" title="Visualizar">
-	                <f:setPropertyActionListener value="#{d}" target="#{baixabemMB.documento}" />
-	            </p:commandButton>
-	        </p:column>
-	    </p:dataTable>
-
-	</h:form>
-</p:dialog>
-
-<h:form id="formD">
-	<p:dialog header="Documento" widgetVar="arq" showEffect="fade" hideEffect="fade" width="900" height="600"  appendTo="@(body)" modal="true">	
-		<object type="application/pdf" data="#{request.contextPath}/temp/contabil/#{baixabemMB.documento.baixabem.id}/#{baixabemMB.documento.arquivo}?pfdrid_c=true" height="500px" width="100%">
-	        Seu navegador não pode exibir o pdf ou o arquivo não existe.
-	    </object>	
-	</p:dialog>
-</h:form>
 
 <p:dialog widgetVar="status" appendTo="@(body)"  modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
     <p:graphicImage value="img/ajaxloading.gif" />

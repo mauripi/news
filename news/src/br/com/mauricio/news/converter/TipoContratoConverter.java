@@ -10,7 +10,7 @@ import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 import br.com.mauricio.news.ln.GenericLN;
-import br.com.mauricio.news.model.compra.TipoContrato;
+import br.com.mauricio.news.model.TipoContrato;
 
 @FacesConverter("tipoContratoConverter")
 public class TipoContratoConverter  implements Converter{

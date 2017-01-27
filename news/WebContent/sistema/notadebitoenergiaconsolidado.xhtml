@@ -31,15 +31,89 @@
 	</p:selectOneMenu>
 	<br></br>
 	<br></br>
-    <p:dataTable id="tbGst" var="v" value="#{notadebitoconsolidadoMB.debitos}" styleClass="consolidado" reflow="true" emptyMessage="">
+    <p:dataTable id="tbGst1" var="v" value="#{notadebitoconsolidadoMB.debitos1}" styleClass="consolidado" reflow="true" emptyMessage="">
     
          <f:facet name="header">
-             Rateios de Energia das Praças - #{notadebitoconsolidadoMB.ano} 
+             Rateios das Praças - #{notadebitoconsolidadoMB.ano} 
         </f:facet>
      
         <p:column headerText="Praca" style="width:275px">
             <h:outputText value="#{v.praca}" style="font-size: 0.85em !important;font-weight: bold;"/>
-        </p:column>        
+        </p:column>             
+        <p:column headerText="Jan" style="text-align: right;">
+			<h:outputText value="#{v.janeiro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.janeiro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	
+        </p:column>
+        <p:column headerText="Fev" style="text-align: right;">
+			<h:outputText value="#{v.fevereiro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.fevereiro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>				
+        </p:column>
+        <p:column headerText="Mar" style="text-align: right;">
+			<h:outputText value="#{v.marco}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.marco != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Abr" style="text-align: right;">
+			<h:outputText value="#{v.abril}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.abril != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Mai" style="text-align: right;">
+			<h:outputText value="#{v.maio}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.maio != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Jun" style="text-align: right;">
+			<h:outputText value="#{v.junho}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.junho != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Jul" style="text-align: right;">
+			<h:outputText value="#{v.julho}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.julho != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	
+        </p:column>
+        <p:column headerText="Ago" style="text-align: right;">
+ 			<h:outputText value="#{v.agosto}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.agosto != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	        
+        </p:column>
+        <p:column headerText="Set" style="text-align: right;">
+			<h:outputText value="#{v.setembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.setembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Out" style="text-align: right;">
+			<h:outputText value="#{v.outubro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.outubro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Nov" style="text-align: right;">
+			<h:outputText value="#{v.novembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.novembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+        <p:column headerText="Dez" style="text-align: right;">
+			<h:outputText value="#{v.dezembro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.dezembro != 0.0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>	         
+        </p:column>
+     </p:dataTable>
+
+<br></br>
+<br></br>
+
+    <p:dataTable id="tbGst2" var="v" value="#{notadebitoconsolidadoMB.debitos2}" styleClass="consolidado" reflow="true" emptyMessage="">
+    
+         <f:facet name="header">
+             Gasto com Energia dos Postos - #{notadebitoconsolidadoMB.ano} 
+        </f:facet>
+     
+        <p:column headerText="Posto" style="width:275px">
+            <h:outputText value="#{v.praca}" style="font-size: 0.85em !important;font-weight: bold;"/>
+        </p:column>            
         <p:column headerText="Jan" style="text-align: right;">
 			<h:outputText value="#{v.janeiro}" style="font-size: 0.85em !important;font-weight: bold;" rendered="#{v.janeiro != 0.0}">
 				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																

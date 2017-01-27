@@ -26,6 +26,7 @@
 </h:form>
 <h:form id="cons">
 	<p:selectOneMenu id="ano" value="#{consolidadoMB.ano}"  style="width:130px;" >	
+		<f:selectItem itemLabel="2017" itemValue="2017"/>
 		<f:selectItem itemLabel="2016" itemValue="2016"/>
 		<f:selectItem itemLabel="2015" itemValue="2015"/>
 		<p:ajax event="change" listener="#{consolidadoMB.init}" update="cons"/>

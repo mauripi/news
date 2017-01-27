@@ -1,4 +1,4 @@
-package br.com.mauricio.news.mb.compra;
+package br.com.mauricio.news.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,8 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import br.com.mauricio.news.ln.GenericLN;
-import br.com.mauricio.news.model.compra.TipoContrato;
-import br.com.mauricio.news.util.UsuarioLogado;
+import br.com.mauricio.news.model.TipoContrato;
 
 @ManagedBean(name="tipocontratoMB")
 @ViewScoped
@@ -54,9 +53,6 @@ public class TipoContratoBean implements Serializable {
 			mensagens();			
 		}else{
 			gln = new GenericLN<TipoContrato>();
-			tipo.setRemovido(1);
-			tipo.setDataAlteracao(new Date(System.currentTimeMillis()));
-			tipo.setUsuarioAlteracao(UsuarioLogado.getUser());
 			msg = gln.update(tipo);
 			mensagens();
 			limpaCadastro();
@@ -68,16 +64,10 @@ public class TipoContratoBean implements Serializable {
 	public void grava(){		
 		if(validaCampos()){
 			gln = new GenericLN<TipoContrato>();
-			if(controlaCadastro==1){
-				tipo.setDataCriacao(new Date(System.currentTimeMillis()));			
-				tipo.setUsuarioCriacao(UsuarioLogado.getUser());
-				msg = gln.add(tipo);
-			}
-			if(controlaCadastro==2)	{		
-				tipo.setDataAlteracao(new Date(System.currentTimeMillis()));
-				tipo.setUsuarioAlteracao(UsuarioLogado.getUser());	
-				msg = gln.update(tipo);
-			}
+			if(controlaCadastro==1)
+				msg = gln.add(tipo);			
+			if(controlaCadastro==2)				
+				msg = gln.update(tipo);			
 			mensagens();
 			listar();
 			limpaCadastro();	

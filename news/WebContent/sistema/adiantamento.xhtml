@@ -19,18 +19,19 @@
 <ui:define name="conteudo">
 
 <h:form id="formtb">
+	<p></p>
 	<p:commandButton action="#{adiantamentoMB.novo}" value="Novo Adiantamento" title="Nova Adiantamento" oncomplete="PF('dgCad').show()" update=":formCad"/>
  	<br></br>                    
 	<br></br>
     <p:dataTable id="tb" var="a" value="#{adiantamentoMB.adiantamentos}" selectionMode="single" selection="#{adiantamentoMB.adiantamento}" rowKey="#{a}" 
-    		rows="20" paginator="true" emptyMessage="" paginatorPosition="bottom">
+    		rows="20" paginator="true" emptyMessage="" paginatorPosition="bottom" style="width:99%;">
     	<f:facet name="header">Adiantamentos Efetuadas</f:facet>
 
 	   <p:ajax event="rowSelect" listener="#{adiantamentoMB.onRowSelect}" update=":formMsg,:formCad,dgCad" oncomplete="PF('dgCad').show();"/>
-       <p:column headerText="Nº" width="3%">
+       <p:column headerText="Nº" width="6%" style="text-align: center;">
             <h:outputText value="#{a.id}" />
        </p:column>	 			
-       <p:column headerText="Data" style="width:5%;">
+       <p:column headerText="Data" style="width:12%;">
           <h:outputText value="#{a.data}">
 			  <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 		  </h:outputText>
@@ -45,7 +46,12 @@
        </p:column>	         
        <p:column headerText="Favorecido" style="width:20%;"  >
             <h:outputText value="#{a.favorecido.nome}" />
-       </p:column>	               
+       </p:column>	
+        <p:column style="text-align: center;width:20%;">
+             <p:commandButton update=":formEmail" value="Reenviar E-mail" oncomplete="PF('emailDialog').show()" icon="ui-icon-mail-closed" title="Enviar E-mail">
+                <f:setPropertyActionListener value="#{a}" target="#{adiantamentoMB.adiantamento}" />
+            </p:commandButton>
+        </p:column>                      
     </p:dataTable>
 
 </h:form>
@@ -84,6 +90,27 @@
 </h:form>
 </p:dialog>
 
+ <p:dialog header="Envio de E-mail" appendTo="@(body)"  widgetVar="emailDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" >
+ <h:form id="formEmail" width="30%">
+ 	<p:panelGrid columns="2">
+         <h:outputLabel value="Solicitação nº.:"/>
+         <h:outputLabel value="   #{adiantamentoMB.adiantamento.id}"/>
+         <h:outputLabel value="Valor do Adiantamento:"/>
+		 <h:outputText value="#{adiantamentoMB.adiantamento.valor}">
+			 <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />	           																
+		 </h:outputText>	
+		 <p></p>
+		 <f:facet name="footer">
+		      <p:commandButton oncomplete="PF('emailDialog').hide()"  onstart="PF('status').show()" onsuccess="PF('status').hide()" action="#{adiantamentoMB.enviarEmail}" value="Confirmar" title="Enviar E-mail"/>
+		      <p:commandButton oncomplete="PF('emailDialog').hide()" value="Cancelar" title="Enviar E-mail"/>
+		 </f:facet>               
+     </p:panelGrid>
+</h:form>     
+</p:dialog>
+
+<p:dialog widgetVar="status" appendTo="@(body)"  modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloading.gif" />
+</p:dialog>
 			
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="5000"/> 

@@ -42,7 +42,9 @@ public class BemDao {
 		
 		String sql1 ="SELECT b.codbem,b.desbem,b.dataqi,b.vlrbas,nomfor,numdoc,l.numpla "
 				+ "FROM e670bem b inner join e670loc l on (l.codbem=b.codbem) "
-				+ "WHERE SUBSTRING(l.numpla, 1, 6)= :codigo ";
+				+ "WHERE SUBSTRING(l.numpla, 1, 6)= :codigo "
+				+ "group by b.codbem,b.desbem,b.dataqi,b.vlrbas,nomfor,numdoc,l.numpla "
+				+ "order by l.numpla";
 
 		String sql2 ="select "
 				+ "SUM(c.vlrant-c.dpracu) as residual "
@@ -90,7 +92,9 @@ public class BemDao {
 		String sql1 ="select "
 				+ "b.codbem,b.desbem,b.dataqi,b.vlrbas,nomfor,numdoc,l.numpla "
 				+ "FROM e670bem b inner join e670loc l on (l.codbem=b.codbem) "
-				+ "WHERE SUBSTRING(l.numpla, 1, 6)= :codigo ";
+				+ "WHERE SUBSTRING(l.numpla, 1, 6)= :codigo "
+				+ "group by b.codbem,b.desbem,b.dataqi,b.vlrbas,nomfor,numdoc,l.numpla "
+				+ "order by l.numpla";
 		
 		List<Patrimonio> bens = new ArrayList<Patrimonio>();
 		@SuppressWarnings("unchecked")

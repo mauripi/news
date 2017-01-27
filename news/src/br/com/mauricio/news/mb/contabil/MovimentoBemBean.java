@@ -110,7 +110,7 @@ public class MovimentoBemBean implements Serializable {
 		MovimentoBemLN ln = new MovimentoBemLN();
 		patrimonios = ln.obterPatrimonios(codigo);
 		for(Patrimonio p: patrimonios)
-			if(p.getCodbem().contains("-00"))
+			if(p.getNumpla().contains("-00"))
 				nomeBem=p.getDesbem();							
 	}
 	
@@ -172,13 +172,15 @@ public class MovimentoBemBean implements Serializable {
 			movimentobem.setItens(itens);
 			if(controlaCadastro==2)						
 				msg = ln.update(movimentobem,itensRemovido);			
-			if(controlaCadastro==1)
+			if(controlaCadastro==1){
 				msg = ln.add(movimentobem);
+				enviaEmail();
+			}
 					
 			mensagens();
 			salvarArquivo();
-			gerarRelatorio();
-			enviaEmail();
+			ln.gerarRelatorio(movimentobem);
+			
 			listar();
 			limpaCadastro();	
 		}else{
@@ -188,21 +190,12 @@ public class MovimentoBemBean implements Serializable {
 		return "movimentobem";
 	}
 	
-	private void enviaEmail() {
+	public void enviaEmail() {
 		MovimentoBemLN bln = new MovimentoBemLN();
 		bln.enviarEmail(movimentobem,caminho());
 	}
 
-	private void gerarRelatorio() {
-		RelMovimentoBemLN rel = new RelMovimentoBemLN();
-		try {
-			rel.geraRelatorio(movimentobem,1);
-		} catch (IOException e) {
-			msg = msg + " Mas não foi possivel gerar relatório.";
-			System.out.println(e.getLocalizedMessage() + " MovimentoBemBean.gerarRelatorio() IOException");
-			mensagens();
-		}
-	}
+
 
 	public void imprimir() {
 		RelMovimentoBemLN rel = new RelMovimentoBemLN();

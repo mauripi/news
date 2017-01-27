@@ -24,10 +24,10 @@
 <h:form id="formCad">
 	<p:panel rendered="#{acessoBean.temAcessoControleSinal}"  style="width:50%;">
 		<p:panelGrid columns="2">
-			<h:outputLabel value="Praça"/>   
-	        <p:autoComplete id="pra" value="#{notadebitoMB.praca}" completeMethod="#{notadebitoMB.completePraca}" size="50"
-	        		disabled="#{notadebitoMB.controlaCadastro eq 0}" placeholder="Digite o nome da Praça" 
-                    var="d" itemLabel="#{d.nome}" itemValue="#{d}" converter="pracaConverter" forceSelection="true"
+			<h:outputLabel value="Local"/>   
+	        <p:autoComplete id="pra" value="#{notadebitoMB.mengloc}" completeMethod="#{notadebitoMB.completeLoc}" size="50"
+	        		disabled="#{notadebitoMB.controlaCadastro eq 0}" placeholder="Digite o nome do Local" 
+                    var="d" itemLabel="#{d.nome}" itemValue="#{d}" converter="menglocConverter" forceSelection="true"
                     required="true" requiredMessage="Informe a Praça" />
 
 			<h:outputLabel value="Mês"/> 
@@ -63,8 +63,8 @@
 	        <p:column headerText="Ano" width="10%" filterBy="#{d.ano}"  filterMatchMode="contains">
 	            <h:outputText value="#{d.ano}" />
 	        </p:column>	        			
-	        <p:column headerText="Praça" width="40%" filterBy="#{d.praca.nome}"  filterMatchMode="contains">
-	            <h:outputText value="#{d.praca.nome}" />
+	        <p:column headerText="Local" width="40%" filterBy="#{d.mengloc.nome}"  filterMatchMode="contains">
+	            <h:outputText value="#{d.mengloc.nome}" />
 	        </p:column>              	 
 	        <p:column headerText="Valor" style="width:9%;text-align: right;">
 				<h:outputText value="#{d.valor}" style="ttext-align: right;">

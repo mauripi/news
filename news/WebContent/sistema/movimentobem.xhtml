@@ -22,18 +22,20 @@
 <h:form id="formCad">
                  
 <p:panel>
-    <p:wizard flowListener="#{movimentobemMB.onFlowProcess}" backLabel="Voltar" nextLabel="Próximo"  >
+    <p:wizard flowListener="#{movimentobemMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo"  >
    
         <p:tab id="gerais" title="Dados Gerais" >
             <p:panel header="Dados Gerais" >
             	<p:messages autoUpdate="true"/>
 				<p:panelGrid columns="2" >		
+					<h:outputLabel value="Registro nro.:" />
+					<h:outputLabel value="#{movimentobemMB.movimentobem.id}" />					
 					<h:outputLabel value="Local e endereço de Origem *"/>
 					<p:inputTextarea value="#{movimentobemMB.movimentobem.localOrigem}" cols="50"  autoResize="false" 
-						rows="3" maxlength="500" disabled="#{movimentobemMB.controlaCadastro == 0}"/>	
+						rows="2" maxlength="500" disabled="#{movimentobemMB.controlaCadastro == 0}"/>	
 					<h:outputLabel value="Local e endereço de Destino *"/>
 					<p:inputTextarea value="#{movimentobemMB.movimentobem.localDestino}" cols="50"  
-						autoResize="false" rows="3" maxlength="500" disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+						autoResize="false" rows="2" maxlength="500" disabled="#{movimentobemMB.controlaCadastro == 0}"/>
 					<h:outputLabel value="Local de destino é locado?"/>	        
 			        <p:selectOneRadio value="#{movimentobemMB.movimentobem.espacoLocado}" disabled="#{movimentobemMB.controlaCadastro == 0}">
 			            <f:selectItem itemLabel="Sim" itemValue="1" />
@@ -67,9 +69,8 @@
 					<h:outputLabel value="Data de saída"/>
 					<p:calendar value="#{movimentobemMB.data}"  locale="pt_BR" pattern="dd/MM/yyyy" size="10"  disabled="#{movimentobemMB.controlaCadastro == 0}"/>
 					<h:outputLabel value="Finalidade/Motivo/Observações *"/>
-					<p:inputTextarea value="#{movimentobemMB.movimentobem.motivo}" cols="60" autoResize="false" rows="4" maxlength="1500" disabled="#{movimentobemMB.controlaCadastro == 0}"/>				
+					<p:inputTextarea value="#{movimentobemMB.movimentobem.motivo}" cols="60" autoResize="false" rows="2" maxlength="1500" disabled="#{movimentobemMB.controlaCadastro == 0}"/>				
 				</p:panelGrid>
-
 
             </p:panel>
         </p:tab>
@@ -77,10 +78,15 @@
         <p:tab id="patrimonios" title="Patrimônios">
 			<p:panel header="Patrimônios" >
 				<p:messages autoUpdate="true"/>
+				<p:panelGrid columns="2">
+					<h:outputLabel value="Nº Patrimônio"/>
+					<p:panelGrid columns="2">
+						<p:inputText id="codigo" value="#{movimentobemMB.codigo}" maxlength="6" size="10" disabled="#{movimentobemMB.controlaCadastro == 0}"/>	
+						<p:commandButton value="buscar" action="#{movimentobemMB.encontrarBem}" update="nomebem" disabled="#{movimentobemMB.controlaCadastro == 0}"/>					
+					</p:panelGrid>
+				</p:panelGrid>
 				<p:panelGrid columns="3">
-					<h:outputLabel value="Nº Patrimônio"/>		
-					<p:inputText id="codigo" value="#{movimentobemMB.codigo}" maxlength="6" size="10" disabled="#{movimentobemMB.controlaCadastro == 0}"/>	
-					<p:commandButton value="buscar" action="#{movimentobemMB.encontrarBem}" update="nomebem" disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+							
 					<h:outputLabel value="Descrição do Patrimonio"/>
 					<p:inputText id="nomebem" value="#{movimentobemMB.nomeBem}" size="40" disabled="#{movimentobemMB.patrimonios.size()!=0 || movimentobemMB.controlaCadastro == 0}"/>		
 					<h:outputLabel value=""/>
@@ -222,15 +228,16 @@
             </p:panel>
         </p:tab>
     </p:wizard>
-    
+
+	<br></br>    
 	<f:facet name="footer">
 			<p:panelGrid columns="7"  style="border: none !important;">	
 				<p:commandButton value="Novo" action="#{movimentobemMB.novo}" update=":formCad" disabled="#{movimentobemMB.controlaCadastro == 1 || movimentobemMB.movimentobem.id != null}"/>	
 	            <p:commandButton value="Selecionar" oncomplete="PF('dgSelecao').show()" action="#{movimentobemMB.listarParaUsersContabilidade}"  update=":formSelecao"  />
 				<p:commandButton value="Imprimir" ajax="false" action="#{movimentobemMB.imprimir}" disabled="#{movimentobemMB.movimentobem.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
-	            <p:commandButton value="Excluir" action="#{movimentobemMB.exclui}" update=":formMsg,:formCad"  disabled="#{movimentobemMB.controlaCadastro == 0}"/>
+	            <p:commandButton value="Excluir" action="#{movimentobemMB.exclui}" update=":formMsg,:formCad"  disabled="#{movimentobemMB.controlaCadastro == 0 || movimentobemMB.movimentobem.id == null}"/>
 	            <p:commandButton value="Cancelar" action="#{movimentobemMB.limpaCadastro}" update=":formCad" disabled="#{movimentobemMB.controlaCadastro == 0}"/>					
-
+				<p:commandButton value="Reenviar Email"  update=":formEmail" oncomplete="PF('emailDialog').show()" disabled="#{movimentobemMB.controlaCadastro == 0 || movimentobemMB.movimentobem.id == null}"/>
 			</p:panelGrid> 
 	</f:facet>
 </p:panel> 
@@ -294,6 +301,30 @@
 			<p:commandButton value="Salvar Arquivo" action="#{movimentobemMB.salvarArquivo}" update=":formAnexo:tbd,:formMsg"/>
 		</p:panelGrid>	
 	</h:form>
+</p:dialog>
+
+ <p:dialog header="Envio de E-mail" appendTo="@(body)"  widgetVar="emailDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="50%">
+ <h:form id="formEmail" >
+ 	<p:panelGrid columns="2">
+         <h:outputLabel value="Movimentação nº.:"/>
+         <h:outputLabel value="   #{movimentobemMB.movimentobem.id}"/>
+         <h:outputLabel value="Origem: " />
+         <h:outputText value="#{movimentobemMB.movimentobem.localOrigem}" styleClass="outputLabel"/>
+         <h:outputLabel value="Destino: " />
+         <h:outputText value="#{movimentobemMB.movimentobem.localDestino}" styleClass="outputLabel"/>	
+         <h:outputLabel value="Finalidade/Motivo/Observações: " />
+         <h:outputText value="#{movimentobemMB.movimentobem.motivo}" styleClass="outputLabel"/>
+		 <p></p> 
+		 <f:facet name="footer">
+		      <p:commandButton oncomplete="PF('emailDialog').hide()"  onstart="PF('sendmail').show()" onsuccess="PF('sendmail').hide()" action="#{movimentobemMB.enviaEmail}" value="Confirmar" title="Enviar E-mail"/>
+		      <p:commandButton oncomplete="PF('emailDialog').hide()" value="Cancelar" title="Enviar E-mail"/>
+		 </f:facet>               
+     </p:panelGrid>
+</h:form>     
+</p:dialog>
+
+<p:dialog widgetVar="sendmail" appendTo="@(body)" header="Aguarde, reenviando e-mail..." modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloading.gif" />
 </p:dialog>
 
 <p:dialog header="Documento" widgetVar="arq" showEffect="fade" hideEffect="fade" width="900" height="600"  appendTo="@(body)" modal="true">	

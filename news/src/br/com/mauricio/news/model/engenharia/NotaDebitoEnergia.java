@@ -26,10 +26,8 @@ public class NotaDebitoEnergia implements Serializable{
 	private Integer ano;
 	private Double valor;
 	@OneToOne
-	@JoinColumn(name="praca_id")
-	private Praca praca;
-
-	
+	@JoinColumn(name="mengloc_id")
+	private MENGLOC mengloc;
 	public Integer getId() {
 		return id;
 	}
@@ -60,11 +58,11 @@ public class NotaDebitoEnergia implements Serializable{
 	public void setValor(Double valor) {
 		this.valor = valor;
 	}
-	public Praca getPraca() {
-		return praca;
+	public MENGLOC getMengloc() {
+		return mengloc;
 	}
-	public void setPraca(Praca praca) {
-		this.praca = praca;
+	public void setMengloc(MENGLOC mengloc) {
+		this.mengloc = mengloc;
 	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -75,9 +73,9 @@ public class NotaDebitoEnergia implements Serializable{
 		int result = 1;
 		result = prime * result + ((ano == null) ? 0 : ano.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((mengloc == null) ? 0 : mengloc.hashCode());
 		result = prime * result + ((mes == null) ? 0 : mes.hashCode());
 		result = prime * result + ((nota == null) ? 0 : nota.hashCode());
-		result = prime * result + ((praca == null) ? 0 : praca.hashCode());
 		result = prime * result + ((valor == null) ? 0 : valor.hashCode());
 		return result;
 	}
@@ -100,6 +98,11 @@ public class NotaDebitoEnergia implements Serializable{
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (mengloc == null) {
+			if (other.mengloc != null)
+				return false;
+		} else if (!mengloc.equals(other.mengloc))
+			return false;
 		if (mes == null) {
 			if (other.mes != null)
 				return false;
@@ -109,11 +112,6 @@ public class NotaDebitoEnergia implements Serializable{
 			if (other.nota != null)
 				return false;
 		} else if (!nota.equals(other.nota))
-			return false;
-		if (praca == null) {
-			if (other.praca != null)
-				return false;
-		} else if (!praca.equals(other.praca))
 			return false;
 		if (valor == null) {
 			if (other.valor != null)

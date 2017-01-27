@@ -140,8 +140,12 @@ public class FluxoDiarioDao {
 	       
 	       CellReference docRef = new CellReference(c.getCampoDoc()+i); 
 	       Row docRow = firstSheet.getRow(docRef.getRow());
-	       Cell docCell = docRow.getCell(docRef.getCol());          
-	       doc=getCellValue(docCell)+"";
+	       Cell docCell = docRow.getCell(docRef.getCol()); 
+	       if(evaluator.evaluate(docCell)!=null)
+	       	   doc=(String) evaluator.evaluate(docCell).getStringValue();
+	       else
+	    	   doc="";	       
+	       
 	
 	       CellReference hisRef = new CellReference(c.getCampohis()+i); 
 	       Row hisRow = firstSheet.getRow(hisRef.getRow());
@@ -190,6 +194,8 @@ public class FluxoDiarioDao {
 	   }
 	    workbook.close();
 	    inputStream.close();
+	    
+System.out.println(fluxos.size());
 		return fluxos;
 	 }
 

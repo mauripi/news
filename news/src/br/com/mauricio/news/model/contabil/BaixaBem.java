@@ -1,7 +1,6 @@
 package br.com.mauricio.news.model.contabil;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PersistenceUnit;
@@ -46,180 +44,124 @@ public class BaixaBem implements Serializable{
 	private Filial filial;
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="ccusto_id")
-	private CCusto ccusto;	
-	
+	private CCusto ccusto;		
 	@Temporal(javax.persistence.TemporalType.DATE)
-	private Date dataemissao;
-	
+	private Date dataemissao;	
 	@Enumerated(EnumType.ORDINAL)
-	private TipoBaixa tipoBaixa;
-	
+	private TipoBaixa tipoBaixa;	
 	@Column(length=10,nullable=false)
-	private String patrimonio;
-	
+	private String patrimonio;	
 	@Column(length=250,nullable=false)
-	private String descricaoBem;	
-	
+	private String descricaoBem;		
 	@Temporal(javax.persistence.TemporalType.DATE)
-	private Date dataaquisicao;	
-	
+	private Date dataaquisicao;		
 	@Temporal(javax.persistence.TemporalType.DATE)
-	private Date datavenda;	
-	
+	private Date datavenda;		
 	private Double vlraquisicao;
 	private Double vlrresidual;
-	private Double vlrvenda;
-	
+	private Double vlrvenda;	
 	@Column(length=1500,nullable=false)
-	private String justificativa;
-	
-	@OneToMany(targetEntity = BaixaBem.class,cascade=CascadeType.ALL)
-	@JoinTable(name="agregado")
+	private String justificativa;	
+	@OneToMany(mappedBy = "baixabem", targetEntity = ItemBaixaBem.class,cascade=CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<BaixaBem> agregados = new ArrayList<BaixaBem>();
-	
-	@OneToMany(mappedBy = "baixabem", cascade=CascadeType.ALL)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<DocBaixaBem> documentos;
-
+	private List<ItemBaixaBem> itens;
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 	public Login getSolicitante() {
 		return solicitante;
 	}
-
 	public void setSolicitante(Login solicitante) {
 		this.solicitante = solicitante;
 	}
-
 	public Filial getFilial() {
 		return filial;
 	}
-
 	public void setFilial(Filial filial) {
 		this.filial = filial;
 	}
-
 	public CCusto getCcusto() {
 		return ccusto;
 	}
-
 	public void setCcusto(CCusto ccusto) {
 		this.ccusto = ccusto;
 	}
-
 	public Date getDataemissao() {
 		return dataemissao;
 	}
-
 	public void setDataemissao(Date dataemissao) {
 		this.dataemissao = dataemissao;
 	}
-
 	public TipoBaixa getTipoBaixa() {
 		return tipoBaixa;
 	}
-
 	public void setTipoBaixa(TipoBaixa tipoBaixa) {
 		this.tipoBaixa = tipoBaixa;
 	}
-
 	public String getPatrimonio() {
 		return patrimonio;
 	}
-
 	public void setPatrimonio(String patrimonio) {
 		this.patrimonio = patrimonio;
 	}
-
 	public String getDescricaoBem() {
 		return descricaoBem;
 	}
-
 	public void setDescricaoBem(String descricaoBem) {
 		this.descricaoBem = descricaoBem;
 	}
-
 	public Date getDataaquisicao() {
 		return dataaquisicao;
 	}
-
 	public void setDataaquisicao(Date dataaquisicao) {
 		this.dataaquisicao = dataaquisicao;
 	}
-
 	public Date getDatavenda() {
 		return datavenda;
 	}
-
 	public void setDatavenda(Date datavenda) {
 		this.datavenda = datavenda;
 	}
-
 	public Double getVlraquisicao() {
 		return vlraquisicao;
 	}
-
 	public void setVlraquisicao(Double vlraquisicao) {
 		this.vlraquisicao = vlraquisicao;
 	}
-
 	public Double getVlrresidual() {
 		return vlrresidual;
 	}
-
 	public void setVlrresidual(Double vlrresidual) {
 		this.vlrresidual = vlrresidual;
 	}
-
 	public Double getVlrvenda() {
 		return vlrvenda;
 	}
-
 	public void setVlrvenda(Double vlrvenda) {
 		this.vlrvenda = vlrvenda;
 	}
-
 	public String getJustificativa() {
 		return justificativa;
 	}
-
 	public void setJustificativa(String justificativa) {
 		this.justificativa = justificativa;
 	}
-
-	public List<BaixaBem> getAgregados() {
-		return agregados;
+	public List<ItemBaixaBem> getItens() {
+		return itens;
 	}
-
-	public void setAgregados(List<BaixaBem> agregados) {
-		this.agregados = agregados;
+	public void setItens(List<ItemBaixaBem> itens) {
+		this.itens = itens;
 	}
-
-	public List<DocBaixaBem> getDocumentos() {
-		return documentos;
-	}
-
-	public void setDocumentos(List<DocBaixaBem> documentos) {
-		this.documentos = documentos;
-	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((agregados == null) ? 0 : agregados.hashCode());
 		result = prime * result + ((ccusto == null) ? 0 : ccusto.hashCode());
 		result = prime * result
 				+ ((dataaquisicao == null) ? 0 : dataaquisicao.hashCode());
@@ -229,10 +171,9 @@ public class BaixaBem implements Serializable{
 				+ ((datavenda == null) ? 0 : datavenda.hashCode());
 		result = prime * result
 				+ ((descricaoBem == null) ? 0 : descricaoBem.hashCode());
-		result = prime * result
-				+ ((documentos == null) ? 0 : documentos.hashCode());
 		result = prime * result + ((filial == null) ? 0 : filial.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((itens == null) ? 0 : itens.hashCode());
 		result = prime * result
 				+ ((justificativa == null) ? 0 : justificativa.hashCode());
 		result = prime * result
@@ -249,7 +190,6 @@ public class BaixaBem implements Serializable{
 				+ ((vlrvenda == null) ? 0 : vlrvenda.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -259,11 +199,6 @@ public class BaixaBem implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		BaixaBem other = (BaixaBem) obj;
-		if (agregados == null) {
-			if (other.agregados != null)
-				return false;
-		} else if (!agregados.equals(other.agregados))
-			return false;
 		if (ccusto == null) {
 			if (other.ccusto != null)
 				return false;
@@ -289,11 +224,6 @@ public class BaixaBem implements Serializable{
 				return false;
 		} else if (!descricaoBem.equals(other.descricaoBem))
 			return false;
-		if (documentos == null) {
-			if (other.documentos != null)
-				return false;
-		} else if (!documentos.equals(other.documentos))
-			return false;
 		if (filial == null) {
 			if (other.filial != null)
 				return false;
@@ -303,6 +233,11 @@ public class BaixaBem implements Serializable{
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (itens == null) {
+			if (other.itens != null)
+				return false;
+		} else if (!itens.equals(other.itens))
 			return false;
 		if (justificativa == null) {
 			if (other.justificativa != null)
