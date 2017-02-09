@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+
+
 import br.com.mauricio.news.model.MCLIFOR;
 
 public class MCLIFORDao {
@@ -19,8 +21,15 @@ public class MCLIFORDao {
 		if(filtro=="1")
 			sql = " FROM mclifor where cgccpf= :dado ";		
 		if(filtro=="2")
-			sql = " FROM mclifor where apecli like :dado ";
-		return manager.createNativeQuery(sql).setParameter("dado", "%"+dado+"%").getResultList();
+			sql = " FROM mclifor where nomfan like :dado ";
+		return manager.createQuery(sql).setParameter("dado", "%"+dado+"%").getResultList();
+	}
+	
+	public MCLIFOR findByNomeCnpj(String razao, Long cgccpf){
+		MCLIFOR cf;
+		String sql = " FROM mclifor where cgccpf= :cgccpf and nomfan like :razao  ";	
+		cf = (MCLIFOR) manager.createQuery(sql).setParameter("razao", "%"+razao+"%").setParameter("cgccpf", cgccpf).getSingleResult();
+		return cf;		
 	}
 	
 	public EntityManager getManager() {

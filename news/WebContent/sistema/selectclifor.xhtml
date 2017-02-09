@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+     
+    <h:head>
+        <title>Clientes/Fornecedores</title>
+        <style type="text/css">
+            .ui-widget {
+                font-size: 90%;
+            }
+        </style>
+    </h:head>
+     
+    <h:body>
+        <h:form>
+            <p:dataTable var="cf" value="#{cliforBean.allCliFor}">
+                <p:column headerText="Reg.">
+                    <h:outputText value="#{cf.id}" />
+                </p:column>
+ 
+                <p:column headerText="Nome">
+                    <h:outputText value="#{cf.nomfan}" />
+                </p:column>
+ 
+                <p:column headerText="CNPJ-CPF">
+                    <h:outputText value="#{cf.cgccpf}" />
+                </p:column>
+ 
+                <p:column headerText="Tipo">
+                    <h:outputText value="#{cf.clifor}" />
+                </p:column>
+ 
+                <p:column style="width:32px;text-align: center">
+                    <p:commandButton icon="ui-icon-search" actionListener="#{cliforBean.selectCliForFromDialog(cf)}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+     
+</html>

@@ -48,7 +48,13 @@ public class Contrato implements Serializable{
 	@OneToOne
 	@JoinColumn(name="mclifor_id")
 	private MCLIFOR mclifor;
+	private Integer diasAviso;
+	private Integer repetirAviso;
+	private String assuntoEmail;
+	private String mensagemEmail;
+	private String emailsAviso;
 
+	
 	
 	public Integer getId() {
 		return id;
@@ -122,6 +128,36 @@ public class Contrato implements Serializable{
 	public void setMclifor(MCLIFOR mclifor) {
 		this.mclifor = mclifor;
 	}
+	public Integer getDiasAviso() {
+		return diasAviso;
+	}
+	public void setDiasAviso(Integer diasAviso) {
+		this.diasAviso = diasAviso;
+	}
+	public Integer getRepetirAviso() {
+		return repetirAviso;
+	}
+	public void setRepetirAviso(Integer repetirAviso) {
+		this.repetirAviso = repetirAviso;
+	}
+	public String getAssuntoEmail() {
+		return assuntoEmail;
+	}
+	public void setAssuntoEmail(String assuntoEmail) {
+		this.assuntoEmail = assuntoEmail;
+	}
+	public String getMensagemEmail() {
+		return mensagemEmail;
+	}
+	public void setMensagemEmail(String mensagemEmail) {
+		this.mensagemEmail = mensagemEmail;
+	}
+	public String getEmailsAviso() {
+		return emailsAviso;
+	}
+	public void setEmailsAviso(String emailsAviso) {
+		this.emailsAviso = emailsAviso;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -129,13 +165,23 @@ public class Contrato implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result
+				+ ((assuntoEmail == null) ? 0 : assuntoEmail.hashCode());
 		result = prime * result + ((ativo == null) ? 0 : ativo.hashCode());
+		result = prime * result
+				+ ((diasAviso == null) ? 0 : diasAviso.hashCode());
+		result = prime * result
+				+ ((emailsAviso == null) ? 0 : emailsAviso.hashCode());
 		result = prime * result + ((fim == null) ? 0 : fim.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((inicio == null) ? 0 : inicio.hashCode());
 		result = prime * result + ((mclifor == null) ? 0 : mclifor.hashCode());
+		result = prime * result
+				+ ((mensagemEmail == null) ? 0 : mensagemEmail.hashCode());
 		result = prime * result + ((objeto == null) ? 0 : objeto.hashCode());
 		result = prime * result + ((origem == null) ? 0 : origem.hashCode());
+		result = prime * result
+				+ ((repetirAviso == null) ? 0 : repetirAviso.hashCode());
 		result = prime * result
 				+ ((responsavel == null) ? 0 : responsavel.hashCode());
 		result = prime * result
@@ -157,10 +203,25 @@ public class Contrato implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Contrato other = (Contrato) obj;
+		if (assuntoEmail == null) {
+			if (other.assuntoEmail != null)
+				return false;
+		} else if (!assuntoEmail.equals(other.assuntoEmail))
+			return false;
 		if (ativo == null) {
 			if (other.ativo != null)
 				return false;
 		} else if (!ativo.equals(other.ativo))
+			return false;
+		if (diasAviso == null) {
+			if (other.diasAviso != null)
+				return false;
+		} else if (!diasAviso.equals(other.diasAviso))
+			return false;
+		if (emailsAviso == null) {
+			if (other.emailsAviso != null)
+				return false;
+		} else if (!emailsAviso.equals(other.emailsAviso))
 			return false;
 		if (fim == null) {
 			if (other.fim != null)
@@ -182,6 +243,11 @@ public class Contrato implements Serializable{
 				return false;
 		} else if (!mclifor.equals(other.mclifor))
 			return false;
+		if (mensagemEmail == null) {
+			if (other.mensagemEmail != null)
+				return false;
+		} else if (!mensagemEmail.equals(other.mensagemEmail))
+			return false;
 		if (objeto == null) {
 			if (other.objeto != null)
 				return false;
@@ -191,6 +257,11 @@ public class Contrato implements Serializable{
 			if (other.origem != null)
 				return false;
 		} else if (!origem.equals(other.origem))
+			return false;
+		if (repetirAviso == null) {
+			if (other.repetirAviso != null)
+				return false;
+		} else if (!repetirAviso.equals(other.repetirAviso))
 			return false;
 		if (responsavel == null) {
 			if (other.responsavel != null)
@@ -219,5 +290,4 @@ public class Contrato implements Serializable{
 			return false;
 		return true;
 	}
-
 }

@@ -24,6 +24,7 @@ public class MCLIFORService implements Serializable {
 		allCliFor=gln.listWithoutRemoved("mclifor", "nomfan");
 	}
 
+	
 
 	public List<MCLIFOR> getAllCliFor() {
 		return allCliFor;

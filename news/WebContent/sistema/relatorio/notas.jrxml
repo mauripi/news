@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 5.6.2.final using JasperReports Library version 5.6.1  -->
-<!-- 2014-12-30T12:00:48 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="notas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="d17d380c-a82c-4522-8ce2-21116e67c379">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<field name="data" class="java.util.Date">
 		<fieldDescription><![CDATA[data]]></fieldDescription>
 	</field>
@@ -52,19 +53,25 @@
 				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="-5" y="15" width="563" height="1" uuid="a400b1f5-7431-4473-8011-74a6cc5eee77">
+				<reportElement x="-6" y="15" width="564" height="1" uuid="a400b1f5-7431-4473-8011-74a6cc5eee77">
 					<property name="local_mesure_unitwidth" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 			</line>
 			<line>
-				<reportElement x="190" y="-5" width="1" height="20" uuid="88d790f6-72f6-45c0-bd54-770f86a3f46f"/>
+				<reportElement x="190" y="0" width="1" height="15" uuid="88d790f6-72f6-45c0-bd54-770f86a3f46f"/>
 			</line>
 			<line>
-				<reportElement x="120" y="-5" width="1" height="20" uuid="0ef35e6c-8e14-416c-9739-61f069bd74f9"/>
+				<reportElement x="120" y="0" width="1" height="15" uuid="0ef35e6c-8e14-416c-9739-61f069bd74f9"/>
 			</line>
 			<line>
-				<reportElement x="67" y="-5" width="1" height="20" uuid="66937d07-2443-4e65-a7fc-7d21b879b070"/>
+				<reportElement x="67" y="0" width="1" height="15" uuid="66937d07-2443-4e65-a7fc-7d21b879b070"/>
+			</line>
+			<line>
+				<reportElement x="558" y="0" width="1" height="15" uuid="15ab7ab9-d091-4b16-a5ad-38924c0019c5"/>
+			</line>
+			<line>
+				<reportElement x="-6" y="0" width="1" height="15" uuid="7708c43a-3686-488d-8e0b-071e8c77972d"/>
 			</line>
 		</band>
 	</detail>

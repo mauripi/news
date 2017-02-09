@@ -15,6 +15,7 @@
 </h:head>
    	
 <h:body>
+
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - TI</ui:define>
 <ui:define name="conteudo">
@@ -30,9 +31,9 @@
 			<p></p>
 		<br></br>   			
 	    <p:dataTable id="tb" var="c" value="#{contratoMB.contratos}"   
-	    	selectionMode="single" selection="#{contratoMB.contrato}" rowKey="#{s}" emptyMessage="">
+	    	selectionMode="single" selection="#{contratoMB.contrato}" rowKey="#{c}" emptyMessage="">
 
-        	<p:ajax event="rowSelect" listener="#{contratoMB.onRowSelect}" update=":formMsg" oncomplete="PF('dgEdit').show();"/>
+        	<p:ajax event="rowSelect" listener="#{contratoMB.onRowSelect}" update=":formMsg,:formCad" oncomplete="PF('dgCad').show();"/>
 
 	       <p:column headerText="Nº" width="6%">
 	            <h:outputText value="#{c.id}" />
@@ -64,6 +65,7 @@
 </p:panel>	
 
 <p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" >
+
 	<h:form id="formCad" style="width:120 %;">
 		<p:panel>
 			<p:wizard flowListener="#{contratoMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo"  >
@@ -74,7 +76,7 @@
 							<p:outputLabel value="Contrato nro.:"/>
 							<p:outputLabel value="#{contratoMB.contrato.id}"/>	
 							<p:outputLabel value="Origem:"/>
-					        <p:selectOneMenu value="#{contratoMB.contrato.origem}">
+					        <p:selectOneMenu value="#{contratoMB.contrato.origem}"  disabled="#{contratoMB.controlaCadastro eq 0}">
 					            <f:selectItem itemLabel="Compra" itemValue="C" />
 					            <f:selectItem itemLabel="Venda" itemValue="V" />
 					        </p:selectOneMenu>
@@ -84,24 +86,33 @@
 								required="true" requiredMessage="Informe o objetivo do contrato"/>
 							<p:outputLabel value="Tipo do Contrato:"/>
 					        <p:selectOneMenu id="tp" value="#{contratoMB.tipoContrato}"  disabled="#{contratoMB.controlaCadastro eq 0}" style="width:130px;"
-					        		styleClass="oneMenu" converter="tipoContratoConverter">
+					        		 converter="tipoContratoConverter">
 					            <f:selectItems value="#{contratoMB.tipoContratos}" var="t" itemLabel="#{t.descricao}" itemValue="#{t}" />
 					        </p:selectOneMenu>	
+					     </p:panelGrid>
+					     <p:panelGrid columns="3" >
 							<p:outputLabel value="Cliente / Fornecedor:"/>		        
-					        <p:autoComplete id="clifor" value="#{contratoMB.contrato.mclifor}" completeMethod="#{contratoMB.completeCliFor}"
+					        <p:autoComplete id="clifor" value="#{contratoMB.contrato.mclifor}" completeMethod="#{contratoMB.completeCliFor}"  disabled="#{contratoMB.controlaCadastro eq 0}"
 			                        var="cl" itemLabel="#{cl.nomfan}" itemValue="#{cl}" converter="mcliforConverter" forceSelection="true" />
+			                <p:commandButton icon="ui-icon-plus" actionListener="#{contratoMB.chooseCliFor}" process="@this">
+						        <p:ajax event="dialogReturn" listener="#{contratoMB.onCliForChosen}" update="clifor"/>
+						    </p:commandButton>        
+						 </p:panelGrid>
+						 <p:panelGrid columns="2" >
 							<h:outputLabel for="dtiv" value="Data Início:"/>
 							<p:calendar id="dtiv" value="#{contratoMB.contrato.inicio}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
-								disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato"/>												
+								disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato">	
+								<p:ajax event="dateSelect" update="dtif"/>		
+							</p:calendar>								
 							<h:outputLabel for="dtif" value="Data Término:"/>		        
-							<p:calendar id="dtif" value="#{contratoMB.contrato.fim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11"
+							<p:calendar id="dtif" value="#{contratoMB.contrato.fim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" mindate="#{contratoMB.contrato.inicio}"
 								 disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato"/>								
 					        <p:outputLabel value="Contrato Ativo:"/>
-					        <p:selectBooleanCheckbox value="#{contratoMB.contrato.ativo}" />								
+					        <p:selectBooleanCheckbox value="#{contratoMB.contrato.ativo}"  disabled="#{contratoMB.controlaCadastro eq 0}"/>								
 						</p:panelGrid>
 		            </p:panel>
 		        </p:tab>	
-				<p:tab id="anexos" title="Aditivos" >	
+				<p:tab id="anexos" title="Documentos" >	
             		<p:panel header="Aditivos" >
 		            	<p:messages autoUpdate="true"/>						        
 		            </p:panel>
@@ -110,10 +121,10 @@
             		<p:panel header="Agendamentos" >
 		            	<p:messages autoUpdate="true"/>
 		            	<p:panelGrid columns="2">
-							<p:outputLabel value="Dias para aviso:"/>	
-							<p:inputText />	  
+							<p:outputLabel value="Dias para aviso:"/>
+							<p:inputMask id="diasaviso" mask="9?99" value="#{contratoMB.contrato.diasAviso}"  type="number"  disabled="#{contratoMB.controlaCadastro eq 0}"  />		  
 							<p:outputLabel value="Repetir envio:"/>	
-					        <p:selectOneMenu value="#{contratoMB.contrato.origem}">
+					        <p:selectOneMenu value="#{contratoMB.contrato.repetirAviso}"  disabled="#{contratoMB.controlaCadastro eq 0}">
 					        	<f:selectItem itemLabel="Não repetir" itemValue="0" />
 					            <f:selectItem itemLabel="Um dia" itemValue="1" />
 					            <f:selectItem itemLabel="Dois dias" itemValue="2" />
@@ -127,22 +138,28 @@
 					            <f:selectItem itemLabel="Vinte dias" itemValue="20" />					            				            
 					        </p:selectOneMenu> 
 							<p:outputLabel value="Assunto do e-mail"/>	
-							<p:inputText />	
+							<p:inputText value="#{contratoMB.contrato.assuntoEmail}"  disabled="#{contratoMB.controlaCadastro eq 0}"/>	
 							<p:outputLabel value="Mensagem :"/>	
-							<p:inputTextarea maxlength="300" rows="2"/>													        	
+							<p:inputTextarea maxlength="300" rows="2" value="#{contratoMB.contrato.mensagemEmail}"  disabled="#{contratoMB.controlaCadastro eq 0}"/>													        	
 				        </p:panelGrid>	
-						<p:inputText size="30" placeholder="Digite aqui o e-mail"/>
-						<p:commandButton value="Add"/>	
-    <p:dataList value="#{dataListView.cars3}" var="car" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
-        <f:facet name="header">
-            Paginator
-        </f:facet>
-        <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:10px">
-            <f:setPropertyActionListener value="#{car}" target="#{dataListView.selectedCar}" />
-            <h:outputText value="#{car.brand}, #{car.year}" />
-        </p:commandLink>
-        <h:outputText value="#{car.brand}, #{car.year}" style="display:inline-block"/>
-    </p:dataList>						
+						<p:inputText size="30" value="#{contratoMB.emailAgendamento}" placeholder="Digite aqui o e-mail"  disabled="#{contratoMB.controlaCadastro eq 0}"/>
+						<p:commandButton value="Incluir" update=":formCad" action="#{contratoMB.addEmail}"/>
+					    <p:dataList id="emlst" value="#{contratoMB.emails}" var="e"  type="unordered" itemType="none" 
+					    	paginator="true" rows="10" styleClass="paginated" paginatorPosition="bottom">
+					        <f:facet name="header">
+					            Enviar email para:
+					        </f:facet>
+					        <p:column>
+					        	<h:outputText value="#{e}" style="display:inline-block"/>
+					        </p:column>
+					        <p:column>
+						        <p:commandLink update=":formCad"  title="Remover" styleClass="ui-icon ui-icon-trash" style="float:left;margin-right:10px">
+						        	<p:collector value="#{e}" removeFrom="#{contratoMB.emails}" unique="true"/>
+						            <h:outputText value="#{e}" />
+						        </p:commandLink>					        
+					        </p:column>
+			        
+					    </p:dataList >						
 										        							          						        
 		            </p:panel>
 		        </p:tab>		        	        					
