@@ -45,6 +45,7 @@
         <p:selectOneMenu id="ano" value="#{consolidadoMB.ano}" style="width:125px">
             <f:selectItem itemLabel="2015" itemValue="2015" />
             <f:selectItem itemLabel="2016" itemValue="2016" />
+            <f:selectItem itemLabel="2017" itemValue="2017" />
         </p:selectOneMenu>
 
 	</p:panelGrid> 
@@ -57,7 +58,7 @@
 </h:form>	
 	
 </p:panel>
-<p:dialog modal="false" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false"  >
+<p:dialog modal="false" widgetVar="statusDialog" header="Aguarde..." draggable="false" closable="false" resizable="false"  >
     <p:graphicImage value="img/ajaxloadingbar.gif" />
 </p:dialog>
 <h:form id="formMsg">                      

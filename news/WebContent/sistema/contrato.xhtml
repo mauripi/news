@@ -33,7 +33,8 @@
 	    <p:dataTable id="tb" var="c" value="#{contratoMB.contratos}"   
 	    	selectionMode="single" selection="#{contratoMB.contrato}" rowKey="#{c}" emptyMessage="">
 
-        	<p:ajax event="rowSelect" listener="#{contratoMB.onRowSelect}" update=":formMsg,:formCad" oncomplete="PF('dgCad').show();"/>
+        	<p:ajax event="rowSelect" listener="#{contratoMB.onRowSelect}" update=":formMsg,:formCad" 
+        			oncomplete="PF('dgCad').show();"/>
 
 	       <p:column headerText="Nº" width="6%">
 	            <h:outputText value="#{c.id}" />
@@ -68,7 +69,7 @@
 
 	<h:form id="formCad" style="width:120 %;">
 		<p:panel>
-			<p:wizard flowListener="#{contratoMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo"  >
+			<p:wizard id="wiz" flowListener="#{contratoMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo"  step="gerais">
 		        <p:tab id="gerais" title="Dados Gerais" >
             		<p:panel header="Dados Gerais" >
 		            	<p:messages autoUpdate="true"/>
@@ -113,16 +114,18 @@
 		            </p:panel>
 		        </p:tab>	
 				<p:tab id="anexos" title="Documentos" >	
-            		<p:panel header="Aditivos" >
-		            	<p:messages autoUpdate="true"/>						        
-		            </p:panel>
+		        	<p:panel header="Aditivos" >
+					</p:panel>
 		        </p:tab>	
 				<p:tab id="skd" title="Agendamentos" >	
             		<p:panel header="Agendamentos" >
 		            	<p:messages autoUpdate="true"/>
 		            	<p:panelGrid columns="2">
 							<p:outputLabel value="Dias para aviso:"/>
-							<p:inputMask id="diasaviso" mask="9?99" value="#{contratoMB.contrato.diasAviso}"  type="number"  disabled="#{contratoMB.controlaCadastro eq 0}"  />		  
+							<p:inputMask id="diasaviso" maxlength="3" value="#{contratoMB.contrato.diasAviso}"  type="number"  disabled="#{contratoMB.controlaCadastro eq 0}" 
+									 converterMessage="Dias para aviso deve conter somente números.">
+								<p:ajax event="blur" listener="#{contratoMB.onBlurDiasAviso}" update=":formCad"/>
+							</p:inputMask>		  
 							<p:outputLabel value="Repetir envio:"/>	
 					        <p:selectOneMenu value="#{contratoMB.contrato.repetirAviso}"  disabled="#{contratoMB.controlaCadastro eq 0}">
 					        	<f:selectItem itemLabel="Não repetir" itemValue="0" />
@@ -142,10 +145,10 @@
 							<p:outputLabel value="Mensagem :"/>	
 							<p:inputTextarea maxlength="300" rows="2" value="#{contratoMB.contrato.mensagemEmail}"  disabled="#{contratoMB.controlaCadastro eq 0}"/>													        	
 				        </p:panelGrid>	
-						<p:inputText size="30" value="#{contratoMB.emailAgendamento}" placeholder="Digite aqui o e-mail"  disabled="#{contratoMB.controlaCadastro eq 0}"/>
-						<p:commandButton value="Incluir" update=":formCad" action="#{contratoMB.addEmail}"/>
+						<p:inputText id="eml" size="30" value="#{contratoMB.emailAgendamento}" placeholder="Digite aqui o e-mail"  disabled="#{contratoMB.controlaCadastro eq 0 or contratoMB.contrato.diasAviso eq null}"/>
+						<p:commandButton id="cmdeml" value="Incluir" update=":formCad" action="#{contratoMB.addEmail}" disabled="#{contratoMB.contrato.diasAviso eq null}"/>
 					    <p:dataList id="emlst" value="#{contratoMB.emails}" var="e"  type="unordered" itemType="none" 
-					    	paginator="true" rows="10" styleClass="paginated" paginatorPosition="bottom">
+					    	paginator="true" rows="10" styleClass="paginated" paginatorPosition="bottom" emptyMessage="">
 					        <f:facet name="header">
 					            Enviar email para:
 					        </f:facet>
@@ -157,24 +160,58 @@
 						        	<p:collector value="#{e}" removeFrom="#{contratoMB.emails}" unique="true"/>
 						            <h:outputText value="#{e}" />
 						        </p:commandLink>					        
-					        </p:column>
-			        
-					    </p:dataList >						
-										        							          						        
+					        </p:column>			        
+					    </p:dataList >																        							          						        
+		            </p:panel>		            
+		        </p:tab>
+		        <p:tab id="Confirmation" title="Confirmar" >		        	        					
+            		<p:panel header="Confirmar" >
+		            	<p:messages autoUpdate="true"/>
+						<p:panelGrid columns="2" >
+							<p:outputLabel value="Contrato nro.:"/>
+							<h:outputText value="#{contratoMB.contrato.id}"/>	
+							<p:outputLabel value="Origem:"/>
+					        <h:outputText value="#{contratoMB.contrato.origem eq 'C' ? 'Compra' : 'Venda'}" />					        
+							<p:outputLabel value="Objeto:"/>
+							<h:outputText value="#{contratoMB.contrato.objeto}" />
+							<p:outputLabel value="Tipo do Contrato:"/>
+					        <h:outputText value="#{contratoMB.tipoContrato.descricao}"  />	
+							<p:outputLabel value="Cliente / Fornecedor:"/>		        
+					        <h:outputText value="#{contratoMB.contrato.mclifor.nomfan}" />        
+							<p:outputLabel value="Data Início:"/>
+	                        <h:outputText value="#{contratoMB.contrato.inicio}" styleClass="outputLabel">
+	                        	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  			</h:outputText>														
+							<p:outputLabel value="Data Término:"/>		        
+	                        <h:outputText value="#{contratoMB.contrato.fim}" styleClass="outputLabel">
+	                        	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				  			</h:outputText>								
+					        <p:outputLabel value="Contrato Ativo:"/>
+					        <h:outputText value="#{contratoMB.contrato.ativo eq true ? 'Ativo' : 'Inativo'}" />								
+						</p:panelGrid>
+						<f:facet name="footer">
+							<p:panelGrid columns="2" >
+								<p:commandButton value="Salvar" action="#{contratoMB.grava}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
+								<p:commandButton value="Cancelar"  oncomplete="PF('dgCad').hide()"/>
+							</p:panelGrid>
+						</f:facet>						
 		            </p:panel>
-		        </p:tab>		        	        					
+		        </p:tab> 		        		        	        					
 			</p:wizard>
-			<f:facet name="footer">
-				<p:panelGrid columns="2" >
-					<p:commandButton value="Salvar" action="#{contratoMB.grava}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
-					<p:commandButton value="Cancelar"  oncomplete="PF('dgCad').hide()"/>
-				</p:panelGrid>
-			</f:facet>
-			
+ 
 		</p:panel>
 	</h:form>
 </p:dialog>
 
+<p:dialog header="Anexos" widgetVar="envdoc" showEffect="fade" hideEffect="fade" width="65%" appendTo="@(body)" modal="true">
+	<h:form id="formAnexo">
+
+
+		<p:panelGrid columns="1">
+			<p:commandButton value="Salvar Arquivo" action="#{movimentobemMB.salvarArquivo}" update=":formAnexo:tbd,:formMsg"/>
+		</p:panelGrid>	
+	</h:form>
+</p:dialog>
 
 <p:dialog modal="false" widgetVar="statusDialog" header="Aguarde..." draggable="false" closable="false" resizable="false"  appendTo="@(body)">
     <p:graphicImage value="img/ajaxloadingbar.gif" />

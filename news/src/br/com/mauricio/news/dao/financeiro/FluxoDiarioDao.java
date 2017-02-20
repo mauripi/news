@@ -3,16 +3,12 @@ package br.com.mauricio.news.dao.financeiro;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
@@ -88,130 +84,92 @@ public class FluxoDiarioDao {
 		}		
 		return custos;	
 	}
-	
-	@SuppressWarnings("static-access")
+
 	public List<FluxoDiario> lerArquivo(String excelFilePath, CampoPlanilha c) throws IOException{
 		
 	    FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
-	    @SuppressWarnings("unused")
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-	
+
 	    Workbook workbook = new XSSFWorkbook(inputStream);
 	    FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
 	    
 	    Sheet firstSheet = workbook.getSheetAt(0);
 	    Iterator<Row> iterator = firstSheet.iterator();
-	     
-	    List<FluxoDiario> fluxos = new ArrayList<FluxoDiario>();
-	    List<Integer> linhas = new ArrayList<Integer>();
 	    
 	    int itipo = numeroDaColuna(c.getCampoTipo());
-	    
-	    while (iterator.hasNext()) {
-	        Row nextRow = iterator.next();            
-	        @SuppressWarnings("unused")
-			String data="";
-	        if(nextRow.getCell(itipo)!=null && nextRow.getCell(itipo).getCellType()!=nextRow.getCell(itipo).CELL_TYPE_BLANK ){
-	        	String tipo=nextRow.getCell(itipo).getStringCellValue();
-	        	
-	        	if(tipo.equals("F")|| tipo.equals("I")|| tipo.equals("V")){
-	        		linhas.add(nextRow.getRowNum()+1);
-	        	}
-	        }else{
-	        	data="";
-	        }
-	    }
-		
-	   for(Integer i:linhas){
-		   Date data=null;
-		   String doc="";
-		   String his="";
-		   
-		   Double ent=null;
-		   Double sai=null;
-		   Double sal=null;
-		   
-		   String tipo="";
-		   
-	       CellReference dataRef = new CellReference(c.getCampoData()+i); 
-	       Row dataRow = firstSheet.getRow(dataRef.getRow());
-	       Cell dataCell = dataRow.getCell(dataRef.getCol()); 
-	       data=dataCell.getDateCellValue();
-	       
-	       CellReference docRef = new CellReference(c.getCampoDoc()+i); 
-	       Row docRow = firstSheet.getRow(docRef.getRow());
-	       Cell docCell = docRow.getCell(docRef.getCol()); 
-	       if(evaluator.evaluate(docCell)!=null)
-	       	   doc=(String) evaluator.evaluate(docCell).getStringValue();
-	       else
-	    	   doc="";	       
-	       
-	
-	       CellReference hisRef = new CellReference(c.getCampohis()+i); 
-	       Row hisRow = firstSheet.getRow(hisRef.getRow());
-	       Cell hisCell = hisRow.getCell(hisRef.getCol()); 
-	       his=hisCell.getStringCellValue()+""; 
-	       
-	       CellReference entRef = new CellReference(c.getCampoEnt()+i); 
-	       Row entRow = firstSheet.getRow(entRef.getRow());
-	       Cell entCell = entRow.getCell(entRef.getCol()); 
+	    int dat = numeroDaColuna(c.getCampoData());
+	    int doc = numeroDaColuna(c.getCampoDoc());
+	    int his = numeroDaColuna(c.getCampohis());		   
+	    int ent = numeroDaColuna(c.getCampoEnt());
+	    int sai = numeroDaColuna(c.getCampoSai());
+	    int sal = numeroDaColuna(c.getCampoSal());
+		List<FluxoDiario> fs = new ArrayList<FluxoDiario>();	    
 
-	       if((Double) getCellValue(entCell)!=null)
-	    	   ent=(Double) getCellValue(entCell);
-	       else
-	    	   ent=new Double(0);
-	       
-	       CellReference saiRef = new CellReference(c.getCampoSai()+i); 
-	       Row saiRow = firstSheet.getRow(saiRef.getRow());
-	       Cell saiCell = saiRow.getCell(saiRef.getCol());
-	       if(evaluator.evaluate(saiCell)!=null)
-	    	   sai=(Double) evaluator.evaluate(saiCell).getNumberValue();
-	       else
-	    	   sai=new Double(0);
-	       
-	  /*    CellReference salRef = new CellReference(c.getCampoSal()+i); 
-	       Row salRow = firstSheet.getRow(salRef.getRow());
-	       Cell salCell = salRow.getCell(salRef.getCol()); 
-	       if((Double) getCellValue(salCell)!=null)
-	    	   sal=(Double) getCellValue(salCell); 
-	       else
-	    	   sal=new Double(0);
-	*/
-	       CellReference tipoRef = new CellReference(c.getCampoTipo()+i); 
-	       Row tipoRow = firstSheet.getRow(tipoRef.getRow());
-	       Cell tipoCell = tipoRow.getCell(tipoRef.getCol()); 
-	   	   tipo=(String) getCellValue(tipoCell);            
+	    while (iterator.hasNext()) {
+
+			Row nextRow = iterator.next();
+			
+			if(nextRow.getCell(itipo)!=null && nextRow.getCell(itipo).toString().length()>0){
+				FluxoDiario f = new FluxoDiario();
+
+				Object oDat = nextRow.getCell(dat);
+				if(oDat!=null){
+			       	if(oDat.toString().length()!=0){
+			       		try{
+			       			f.setData(nextRow.getCell(dat).getDateCellValue());
+			       		}catch(Exception e){
+			       			f.setData(null);
+			       		}
+			       	}
+				}
 	
-	   	   FluxoDiario f =new FluxoDiario();
-	   	   f.setData(data);
-	   	   f.setDocumento(doc);
-	   	   f.setEntrada(ent);
-	   	   f.setHistorico(his);
-	   	   f.setSaida(sai);
-	   	   f.setSaldo(sal);
-	   	   f.setTipo(tipo);
-	   	   fluxos.add(f);
-	   }
+				if(nextRow.getCell(doc)!=null)
+					f.setDocumento(nextRow.getCell(doc).toString());
+				if(nextRow.getCell(his)!=null)
+					f.setHistorico(nextRow.getCell(his).toString());
+				if(nextRow.getCell(itipo)!=null)
+					f.setTipo(nextRow.getCell(itipo).toString());
+		        
+				Object oEnt = nextRow.getCell(ent);
+				if(oEnt!=null){
+			       	if(oEnt.toString().length()>0){
+			       		Cell entCell =nextRow.getCell(ent); 	       		
+			       		f.setEntrada(evaluator.evaluate(entCell).getNumberValue());
+			       	}else{
+			       		f.setEntrada(new Double(0));
+			       	}
+				}
+				Object oSai = nextRow.getCell(sai);
+				if(oSai!=null){
+			       	if(oSai.toString().length()>0){
+			       		Cell saiCell =nextRow.getCell(sai); 
+			       		f.setSaida(evaluator.evaluate(saiCell).getNumberValue());
+			       	}else{
+			       		f.setSaida(new Double(0));
+			       	}				
+				}
+				Object oSal = nextRow.getCell(sal);
+				if(oSal!=null){
+			       	if(oSal.toString().length()>0){
+			       		try{
+				       		Cell salCell =nextRow.getCell(sal); 
+				       		f.setSaldo(evaluator.evaluate(salCell).getNumberValue());
+			       		}catch(Exception e){
+			       			f.setSaldo(new Double(0));
+			       		}
+			       	}else{
+			       		f.setSaldo(new Double(0));
+			       	}					
+				}
+				
+				fs.add(f);
+			}
+	    }
 	    workbook.close();
 	    inputStream.close();
 	    
-System.out.println(fluxos.size());
-		return fluxos;
+		return fs;
 	 }
 
-	private Object getCellValue(Cell cell) {
-	    switch (cell.getCellType()) {
-	    case Cell.CELL_TYPE_STRING:
-	        return cell.getStringCellValue(); 
-	    case Cell.CELL_TYPE_BOOLEAN:
-	        return cell.getBooleanCellValue();	 
-	    case Cell.CELL_TYPE_NUMERIC:
-	        return cell.getNumericCellValue();
-	    case Cell.CELL_TYPE_FORMULA:
-	    	return cell.getCellFormula();
-	    }	 
-	    return null;
-	}
 
 	private int numeroDaColuna(String s){
         switch (s) {

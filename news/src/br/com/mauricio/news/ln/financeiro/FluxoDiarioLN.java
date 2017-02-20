@@ -66,11 +66,10 @@ public class FluxoDiarioLN implements Serializable {
 	public String importarArquivoBD(String nomeArquivo, CampoPlanilha c, Integer mes, Integer ano ) {
 		FluxoDiarioDao dao = new FluxoDiarioDao(manager);
 		try {
-			List<FluxoDiario> list = dao.lerArquivo(CAMINHO_PARA_SALVAR_ARQUIVO_IMPORTADO + nomeArquivo,c);
 			FluxoDiarioDao fdao = new FluxoDiarioDao(manager);
-			GenericDao<FluxoDiario> gdao = new GenericDao<FluxoDiario>(manager);
-		System.out.println(mes+"-"+ano);
 			fdao.removePeriodoDoBanco(mes, ano);
+			List<FluxoDiario> list = dao.lerArquivo(CAMINHO_PARA_SALVAR_ARQUIVO_IMPORTADO + nomeArquivo,c);
+			GenericDao<FluxoDiario> gdao = new GenericDao<FluxoDiario>(manager);
 			gdao.saveList(list);
 		} catch (IOException e) {
 			System.out.println("Erro em FluxoDiarioLN.importarArquivoBD " + e.getLocalizedMessage());

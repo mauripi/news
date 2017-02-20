@@ -46,13 +46,13 @@ public class FluxoDiarioBean implements Serializable {
 	private LineChartModel areaModel;
 	private List<FluxoDiario> detalhes = new ArrayList<FluxoDiario>();
 	private List<String> campos = new ArrayList<String>();
-	private String campoData="";
-	private String campoDoc="";
-	private String campohis="";
-	private String campoEnt="";
-	private String campoSai="";
-	private String campoSal="";
-	private String campoTipo="";	
+	private String campoData="A";
+	private String campoDoc="B";
+	private String campohis="C";
+	private String campoEnt="D";
+	private String campoSai="E";
+	private String campoSal="F";
+	private String campoTipo="G";	
 	
 	@PostConstruct
 	public void init(){

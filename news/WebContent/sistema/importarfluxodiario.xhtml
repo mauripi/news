@@ -103,11 +103,14 @@
         </p:selectOneMenu>	                                              
 	</p:panelGrid>	
 	<br></br>
-		<p:commandButton value="Enviar" ajax="false"  action="#{fluxodiarioMB.importar}" update=":formMsg"/>
+		<p:commandButton value="Enviar" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  action="#{fluxodiarioMB.importar}" update=":formMsg, down"/>
 </h:form>	
 	
 </p:panel>
 
+<p:dialog modal="false" widgetVar="statusDialog" header="Aguarde..." draggable="false" closable="false" resizable="false"  >
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="8000"/> 
 </h:form>

@@ -15,6 +15,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.component.wizard.Wizard;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
@@ -25,6 +26,7 @@ import br.com.mauricio.news.model.Contrato;
 import br.com.mauricio.news.model.Login;
 import br.com.mauricio.news.model.MCLIFOR;
 import br.com.mauricio.news.model.TipoContrato;
+import br.com.mauricio.news.util.DateUtil;
 import br.com.mauricio.news.util.ValidaEmail;
 import br.com.mauricio.news.util.VerificaString;
 
@@ -42,6 +44,7 @@ public class ContratoBean implements Serializable {
 	private Login userLogado = new Login();
 	private int controlaCadastro = 0;
 	private String msg;
+	private List<String> msgs;
 	private List<String> emails;
 	private String emailAgendamento;
 	private boolean skip;
@@ -125,11 +128,15 @@ public class ContratoBean implements Serializable {
 	}
 	
 	private void stringToList(){
-		if(contrato.getEmailsAviso()!=null){
-			String s[] = contrato.getEmailsAviso().split(",");
-			emails = new ArrayList<String>();
-			for(String x:s)
-				emails.add(x);
+		if(contrato!=null){
+			if(contrato.getEmailsAviso().length()>0){
+				String s[] = contrato.getEmailsAviso().split(",");
+				emails = new ArrayList<String>();
+				for(String x:s)
+					emails.add(x);
+			}else{
+				emails = new ArrayList<String>();
+			}
 		}
 	}
 	
@@ -154,7 +161,24 @@ public class ContratoBean implements Serializable {
         stringToList();
         tipoContrato = contrato.getTipocontrato();
         emailAgendamento="";
+        edita();
+        primeiraSataAba();
     }
+    
+    private void primeiraSataAba(){
+    	   Wizard wizard = (Wizard) FacesContext.getCurrentInstance().getViewRoot().findComponent(":formCad:wiz");
+    	    wizard.setStep("gerais");
+    	    RequestContext.getCurrentInstance().update("formCad");
+    }
+
+    public void onBlurDiasAviso(){
+    	if(contrato.getDiasAviso()!=null){
+	    	int intervalo = DateUtil.diferencaEmDias(contrato.getInicio(), contrato.getFim());
+	    	if(intervalo>contrato.getDiasAviso())
+	    		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Dias de aviso com período já está vencido.","")); 
+    	}
+    }
+    
     
     public List<MCLIFOR> completeCliFor(String query) {
         List<MCLIFOR> allCliFor = service.getAllCliFor();
@@ -190,8 +214,46 @@ public class ContratoBean implements Serializable {
         if(skip) {
             skip = false;   //reset in case user goes back
             return "confirm";
-        }
-        else {
+        }else {
+        	msgs = new ArrayList<String>();
+        	if(event.getOldStep().equals("gerais")){
+        		if(contrato.getObjeto().length()<1){
+        			msgs.add("Informe o objeto do contrato.");
+        		}
+        		if(contrato.getMclifor()==null){       			
+        			msgs.add("Informe o Cliente ou Fornecedor");
+        		}
+        		if(contrato.getInicio().equals(null)){
+        			msgs.add("Informe a data inicial.");
+        		}   
+        		if(contrato.getFim().equals(null)){
+        			msgs.add("Informe a data final.");
+        		}   
+        		if(DateUtil.isMaior(contrato.getInicio(), contrato.getFim())){
+        			msgs.add("Data inicial é maior que a data final.");
+        		}        		
+        		if(msgs.size()>0){
+        			mensagens(msgs);
+        			return event.getOldStep();
+        		}
+        	}
+        	if(event.getOldStep().equals("skd")){
+        		if(contrato.getDiasAviso()!=null){
+	        		int intervalo = DateUtil.diferencaEmDias(contrato.getInicio(), contrato.getFim());
+	        		if(intervalo>contrato.getDiasAviso()){
+	        			msgs.add("Dias de aviso com período já está vencido.");
+	        		}
+        		}        		
+        		if(emails.size()==0 && (contrato.getDiasAviso()!=null || contrato.getAssuntoEmail().length()>0 
+        				|| contrato.getMensagemEmail().length()>0 || contrato.getRepetirAviso()!=0)){
+        			msgs.add("Foi/Foram preenchido(s) informação(ões) para aviso, mais nenhum email foi cadastrado.");
+        		}
+
+        		if(msgs.size()>0){
+        			mensagens(msgs);
+        			return event.getOldStep();
+        		}        		
+        	}
             return event.getNewStep();
         }
     }    
@@ -205,10 +267,16 @@ public class ContratoBean implements Serializable {
     		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(msg,msg)); 
     	}
     }    
-    
+
+	private void mensagens(List<String> ms) {
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        for(String m:ms)
+        	context.addMessage(null, new FacesMessage(m,m));  			
+	}
+	
 	public void mensagens(){
         FacesContext context = FacesContext.getCurrentInstance();  	          
-        context.addMessage(null, new FacesMessage("",msg));  		
+        context.addMessage(null, new FacesMessage(msg,""));  		
 	}
 	//--------------------------GETTERS E SETTERS ----------------------------------
 	public Date getToday() {

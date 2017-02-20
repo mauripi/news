@@ -178,15 +178,23 @@ public class SigDao{
 		
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = manager.createNativeQuery(sql).setParameter("codigos", codigos).getResultList();
-	
-		for(Object[] o:list)
-			writer.append(o[0]+";"+o[1]+";"+o[2]+";"+o[3]+";"+o[4]+";"+o[5].toString().replace("\n", "").replace("\r", "")+ "\r\n");
+
+		for(Object[] o:list){
+			if(o[3].toString().equals("61550141000172") || o[3].toString().equals("40432544083506") || 
+									o[3].toString().equals("1404158000190") || o[3].toString().equals("1404158001838") || 
+									o[3].toString().equals("191") || o[3].toString().equals("40432544082607")){
+				writer.append(o[0]+";"+o[1]+";"+o[2]+";"+o[0]+";"+o[4]+";"+o[5].toString().replace("\n", "").replace("\r", "")+ "\r\n");
+			}else{
+				writer.append(o[0]+";"+o[1]+";"+o[2]+";"+o[3]+";"+o[4]+";"+o[5].toString().replace("\n", "").replace("\r", "")+ "\r\n");
+			}
+		}
 	
 		writer.close();
 
 		System.out.println("========== Arquivo fornecedores10.txt gerado com "+ (list.size()+list.size())+" registros ===============");
 	}
 
+	
 	public void gerarArquivoCliente() throws IOException{
 
 		File file = new File(SOURCE_FOLDER,"clientes10.txt");

@@ -25,12 +25,6 @@ public class ContratoLN implements Serializable {
 		this.manager = c.getEntityManager();
 	}
 
-	public String create(){
-		return null;
-	}
-	public String update(){
-		return null;
-	}
 	public String delete(){
 		return null;
 	}
@@ -47,4 +41,7 @@ public class ContratoLN implements Serializable {
 		}
 		return list;
 	}
+
+	
+
 }
