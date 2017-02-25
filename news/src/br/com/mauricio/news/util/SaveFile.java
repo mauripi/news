@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+
 public class SaveFile {
 
     public static void criaArquivo(File caminhoorigem, String novocaminho) throws IOException {
@@ -46,4 +48,13 @@ public class SaveFile {
          }
      }     
     
+    public static void copiar(String origem, String destino){
+        File source = new File(origem);
+        File dest = new File(destino);
+        try {
+            FileUtils.copyFile(source, dest);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    	
+    }
 }

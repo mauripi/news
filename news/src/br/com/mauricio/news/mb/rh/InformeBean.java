@@ -27,6 +27,7 @@ public class InformeBean implements Serializable{
 	private Login usuarioLogado = new Login();
 	private Informe irrf;
 	private List<Informe> informes;
+
 	
 	public InformeBean(){
 		FacesContext cx = FacesContext.getCurrentInstance();
@@ -34,6 +35,7 @@ public class InformeBean implements Serializable{
 		this.usuarioLogado = (Login) sessao.getAttribute("login");
 	}
 	
+
 	public void listarInformes(){
 		InformeLN ln = new InformeLN();
 		informes = new ArrayList<Informe>();
@@ -81,5 +83,4 @@ public class InformeBean implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
 }
