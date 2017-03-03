@@ -57,4 +57,10 @@ public class SaveFile {
             e.printStackTrace();
         }    	
     }
+
+    public static void criarPasta(String caminho) {
+        File folder = new File(caminho);
+        if (!folder.exists())
+            folder.mkdirs();	
+	}
 }

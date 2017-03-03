@@ -35,24 +35,10 @@ public class ContratoDao {
 	}
 	
 	
-	/*
-	 	StringBuilder sb = new StringBuilder();
-		sb.append("SELECT ");
-		sb.append(" c.nome,r.datareuniao,");
-		sb.append("count(m.idmembro),");
-		sb.append(" SUM(case when rm.estevepresente=1 Then 1 Else 0 End),");
-		sb.append(" SUM(case when rm.estevepresente=0 Then 1 Else 0 End)");
-		sb.append(" FROM reuniao_membro rm");
-		sb.append(" join rm.reuniao r");
-		sb.append(" join rm.membro m");
-		sb.append(" join m.celula c");
-		sb.append(" WHERE");
-		sb.append(" r.datareuniao between :inicio and :fim");
-		sb.append(" group by c.idcelula,r.idreuniao");
-
-	 */
 	public void delete(Contrato c){	
 		//this.manager.createNativeQuery(" delete from doccontrato where contrato_id= :id").setParameter("id", c.getId()).executeUpdate();		
 		//this.manager.createNativeQuery(" delete from contrato where id= :id").setParameter("id", c.getId()).executeUpdate();		
 	}
+	
+	
 }

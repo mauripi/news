@@ -303,9 +303,10 @@ public class BaixaBemBean implements Serializable {
 			return false;
 
 		if(baixabem.getJustificativa()==null)
-			return false;		
-		if(baixabem.getVlrvenda()==null)
 			return false;
+		if(baixabem.getTipoBaixa()==TipoBaixa.VENDA)
+			if(baixabem.getVlrvenda()==null)
+				return false;
 		if(data==null)
 			return false;
 		

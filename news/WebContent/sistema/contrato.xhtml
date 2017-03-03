@@ -67,9 +67,9 @@
 
 <p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" >
 
-	<h:form id="formCad" style="width:120 %;">
+	<h:form id="formCad">
 		<p:panel>
-			<p:wizard id="wiz" flowListener="#{contratoMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo"  step="gerais">
+			<p:wizard id="wiz" flowListener="#{contratoMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo"  step="gerais" >
 		        <p:tab id="gerais" title="Dados Gerais" >
             		<p:panel header="Dados Gerais" >
 		            	<p:messages autoUpdate="true"/>
@@ -113,10 +113,26 @@
 						</p:panelGrid>
 		            </p:panel>
 		        </p:tab>	
+				
 				<p:tab id="anexos" title="Documentos" >	
-		        	<p:panel header="Aditivos" >
-					</p:panel>
+					<p:panel>
+						<p:commandButton value="Adicionar" icon="ui-icon-extlink" onclick="PF('upl').show()" />
+						<p></p>
+					    <p:dataList value="#{contratoMB.anexos}" var="a" type="unordered" itemType="none" emptyMessage=""
+					    			paginatorPosition="bottom" paginator="true" rows="10" styleClass="paginated">
+					        <f:facet name="header">
+					            Documentos
+					        </f:facet>
+					        <p:commandLink update=":formD" oncomplete="PF('anx').show()" title="Mostrar" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:10px">
+					            <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
+					            <h:outputText value="#{a}" />
+					        </p:commandLink>
+					        <h:outputText value="#{a}" style="display:inline-block"/>
+					    </p:dataList>						
+
+				    </p:panel>
 		        </p:tab>	
+				
 				<p:tab id="skd" title="Agendamentos" >	
             		<p:panel header="Agendamentos" >
 		            	<p:messages autoUpdate="true"/>
@@ -164,6 +180,7 @@
 					    </p:dataList >																        							          						        
 		            </p:panel>		            
 		        </p:tab>
+
 		        <p:tab id="Confirmation" title="Confirmar" >		        	        					
             		<p:panel header="Confirmar" >
 		            	<p:messages autoUpdate="true"/>
@@ -203,15 +220,25 @@
 	</h:form>
 </p:dialog>
 
-<p:dialog header="Anexos" widgetVar="envdoc" showEffect="fade" hideEffect="fade" width="65%" appendTo="@(body)" modal="true">
-	<h:form id="formAnexo">
+<h:form id="formD">
+   <p:dialog header="Anexo" widgetVar="anx" showEffect="fade" hideEffect="fade" width="900" height="600"   appendTo="@(body)">
+		<object type="application/pdf" data="#{request.contextPath}/sistema/tmp/#{contratoMB.contrato.id}/#{contratoMB.anexo}?pfdrid_c=true" height="500px" width="100%">
+            Seu navegador não pode exibir o pdf ou o arquivo não existe.
+        </object>
+   </p:dialog>
+</h:form>
 
-
-		<p:panelGrid columns="1">
-			<p:commandButton value="Salvar Arquivo" action="#{movimentobemMB.salvarArquivo}" update=":formAnexo:tbd,:formMsg"/>
-		</p:panelGrid>	
-	</h:form>
-</p:dialog>
+<h:form id="formUpload" style="height:250px;">
+   <p:dialog header="Enviar documentos" widgetVar="upl" showEffect="fade" hideEffect="fade"  
+   		draggable="false" closable="false" resizable="false"  appendTo="@(body)">
+	   	<p:panelGrid columns="1">
+		    <p:fileUpload fileUploadListener="#{contratoMB.handleFileUpload}" mode="advanced" dragDropSupport="false"
+		                  multiple="true" update=":formMsg,:formCad"  fileLimit="10" allowTypes="/(\.|\/)(pdf)$/" 
+		                  cancelLabel="Cancelar" uploadLabel="Gravar"  label="Selecionar..." 
+		                  oncomplete="PF('upl').hide()" invalidFileMessage="Somente arquivos .pdf"/>		
+		</p:panelGrid>
+   </p:dialog>
+</h:form>
 
 <p:dialog modal="false" widgetVar="statusDialog" header="Aguarde..." draggable="false" closable="false" resizable="false"  appendTo="@(body)">
     <p:graphicImage value="img/ajaxloadingbar.gif" />

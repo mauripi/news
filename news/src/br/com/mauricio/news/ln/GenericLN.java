@@ -12,6 +12,12 @@ public class GenericLN<T> implements Serializable {
 
 	private String msg;
 	
+	public T addT(T t){
+		GenericDao<T> dao = new GenericDao<T>();
+		dao.save(t);	
+		return t;
+	}
+	
 	public String add(T t){
 		try {
 			GenericDao<T> dao = new GenericDao<T>();
@@ -23,6 +29,7 @@ public class GenericLN<T> implements Serializable {
 		}					
 		return msg;
 	}
+	
 	public String update(T t){
 		try {
 			GenericDao<T> dao = new GenericDao<T>();

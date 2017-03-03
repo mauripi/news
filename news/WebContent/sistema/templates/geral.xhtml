@@ -80,11 +80,11 @@
         </p:submenu>           
         <p:submenu label="Compras">
         	<p:menuitem value="Em Desenvolvimento"   />
-            <p:menuitem value="Contratos" actionListener="#{acessoBean.contrato}" rendered="false" />
+            <p:menuitem value="Contratos" actionListener="#{acessoBean.contrato}" rendered="#{acessoBean.temAcessoContrato}" />
             <p:menuitem value="Visão Gerencial" actionListener="#{acessoBean.contratoVisao}" rendered="false" /> 
             <p:menuitem value="Fornecedores" actionListener="#{acessoBean.comprasFornecedor}"  disabled="#{!acessoBean.temAcessoFornecedor}" rendered="false"/>           
             <p:menuitem value="Clientes" actionListener="#{acessoBean.comprasCliente}" rendered="false" />
-            <p:menuitem value="Tipos de Contratos" actionListener="#{acessoBean.comprasTipoContrato}" rendered="false" />
+            <p:menuitem value="Tipos de Contratos" actionListener="#{acessoBean.comprasTipoContrato}" rendered="#{acessoBean.temAcessoContrato}" />
         </p:submenu> 
         <p:submenu label="Engenharia">
             <p:menuitem value="Controle de Sinal" actionListener="#{acessoBean.controleSinal}" disabled="#{!acessoBean.temAcessoControleSinal}" />
@@ -94,7 +94,8 @@
             <p:menuitem value="Gasto com Energia" actionListener="#{acessoBean.notaDebito}" disabled="#{!acessoBean.temAcessoControleSinal}" />
             <p:menuitem value="Gasto com Energias - Consolidado" actionListener="#{acessoBean.notaDebitoConsolidado}" target="_blank" ajax="false"  disabled="#{!acessoBean.temAcessoControleSinal}" />
             <p:menuitem value="Fluxo de Demandas" actionListener="#{acessoBean.controleTarefa}" disabled="#{!acessoBean.temAcessoControleTarefa}" />
-
+			<p:menuitem value="Contratos" actionListener="#{acessoBean.contrato}" rendered="#{acessoBean.temAcessoContrato}" />
+       		<p:menuitem value="Tipos de Contratos" actionListener="#{acessoBean.comprasTipoContrato}" rendered="#{acessoBean.temAcessoContrato}" />
         </p:submenu> 
         <p:submenu label="Marketing">
             <p:menuitem value="Importar arquivo Ibope" actionListener="#{acessoBean.importarIbope}" rendered="#{acessoBean.temAcessoIbopeMidiaMais}" />
