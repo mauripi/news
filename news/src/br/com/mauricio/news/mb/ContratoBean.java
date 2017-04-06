@@ -54,6 +54,7 @@ public class ContratoBean implements Serializable {
 	private MCLIFOR mclifor;	
 	private List<String> anexos;
 	private String anexo;
+	private List<String> allEmailsCadastrados = new ArrayList<String>();
 	
 	@PostConstruct
 	public void init(){
@@ -79,6 +80,8 @@ public class ContratoBean implements Serializable {
 	public void listar(){
 		ContratoLN ln = new ContratoLN();
 		contratos = ln.list(userLogado);
+		allEmailsCadastrados = new ArrayList<String>();
+		allEmailsCadastrados = ln.emailsCadastrados();
 	}
 
 	public void novo(){
@@ -108,7 +111,7 @@ public class ContratoBean implements Serializable {
 			gln = new GenericLN<Contrato>();
 			contrato.setEmailsAviso(listToString(emails));
 			contrato.setTipocontrato(tipoContrato);
-			contrato.setResponsavel(userLogado);
+			contrato.setUsuario(userLogado);
 			msg = gln.update(contrato);			
 			mensagens();
 			listar();
@@ -189,21 +192,28 @@ public class ContratoBean implements Serializable {
         for (int i = 0; i < allCliFor.size(); i++) {
         	MCLIFOR skin = allCliFor.get(i);
         	if(VerificaString.isInt(query)){
-        		if(skin.getCgccpf().toString().startsWith(query.toLowerCase())) 
-        			filteredCliFor.add(skin);         		
+        		if(skin.getCgccpf().toString().startsWith(query.toLowerCase())) filteredCliFor.add(skin);         		
         	}else{
-        		if(skin.getNomfan().toLowerCase().contains(query.toLowerCase())) 
-        			filteredCliFor.add(skin);        		      		
+        		if(skin.getNomfan().toLowerCase().contains(query.toLowerCase())) filteredCliFor.add(skin);        		      		
         	}
         }         
         return filteredCliFor;
     }
 
+    public List<String> completeEmail(String query) {
+    	List<String> filtered = new ArrayList<String>();
+        for (int i = 0; i < allEmailsCadastrados.size(); i++) {
+        	String skin = allEmailsCadastrados.get(i);
+        	if(skin.toLowerCase().contains(query.toLowerCase())) filtered.add(skin);
+        }         
+        return filtered;
+    }
+    
     public void chooseCliFor() {
         Map<String,Object> options = new HashMap<String, Object>();
         options.put("resizable", false);
         options.put("draggable", false);
-        options.put("modal", true);
+        options.put("modal", true);     
         RequestContext.getCurrentInstance().openDialog("cadclifor", options, null);
     }
      
@@ -243,7 +253,7 @@ public class ContratoBean implements Serializable {
         				ContratoLN ln = new ContratoLN();
 	        			gln = new GenericLN<Contrato>();
 	        			contrato.setTipocontrato(tipoContrato);
-	        			contrato.setResponsavel(userLogado);	        			
+	        			contrato.setUsuario(userLogado);	        			
 	        			gln.addT(contrato);
 	        			ln.criaPasta(contrato);
         			}
@@ -430,6 +440,14 @@ public class ContratoBean implements Serializable {
 
 	public void setAnexo(String anexo) {
 		this.anexo = anexo;
+	}
+
+	public List<String> getAllEmailsCadastrados() {
+		return allEmailsCadastrados;
+	}
+
+	public void setAllEmailsCadastrados(List<String> allEmailsCadastrados) {
+		this.allEmailsCadastrados = allEmailsCadastrados;
 	}
 
 }

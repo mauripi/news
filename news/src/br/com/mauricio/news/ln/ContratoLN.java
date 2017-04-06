@@ -107,5 +107,10 @@ public class ContratoLN implements Serializable {
 		
 	}
 
+	public List<String> emailsCadastrados(){
+		ContratoDao cdao = new ContratoDao(manager);
+		return cdao.emailsCadastrados();
+		
+	}
 	
 }

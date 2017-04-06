@@ -43,8 +43,8 @@ public class Contrato implements Serializable{
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private Boolean ativo=true;
 	@OneToOne
-	@JoinColumn(name="responsavel_id")
-	private Login responsavel;
+	@JoinColumn(name="usuario_id")
+	private Login usuario;
 	@OneToOne
 	@JoinColumn(name="mclifor_id")
 	private MCLIFOR mclifor;
@@ -53,8 +53,9 @@ public class Contrato implements Serializable{
 	private String assuntoEmail;
 	private String mensagemEmail;
 	private String emailsAviso;
+	@Column(length=40)
+	private String responsavel;
 
-	
 	
 	public Integer getId() {
 		return id;
@@ -116,11 +117,11 @@ public class Contrato implements Serializable{
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
 	}
-	public Login getResponsavel() {
-		return responsavel;
+	public Login getUsuario() {
+		return usuario;
 	}
-	public void setResponsavel(Login responsavel) {
-		this.responsavel = responsavel;
+	public void setUsuario(Login usuario) {
+		this.usuario = usuario;
 	}
 	public MCLIFOR getMclifor() {
 		return mclifor;
@@ -158,6 +159,12 @@ public class Contrato implements Serializable{
 	public void setEmailsAviso(String emailsAviso) {
 		this.emailsAviso = emailsAviso;
 	}
+	public String getResponsavel() {
+		return responsavel;
+	}
+	public void setResponsavel(String responsavel) {
+		this.responsavel = responsavel;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -188,6 +195,7 @@ public class Contrato implements Serializable{
 				+ ((tipoValor == null) ? 0 : tipoValor.hashCode());
 		result = prime * result
 				+ ((tipocontrato == null) ? 0 : tipocontrato.hashCode());
+		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
 		result = prime * result
 				+ ((valorMensal == null) ? 0 : valorMensal.hashCode());
 		result = prime * result
@@ -277,6 +285,11 @@ public class Contrato implements Serializable{
 			if (other.tipocontrato != null)
 				return false;
 		} else if (!tipocontrato.equals(other.tipocontrato))
+			return false;
+		if (usuario == null) {
+			if (other.usuario != null)
+				return false;
+		} else if (!usuario.equals(other.usuario))
 			return false;
 		if (valorMensal == null) {
 			if (other.valorMensal != null)

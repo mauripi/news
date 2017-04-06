@@ -73,7 +73,7 @@ public class MCLIFORERPDao {
 				else
 					reg.setTippes(1);
 				
-				reg.setCgccpf(Long.valueOf(o[5].toString()));					
+				reg.setCgccpf(o[5].toString());					
 				reg.setEndrua(o[6].toString());
 				reg.setEndnum(o[7].toString());
 				reg.setEndcpl(o[8].toString());
@@ -81,7 +81,7 @@ public class MCLIFORERPDao {
 				reg.setEndcid(o[10].toString());
 				String cep=o[11].toString();
 				if(cep.length()>0)
-					reg.setEndcep(Integer.parseInt(o[11].toString()));
+					reg.setEndcep(o[11].toString());
 				reg.setEndest(o[12].toString());
 				reg.setFoncon(o[13].toString());
 				results.add(reg);

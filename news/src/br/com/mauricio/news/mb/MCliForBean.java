@@ -3,7 +3,6 @@ package br.com.mauricio.news.mb;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -12,13 +11,16 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 
 import br.com.mauricio.news.ln.GenericLN;
 import br.com.mauricio.news.ln.MCLIFORLN;
+import br.com.mauricio.news.model.Endereco;
 import br.com.mauricio.news.model.MCLIFOR;
 import br.com.mauricio.news.util.ValidaCNPJ;
 import br.com.mauricio.news.util.ValidaCPF;
 import br.com.mauricio.news.util.VerificaString;
+import br.com.mauricio.news.util.WebServiceCep;
 
 @ManagedBean(name = "cliforBean")
 @ViewScoped
@@ -70,15 +72,16 @@ public class MCliForBean implements Serializable{
     
     private boolean validar() {
     	boolean isValid=true;
-		int tam = clifor.getCgccpf().toString().length();
+    	String tmpCnpjCpf = clifor.getCgccpf().toString();
+		int tam = tmpCnpjCpf.length();
 		if (tam>0 && tam<=11){
-			if(!ValidaCPF.isValidCPF(clifor.getCgccpf().toString())){
+			if(!ValidaCPF.isValidCPF(tmpCnpjCpf)){
 				isValid=false;
 				mensagens("Verifique o CNPJ ou CPF.");
 			}
 		}
-		if (tam>11 && tam<=13){
-			if(!ValidaCNPJ.isValidCNPJ(clifor.getCgccpf().toString())){
+		if (tam>11 && tam<=14){
+			if(!ValidaCNPJ.isValidCNPJ(tmpCnpjCpf)){
 				isValid=false;
 				mensagens("Verifique o CNPJ ou CPF.");
 			}
@@ -106,6 +109,23 @@ public class MCliForBean implements Serializable{
     	}  		
     }
  
+	public void localizaEnderecoPorCep(){
+		Endereco endereco = WebServiceCep.buscaCep(clifor.getEndcep().toString());
+		if(endereco != null){
+			clifor.setEndcep(endereco.getCep());
+			clifor.setEndrua(endereco.getLogradouro());
+			clifor.setEndbai(endereco.getBairro());
+			clifor.setEndcid(endereco.getCidade());
+			clifor.setEndest(endereco.getUf());
+		}else{
+			mensagens("Endereço não localizado.");
+		}
+	}
+	
+	public void onRowSelect(SelectEvent event) {
+		clifor = (MCLIFOR) event.getObject();
+    }
+    
 	public void mensagens(String msg){
         FacesContext context = FacesContext.getCurrentInstance();  	          
         context.addMessage(null, new FacesMessage(msg,msg));  		

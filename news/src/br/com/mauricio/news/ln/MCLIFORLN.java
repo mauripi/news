@@ -39,7 +39,7 @@ public class MCLIFORLN implements Serializable {
 		return results;		
 	}
 	
-	public MCLIFOR findByNomeCnpj(String razao, Long cgccpf){
+	public MCLIFOR findByNomeCnpj(String razao, String cgccpf){
 		MCLIFORDao dao = new MCLIFORDao(manager);
 		return dao.findByNomeCnpj(razao, cgccpf);
 	}

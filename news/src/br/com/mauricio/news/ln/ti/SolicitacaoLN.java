@@ -318,7 +318,7 @@ public class SolicitacaoLN implements Serializable {
 		List<String> dests = new ArrayList<String>();
 		
 		dests.add("afigueredo@recordnews.com.br");
-		dests.add("rramos@recordnews.com.br");
+		dests.add("cmarques@recordnews.com.br");
 		dests.add("jfranca@recordnews.com.br");
 		dests.add("maucruz@news.rederecord.com.br");
 		

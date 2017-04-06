@@ -25,7 +25,7 @@ public class MCLIFORDao {
 		return manager.createQuery(sql).setParameter("dado", "%"+dado+"%").getResultList();
 	}
 	
-	public MCLIFOR findByNomeCnpj(String razao, Long cgccpf){
+	public MCLIFOR findByNomeCnpj(String razao, String cgccpf){
 		MCLIFOR cf;
 		String sql = " FROM mclifor where cgccpf= :cgccpf and nomfan like :razao  ";	
 		cf = (MCLIFOR) manager.createQuery(sql).setParameter("razao", "%"+razao+"%").setParameter("cgccpf", cgccpf).getSingleResult();

@@ -27,10 +27,12 @@ public class LoginDao {
 		  Login lg = null;
 		  int removido = 0;
 		  boolean ativo = true;
-	      Query query = this.manager.createQuery("From login l WHERE l.cpf = :cpf AND l.senha = :senha AND l.removido = :removido AND l.ativo = :ativo order by l.chapa desc" );   
+	      String sql = " From login l WHERE l.cpf = :cpf AND l.senha = :senha AND l.removido =:removido AND l.ativo = :ativo order by l.chapa desc";
+		  Query query = this.manager.createQuery(sql );   
 	      query.setParameter("removido", removido); 
 	      query.setParameter("ativo", ativo); 
-	      query.setParameter("cpf", cpf);   
+	      query.setParameter("cpf", cpf);
+	      
 	      try {
 			query.setParameter("senha", Cripto.criptografa(senha));
 	      } catch (NoSuchAlgorithmException e) {			

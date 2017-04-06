@@ -12,9 +12,8 @@
 <h:head>
 <title><ui:insert name="titulo"></ui:insert></title>
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
-
-<link rel="stylesheet" href="templates/reset.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="templates/style.css" type="text/css" media="screen" />
+<script type="text/javascript" src="js/padraoPtBr.js"></script>
+<link rel="stylesheet" href="templates/rh.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/primefaces.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/showcase.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/form.css" type="text/css" media="screen" />
@@ -83,7 +82,8 @@
         	<p:menuitem value="Em Desenvolvimento"   />
             <p:menuitem value="Contratos" actionListener="#{acessoBean.contrato}" rendered="#{acessoBean.temAcessoContrato}" />
             <p:menuitem value="Visão Gerencial" actionListener="#{acessoBean.contratoVisao}" rendered="false" /> 
-            <p:menuitem value="Clientes/Fornecedores" actionListener="#{acessoBean.cadCliFor}"  disabled="#{!acessoBean.temAcessoFornecedor}" />           
+            <p:menuitem value="Fornecedores" actionListener="#{acessoBean.comprasFornecedor}"  disabled="#{!acessoBean.temAcessoFornecedor}" rendered="false"/>           
+            <p:menuitem value="Clientes" actionListener="#{acessoBean.comprasCliente}" rendered="false" />
             <p:menuitem value="Tipos de Contratos" actionListener="#{acessoBean.comprasTipoContrato}" rendered="#{acessoBean.temAcessoContrato}" />
         </p:submenu> 
         <p:submenu label="Engenharia">
@@ -127,7 +127,7 @@
 	</h:form>    
 	</p:layoutUnit>
 
-	<p:layoutUnit position="center" styleClass="center" style="border:0 !important">
+	<p:layoutUnit position="center" styleClass="center" style="border:0 !important;">
 		<ui:insert name="conteudo"/>
 	</p:layoutUnit>
 	
@@ -147,7 +147,7 @@
 	</p:panelGrid>
 </p:dialog>
 </h:form>      
-<script type="text/javascript" src="js/padraoPtBr.js"></script>
+
 <script type="text/javascript">
 function start() {
     PF('statusDialog').show();

@@ -22,7 +22,7 @@ public class MCLIFOR implements Serializable{
 	private String nomraz;
 	@Column(length=120,nullable=false)
 	private String nomfan;	
-	private Long cgccpf;
+	private String cgccpf;
 	private Integer tippes;//F,J
 	private Integer clifor;//C,F,A
 	@Column(length=100)
@@ -33,14 +33,19 @@ public class MCLIFOR implements Serializable{
 	private String endcpl;
 	@Column(length=100)
 	private String endbai;
+	@Column(length=9)
+	private String endcep;
 	@Column(length=100)
 	private String endcid;
 	@Column(length=2)
 	private String endest;
 	@Column(length=20)
 	private String foncon;
-	private Integer endcep;
-	
+	@Column(length=50)
+	private String nomcon;
+	@Column(length=50)
+	private String emacon;
+
 	public Integer getId() {
 		return id;
 	}
@@ -71,10 +76,10 @@ public class MCLIFOR implements Serializable{
 	public void setNomfan(String nomfan) {
 		this.nomfan = nomfan;
 	}
-	public Long getCgccpf() {
+	public String getCgccpf() {
 		return cgccpf;
 	}
-	public void setCgccpf(Long cgccpf) {
+	public void setCgccpf(String cgccpf) {
 		this.cgccpf = cgccpf;
 	}
 	public Integer getTippes() {
@@ -113,6 +118,12 @@ public class MCLIFOR implements Serializable{
 	public void setEndbai(String endbai) {
 		this.endbai = endbai;
 	}
+	public String getEndcep() {
+		return endcep;
+	}
+	public void setEndcep(String endcep) {
+		this.endcep = endcep;
+	}
 	public String getEndcid() {
 		return endcid;
 	}
@@ -131,18 +142,21 @@ public class MCLIFOR implements Serializable{
 	public void setFoncon(String foncon) {
 		this.foncon = foncon;
 	}
+	public String getNomcon() {
+		return nomcon;
+	}
+	public void setNomcon(String nomcon) {
+		this.nomcon = nomcon;
+	}
+	public String getEmacon() {
+		return emacon;
+	}
+	public void setEmacon(String emacon) {
+		this.emacon = emacon;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	public Integer getEndcep() {
-		return endcep;
-	}
-	public void setEndcep(Integer endcep) {
-		this.endcep = endcep;
-	}
-
-	
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -151,6 +165,7 @@ public class MCLIFOR implements Serializable{
 		result = prime * result + ((clifor == null) ? 0 : clifor.hashCode());
 		result = prime * result + ((codcli == null) ? 0 : codcli.hashCode());
 		result = prime * result + ((codfor == null) ? 0 : codfor.hashCode());
+		result = prime * result + ((emacon == null) ? 0 : emacon.hashCode());
 		result = prime * result + ((endbai == null) ? 0 : endbai.hashCode());
 		result = prime * result + ((endcep == null) ? 0 : endcep.hashCode());
 		result = prime * result + ((endcid == null) ? 0 : endcid.hashCode());
@@ -160,6 +175,7 @@ public class MCLIFOR implements Serializable{
 		result = prime * result + ((endrua == null) ? 0 : endrua.hashCode());
 		result = prime * result + ((foncon == null) ? 0 : foncon.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((nomcon == null) ? 0 : nomcon.hashCode());
 		result = prime * result + ((nomfan == null) ? 0 : nomfan.hashCode());
 		result = prime * result + ((nomraz == null) ? 0 : nomraz.hashCode());
 		result = prime * result + ((tippes == null) ? 0 : tippes.hashCode());
@@ -193,6 +209,11 @@ public class MCLIFOR implements Serializable{
 			if (other.codfor != null)
 				return false;
 		} else if (!codfor.equals(other.codfor))
+			return false;
+		if (emacon == null) {
+			if (other.emacon != null)
+				return false;
+		} else if (!emacon.equals(other.emacon))
 			return false;
 		if (endbai == null) {
 			if (other.endbai != null)
@@ -239,6 +260,11 @@ public class MCLIFOR implements Serializable{
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
+		if (nomcon == null) {
+			if (other.nomcon != null)
+				return false;
+		} else if (!nomcon.equals(other.nomcon))
+			return false;
 		if (nomfan == null) {
 			if (other.nomfan != null)
 				return false;
@@ -256,5 +282,4 @@ public class MCLIFOR implements Serializable{
 			return false;
 		return true;
 	}
-
 }

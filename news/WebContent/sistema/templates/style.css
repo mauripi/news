@@ -32,8 +32,8 @@ background: #DFE4E6 !important;*/
 
 
 .center .ui-layout-unit-content{
-   background-image:url('news2.jpg');
-   background-size: 100% 100%;
+   /*background-image:url('news2.jpg');
+   background-size: 100% 100%;*/
 }
 
 .norte .ui-layout-unit-content{
@@ -42,7 +42,7 @@ background: #DFE4E6 !important;*/
 }
 
 .ui-widget,.ui-widget .ui-widget {
-font-size: small !important;
+font-size: 0.95em !important;
 
 }
 

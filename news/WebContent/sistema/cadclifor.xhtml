@@ -29,45 +29,63 @@
     </h:head>
      
     <h:body>
-        <h:form id="formCadCliFor">
-	        <p:panel>
-				<p:panelGrid columns="2" style="border: none !important; ">
-					<p:outputLabel value="Registro:"/>
-					<p:outputLabel value="#{cliforBean.clifor.id}"/>	
-					<p:outputLabel value="Tipo:"/>
-			        <p:selectOneMenu id="tipo" value="#{cliforBean.clifor.clifor}">
-			            <f:selectItem itemLabel="Ambos" itemValue="0" />
-			            <f:selectItem itemLabel="Cliente" itemValue="1" />
-			            <f:selectItem itemLabel="Fornecedor" itemValue="2" />
-			        </p:selectOneMenu>
-			        
-					<p:outputLabel value="Nome:"/>
-					<p:inputText id="nome" value="#{cliforBean.clifor.nomfan}" placeholder="Nome Fantasia" maxlength="100" size="50" required="true" requiredMessage="Informe o nome"/>
-					<p:outputLabel value="CNPJ CPF:"/>
-				    <p:inputMask id="cnpj_cpf" mask="9?9999999999999" value="#{cliforBean.clifor.cgccpf}"  type="number" placeholder="Informe o cnpj ou cpf"  />
-	
-					<p:outputLabel value="Rua:"/>
-					<p:inputText value="#{cliforBean.clifor.endrua}" placeholder="Rua/Avenida" maxlength="100" size="50"/>
-					<p:outputLabel value="Número:"/>
-					<p:inputText value="#{cliforBean.clifor.endnum}" placeholder="Número" maxlength="10" size="6"/>
-					<p:outputLabel value="Complemento:"/>
-					<p:inputText value="#{cliforBean.clifor.endcpl}" placeholder="Complemento Endereço" maxlength="100" />				
-					<p:outputLabel value="Bairro:"/>
-					<p:inputText id="bairro" value="#{cliforBean.clifor.endbai}" placeholder="Bairro" maxlength="100" size="30"/>	
-					<p:outputLabel value="Cidade:"/>
-					<p:inputText id="cidade" value="#{cliforBean.clifor.endcid}" placeholder="Cidade" maxlength="100" size="30"/>				
-					<p:outputLabel value="UF:"/>
-					<p:inputText id="uf" value="#{cliforBean.clifor.endest}" placeholder="UF" maxlength="2" size="4"/>							
-					<p:outputLabel value="CEP:"/>
-				    <p:inputMask id="cep" mask="99999999" value="#{cliforBean.clifor.endcep}"  type="number" placeholder="Informe o CEPf" size="8" />						    
-				</p:panelGrid>
-				    <f:facet name="footer">
-				    	<p:panelGrid columns="2">
-				    		<p:commandButton value="Salvar" actionListener="#{cliforBean.salvarCadCliForFromDialog}" update=":formMsg"/>
-				    		<p:commandButton value="Cancelar" actionListener="#{cliforBean.cancelCadCliForFromDialog}"/>
-				    	</p:panelGrid>
-				    </f:facet>						
-			</p:panel>	
+        <h:form id="formCadCliFor">       
+		    <p:tabView>
+		        <p:tab title="Geral">
+						<p:panelGrid columns="2" style="border: none !important; ">
+							<p:outputLabel value="Registro:"/>
+							<p:outputLabel value="#{cliforBean.clifor.id}"/>	
+							<p:outputLabel value="Tipo:"/>
+					        <p:selectOneMenu id="tipo" value="#{cliforBean.clifor.clifor}">
+					            <f:selectItem itemLabel="Ambos" itemValue="0" />
+					            <f:selectItem itemLabel="Cliente" itemValue="1" />
+					            <f:selectItem itemLabel="Fornecedor" itemValue="2" />
+					        </p:selectOneMenu>
+					        
+							<p:outputLabel value="Razão:"/>
+							<p:inputText id="nome" value="#{cliforBean.clifor.nomfan}" placeholder="Nome Fantasia" maxlength="100" size="50" required="true" requiredMessage="Informe o nome da empresa"/>
+							<p:outputLabel value="CNPJ CPF:"/>
+						    <p:inputText id="cnpj_cpf"  value="#{cliforBean.clifor.cgccpf}" placeholder="Informe o cnpj ou cpf"  />
+							<p:outputLabel value="Contato:"/>
+							<p:inputText id="contato" value="#{cliforBean.clifor.nomcon}" placeholder="Nome Contato" maxlength="50" size="50" />
+							<p:outputLabel value="Fone Contato:"/>
+							<p:inputText id="fone" value="#{cliforBean.clifor.foncon}" placeholder="Fone Contato" maxlength="20" size="20" />
+							<p:outputLabel value="Email Contato:"/>
+							<p:inputText id="email" value="#{cliforBean.clifor.emacon}" placeholder="E-mail Contato" maxlength="50" size="50"/>
+						</p:panelGrid>
+		
+		        </p:tab>
+		        <p:tab title="Endereço">
+						<p:panelGrid columns="2" style="border: none !important; ">
+							<p:outputLabel value="CEP:"/>
+							<p:panelGrid columns="2" style="border: none !important; ">    
+							    <p:inputMask id="cep" mask="99999-999" value="#{cliforBean.clifor.endcep}" placeholder="CEP" size="9" />
+							    <p:commandButton icon="ui-icon-search" action="#{cliforBean.localizaEnderecoPorCep}" update=":formCadCliFor, :formMsg"/>
+							</p:panelGrid>		
+							<p:outputLabel value="Rua:"/>
+							<p:inputText value="#{cliforBean.clifor.endrua}" placeholder="Rua/Avenida" maxlength="100" size="50"/>
+							<p:outputLabel value="Número:"/>
+							<p:inputText value="#{cliforBean.clifor.endnum}" placeholder="Número" maxlength="10" size="6"/>
+							<p:outputLabel value="Complemento:"/>
+							<p:inputText value="#{cliforBean.clifor.endcpl}" placeholder="Complemento Endereço" maxlength="100" />				
+							<p:outputLabel value="Bairro:"/>
+							<p:inputText id="bairro" value="#{cliforBean.clifor.endbai}" placeholder="Bairro" maxlength="100" size="30"/>	
+							<p:outputLabel value="Cidade:"/>
+							<p:inputText id="cidade" value="#{cliforBean.clifor.endcid}" placeholder="Cidade" maxlength="100" size="30"/>				
+							<p:outputLabel value="UF:"/>
+							<p:inputText id="uf" value="#{cliforBean.clifor.endest}" placeholder="UF" maxlength="2" size="4"/>							
+							    
+						</p:panelGrid>
+		
+		        </p:tab>
+
+			</p:tabView> 
+
+	    	<p:panelGrid columns="2">
+	    		<p:commandButton value="Salvar" actionListener="#{cliforBean.salvarCadCliForFromDialog}" update=":formMsg"/>
+	    		<p:commandButton value="Cancelar" actionListener="#{cliforBean.cancelCadCliForFromDialog}"/>
+	    	</p:panelGrid>
+					
         </h:form>
     </h:body>
  

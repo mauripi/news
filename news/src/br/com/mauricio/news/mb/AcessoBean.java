@@ -76,7 +76,7 @@ public class AcessoBean implements Serializable {
 	public void entrar() throws IOException{
 		FacesContext cx = FacesContext.getCurrentInstance();
 	    HttpSession sessao = (HttpSession) cx.getExternalContext().getSession(false);
-
+	    ln = new LoginLN();
 		Boolean permissao=ln.autorizaLogin(this.login.getCpf(), this.login.getSenha());
 		if(permissao==false){
 			msg="Acesso Negado."; 
@@ -383,12 +383,12 @@ public class AcessoBean implements Serializable {
 		}
 	}
 	
-	public void comprasFornecedor() throws IOException{
+	public void cadCliFor() throws IOException{
 		if (this.login.getId()==null){
 			sair();
 		}else{
 			FacesContext cx = FacesContext.getCurrentInstance();
-			cx.getExternalContext().redirect("fornecedor.jsf");	
+			cx.getExternalContext().redirect("clifor.jsf");	
 		}
 	}
 

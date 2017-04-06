@@ -36,21 +36,21 @@
         	<p:ajax event="rowSelect" listener="#{contratoMB.onRowSelect}" update=":formMsg,:formCad" 
         			oncomplete="PF('dgCad').show();"/>
 
-	       <p:column headerText="Nº" width="6%">
+	       <p:column headerText="Nº"  width="32px;">
 	            <h:outputText value="#{c.id}" />
 	       </p:column>	 
-	       <p:column headerText="Tipo" width="20%">
-	            <h:outputText value="#{c.tipocontrato.descricao}" />
-	       </p:column>	 	       	
-	       <p:column headerText="Origem" width="6%">
+	       <p:column headerText="Objeto" width="30%">
+	            <h:outputText value="#{c.objeto}" />
+	       </p:column>	        	       	
+	       <p:column headerText="Origem" width="40px;">
 	            <h:outputText value="#{c.origem eq 'C' ?  'Compra' : 'Venda'}" />
 	       </p:column>	
-	        <p:column headerText="Início Vigênc." style="width:12%;">
+	        <p:column headerText="Início Vigênc." width="60px;">
               <h:outputText value="#{c.inicio}">
 				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 			  </h:outputText>
             </p:column>		       
-	        <p:column headerText="Fim Vigênc." style="width:12%;">
+	        <p:column headerText="Fim Vigênc." width="60px;">
               <h:outputText value="#{c.fim}">
 				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 			  </h:outputText>
@@ -58,14 +58,14 @@
 	       <p:column headerText="Cliente / Fornecedor" width="25%">
 	            <h:outputText value="#{c.mclifor.nomfan}" />
 	       </p:column>	   
-	       <p:column headerText="Objeto" width="30%">
-	            <h:outputText value="#{c.objeto}" />
-	       </p:column>		           		
+	       <p:column headerText="Tipo" width="100px;">
+	            <h:outputText value="#{c.tipocontrato.descricao}" />
+	       </p:column>			           		
 	    </p:dataTable>
 	</h:form>
 </p:panel>	
 
-<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" >
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" width="800">
 
 	<h:form id="formCad">
 		<p:panel>
@@ -118,18 +118,17 @@
 					<p:panel>
 						<p:commandButton value="Adicionar" icon="ui-icon-extlink" onclick="PF('upl').show()" />
 						<p></p>
-					    <p:dataList value="#{contratoMB.anexos}" var="a" type="unordered" itemType="none" emptyMessage=""
-					    			paginatorPosition="bottom" paginator="true" rows="10" styleClass="paginated">
-					        <f:facet name="header">
-					            Documentos
-					        </f:facet>
-					        <p:commandLink update=":formD" oncomplete="PF('anx').show()" title="Mostrar" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:10px">
-					            <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
-					            <h:outputText value="#{a}" />
-					        </p:commandLink>
-					        <h:outputText value="#{a}" style="display:inline-block"/>
-					    </p:dataList>						
-
+					    <p:dataTable var="a" value="#{contratoMB.anexos}" emptyMessage=""  resizableColumns="true" liveResize="true"
+										    			paginatorPosition="bottom" paginator="true" rows="10" >
+					        <p:column headerText="Documento">
+					            <h:outputText value="#{a}" style="width:32px;text-align: center"/>
+					        </p:column>
+					        <p:column style="width:32px;text-align: center">
+					             <p:commandButton update=":formCad" oncomplete="PF('anx').show()" title="Mostrar" icon="ui-icon-search" >
+					                <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
+					            </p:commandButton>
+					        </p:column>
+					    </p:dataTable>
 				    </p:panel>
 		        </p:tab>	
 				
@@ -161,23 +160,28 @@
 							<p:outputLabel value="Mensagem :"/>	
 							<p:inputTextarea maxlength="300" rows="2" value="#{contratoMB.contrato.mensagemEmail}"  disabled="#{contratoMB.controlaCadastro eq 0}"/>													        	
 				        </p:panelGrid>	
-						<p:inputText id="eml" size="30" value="#{contratoMB.emailAgendamento}" placeholder="Digite aqui o e-mail"  disabled="#{contratoMB.controlaCadastro eq 0 or contratoMB.contrato.diasAviso eq null}"/>
+				        
+				        <p:autoComplete  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}"  disabled="#{contratoMB.controlaCadastro eq 0 or contratoMB.contrato.diasAviso eq null}"
+			                        var="e" itemLabel="#{e}" itemValue="#{e}" forceSelection="true" />
+
 						<p:commandButton id="cmdeml" value="Incluir" update=":formCad" action="#{contratoMB.addEmail}" disabled="#{contratoMB.contrato.diasAviso eq null}"/>
-					    <p:dataList id="emlst" value="#{contratoMB.emails}" var="e"  type="unordered" itemType="none" 
-					    	paginator="true" rows="10" styleClass="paginated" paginatorPosition="bottom" emptyMessage="">
+
+					    <p:dataTable id="emlst" value="#{contratoMB.emails}" var="e"  emptyMessage=""  style="width:70%;" 
+										    	   		paginatorPosition="bottom" paginator="true" rows="5" >
 					        <f:facet name="header">
 					            Enviar email para:
 					        </f:facet>
-					        <p:column>
+					        <p:column style="width:90%">
 					        	<h:outputText value="#{e}" style="display:inline-block"/>
 					        </p:column>
-					        <p:column>
-						        <p:commandLink update=":formCad"  title="Remover" styleClass="ui-icon ui-icon-trash" style="float:left;margin-right:10px">
+					        <p:column style="width:10%;">
+						        <p:commandLink update=":formCad"  title="Remover" styleClass="ui-icon ui-icon-trash" >
 						        	<p:collector value="#{e}" removeFrom="#{contratoMB.emails}" unique="true"/>
 						            <h:outputText value="#{e}" />
 						        </p:commandLink>					        
-					        </p:column>			        
-					    </p:dataList >																        							          						        
+					        </p:column>	
+					    </p:dataTable>
+																        							          						        
 		            </p:panel>		            
 		        </p:tab>
 

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS</ui:define>
+<ui:define name="conteudo">
+<f:facet name="header">Clientes / Fornecedores</f:facet>
+
+<p:panel>
+	<h:form id="formtb">	
+  			
+	    <p:dataTable id="tb" var="c" value="#{cliforBean.allCliFor}"   
+	    	selectionMode="single" selection="#{cliforBean.clifor}" rowKey="#{c}" emptyMessage="">
+
+        	<p:ajax event="rowSelect" listener="#{cliforBean.onRowSelect}"  update=":formMsg,:formCad" 
+        			oncomplete="PF('dgCad').show();"/>
+
+	       <p:column headerText="Nº" width="6%">
+	            <h:outputText value="#{c.id}" />
+	       </p:column>	 
+           		
+	    </p:dataTable>
+	</h:form>
+</p:panel>	
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro Cliente/Fornecedor" resizable="false" >
+
+	<h:form id="formCad">
+	    <p:tabView>
+	        <p:tab title="Geral">
+					<p:panelGrid columns="2" style="border: none !important; ">
+						<p:outputLabel value="Registro:"/>
+						<p:outputLabel value="#{cliforBean.clifor.id}"/>	
+						<p:outputLabel value="Tipo:"/>
+				        <p:selectOneMenu id="tipo" value="#{cliforBean.clifor.clifor}">
+				            <f:selectItem itemLabel="Ambos" itemValue="0" />
+				            <f:selectItem itemLabel="Cliente" itemValue="1" />
+				            <f:selectItem itemLabel="Fornecedor" itemValue="2" />
+				        </p:selectOneMenu>
+				        
+						<p:outputLabel value="Razão:"/>
+						<p:inputText id="nome" value="#{cliforBean.clifor.nomfan}" placeholder="Nome Fantasia" maxlength="100" size="50" required="true" requiredMessage="Informe o nome da empresa"/>
+						<p:outputLabel value="CNPJ CPF:"/>
+					    <p:inputText id="cnpj_cpf"  value="#{cliforBean.clifor.cgccpf}" placeholder="Informe o cnpj ou cpf"  />
+						<p:outputLabel value="Contato:"/>
+						<p:inputText id="contato" value="#{cliforBean.clifor.nomcon}" placeholder="Nome Contato" maxlength="50" size="50" />
+						<p:outputLabel value="Fone Contato:"/>
+						<p:inputText id="fone" value="#{cliforBean.clifor.foncon}" placeholder="Fone Contato" maxlength="20" size="20" />
+						<p:outputLabel value="Email Contato:"/>
+						<p:inputText id="email" value="#{cliforBean.clifor.emacon}" placeholder="E-mail Contato" maxlength="50" size="50"/>
+					</p:panelGrid>
+	
+	        </p:tab>
+	        <p:tab title="Endereço">
+					<p:panelGrid columns="2" style="border: none !important; ">
+						<p:outputLabel value="CEP:"/>
+						<p:panelGrid columns="2" style="border: none !important; ">    
+						    <p:inputMask id="cep" mask="99999-999" value="#{cliforBean.clifor.endcep}" placeholder="CEP" size="9" />
+						    <p:commandButton icon="ui-icon-search" action="#{cliforBean.localizaEnderecoPorCep}" update=":formCad, :formMsg"/>
+						</p:panelGrid>		
+						<p:outputLabel value="Rua:"/>
+						<p:inputText value="#{cliforBean.clifor.endrua}" placeholder="Rua/Avenida" maxlength="100" size="50"/>
+						<p:outputLabel value="Número:"/>
+						<p:inputText value="#{cliforBean.clifor.endnum}" placeholder="Número" maxlength="10" size="6"/>
+						<p:outputLabel value="Complemento:"/>
+						<p:inputText value="#{cliforBean.clifor.endcpl}" placeholder="Complemento Endereço" maxlength="100" />				
+						<p:outputLabel value="Bairro:"/>
+						<p:inputText id="bairro" value="#{cliforBean.clifor.endbai}" placeholder="Bairro" maxlength="100" size="30"/>	
+						<p:outputLabel value="Cidade:"/>
+						<p:inputText id="cidade" value="#{cliforBean.clifor.endcid}" placeholder="Cidade" maxlength="100" size="30"/>				
+						<p:outputLabel value="UF:"/>
+						<p:inputText id="uf" value="#{cliforBean.clifor.endest}" placeholder="UF" maxlength="2" size="4"/>							
+						    
+					</p:panelGrid>
+	
+	        </p:tab>
+
+		</p:tabView> 
+
+    	<p:panelGrid columns="2">
+    		<p:commandButton value="Salvar" actionListener="#{cliforBean.salvarCadCliForFromDialog}" update=":formMsg"/>
+    		<p:commandButton value="Cancelar" actionListener="#{cliforBean.cancelCadCliForFromDialog}"/>
+    	</p:panelGrid>
+				
+  	</h:form>
+
+</p:dialog>	
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+
+<script type="text/javascript">
+function start() {
+    PF('statusDialog').show();
+}
+ 
+function stop() {
+    PF('statusDialog').hide();
+}
+</script>
+</h:body>	
+
+</html>

@@ -1,9 +1,11 @@
 package br.com.mauricio.news.dao;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
-
 import br.com.mauricio.news.model.Contrato;
 
 public class ContratoDao {
@@ -40,5 +42,19 @@ public class ContratoDao {
 		//this.manager.createNativeQuery(" delete from contrato where id= :id").setParameter("id", c.getId()).executeUpdate();		
 	}
 	
-	
+	public List<String> emailsCadastrados(){
+		String sql = "SELECT emailsAviso FROM contrato";
+		@SuppressWarnings("unchecked")
+		List<String> list = this.manager.createNativeQuery(sql).getResultList();
+		Set<String> emails = new HashSet<String>();
+		for(String o:list){
+			if(o!=null){
+				String e[] = o.split(",");
+				for(String x:e)
+					if(x!=",") emails.add(x);				
+			}
+		}
+		List<String> all = new ArrayList<String>(emails);
+		return all;	
+	}
 }
