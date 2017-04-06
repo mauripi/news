@@ -59,7 +59,6 @@ public class BaixaBemLN implements Serializable {
 		List<String> destinatarios = new ArrayList<String>();
 		destinatarios.add("acorrea@recordnews.com.br");
 		destinatarios.add("flettieri@recordnews.com.br");
-		destinatarios.add("aarias@recordnews.com.br");
 		if(ValidaEmail.validar(bem.getSolicitante().getEmail()))
 			destinatarios.add(bem.getSolicitante().getEmail());
 		List<File> anexos = new ArrayList<File>();
@@ -93,7 +92,6 @@ public class BaixaBemLN implements Serializable {
 		List<String> destinatarios = new ArrayList<String>();
 		destinatarios.add("acorrea@recordnews.com.br");
 		destinatarios.add("flettieri@recordnews.com.br");
-		destinatarios.add("aarias@recordnews.com.br");
 		if(ValidaEmail.validar(bem.getSolicitante().getEmail()))
 			destinatarios.add(bem.getSolicitante().getEmail());
 		

@@ -10,7 +10,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -49,8 +48,6 @@ public class ContratoBean implements Serializable {
 	private List<String> emails;
 	private String emailAgendamento;
 	private boolean skip;
-    @ManagedProperty("#{mcliforService}")
-    private MCLIFORService service;
 	private MCLIFOR mclifor;	
 	private List<String> anexos;
 	private String anexo;
@@ -187,7 +184,8 @@ public class ContratoBean implements Serializable {
     
     
     public List<MCLIFOR> completeCliFor(String query) {
-        List<MCLIFOR> allCliFor = service.getAllCliFor();
+    	GenericLN<MCLIFOR> gln = new GenericLN<MCLIFOR>();
+    	List<MCLIFOR> allCliFor=gln.listWithoutRemoved("mclifor", "nomfan");
         List<MCLIFOR> filteredCliFor = new ArrayList<MCLIFOR>();
         for (int i = 0; i < allCliFor.size(); i++) {
         	MCLIFOR skin = allCliFor.get(i);
@@ -388,10 +386,6 @@ public class ContratoBean implements Serializable {
 
 	public void setTipoContrato(TipoContrato tipoContrato) {
 		this.tipoContrato = tipoContrato;
-	}
-
-	public void setService(MCLIFORService service) {
-		this.service = service;
 	}
 
 	public boolean isSkip() {

@@ -108,8 +108,11 @@
 							<h:outputLabel for="dtif" value="Data Término:"/>		        
 							<p:calendar id="dtif" value="#{contratoMB.contrato.fim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" mindate="#{contratoMB.contrato.inicio}"
 								 disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato"/>								
+							<p:outputLabel value="Responsável:"/>
+							<p:inputText id="resp" value="#{contratoMB.contrato.responsavel}" placeholder="Responsavel do contrato" size="60" disabled="#{contratoMB.controlaCadastro eq 0}"/>
 					        <p:outputLabel value="Contrato Ativo:"/>
 					        <p:selectBooleanCheckbox value="#{contratoMB.contrato.ativo}"  disabled="#{contratoMB.controlaCadastro eq 0}"/>								
+						
 						</p:panelGrid>
 		            </p:panel>
 		        </p:tab>	

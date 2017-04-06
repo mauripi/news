@@ -72,7 +72,6 @@ public class MovimentoBemLN implements Serializable {
 		
 		destinatarios.add("acorrea@recordnews.com.br");
 		destinatarios.add("flettieri@recordnews.com.br");
-		destinatarios.add("aarias@recordnews.com.br");
 	
 		if(ValidaEmail.validar(m.getSolicitante().getEmail()))
 			destinatarios.add(m.getSolicitante().getEmail());
@@ -139,7 +138,6 @@ public class MovimentoBemLN implements Serializable {
 		List<String> destinatarios = new ArrayList<String>();
 		destinatarios.add("acorrea@recordnews.com.br");
 		destinatarios.add("flettieri@recordnews.com.br");
-		destinatarios.add("aarias@recordnews.com.br");
 		if(ValidaEmail.validar(m.getSolicitante().getEmail()))
 			destinatarios.add(m.getSolicitante().getEmail());
 		List<File> anexos = new ArrayList<File>();

@@ -30,10 +30,29 @@
         	<p:ajax event="rowSelect" listener="#{cliforBean.onRowSelect}"  update=":formMsg,:formCad" 
         			oncomplete="PF('dgCad').show();"/>
 
-	       <p:column headerText="Nº" width="6%">
+	       <p:column headerText="Registro" width="32px;">
 	            <h:outputText value="#{c.id}" />
 	       </p:column>	 
-           		
+	       <p:column headerText="Razão" width="6%">
+	            <h:outputText value="#{c.nomfan}" />
+	       </p:column>	      
+	       <p:column headerText="CPF-CNPJ" width="50px;">
+	            <h:outputText value="#{c.cgccpf}" />
+	       </p:column>	  	       
+	       <p:column headerText="Contato" width="6%">
+	            <h:outputText value="#{c.nomcon}" />
+	       </p:column>	  	       
+	       <p:column headerText="Fone" width="40px;">
+	            <h:outputText value="#{c.foncon}" />
+	       </p:column>	  	       
+	       <p:column headerText="Email" width="6%">
+	            <h:outputText value="#{c.emacon}" />
+	       </p:column>		       
+	       <p:column style="width:32px;text-align: center">
+	            <p:commandButton update=":formtb,:formCad,:formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+	                <f:setPropertyActionListener value="#{c}" target="#{cliforBean.clifor}" />
+	            </p:commandButton>
+	       </p:column>	            		
 	    </p:dataTable>
 	</h:form>
 </p:panel>	
@@ -93,13 +112,29 @@
 		</p:tabView> 
 
     	<p:panelGrid columns="2">
-    		<p:commandButton value="Salvar" actionListener="#{cliforBean.salvarCadCliForFromDialog}" update=":formMsg"/>
-    		<p:commandButton value="Cancelar" actionListener="#{cliforBean.cancelCadCliForFromDialog}"/>
+    		<p:commandButton value="Salvar" actionListener="#{cliforBean.salvarAtualizar}" update=":formMsg,:formCad,:formtb" />
+    		<p:commandButton value="Cancelar" actionListener="#{cliforBean.init}" update=":formMsg,:formCad,:formtb" oncomplete="PF('dgCad').hide()"/>
     	</p:panelGrid>
 				
   	</h:form>
 
 </p:dialog>	
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão de Cliente/Fornecedor" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<span>Tem certeza que quer excluir o registro #{cliforBean.clifor.id} - #{cliforBean.clifor.nomfan}?</span>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{cliforBean.excluir}" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
+
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="8000"/> 
 </h:form>

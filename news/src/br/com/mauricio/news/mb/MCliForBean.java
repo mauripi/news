@@ -3,10 +3,10 @@ package br.com.mauricio.news.mb;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -19,6 +19,7 @@ import br.com.mauricio.news.model.Endereco;
 import br.com.mauricio.news.model.MCLIFOR;
 import br.com.mauricio.news.util.ValidaCNPJ;
 import br.com.mauricio.news.util.ValidaCPF;
+import br.com.mauricio.news.util.ValidaEmail;
 import br.com.mauricio.news.util.VerificaString;
 import br.com.mauricio.news.util.WebServiceCep;
 
@@ -29,16 +30,19 @@ public class MCliForBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private List<MCLIFOR> allCliFor = new ArrayList<MCLIFOR>();
 	private MCLIFOR clifor;
-    @ManagedProperty("#{mcliforService}")
-    private MCLIFORService service;	
     
     @PostConstruct
     public void init() {
-    	allCliFor = service.getAllCliFor();
+    	listarCliFor();
     	clifor = new MCLIFOR();
     }
     
-    public List<MCLIFOR> completeCliFor(String query) {       
+    private void listarCliFor(){
+		GenericLN<MCLIFOR> gln = new GenericLN<MCLIFOR>();
+		allCliFor=gln.listWithoutRemoved("mclifor", "nomfan");
+    }
+    
+     public List<MCLIFOR> completeCliFor(String query) {       
         List<MCLIFOR> filteredCliFor = new ArrayList<MCLIFOR>();
          
         for (int i = 0; i < allCliFor.size(); i++) {
@@ -65,7 +69,6 @@ public class MCliForBean implements Serializable{
     public void salvarCadCliForFromDialog() {
     	if(validar()){
 	    	gravar();
-	    	service.init();
 	        RequestContext.getCurrentInstance().closeDialog(findCliFor());
     	}
     }     
@@ -92,6 +95,12 @@ public class MCliForBean implements Serializable{
 		}else{
 			clifor.setNomraz(clifor.getNomfan());
 		}
+		if(clifor.getEmacon().length()>0){
+			if(!ValidaEmail.validar(clifor.getEmacon())){
+				isValid=false;
+				mensagens("E-mail inválido.");
+			}
+		}
 		return isValid;
 	}
 
@@ -100,15 +109,31 @@ public class MCliForBean implements Serializable{
     	return ln.findByNomeCnpj(clifor.getNomfan(), clifor.getCgccpf());
     }
     
-	private void gravar(){
-    	GenericLN<MCLIFOR> gln = new GenericLN<MCLIFOR>();
+	public void gravar(){
+		GenericLN<MCLIFOR> gln = new GenericLN<MCLIFOR>();
     	if(clifor.getId()!=null){
-    		gln.add(clifor);
-    	}else{
     		gln.update(clifor);
-    	}  		
+    	}else{
+    		gln.add(clifor);
+    	}
+    	listarCliFor();
     }
- 
+
+	public void excluir(){
+		GenericLN<MCLIFOR> gln = new GenericLN<MCLIFOR>();
+		mensagens(gln.remove(gln.find(new MCLIFOR(), clifor.getId())));
+		listarCliFor();
+    }
+	
+	public void salvarAtualizar(){
+		RequestContext request = RequestContext.getCurrentInstance();
+		if(validar()){
+	    	gravar();
+	    	request.execute("PF('dgCad').hide()");  
+	    	mensagens("Gravado com sucesso");
+		}
+	}
+	
 	public void localizaEnderecoPorCep(){
 		Endereco endereco = WebServiceCep.buscaCep(clifor.getEndcep().toString());
 		if(endereco != null){
@@ -143,8 +168,6 @@ public class MCliForBean implements Serializable{
 	public void setClifor(MCLIFOR clifor) {
 		this.clifor = clifor;
 	}
-	public void setService(MCLIFORService service) {
-		this.service = service;
-	}
+
 
 }

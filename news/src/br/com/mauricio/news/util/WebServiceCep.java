@@ -435,8 +435,7 @@ public final class WebServiceCep {
 			webServiceCep = searchCep(cep);
 		}else{
 			webServiceCep = searchCep(cep);			
-		}
-System.out.println(cep);		
+		}	
 		Endereco endereco;
 		if (webServiceCep.wasSuccessful()) {
 			endereco = new Endereco(webServiceCep.getCep(),webServiceCep.getLogradouroFull(),
