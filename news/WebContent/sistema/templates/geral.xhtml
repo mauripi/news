@@ -45,7 +45,7 @@
 	<p:layoutUnit position="west" styleClass="west" style="border:0 !important" size="220" >
 	<h:form>
 
-    <p:panelMenu style="width:300px">
+    <p:panelMenu style="width:300px;font-size:95% !important;">
         <p:submenu label="Geral">
             <p:menuitem value="Home" actionListener="#{acessoBean.home}"  />
             <p:menuitem value="Help Desk" actionListener="#{acessoBean.chamado}" />
@@ -80,7 +80,6 @@
             <p:menuitem value="Consolidado" actionListener="#{acessoBean.controleConsolidado}"  disabled="#{!acessoBean.temAcessoControletConsolidado}" rendered="#{acessoBean.temAcessoControletConsolidado}"/>           
         </p:submenu>           
         <p:submenu label="Compras">
-        	<p:menuitem value="Em Desenvolvimento"   />
             <p:menuitem value="Contratos" actionListener="#{acessoBean.contrato}" rendered="#{acessoBean.temAcessoContrato}" />
             <p:menuitem value="Visão Gerencial" actionListener="#{acessoBean.contratoVisao}" rendered="false" /> 
             <p:menuitem value="Clientes/Fornecedores" actionListener="#{acessoBean.cadCliFor}"  disabled="#{!acessoBean.temAcessoFornecedor}" />           

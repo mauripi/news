@@ -24,16 +24,16 @@
 <p:panel>
 	<h:form id="formtb">	
   			
-	    <p:dataTable id="tb" var="c" value="#{cliforBean.allCliFor}"   
+	    <p:dataTable id="tb" var="c" value="#{cliforBean.allCliFor}"  rows="15" paginator="true" paginatorPosition="bottom"  
 	    	selectionMode="single" selection="#{cliforBean.clifor}" rowKey="#{c}" emptyMessage="">
 
         	<p:ajax event="rowSelect" listener="#{cliforBean.onRowSelect}"  update=":formMsg,:formCad" 
         			oncomplete="PF('dgCad').show();"/>
 
-	       <p:column headerText="Registro" width="32px;">
+	       <p:column headerText="Registro" width="32px;" sortBy="#{c.id}">
 	            <h:outputText value="#{c.id}" />
 	       </p:column>	 
-	       <p:column headerText="Razão" width="6%">
+	       <p:column headerText="Razão" width="6%" filterBy="#{c.nomfan}"  filterMatchMode="contains"  sortBy="#{c.nomfan}">
 	            <h:outputText value="#{c.nomfan}" />
 	       </p:column>	      
 	       <p:column headerText="CPF-CNPJ" width="50px;">
@@ -89,7 +89,7 @@
 					<p:panelGrid columns="2" style="border: none !important; ">
 						<p:outputLabel value="CEP:"/>
 						<p:panelGrid columns="2" style="border: none !important; ">    
-						    <p:inputMask id="cep" mask="99999-999" value="#{cliforBean.clifor.endcep}" placeholder="CEP" size="9" />
+						    <p:inputText id="cep"  value="#{cliforBean.clifor.endcep}" placeholder="CEP" size="9" />
 						    <p:commandButton icon="ui-icon-search" action="#{cliforBean.localizaEnderecoPorCep}" update=":formCad, :formMsg"/>
 						</p:panelGrid>		
 						<p:outputLabel value="Rua:"/>

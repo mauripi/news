@@ -15,8 +15,8 @@
 }
 
 .ui-layout-unit-content{
-	/*background-image:url('news2.jpg');
-background: #DFE4E6 !important;*/
+	/*background-image:url('news2.jpg');*/
+	background: #DFE4E6 !important;
 }
 
 .ui-layout-west {
@@ -42,10 +42,11 @@ background: #DFE4E6 !important;*/
 }
 
 .ui-widget,.ui-widget .ui-widget {
-font-size: 0.95em !important;
-
+	font-size: 95% !important;
 }
-
+.ui-panelmenu .ui-menuitem-link {
+	font-size: 85% !important;
+}
 .ui-datatable {
     display: table;
 }

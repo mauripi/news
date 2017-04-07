@@ -52,6 +52,7 @@ public class ContratoBean implements Serializable {
 	private List<String> anexos;
 	private String anexo;
 	private List<String> allEmailsCadastrados = new ArrayList<String>();
+	private String pathPdfAnexo="";
 	
 	@PostConstruct
 	public void init(){
@@ -155,6 +156,11 @@ public class ContratoBean implements Serializable {
 		edita();
 	}
 
+	public void montaCaminho(){
+		pathPdfAnexo = ""+contrato.getId()+"/"+anexo;
+		System.out.println(pathPdfAnexo);
+	}
+	
     public void onRowSelect(SelectEvent event) {
         contrato = (Contrato) event.getObject(); 
         stringToList();
@@ -181,8 +187,7 @@ public class ContratoBean implements Serializable {
     	}
     	*/
     }
-    
-    
+        
     public List<MCLIFOR> completeCliFor(String query) {
     	GenericLN<MCLIFOR> gln = new GenericLN<MCLIFOR>();
     	List<MCLIFOR> allCliFor=gln.listWithoutRemoved("mclifor", "nomfan");
@@ -442,6 +447,14 @@ public class ContratoBean implements Serializable {
 
 	public void setAllEmailsCadastrados(List<String> allEmailsCadastrados) {
 		this.allEmailsCadastrados = allEmailsCadastrados;
+	}
+
+	public String getPathPdfAnexo() {
+		return pathPdfAnexo;
+	}
+
+	public void setPathPdfAnexo(String pathPdfAnexo) {
+		this.pathPdfAnexo = pathPdfAnexo;
 	}
 
 }

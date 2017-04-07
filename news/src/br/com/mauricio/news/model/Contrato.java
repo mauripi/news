@@ -49,12 +49,15 @@ public class Contrato implements Serializable{
 	@JoinColumn(name="mclifor_id")
 	private MCLIFOR mclifor;
 	private Integer diasAviso;
+	private Integer avigpm;
 	private Integer repetirAviso;
 	private String assuntoEmail;
 	private String mensagemEmail;
 	private String emailsAviso;
 	@Column(length=40)
 	private String responsavel;
+	@Column(length=1000)
+	private String observacao;
 
 	
 	public Integer getId() {
@@ -135,6 +138,12 @@ public class Contrato implements Serializable{
 	public void setDiasAviso(Integer diasAviso) {
 		this.diasAviso = diasAviso;
 	}
+	public Integer getAvigpm() {
+		return avigpm;
+	}
+	public void setAvigpm(Integer avigpm) {
+		this.avigpm = avigpm;
+	}
 	public Integer getRepetirAviso() {
 		return repetirAviso;
 	}
@@ -165,6 +174,12 @@ public class Contrato implements Serializable{
 	public void setResponsavel(String responsavel) {
 		this.responsavel = responsavel;
 	}
+	public String getObservacao() {
+		return observacao;
+	}
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -175,6 +190,7 @@ public class Contrato implements Serializable{
 		result = prime * result
 				+ ((assuntoEmail == null) ? 0 : assuntoEmail.hashCode());
 		result = prime * result + ((ativo == null) ? 0 : ativo.hashCode());
+		result = prime * result + ((avigpm == null) ? 0 : avigpm.hashCode());
 		result = prime * result
 				+ ((diasAviso == null) ? 0 : diasAviso.hashCode());
 		result = prime * result
@@ -186,6 +202,8 @@ public class Contrato implements Serializable{
 		result = prime * result
 				+ ((mensagemEmail == null) ? 0 : mensagemEmail.hashCode());
 		result = prime * result + ((objeto == null) ? 0 : objeto.hashCode());
+		result = prime * result
+				+ ((observacao == null) ? 0 : observacao.hashCode());
 		result = prime * result + ((origem == null) ? 0 : origem.hashCode());
 		result = prime * result
 				+ ((repetirAviso == null) ? 0 : repetirAviso.hashCode());
@@ -220,6 +238,11 @@ public class Contrato implements Serializable{
 			if (other.ativo != null)
 				return false;
 		} else if (!ativo.equals(other.ativo))
+			return false;
+		if (avigpm == null) {
+			if (other.avigpm != null)
+				return false;
+		} else if (!avigpm.equals(other.avigpm))
 			return false;
 		if (diasAviso == null) {
 			if (other.diasAviso != null)
@@ -260,6 +283,11 @@ public class Contrato implements Serializable{
 			if (other.objeto != null)
 				return false;
 		} else if (!objeto.equals(other.objeto))
+			return false;
+		if (observacao == null) {
+			if (other.observacao != null)
+				return false;
+		} else if (!observacao.equals(other.observacao))
 			return false;
 		if (origem == null) {
 			if (other.origem != null)

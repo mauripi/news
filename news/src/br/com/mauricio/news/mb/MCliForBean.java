@@ -30,7 +30,9 @@ public class MCliForBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private List<MCLIFOR> allCliFor = new ArrayList<MCLIFOR>();
 	private MCLIFOR clifor;
-    
+	private String cep;
+	
+	
     @PostConstruct
     public void init() {
     	listarCliFor();
@@ -117,12 +119,14 @@ public class MCliForBean implements Serializable{
     		gln.add(clifor);
     	}
     	listarCliFor();
+    	cep="";
     }
 
 	public void excluir(){
 		GenericLN<MCLIFOR> gln = new GenericLN<MCLIFOR>();
 		mensagens(gln.remove(gln.find(new MCLIFOR(), clifor.getId())));
 		listarCliFor();
+		cep="";
     }
 	
 	public void salvarAtualizar(){
@@ -149,6 +153,7 @@ public class MCliForBean implements Serializable{
 	
 	public void onRowSelect(SelectEvent event) {
 		clifor = (MCLIFOR) event.getObject();
+		cep = clifor.getEndcep();
     }
     
 	public void mensagens(String msg){
@@ -167,6 +172,14 @@ public class MCliForBean implements Serializable{
 	}
 	public void setClifor(MCLIFOR clifor) {
 		this.clifor = clifor;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
 	}
 
 

@@ -66,7 +66,7 @@ public class GastoTransporteBean  implements Serializable {
 			mensagens();			
 		}else{
 			gln = new GenericLN<GastoTransporte>();
-			msg = gln.update(gasto);
+			msg =gln.remove(gln.find(new GastoTransporte(), gasto.getId()));
 			mensagens();
 			limpaCadastro();
 			listar();

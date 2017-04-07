@@ -70,11 +70,31 @@
 				<h:outputText value="#{d.valor}" style="ttext-align: right;">
 					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
 				</h:outputText>	
-		    </p:column>	   	               	        
+		    </p:column>	  
+	        <p:column style="width:32px;text-align: center">
+	            <p:commandButton update=":tbdesp,:formCad,:formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+	                <f:setPropertyActionListener value="#{d}" target="#{gastotransporteMB.gasto}" />
+	            </p:commandButton>
+	        </p:column>			     	               	        
 	    </p:dataTable>
 	</p:panel>
 </h:form>
 
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão de Cliente/Fornecedor" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<span>Tem certeza que quer excluir o registro #{gastotransporteMB.gasto.id} - 
+					#{gastotransporteMB.gasto.mes}/#{gastotransporteMB.gasto.mes}, #{gastotransporteMB.gasto.tipodespesa.despesa}</span>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{gastotransporteMB.excluir}" update=":formMsg,:formCad,:tbdesp" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
 
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="6000"/> 
