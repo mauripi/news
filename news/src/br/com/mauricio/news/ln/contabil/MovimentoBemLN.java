@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import br.com.mauricio.news.cnn.Conexao;
 import br.com.mauricio.news.dao.GenericDao;
 import br.com.mauricio.news.dao.contabil.BemDao;
+import br.com.mauricio.news.dao.contabil.DocMovimentoBemDao;
 import br.com.mauricio.news.dao.contabil.MovimentoBemDao;
 import br.com.mauricio.news.model.Login;
 import br.com.mauricio.news.model.contabil.MovimentoBem;
@@ -77,16 +78,22 @@ public class MovimentoBemLN implements Serializable {
 			destinatarios.add(m.getSolicitante().getEmail());
 		
 		gerarRelatorio(m);
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			System.out.println(e.getLocalizedMessage());
+		}
 		File file = new File("C:\\windows\\temp\\contabil\\"+"movimentobem_"+m.getId()+".pdf");
 		List<File> anexos = new ArrayList<File>();
 		anexos.add(file);
 		
-		if(m.getDocumentos()!=null){
-			for(DocMovimentoBem doc:m.getDocumentos()){
-				File f = new File(caminho+doc.getArquivo());
-				anexos.add(f);
-			}
+		DocMovimentoBemDao docdao = new DocMovimentoBemDao();
+		List<DocMovimentoBem> docs = docdao.listarAnexos(m);
+		for(DocMovimentoBem doc:docs){
+			File f = new File(caminho+doc.getArquivo());
+			anexos.add(f);
 		}
+
 		
 		Email email = new Email("Intranet Record News", destinatarios, "Movimentação de Patrimônio", montaCorpodoEmail(m),anexos);
 		email.start();

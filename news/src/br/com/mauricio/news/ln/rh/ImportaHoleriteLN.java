@@ -166,6 +166,10 @@ public class ImportaHoleriteLN implements Serializable {
 			
 		} 
 		arq.close(); 
+		
+		for(Base b:bases){
+			//System.out.println(b.getAno()+"/"+b.getMes()+"  -  "+b.getChapa());
+		}
 	}
 	
 	public Boolean verificaMesAnoPeriodoInformado(String mes, String ano, Integer periodo){
@@ -177,6 +181,8 @@ public class ImportaHoleriteLN implements Serializable {
 			i=3;
 		if(periodo==14)
 			i=14;
+		if(periodo==92)
+			i=92;		
 		for(Base b:bases)
 			if(b.getAno()!=Integer.parseInt(ano)||b.getMes()!=Integer.parseInt(mes)||b.getPeriodo()!=i)
 				erro=true;			
@@ -191,6 +197,8 @@ public class ImportaHoleriteLN implements Serializable {
 			i=3;
 		if(periodo==14)
 			i=14;
+		if(periodo==92)
+			i=92;		
 		BaseDao dao = new BaseDao();
 		dao.deletaPorMesAnoPeriodo(mes, ano, i);
 	}
@@ -203,6 +211,8 @@ public class ImportaHoleriteLN implements Serializable {
 			i=3;
 		if(periodo==14)
 			i=14;
+		if(periodo==92)
+			i=92;		
 		VencimentoDao dao = new VencimentoDao();
 		dao.deletaPorMesAnoPeriodo(mes, ano, i);
 	}

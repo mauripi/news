@@ -117,7 +117,7 @@ public class LoginLN implements Serializable{
 	
 	public List<Login> listaUsuarios(String orderBy){
 		GenericDao<Login> dao = new GenericDao<Login>();
-		return dao.list("login", orderBy);		
+		return dao.listWithoutRemoved("login", orderBy);		
 	}
 
 	public List<Login> listaUsuariosAutoComplete(String query){

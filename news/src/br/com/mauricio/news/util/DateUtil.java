@@ -1,5 +1,6 @@
 package br.com.mauricio.news.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -25,4 +26,15 @@ public class DateUtil {
 			return false;
 		return true;
 	}	
+	
+	public static Date hoje(){
+		DateTime hoje = new DateTime();
+		return new DateTime(hoje.getYear(),hoje.getMonthOfYear(),hoje.getDayOfMonth(), 0, 0).toDate();	
+	}
+
+	public static String formatDataFromBanco(Date d){
+		SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+		return formato.format(d);
+	}
+
 }

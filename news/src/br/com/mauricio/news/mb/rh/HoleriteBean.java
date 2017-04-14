@@ -42,7 +42,7 @@ public class HoleriteBean implements Serializable{
 	private Double totalDesconto;
 	private Double fgtsMes;
 	private List<Login> funcionarios = new ArrayList<Login>();
-	private int ano=2016;
+	private int ano=2017;
 	
 	public HoleriteBean(){
 		FacesContext cx = FacesContext.getCurrentInstance();

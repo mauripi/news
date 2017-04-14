@@ -195,8 +195,6 @@ public class MovimentoBemBean implements Serializable {
 		bln.enviarEmail(movimentobem,caminho());
 	}
 
-
-
 	public void imprimir() {
 		RelMovimentoBemLN rel = new RelMovimentoBemLN();
 		try {

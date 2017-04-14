@@ -22,7 +22,10 @@ public class LoginDao {
 		Conexao c = new Conexao();
 		this.manager = c.getEntityManager();
 	}
-
+	public LoginDao(EntityManager manager){
+		this.manager = manager;
+	}
+	
 	public Boolean validaLogin(String cpf, String senha) { 
 		  Login lg = null;
 		  int removido = 0;
@@ -117,4 +120,5 @@ public class LoginDao {
 	public List<Login> findUserByQuery(String query){		
 		return this.manager.createQuery(" From login where nome like :query").setParameter("query", "'%"+query+"%'").getResultList();	
 	}
+
 }

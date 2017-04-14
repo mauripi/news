@@ -141,7 +141,8 @@ height: 98%;
 	text-align: left;
 	font: 98% verdana;
 }
-		
+
+	
 .ui-accordion { width: 100%;}
 .ui-accordion .ui-accordion-header { cursor: pointer; position: relative; margin-top: 1px; zoom: 1; }
 .ui-accordion .ui-accordion-li-fix { display: inline; }

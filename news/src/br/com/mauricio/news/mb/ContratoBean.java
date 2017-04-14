@@ -148,6 +148,7 @@ public class ContratoBean implements Serializable {
 	public void limpaCadastro(){
 		contrato = new Contrato();
 		controlaCadastro=0;
+		
 	}
 
 	public void selecao(){

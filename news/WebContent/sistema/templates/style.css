@@ -30,7 +30,6 @@
    background: #1f3063 !important; /* old #3e5795 */
 }
 
-
 .center .ui-layout-unit-content{
    /*background-image:url('news2.jpg');
    background-size: 100% 100%;*/
@@ -49,6 +48,7 @@
 }
 .ui-datatable {
     display: table;
+    font-size: xx-small;
 }
 
 .ui-datatable table {
@@ -71,6 +71,8 @@
 	border: none !important;
 }
 
-
+.ui-radiobutton{
+	padding: 15px !important;
+}	
 
 

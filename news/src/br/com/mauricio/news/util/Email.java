@@ -1,6 +1,7 @@
 package br.com.mauricio.news.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Properties;
@@ -27,6 +28,8 @@ public class Email  extends Thread {
 	private String nomeFrom;
 	private List<String> destinatarios;
 	private List<File> anexos;
+	private String imagemNoCorpo;
+	private String cidImagemNoCorpo;
 	
 	private void getConfiguracao(){
         /** Parâmetros de conexão com servidor Gmail     */
@@ -40,9 +43,33 @@ public class Email  extends Thread {
         props.put("mail.smtp.ssl.enable", "true");
         props.put("mail.smtp.socketFactory.fallback", "true");
 	}
+
+	public Email(String nomeFrom, List<String> listDest,String ass,String txt ){
+		this.destinatarios=listDest;
+		this.assunto=ass;
+		this.texto=txt;
+	}
+
+	public Email(String nomeFrom, List<String> listDest,String ass,String txt,String imagemNoCorpo,String cidImagemNoCorpo ){
+		this.destinatarios=listDest;
+		this.assunto=ass;
+		this.texto=txt;
+		this.nomeFrom = nomeFrom;
+		this.cidImagemNoCorpo = cidImagemNoCorpo;
+		this.imagemNoCorpo = imagemNoCorpo;
+	}
 	
+	public Email(String nomeFrom, List<String> listDest,String ass,String txt,List<File> anexos,String imagemNoCorpo,String cidImagemNoCorpo ){
+		this.destinatarios=listDest;
+		this.assunto=ass;
+		this.texto=txt;
+		this.anexos = anexos;
+		this.nomeFrom = nomeFrom;
+		this.cidImagemNoCorpo = cidImagemNoCorpo;
+		this.imagemNoCorpo = imagemNoCorpo;
+	}
 	
-	public Email(String nomeFrom, List<String> listDest,String ass,String txt,List<File> anexos){
+	public Email(String nomeFrom, List<String> listDest,String ass,String txt,List<File> anexos ){
 		this.destinatarios=listDest;
 		this.assunto=ass;
 		this.texto=txt;
@@ -90,19 +117,23 @@ public class Email  extends Thread {
 	           
 	           MimeBodyPart corpo = new MimeBodyPart();
 	           corpo.setContent(this.texto,"text/html; charset=UTF-8");
+	           corpo.attachFile(imagemNoCorpo);
+	           corpo.setContentID("<" + cidImagemNoCorpo + ">");
+	           corpo.setDisposition(MimeBodyPart.INLINE);
 	           multipart.addBodyPart(corpo);
 	           
-	          
-	           for(File file:anexos){
-		           MimeBodyPart attachment = new MimeBodyPart();
-		           attachment.setDataHandler(new DataHandler(new FileDataSource(file)));
-		           attachment.setFileName(file.getName());
-		           multipart.addBodyPart(attachment);
-	           }
+	          if(anexos!=null){
+		           for(File file:anexos){
+			           MimeBodyPart attachment = new MimeBodyPart();
+			           attachment.setDataHandler(new DataHandler(new FileDataSource(file)));
+			           attachment.setFileName(file.getName());
+			           multipart.addBodyPart(attachment);
+		           }
+	          }
 	           message.setContent(multipart);
 	           /**Método para enviar a mensagem criada*/ 
 	           Transport.send(message);
-		      } catch (MessagingException e) {
+		      } catch (MessagingException | IOException e) {
 		    	  System.out.println(e.getLocalizedMessage());
 		           throw new RuntimeException(e);
 		     }

@@ -1,12 +1,15 @@
 package br.com.mauricio.news.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+
 import br.com.mauricio.news.model.Contrato;
+import br.com.mauricio.news.util.DateUtil;
 
 public class ContratoDao {
 	private EntityManager manager;
@@ -56,5 +59,13 @@ public class ContratoDao {
 		}
 		List<String> all = new ArrayList<String>(emails);
 		return all;	
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Contrato> listPrimeiroAviso() {
+		Boolean ativo=true;
+		String sql=" from contrato where DATEADD(DAY, -1*(diasAviso), fim) = :hoje and ativo= :ativo";
+		Date hoje = DateUtil.hoje();
+		return this.manager.createQuery(sql).setParameter("ativo", ativo).setParameter("hoje", hoje).getResultList();	
 	}
 }

@@ -7,6 +7,12 @@
   /*  font-size: 1.5em !important;   */
 }
 
+
+.radio label, .checkbox label {
+	font-weight: normal !important;
+	font-size: small !important; 
+}
+
 .ui-widget label{
 	font-weight: bold;
 	/*font-size: 1.0em !important;*/
@@ -17,6 +23,7 @@
 	border-radius:0 !important;	
 	font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
     font-size: 1.5em !important; 
+    
 }
 
 .ui-datatable thead th, .ui-datatable tfoot td{
