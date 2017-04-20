@@ -1,7 +1,6 @@
 package br.com.mauricio.news.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Properties;
@@ -28,8 +27,6 @@ public class Email  extends Thread {
 	private String nomeFrom;
 	private List<String> destinatarios;
 	private List<File> anexos;
-	private String imagemNoCorpo;
-	private String cidImagemNoCorpo;
 	
 	private void getConfiguracao(){
         /** Parâmetros de conexão com servidor Gmail     */
@@ -48,25 +45,6 @@ public class Email  extends Thread {
 		this.destinatarios=listDest;
 		this.assunto=ass;
 		this.texto=txt;
-	}
-
-	public Email(String nomeFrom, List<String> listDest,String ass,String txt,String imagemNoCorpo,String cidImagemNoCorpo ){
-		this.destinatarios=listDest;
-		this.assunto=ass;
-		this.texto=txt;
-		this.nomeFrom = nomeFrom;
-		this.cidImagemNoCorpo = cidImagemNoCorpo;
-		this.imagemNoCorpo = imagemNoCorpo;
-	}
-	
-	public Email(String nomeFrom, List<String> listDest,String ass,String txt,List<File> anexos,String imagemNoCorpo,String cidImagemNoCorpo ){
-		this.destinatarios=listDest;
-		this.assunto=ass;
-		this.texto=txt;
-		this.anexos = anexos;
-		this.nomeFrom = nomeFrom;
-		this.cidImagemNoCorpo = cidImagemNoCorpo;
-		this.imagemNoCorpo = imagemNoCorpo;
 	}
 	
 	public Email(String nomeFrom, List<String> listDest,String ass,String txt,List<File> anexos ){
@@ -117,8 +95,6 @@ public class Email  extends Thread {
 	           
 	           MimeBodyPart corpo = new MimeBodyPart();
 	           corpo.setContent(this.texto,"text/html; charset=UTF-8");
-	           corpo.attachFile(imagemNoCorpo);
-	           corpo.setContentID("<" + cidImagemNoCorpo + ">");
 	           corpo.setDisposition(MimeBodyPart.INLINE);
 	           multipart.addBodyPart(corpo);
 	           
@@ -133,7 +109,7 @@ public class Email  extends Thread {
 	           message.setContent(multipart);
 	           /**Método para enviar a mensagem criada*/ 
 	           Transport.send(message);
-		      } catch (MessagingException | IOException e) {
+		      } catch (MessagingException e) {
 		    	  System.out.println(e.getLocalizedMessage());
 		           throw new RuntimeException(e);
 		     }

@@ -268,7 +268,7 @@ public class MovimentoBemLN implements Serializable {
 	}
 
 	
-	
+//==============================================================================================//	
 	public GenericDao<MovimentoBem> getDao() {
 		return dao;
 	}

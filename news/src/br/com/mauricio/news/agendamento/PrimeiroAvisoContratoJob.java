@@ -24,7 +24,7 @@ import br.com.mauricio.news.util.SendMail;
 
 public class PrimeiroAvisoContratoJob  implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-
+		String CAMINHO_PASTA_CONTRATOS = "C:\\ARQUIVOS_CONTRATOS\\";
 		List<Contrato> list = getList();
 		
 		if(list.size()==0){
@@ -34,10 +34,10 @@ public class PrimeiroAvisoContratoJob  implements Job {
 		        HtmlEmail email = new HtmlEmail();  		
 		        String cid;
 				try {
-					cid = email.embed(new File("c://tmp//logo.png"));
+					cid = email.embed(new File(CAMINHO_PASTA_CONTRATOS+"img//img-not-logo.png"));
 			        email.setHtmlMsg(emailContratoPrimeiroAviso(cid,c));   
-			        email.addTo("maucruz@recordnews.com.br", "Mumu");         
-			        email.setSubject("Contratos"); // assunto do e-mail  		
+			        email.addTo(c.getEmailsAviso());         
+			        email.setSubject("Aviso de término de contrato"); 		
 			        SendMail.sendHtml(email);
 				} catch (EmailException e) {
 					System.out.println(e.getLocalizedMessage());
@@ -45,8 +45,7 @@ public class PrimeiroAvisoContratoJob  implements Job {
 				}    
 			}
 		}
-        System.out.println("Finalizando processo automático para envio email contrato...");
- 
+        System.out.println("Finalizando processo automático para envio email contrato..."); 
 	}
 	
 	private static List<Contrato> getList(){
@@ -64,6 +63,7 @@ public class PrimeiroAvisoContratoJob  implements Job {
         return list;
    }
 
+	/*
 	private static String emailContratoPrimeiroAviso(String cidLogo, Contrato c){
 	    
 		String linhaEmBranco = "<tr><td>&nbsp;</td><td colspan='10'></td><td>&nbsp;</td></tr>";
@@ -125,7 +125,49 @@ public class PrimeiroAvisoContratoJob  implements Job {
 		sb.append("</tbody></table></div></body></html>");
 		return sb.toString();		
 	}
+*/	
+
 	
+	private static String emailContratoPrimeiroAviso(String cidLogo, Contrato c){
+	    
+		String style1 = "style='font-weight: bold; text-transform: uppercase; color:#012257; font-size: 14px;'";
+		String style2 = "style='padding-left: 30px; line-height: 22px;'";
+		String style3 = "style='font-weight: bold; text-transform: uppercase; color:#17609a'";
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("<html><head><META http-equiv=Content-Type content='text/html; charset=utf-8'></head><body>");
+		sb.append("<table width='550' border='0' align='center' cellpadding='0' cellspacing='0' style='font-family: Calibri, Gotham, 'Helvetica Neue', Helvetica, Arial, 'sans-serif';width: 550px;'>");
+		sb.append("<tr><td bgcolor='#0c183c'><img style='width: 550px; height: 153px;' src=\"cid:"+cidLogo+"\"/></td></tr>");
+		sb.append("<tr><td height='50' bgcolor='#cce1ef'><table width='500' border='0' cellpadding='0' cellspacing='0' style=' width: 500px;'>");
 
+		sb.append("<tr ><td style='padding-left: 30px; font-weight: bold; font-size: 20px; color:#0c183c'>"+c.getObjeto()+"</td></tr>");
+		sb.append("<tr><td style='padding-left: 30px; font-weight: bold; font-size: 14px; color:#17609a; text-transform: uppercase;' >Contrato de "+c.getTipocontrato().getDescricao()+" n° "+c.getId()+"</td>");
 
+		sb.append("</tr></table></td></tr><tr><td valign='middle' style='border: 1px solid #cbcbcb; border-top-width: 0px;'>");
+		sb.append("<table width='500' border='0' cellpadding='0' cellspacing='0' style='width: 500px; font-size: 16px;'>");
+		sb.append("<tr><td height='20'>&nbsp;</td></tr><tr><td "+style2+">");
+
+		sb.append("<span "+style3+">INFORMAÇÕES</span><br>");
+		sb.append("<span "+style1+">Empresa:</span>    "+ c.getMclifor().getNomfan()+"<br>");
+		sb.append("<span "+style1+">Contato:</span>    "+ c.getMclifor().getNomcon()+"<br>");
+		sb.append("<span "+style1+">Telefone:</span>    "+ c.getMclifor().getFoncon()+"<br>");
+		sb.append("<span "+style1+">E-mail:</span>    "+ c.getMclifor().getEmacon()+"<br>");		
+		sb.append("<span "+style1+">Responsável do Contrato:</span>    "+ c.getResponsavel()+"</td>");
+		
+		sb.append("</tr><tr><td height='20'>&nbsp;</td></tr><tr>");
+		sb.append("<td "+style2+"><span "+style3+">DADOS DO CONTRATO</span><br>");		
+		sb.append("<span "+style1+">Vigência:</span>    "+ DateUtil.formatDataFromBanco(c.getInicio())+ " a "+DateUtil.formatDataFromBanco(c.getFim())+"<br>");		
+		sb.append("<span "+style1+">Dias para TÉRMINO:</span>   "+DateUtil.diferencaEmDias(new Date(),c.getFim())+"<br>");
+		sb.append("<span "+style1+">Valor mensal:</span> R$   "+FormataNumero.doubleTOMoedaReal(c.getValorMensal())+"<br>");
+		sb.append("<span "+style1+">Valor Total:</span>    "+ FormataNumero.doubleTOMoedaReal(c.getValorTotal())+"</td>  </tr>");		
+
+		sb.append("<tr><td height='20'>&nbsp;</td></tr>");
+		sb.append("<tr><td "+style2+"><span "+style3+">Observação:</span><br>");		
+		sb.append("<span>"+c.getObservacao()+"</span></td></tr>");
+		sb.append("<tr><td height='20'>&nbsp;</td></tr><tr><td></td></tr></table></td></tr></table></body></html>");
+		
+		
+		return sb.toString();		
+	}
 }

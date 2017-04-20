@@ -159,10 +159,17 @@ public class ContratoBean implements Serializable {
 
 	public void montaCaminho(){
 		pathPdfAnexo = ""+contrato.getId()+"/"+anexo;
-		System.out.println(pathPdfAnexo);
+	}
+
+	public void removeAnexo(){
+		ContratoLN ln = new ContratoLN();
+		msg=ln.removeAnexo(contrato,anexo);
+		anexos.remove(anexo);
+		mensagens();
+		
 	}
 	
-    public void onRowSelect(SelectEvent event) {
+	public void onRowSelect(SelectEvent event) {
         contrato = (Contrato) event.getObject(); 
         stringToList();
         ContratoLN ln = new ContratoLN();
@@ -313,6 +320,8 @@ public class ContratoBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();  	          
         context.addMessage(null, new FacesMessage(msg,""));  		
 	}
+	
+
 	//--------------------------GETTERS E SETTERS ----------------------------------
 	public Date getToday() {
         return new Date();

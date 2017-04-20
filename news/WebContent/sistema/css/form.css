@@ -15,6 +15,7 @@
 
 .ui-widget label{
 	font-weight: bold;
+	padding-left: 5px;
 	/*font-size: 1.0em !important;*/
 }
 

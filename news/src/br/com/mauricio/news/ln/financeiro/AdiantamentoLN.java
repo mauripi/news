@@ -128,7 +128,7 @@ public class AdiantamentoLN implements Serializable{
 		File file = new File("C:\\Windows\\Temp\\financeiro\\"+"adiantamento"+adto.getId()+".pdf");
 		List<File> anexos = new ArrayList<File>();
 		anexos.add(file);		
-		Email email = new Email("Intranet Record News", dest, "Adiantamento de Despesas Nro." +adto.getId()  , montaCorpodoEmail(adto),anexos);
+		Email email = new Email("Intranet Record News", dest, "Adiantamento de Despesas Nro." +adto.getId(), montaCorpodoEmail(adto),anexos);
 		email.start();
 	}
 	

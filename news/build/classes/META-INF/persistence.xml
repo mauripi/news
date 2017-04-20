@@ -21,11 +21,11 @@
 	        
 <!--==== CONEXAO PRODUCAO ===== -->	
 
-<!--	
+	
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://RMS03:1433;databaseName=intranet;" />
 			<property name="javax.persistence.jdbc.user" value="sa" />			
 			<property name="javax.persistence.jdbc.password" value="xptohb3s%lrbe" />			
--->			
+			
 	
 <!--==== CONEXAO HOMOLOGAÇÃO ===== -->	
 		
@@ -36,11 +36,11 @@
 -->	
 					
 <!--==== CONEXAO LOCAL ===== -->
-
+<!--
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;instanceName=SQLEXPRESS;databaseName=intranet;useNTLMv2=tru‌​e;domain=redemulher" />			
 			<property name="javax.persistence.jdbc.user" value="sa" />
 			<property name="javax.persistence.jdbc.password" value="consolador" />
-
+-->
 	
 		</properties>
 	</persistence-unit>

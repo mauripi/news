@@ -2,6 +2,7 @@ package br.com.mauricio.news.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 public class Cripto {
 
@@ -17,6 +18,9 @@ public class Cripto {
         return sb.toString();   
     }   
      
-
+    public static String gerarSenha(){
+    	UUID uuid = UUID.randomUUID();    	
+		return uuid.toString().substring(0,8);   	
+    }
 
 }

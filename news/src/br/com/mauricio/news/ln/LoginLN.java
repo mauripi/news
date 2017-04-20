@@ -8,9 +8,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.SimpleEmail;
 
 import br.com.mauricio.news.dao.AcessoDao;
 import br.com.mauricio.news.dao.GenericDao;
@@ -21,6 +26,7 @@ import br.com.mauricio.news.model.Filial;
 import br.com.mauricio.news.model.Login;
 import br.com.mauricio.news.model.Modulo;
 import br.com.mauricio.news.util.Cripto;
+import br.com.mauricio.news.util.SendMail;
 import br.com.mauricio.news.util.UsuarioLogado;
 
 public class LoginLN implements Serializable{
@@ -177,8 +183,44 @@ public class LoginLN implements Serializable{
  		dao.deletarPermissaoPrestacao(l);
  	} 	
  	
+ 	public String recuperaSenha(String cpf){
+ 		AcessoDao dao = new AcessoDao();
+ 		Map<Boolean, Login> result = dao.recuperaSenha(cpf);
+ 		Set<Boolean> chaves = result.keySet();
+ 		for (Boolean chave : chaves){
+ 			if(!chave){
+ 				return "Não foi possível recuperar sua senha, favor entrar em contato com a TI."; 				
+ 			}else{
+ 				try{
+ 					Login login = result.get(chave);
+	 				if(login.getEmail().length()<1 || login.getEmail()==null)
+	 					return "Não foi possível recuperar sua senha, não há email cadastrado. Favor entrar em contato com a TI.";
+	 				String senha = Cripto.gerarSenha();
+	 				login.setSenha(Cripto.criptografa(senha));
+	 				atualiza(findById(login));
+	 				msg = enviarEmailSenha(senha,login.getEmail());
+ 				}catch(Exception e){
+ 					return "Não foi possível recuperar sua senha, favor entrar em contato com a TI.";
+ 				}				
+ 			}
+ 		}		
+		return msg;
+ 	}
  	
- 	
+	private String enviarEmailSenha(String senha, String emailTo) {
+	    try {
+	    	SimpleEmail email = new SimpleEmail();
+	    	email.setSubject( "Recuperação de senha da Intranet" );
+			email.setMsg( "Sua nova senha é: " + senha);
+			email.addTo(emailTo);
+			SendMail.sendSimple(email);
+			return "Sua senha voi enviada para: " + emailTo;
+		} catch (EmailException e) {
+			e.printStackTrace();
+			return "Não foi possível enviar o emial com a nova senha. Entre em contato com a TI";
+		}		
+	}
+
 	public String getMsg() {
 		return msg;
 	}

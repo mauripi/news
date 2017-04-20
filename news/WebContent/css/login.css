@@ -1,0 +1,40 @@
+body{
+	background-color: #0C183C;
+}
+
+h3 {font-family: 'Fjalla One', sans-serif;font-size: 34px;color: #FFF;}
+img {
+	width: 200px;
+	height: 87px;
+}
+@media (max-width: 767px) {
+	.form-login {
+	    text-align: center;
+		padding: 3em;
+		width: 100%;
+		margin: 10px;
+	}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+	.form-login {
+	    text-align: center;
+		padding: 3em;
+		margin: 10% 25%;
+	}
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+	.form-login {
+	    text-align: center;
+		padding: 3em;
+		margin: 10% 30%;
+	}
+
+}
+@media (min-width: 1200px) {
+	.form-login {
+	    text-align: center;
+		padding: 3em;
+		margin: 10% 40%;
+	}
+}
+

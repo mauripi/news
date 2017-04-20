@@ -6,65 +6,64 @@
     xmlns:b="http://bootsfaces.net/ui">
 
 <h:head>
-	<link rel="stylesheet" href="css/rh.css" type="text/css" media="screen" />
-	<style type="text/css">
 
-	</style>
 </h:head>
 
 <h:body>
 <ui:composition template="templates/geral.xhtml"> 
 <ui:define name="titulo">RECORD NEWS - RH</ui:define>
 <ui:define name="conteudo">
-	<h:form id="formCad">
+	<b:form id="formCad">
 		<p:panel header="Requisição de Pessoal" style="width:900px; " >
 			<p:panelGrid columns="4" >
-				<b:inputText
-				    placeholder=""
-				    id="autocomplete"
-				    typeahead="true"
-				    typeahead-values="#{reqpessoaMB.completeTextRequisitante(teste)}"
-				/>
-     			<p:autoComplete id="requisitante"  value="#{reqpessoaMB.requisitante}" converter="loginConverter" forceSelection="true" size="35"
-     						completeMethod="#{reqpessoaMB.completeTextRequisitante}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>
+				<p:outputLabel value="Requisitante:"/>
+				<b:inputText value="#{reqpessoaMB.requisicao.reqges.nome}"
+				    placeholder="Requisitante" id="requisitante" typeahead="true" size="30"
+				    typeahead-values="#{reqpessoaMB.completeTextRequisitante(teste)}"/>
 
-				<p:outputLabel value="DEPTO" for="depto"/>
-				<p:selectOneMenu id="depto" value="#{reqpessoaMB.centroCusto}" converter="ccustoConverter">
+				<p:outputLabel value="DEPTO:"/>
+				<b:selectOneMenu id="depto" value="#{reqpessoaMB.requisicao.reqccu.nome}" >
+					<f:selectItem itemLabel="#{reqpessoaMB.requisicao.reqccu.nome}" itemValue="#{reqpessoaMB.requisicao.reqccu.nome}" />
 					<f:selectItems value="#{reqpessoaMB.centroCustos}" var="c" itemLabel="#{c.filial.nome} - #{c.nome}" itemValue="#{c}" />
-				</p:selectOneMenu>						
-				<p:outputLabel value="Local de Trabalho:" for="loctrab"/>		
-				<p:inputText id="loctrab"  size="35"/>
-				<p:outputLabel value="Horário" for="horario"/>
-				<p:inputText id="horario"/>	
+				</b:selectOneMenu>									
+				<p:outputLabel value="Local de Trabalho:" />		
+				<b:inputText value="#{reqpessoaMB.requisicao.reqloc}" placeholder="Local de Trabalho" id="loctrab" />
+				<p:outputLabel value="Horário:" />
+				<b:inputText value="#{reqpessoaMB.requisicao.reqhor}" placeholder="Horário"  id="horario"/>	
 			</p:panelGrid>
 			<p:separator style="width:100%;" />			
 			<p:panelGrid columns="2" >
 				<p:outputLabel value="Necessidade de hora-extra?:" />
-				<b:panelGrid columns="3">
-					<b:radiobutton value="#{reqpessoaMB.sexo}" itemLabel="Sim" itemValue="Sim" />
-					<b:radiobutton value="#{reqpessoaMB.sexo}" itemLabel="Não" itemValue="Não" />
-				</b:panelGrid>
+				<p:selectOneRadio id="horext" value="#{reqpessoaMB.horext}" >
+		            <f:selectItem itemLabel="Sim" itemValue="1" />
+		            <f:selectItem itemLabel="Não" itemValue="0" />
+		            <p:ajax process="@this"  update=":formCad:freq"/>
+		        </p:selectOneRadio>
 			</p:panelGrid>
-			
-			<p:panelGrid columns="2">
-				<p:outputLabel value="Frequência:" />
-				<b:panelGrid columns="3" style="font-size: small !important;font-weight:normal !important;" styleClass="rh">
-					<b:radiobutton value="#{reqpessoaMB.frequencia}" itemLabel="Fequentemente" itemValue="1" />
-					<b:radiobutton value="#{reqpessoaMB.frequencia}" itemLabel="Exporadicamente" itemValue="2" />
-					<b:radiobutton value="#{reqpessoaMB.frequencia}" itemLabel="Raramente" itemValue="3" />
-				</b:panelGrid>
-			</p:panelGrid>
-
+			<h:panelGroup id="freq" layout="block">
+				<p:panelGrid columns="2" rendered="#{reqpessoaMB.frequenciaHoraExtra()}" >
+					<p:outputLabel value="Frequência:" />
+					<p:selectOneRadio value="#{reqpessoaMB.reqfreq}" >
+			            <f:selectItem itemLabel="Fequentemente" itemValue="1"  />
+			            <f:selectItem itemLabel="Exporadicamente" itemValue="2"  />
+			            <f:selectItem itemLabel="Raramente" itemValue="3" />
+			            <f:selectItem itemLabel="Nunca" itemValue="0" itemDisabled="true"/>
+			        </p:selectOneRadio>					
+					
+				</p:panelGrid>
+			</h:panelGroup>
 			<p:separator style="width:100%;" />
 			
-			<p:panelGrid columns="1">
-				<p:outputLabel value="Descrição das atividades:" for="desatv"/>
-				<p:inputTextarea id="desatv" rows="3" cols="80" autoResize="false"/>
+			<p:panelGrid columns="1" style="width:100%">
+				<p:outputLabel value="Descrição das atividades:"/>
+				<b:inputTextarea placeholder="Descrição das atividades" value="#{reqpessoaMB.requisicao.reqatv}"
+				 	rows="3"/>
 			</p:panelGrid>
 
-			<p:panelGrid columns="1">
-				<p:outputLabel value="Qual a maior dificuldade do cargo?:" for="dfccrg"/>
-				<p:inputTextarea id="dfccrg" rows="3" cols="80" autoResize="false"/>
+			<p:panelGrid columns="1" style="width:100%">
+				<p:outputLabel value="Qual a maior dificuldade do cargo?:" />
+				<b:inputTextarea placeholder="Qual a maior dificuldade do cargo" value="#{reqpessoaMB.requisicao.reqmdc}"
+				 	rows="3"/>
 			</p:panelGrid>			
 
 			<p:separator style="width:100%;" />
@@ -74,22 +73,22 @@
 			</p:panelGrid>
 			<div style="margin-left: 30px !important;margin-bottom: 10px;">
 				<b:row class="form-inline">
-					<b:radiobutton value="#{reqpessoaMB.sexo}" itemLabel="Entre" itemValue="6" /><span> </span>
-					<p:inputNumber value="#{reqpessoaMB.sexo}" size="4" maxlength="2" maxValue="99" minValue="14"/>
+					<b:radiobutton value="#{reqpessoaMB.reqidade}" itemLabel="Entre" itemValue="0" /><span> </span>
+					<p:inputNumber value="#{reqpessoaMB.requisicao.idaenta}" size="4" maxlength="2" maxValue="99" minValue="14"/>
 					<span> a </span>
-					<p:inputNumber value="#{reqpessoaMB.sexo}" size="4" maxlength="2" maxValue="99" minValue="14"/>
+					<p:inputNumber value="#{reqpessoaMB.requisicao.idaentb}" size="4" maxlength="2" maxValue="99" minValue="14"/>
 					<span> anos </span>	
 				</b:row>
 				<br></br>
 				<b:row class="form-inline">
-					<b:radiobutton value="#{reqpessoaMB.sexo}" itemLabel="Inferior ou igual a" itemValue="6" /><span> </span>
-					<p:inputNumber value="#{reqpessoaMB.sexo}" size="4" maxlength="2" maxValue="99" minValue="14"/>
+					<b:radiobutton value="#{reqpessoaMB.reqidade}" itemLabel="Inferior ou igual a" itemValue="1" /><span> </span>
+					<p:inputNumber value="#{reqpessoaMB.requisicao.idainf}" size="4" maxlength="2" maxValue="99" minValue="14"/>
 					<span> anos </span>	
 				</b:row>
 				<br></br>
 				<b:row class="form-inline">
-					<b:radiobutton value="#{reqpessoaMB.sexo}" itemLabel="Superior ou igual a" itemValue="6" /><span> </span>
-					<p:inputNumber value="#{reqpessoaMB.sexo}" size="4" maxlength="2" maxValue="99" minValue="14"/>
+					<b:radiobutton value="#{reqpessoaMB.reqidade}" itemLabel="Superior ou igual a" itemValue="2" /><span> </span>
+					<p:inputNumber value="#{reqpessoaMB.requisicao.idasup}" size="4" maxlength="2" maxValue="99" minValue="14"/>
 					<span> anos </span>	
 				</b:row>				
 		    </div>
@@ -97,29 +96,29 @@
 			<p:separator style="width:100%;" />
 
 			<p:panelGrid columns="4" >
-				<p:outputLabel value="Formação mínima:" for="formmin"/>
-     			<p:inputText id="formmin"  value="#{reqpessoaMB.sexo}" size="25"/>
-				<p:outputLabel value="Formação desejada:" for="formdjd"/>
-     			<p:inputText id="formdjd"  value="#{reqpessoaMB.sexo}" size="25" />
+				<p:outputLabel value="Formação mínima:"/>
+				<b:inputText value="#{reqpessoaMB.requisicao.formin}" placeholder="Formação mínima" size="25"/>
+				<p:outputLabel value="Formação desejada:" />
+				<b:inputText value="#{reqpessoaMB.requisicao.fordes}" placeholder="Formação desejada" size="25"/>
 			</p:panelGrid>
 
 			<p:panelGrid columns="4" >
-				<p:outputLabel value="Universidade de formação:" for="univer"/>
-     			<p:inputText id="univer"  value="#{reqpessoaMB.sexo}" size="35"/>
-				<p:outputLabel value="Ano/Período:" for="anoper"/>
-     			<p:inputText id="anoper"  value="#{reqpessoaMB.sexo}" size="10" />
+				<p:outputLabel value="Universidade de formação:"/>
+				<b:inputText value="#{reqpessoaMB.requisicao.unifor}" placeholder="Universidade de formação" size="25"/>
+				<p:outputLabel value="Ano/Período:"/>
+     			<b:inputText value="#{reqpessoaMB.requisicao.anoper}" placeholder="Ano/Período" size="25"/>
 			</p:panelGrid>					    
 
 			<p:panelGrid columns="2">
 				<p:outputLabel value="Experiência" />
-				<b:panelGrid columns="3" style="font-size: small !important;font-weight:normal !important;" styleClass="rh" >
-					<b:radiobutton value="#{reqpessoaMB.frequencia}" itemLabel="Na vaga específica" itemValue="1" />
-					<b:radiobutton value="#{reqpessoaMB.frequencia}" itemLabel="Na área" itemValue="2" />
-					<b:radiobutton value="#{reqpessoaMB.frequencia}" itemLabel="Outros" itemValue="3" />
+				<b:panelGrid columns="3" style="font-size: small !important;font-weight:normal !important;" >
+					<b:radiobutton value="#{reqpessoaMB.reqexp}" itemLabel="Na vaga específica" itemValue="0" />
+					<b:radiobutton value="#{reqpessoaMB.reqexp}" itemLabel="Na área" itemValue="1"/>
+					<b:radiobutton value="#{reqpessoaMB.reqexp}" itemLabel="Outros" itemValue="2" />
 				</b:panelGrid>
 			</p:panelGrid>
 
-			<p:separator style="width:100%;" />
+			<p:separator style="width:100%;" /> 
 			<b:panelGrid columns="3"  layout="grid">
 				<p:outputLabel value="Conhecimentos"/>
 				<p:outputLabel value="Frequência"/>
@@ -127,27 +126,49 @@
 			</b:panelGrid>	
 			<br></br>
 			<br></br>
-	 		<p:repeat value="#{reqpessoaMB.todosUsuarios}" var="u">
-				<b:panelGrid columns="3" layout="grid">			
-					<p:outputLabel value="#{u.nome}" style="font-weight: normal !important;"/>
-					<b:selectOneMenu value="#{u.nome}">
-						<f:selectItem itemLabel="Sempre" itemValue="1"/>
-						<f:selectItem itemLabel="Algumas vezes" itemValue="2"/>
-						<f:selectItem itemLabel="Nunca" itemValue="3"/>
-					</b:selectOneMenu>
-					<b:selectOneMenu value="#{u.nome}">
-						<f:selectItem itemLabel="Básico" itemValue="1"/>
-						<f:selectItem itemLabel="Intermediário" itemValue="2"/>
-						<f:selectItem itemLabel="Avançado" itemValue="3"/>
-					</b:selectOneMenu>
+			<b:well>
+		 		<p:repeat value="#{reqpessoaMB.todosUsuarios}" var="u">
+					<b:panelGrid columns="3" layout="grid">			
+						<p:outputLabel value="#{u.nome}" style="font-weight: normal !important;"/>
+						<b:selectOneMenu value="#{u.nome}" >
+							
+							<f:selectItem itemLabel="Sempre" itemValue="1"/>
+							<f:selectItem itemLabel="Algumas vezes" itemValue="2"/>
+							<f:selectItem itemLabel="Nunca" itemValue="3"/>
+						</b:selectOneMenu>
+						<b:selectOneMenu value="#{u.nome}">
+							<f:selectItem itemLabel="Básico" itemValue="1"/>
+							<f:selectItem itemLabel="Intermediário" itemValue="2"/>
+							<f:selectItem itemLabel="Avançado" itemValue="3"/>
+						</b:selectOneMenu>
+				
+					</b:panelGrid>
+				</p:repeat>			
+ 			</b:well>	
+			<p:panelGrid columns="1" style="width:100%">
+				<p:outputLabel value="Observações:"/>
+				<b:inputTextarea placeholder="Observações" value="#{reqpessoaMB.requisicao.reqobs}" rows="3"/>
+			</p:panelGrid>			
 			
-				</b:panelGrid>
-			</p:repeat>			
- 		
+			<p:separator style="width:100%;" />
 			
+			<p:panelGrid columns="1" style="width:100%">
+				<p:outputLabel value="Quais são as características comportamentais essenciais que o candidato deve ter?"/>
+				<b:inputTextarea placeholder="Características comportamentais essenciais" value="#{reqpessoaMB.requisicao.fatess}" rows="3"/>
+			</p:panelGrid>			
+			
+			<p:panelGrid columns="1" style="width:100%">
+				<p:outputLabel value="Quais são as características comportamentais desejáveis esperadas pelo candidato?"/>
+				<b:inputTextarea placeholder="Características comportamentais desejáveis" value="#{reqpessoaMB.requisicao.fatdes}" rows="3"/>
+			</p:panelGrid>			
+			
+			<p:panelGrid columns="1" style="width:100%">
+				<p:outputLabel value="Quais são as características comportamentais indesejáveis do candidato?"/>
+				<b:inputTextarea placeholder="Características comportamentais indesejáveis" value="#{reqpessoaMB.requisicao.fatind}" rows="3"/>
+			</p:panelGrid>			
 			
 		</p:panel>
-	</h:form>
+	</b:form>
 </ui:define>
 </ui:composition>    
 </h:body>    

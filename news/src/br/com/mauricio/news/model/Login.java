@@ -65,7 +65,10 @@ public class Login extends Auditoria implements Serializable{
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private Boolean ativo=true;
 
-	
+	@Override
+	public String toString() {
+		return nome;
+	};
 	
 	public Integer getId() {
 		return id;

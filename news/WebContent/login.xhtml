@@ -4,62 +4,122 @@
 		xmlns:h="http://java.sun.com/jsf/html"  
    		xmlns:f="http://java.sun.com/jsf/core"  
     	xmlns:p="http://primefaces.org/ui"
-    	xmlns:ui="http://java.sun.com/jsf/facelets">
+    	xmlns:ui="http://java.sun.com/jsf/facelets"
+    	xmlns:b="http://bootsfaces.net/ui">
 
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="stylesheet" href="css/login.css"/>
+<link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet"/> 
 <title>RECORD NEWS - Acesso</title>
-
-<style type="text/css">
-	body {margin: 1%;font-size: 12px;color: #616161;text-align: center;}	
-	.ui-panelgrid tr, .ui-panelgrid td {border:0 !important;}	
-	input, select,textarea,button, .ui-widget,.ui-widget input,.ui-widget select,  
-	.ui-widget textarea,.ui-widget button { font-family: Arial, "Trebuchet MS", Verdana, sans-serif;      
-	 	font-size: 14px !important;font-stretch: wider;font: bold;}
-</style>
-
 </h:head>
-<h:body >
 
-	<h:form id="form" style="width:300px;height:350px;padding-left: 40%;padding-top: 10%;">		 
-		<p:panel >
+<h:body>
+
+
+		<div class="form-login" >
+			<b:form  horizontal="true" id="form_login">
+				<div class="form-group">
+					<img src="img/news2.png"/>
+	
+					<h3 class="form-signin-heading">Intranet</h3>
+				</div>
+			  	<b:row>
+			    	<b:column col-xs="8" offset-xs="2" col-sm="6" offset-sm="3" col-md="10" offset-md="1">				    
+					    <b:inputText type="text" class="bf-no-message has-success" id="cpf" 
+					     	value="#{acessoBean.login.cpf}" maxlength="11" placeholder="CPF">
+							<f:facet name="prepend">
+					            <span><i class="glyphicon glyphicon-user"></i></span>
+					        </f:facet>					    
+					    </b:inputText>
+				    </b:column>
+				</b:row>  
+
+			  	<b:row>
+			    	<b:column col-xs="8" offset-xs="2" col-sm="6" offset-sm="3" col-md="10" offset-md="1">						    					      
+					      <b:inputText type="password" class="form-control bf-no-message has-success" 
+					      	id="password" placeholder="Senha"  value="#{acessoBean.login.senha}">
+							<f:facet name="prepend">
+					            <span><i class="fa fa-key"></i></span>
+					        </f:facet>						      	
+					      </b:inputText>
+				    </b:column>
+				    <div id="divMayus" style="visibility:hidden">Caps Lock is on.</div>
+				</b:row>
+			  	
+		  		<b:row>		  
+					<b:commandButton  icon-size="1x" iconAwesome="fa-arrow-circle-right" value="Entrar" 
+				        look="info" title="icon-size='3x'" col-xs="8" offset-xs="2" col-sm="6" offset-sm="3" col-md="10" offset-md="1"
+				         action="#{acessoBean.entrar}" update=":formMsg"/>
+			    </b:row>
+			    <br></br>
+			    <p:commandLink value="Esqueci minha senha" onclick="PF('dgRecuperarSenha').show();"/>
+
+
+			</b:form>
+			
+		</div>
 		
-			<img src="img/logo2.jpg" alt="" height="50px;" />
-			<p:separator></p:separator>
-			<p:panelGrid columns="2">				
-				<h:outputLabel style="font-family: Georgia, Times New Roman; ">CPF</h:outputLabel>
-				<p:inputText  value="#{acessoBean.login.cpf}" maxlength="11"/>
-				<h:outputLabel style="font-family: Georgia, Times New Roman;">Senha</h:outputLabel>
-				<p:password value="#{acessoBean.login.senha}"></p:password>
-			</p:panelGrid>
-		<f:facet name="footer">
-			<p:commandButton action="#{acessoBean.entrar}" update=":formMsg"
-			value="Entrar" icon="ui-icon-check" style="margin:0;font-size:xx-small;"/> 
-		
-		</f:facet>
-		</p:panel>
-	</h:form>
+	<h:form id="formMsg" style="font-size:small;">                      
+	   <p:growl id="msg" showDetail="true" sticky="false" life="3000"/>
+	</h:form>		
+
+
+
+<h:form id="rcp">
+	<p:dialog header="Recuperar senha" widgetVar="dgRecuperarSenha" width="300px">
+	  	<b:row>
+	    	<b:column col-xs="8" offset-xs="2" col-sm="6" offset-sm="3" col-md="10" offset-md="1">	
+			    <b:inputText type="text" class="bf-no-message has-success" id="cpf" 
+			     	value="#{acessoBean.cpf}" maxlength="11" placeholder="Informe seu CPF">
+					<f:facet name="prepend">
+			            <span><i class="glyphicon glyphicon-user"> CPF</i></span>
+			        </f:facet>					    
+			    </b:inputText>
+		    </b:column>
+		</b:row>  
+	
+	    <f:facet name="footer">
+
+	    	<p:commandButton value="Enviar" action="#{acessoBean.recuperarSenha}" update=":formMsg" oncomplete="PF('dgRecuperarSenha').hide();" />	    
+			<p:commandButton value="Sair" type="button" onclick="PF('dgRecuperarSenha').hide();" />	         
+
+	    </f:facet>
+	    <br></br>
+	</p:dialog>
+	
+</h:form>
+
 
 	<h:form id="formTroca">
 		<p:dialog id="dgTroca" widgetVar="dgTroca" header="Troca Senha de Acesso">
 			<p:panelGrid columns="1">
 		    	<p:panelGrid columns="2">
-			    	<h:outputLabel value="Digite a nova Senha: "/>
-			    	<p:inputText value="#{acessoBean.senha1}" type="password"/>	    	
-			    	<h:outputLabel value="Re-digite a nova Senha: "/>
-			    	<p:inputText value="#{acessoBean.senha2}" type="password"/>
+			    	  <h:outputLabel value="Digite a nova Senha: "/>
+				      <b:inputText type="password" class="form-control bf-no-message has-success" 
+				      	placeholder="Digite a nova Senha"  value="#{acessoBean.senha1}">
+						<f:facet name="prepend">
+				            <span><i class="fa fa-key"></i></span>
+				        </f:facet>						      	
+				      </b:inputText>   	
+			    	  <h:outputLabel value="Re-digite a nova Senha: "/>
+				      <b:inputText type="password" class="form-control bf-no-message has-success" 
+				      	placeholder="Re-digite a nova Senha"  value="#{acessoBean.senha2}">
+						<f:facet name="prepend">
+				            <span><i class="fa fa-key"></i></span>
+				        </f:facet>						      	
+				      </b:inputText> 			    	
 			    	<f:facet name="footer">
-						<p:commandButton value="Salvar" action="#{acessoBean.alterarSenhaLogin}" update=":formMsg"/>		    	
+						<b:commandButton value="Salvar" action="#{acessoBean.alterarSenhaLogin}" update=":formMsg"/>		    	
 			    	</f:facet>
 		    	</p:panelGrid>				
 			</p:panelGrid>
 		</p:dialog>
 	</h:form>
-
-	<h:form id="formMsg" style="font-size:small;">                      
-	   <p:growl id="msg" showDetail="true" sticky="false" life="3000"/>
-	</h:form> 	
+		
+	<script src="js/login.js"></script>
 		
 </h:body>
 </html>

@@ -22,6 +22,24 @@
 				<!-- 1 em 1 hora -->
 				<cron-expression>0 0/30 9-18 * * ?</cron-expression>
 			</cron>
-		</trigger>	
+		</trigger>
+			
+		<job>
+			<name>PrimeiroAvisoContratoJob</name>
+			<group>News</group>
+			<description>Aviso de término de contrato</description>
+			<job-class>br.com.mauricio.news.agendamento.PrimeiroAvisoContratoJob</job-class>
+		</job>
+
+		<trigger>
+			<cron>
+				<name>primeiroAvisoContratoJob</name>
+				<job-name>PrimeiroAvisoContratoJob</job-name>
+				<job-group>News</job-group>
+				<!-- 1 x por dia 5h -->
+				<cron-expression>0 5 * * * ?</cron-expression>
+			</cron>
+		</trigger>			
 	</schedule>
+
 </job-scheduling-data>

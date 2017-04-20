@@ -155,6 +155,11 @@
 					                <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
 					            </p:commandButton>
 					        </p:column>
+					        <p:column style="width:32px;text-align: center">
+					             <p:commandButton action="#{contratoMB.removeAnexo}" title="Remover" icon="ui-icon-trash" update=":formMsg,:formCad">
+					                <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
+					            </p:commandButton>
+					        </p:column>					        
 					    </p:dataTable>
 				    </p:panel>
 		        </p:tab>	

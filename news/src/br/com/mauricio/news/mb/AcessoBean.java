@@ -35,6 +35,7 @@ public class AcessoBean implements Serializable {
 	private static final long serialVersionUID = -8083042147042481389L;
 	private Login login = new Login();
 	private String senha1;
+	private String cpf="";
 	private String senha2;
 	private LoginLN ln = new LoginLN();
 	private String msgBoasVindas;
@@ -620,6 +621,13 @@ public class AcessoBean implements Serializable {
         options.put("contentWidth", 400);
         RequestContext.getCurrentInstance().openDialog("trocarsenha", options, null);
 	}
+
+	public void recuperarSenha(){
+		ln = new LoginLN();
+		msg = ln.recuperaSenha(cpf);
+		cpf="";
+		mensagens();
+	}
 	
 	public void alterarSenhaLogin() throws IOException{
 		if(!this.senha1.equals(this.senha2)){
@@ -1022,6 +1030,14 @@ public class AcessoBean implements Serializable {
 	public void setTemAcessoControleTransporte(
 			Boolean temAcessoControleTransporte) {
 		this.temAcessoControleTransporte = temAcessoControleTransporte;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
 

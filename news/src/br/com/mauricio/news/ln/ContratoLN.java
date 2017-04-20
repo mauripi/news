@@ -112,5 +112,20 @@ public class ContratoLN implements Serializable {
 		return cdao.emailsCadastrados();
 		
 	}
+
+
+	public String removeAnexo(Contrato contrato, String anexo) {
+		try{
+			String caminho = CAMINHO_PASTA_CONTRATOS + contrato.getId().toString();
+			File targetFile = new File(caminho+"\\"+anexo);
+			targetFile.delete();
+			return "Anexo removido";
+		}catch(Exception e){
+			System.out.println(e);
+			return "Ocorreu erro ao remover anexo.";
+		}
+	}
+
+	
 	
 }

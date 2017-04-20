@@ -5,6 +5,7 @@ import javax.mail.PasswordAuthentication;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
+import org.apache.commons.mail.SimpleEmail;
 
 public class SendMail {
 
@@ -34,4 +35,24 @@ public class SendMail {
 		}
 	}
 
+	public static void sendSimple(SimpleEmail email){
+		try {
+			email.setFrom(userAut, "Intranet Record News"); 
+		    email.setHostName(hostSmtp);  
+		    email.setSslSmtpPort(sslSmtpPort);
+		    email.setSmtpPort(Integer.parseInt(sslSmtpPort));    
+		    email.setStartTLSEnabled(true);
+		    email.setSSLOnConnect(true);
+		    email.setAuthenticator(new Authenticator(){
+		           protected PasswordAuthentication getPasswordAuthentication() 
+		           {return new PasswordAuthentication(userAut, pwd); }
+		    });
+		   	
+		    email.send();
+		     
+		} catch (EmailException e) {
+		    e.printStackTrace();
+		} 		
+	}
+	
 }

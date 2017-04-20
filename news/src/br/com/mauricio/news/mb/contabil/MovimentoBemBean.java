@@ -162,8 +162,7 @@ public class MovimentoBemBean implements Serializable {
 		itensRemovido.add(i);
 	}
 	
- 	public String grava(){
- 		
+ 	public String grava(){ 		
 		if(validaCampos()){
 			MovimentoBemLN ln = new MovimentoBemLN();			
 			movimentobem.setSolicitante(usuario);
@@ -171,24 +170,28 @@ public class MovimentoBemBean implements Serializable {
 			movimentobem.setDataemissao(new Date());
 			movimentobem.setItens(itens);
 			if(controlaCadastro==2)						
-				msg = ln.update(movimentobem,itensRemovido);			
+				msg = ln.update(movimentobem,itensRemovido);	
+				postSaveUpdate(ln);
 			if(controlaCadastro==1){
 				msg = ln.add(movimentobem);
+				salvarArquivo();
 				enviaEmail();
+				postSaveUpdate(ln);
 			}
-					
-			mensagens();
-			salvarArquivo();
-			ln.gerarRelatorio(movimentobem);
-			
-			listar();
-			limpaCadastro();	
+			movimentobem = new MovimentoBem();
+			controlaCadastro = 0;	
 		}else{
 			mensagens(msgs);
-		}
-		
+		}		
 		return "movimentobem";
 	}
+ 	
+ 	private void postSaveUpdate(MovimentoBemLN ln){
+		mensagens();		
+		ln.gerarRelatorio(movimentobem);		
+		listar();
+		limpaCadastro();
+ 	}
 	
 	public void enviaEmail() {
 		MovimentoBemLN bln = new MovimentoBemLN();

@@ -15,6 +15,7 @@ import br.com.mauricio.news.dao.CCustoDao;
 import br.com.mauricio.news.ln.LoginLN;
 import br.com.mauricio.news.model.CCusto;
 import br.com.mauricio.news.model.Login;
+import br.com.mauricio.news.model.rh.RequisicaoPessoa;
 
 @ViewScoped
 @ManagedBean(name="reqpessoaMB")
@@ -24,17 +25,26 @@ public class RequisicaoPessoaBean implements Serializable{
 	private Login usuarioLogado = new Login();
 	private Login requisitante = new Login();
     private LoginLN loginLN;
+    private RequisicaoPessoa requisicao = new RequisicaoPessoa();
 	private List<Login> todosUsuarios = new ArrayList<Login>();
 	private List<CCusto> centroCustos;
 	private CCusto centroCusto;
 	private String sexo;
 	private Integer frequencia;
+	private int reqfreq;
+	private int reqidade;
+	private int reqexp;
+	private int horext=0;
 	
 	@PostConstruct
 	public void init(){
 		FacesContext cx = FacesContext.getCurrentInstance();
         HttpSession sessao = (HttpSession) cx.getExternalContext().getSession(false);		
 		this.usuarioLogado = (Login) sessao.getAttribute("login");
+		requisicao = new RequisicaoPessoa();
+		requisicao.setReqges(usuarioLogado);
+		requisicao.setReqccu(usuarioLogado.getCusto());
+		frequenciaHoraExtra();
 		listar();
 	}
 
@@ -43,6 +53,12 @@ public class RequisicaoPessoaBean implements Serializable{
 		todosUsuarios=loginLN.listaUsuarios("nome");
 		CCustoDao daoc = new CCustoDao();
 		centroCustos = daoc.list();		
+	}
+	
+	public boolean frequenciaHoraExtra(){
+		System.out.println("kfk" + horext);
+		if(horext==1) return true;
+		return false;
 	}
 	
     public List<Login> completeTextRequisitante(String query) {
@@ -120,6 +136,46 @@ public class RequisicaoPessoaBean implements Serializable{
 
 	public void setFrequencia(Integer frequencia) {
 		this.frequencia = frequencia;
+	}
+
+	public RequisicaoPessoa getRequisicao() {
+		return requisicao;
+	}
+
+	public void setRequisicao(RequisicaoPessoa requisicao) {
+		this.requisicao = requisicao;
+	}
+
+	public int getReqfreq() {
+		return reqfreq;
+	}
+
+	public void setReqfreq(int reqfreq) {
+		this.reqfreq = reqfreq;
+	}
+
+	public int getReqidade() {
+		return reqidade;
+	}
+
+	public void setReqidade(int reqidade) {
+		this.reqidade = reqidade;
+	}
+
+	public int getReqexp() {
+		return reqexp;
+	}
+
+	public void setReqexp(int reqexp) {
+		this.reqexp = reqexp;
+	}
+
+	public int getHorext() {
+		return horext;
+	}
+
+	public void setHorext(int horext) {
+		this.horext = horext;
 	}	
 	
 }
