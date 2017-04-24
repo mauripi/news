@@ -22,6 +22,7 @@ import br.com.mauricio.news.dao.rh.VencimentoDao;
 import br.com.mauricio.news.dao.rh.VetorhDao;
 import br.com.mauricio.news.model.rh.Base;
 import br.com.mauricio.news.model.rh.Vencimento;
+import br.com.mauricio.news.util.SaveFile;
 
 
 public class ImportaHoleriteLN implements Serializable {
@@ -34,16 +35,9 @@ public class ImportaHoleriteLN implements Serializable {
 
     
 	public String recebeArquivoUpload(InputStream is, String nome){
-        FileOutputStream os = null;
         String erro="";
         try {
-            File file = new File(CAMINHO_PARA_SALVAR_ARQUIVO_IMPORTADO + nome);        	
-            os = new FileOutputStream(file);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
+        	SaveFile.criaArquivo(is, CAMINHO_PARA_SALVAR_ARQUIVO_IMPORTADO + nome);
             gravaNomeDoUltimoArquivoImportado(nome);
         } catch (FileNotFoundException e) {
         	erro = "Ocorreu erro ao importar arquivo.";
@@ -51,15 +45,7 @@ public class ImportaHoleriteLN implements Serializable {
 		} catch (IOException e) {
 			erro = "Ocorreu erro ao importar arquivo.";
 			System.out.println("Erro localizado em: ImportaHoleriteLN().recebeArquivoUpload()  catch (IOException e) " + e.getLocalizedMessage());
-		} finally {
-			if(os!=null)
-				try {
-					os.close();
-				} catch (IOException e) {
-					erro = "Ocorreu erro ao importar arquivo.";
-					System.out.println("Erro localizado em: ImportaHoleriteLN().recebeArquivoUpload() finally os.close()  " + e.getLocalizedMessage());
-				}
-        }
+		} 
 		return erro;
 	}
 	
@@ -85,7 +71,6 @@ public class ImportaHoleriteLN implements Serializable {
 	        	System.out.println("Erro localizado em: ImportaHoleriteLN().validaArquivo().verificaMesAnoPeriodoInformado(mes,ano,periodo)  Mês ou Ano informado diferente do arquivo importado!.) ");
 				erro = "Mês ou Ano ou Tipo de Holerite informado diferente do arquivo importado!.";				
 			}else{
-
 				verificaSeExistemRegistrosDeBaseNoBanco(iMes,iAno,periodo);
 				gravarBases();
 				verificaSeExistemRegistrosDeVencimentoNoBanco(iMes,iAno,periodo);
@@ -167,9 +152,6 @@ public class ImportaHoleriteLN implements Serializable {
 		} 
 		arq.close(); 
 		
-		for(Base b:bases){
-			//System.out.println(b.getAno()+"/"+b.getMes()+"  -  "+b.getChapa());
-		}
 	}
 	
 	public Boolean verificaMesAnoPeriodoInformado(String mes, String ano, Integer periodo){
@@ -205,6 +187,7 @@ public class ImportaHoleriteLN implements Serializable {
 
 	public void verificaSeExistemRegistrosDeVencimentoNoBanco(int mes, int ano, int periodo){
 		int i = 0;
+		
 		if(periodo==11)
 			i=2;
 		if(periodo==31||periodo==32)

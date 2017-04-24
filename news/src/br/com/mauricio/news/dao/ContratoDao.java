@@ -1,71 +1,75 @@
 package br.com.mauricio.news.dao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
+import br.com.mauricio.news.model.CCusto;
 import br.com.mauricio.news.model.Contrato;
+import br.com.mauricio.news.model.Login;
 import br.com.mauricio.news.util.DateUtil;
 
 public class ContratoDao {
-	private EntityManager manager;
+    private EntityManager manager;
+    private CriteriaBuilder cb;
+    
+    public ContratoDao(EntityManager manager){
+        this.manager = manager;
+        cb = this.manager.getCriteriaBuilder();
+    }
+        
+    public List<Contrato> listaContratosAtivos() {
+        CriteriaQuery<Contrato> query = cb.createQuery(Contrato.class);
+        Root<Contrato> root = query.from(Contrato.class);        
+        Path<Boolean> path = root.get("ativo");        
+        Predicate predicate = cb.equal(path, true);
+        Order id = cb.desc(root.get("id"));
+        query.where(predicate).orderBy(id);
+        TypedQuery<Contrato> typedQuery = manager.createQuery(query);        
+        return typedQuery.getResultList();    
+    }
 
-	public ContratoDao(EntityManager manager){
-		this.manager = manager;
-	}
-		
-	@SuppressWarnings("unchecked")
-	public List<Contrato> listaContratosAtivos() {
-		Boolean ativo=true;
-		return this.manager.createQuery(" from contrato where ativo= :ativo order by id desc").setParameter("ativo", ativo).getResultList();	
-	}
+    public List<Contrato> listaContratosByCCusto(List<String> custos) {
+        CriteriaQuery<Contrato> query = cb.createQuery(Contrato.class);
+        Root<Contrato> root = query.from(Contrato.class);        
+        Path<Boolean> path1 = root.get("ativo");
+        Path<String> pathCc = root.<Login>get("usuario").<CCusto>get("custo").<String>get("codigo");        
+        Predicate predicate1 = cb.equal(path1, true);
+        Predicate predicate2 = cb.isTrue(pathCc.in(custos));        
+        query.where(predicate1,predicate2);
+        TypedQuery<Contrato> typedQuery = manager.createQuery(query);        
+        return typedQuery.getResultList();
+    }
+    
+    public List<String> emailsCadastrados(){
+        CriteriaQuery<Contrato> query = cb.createQuery(Contrato.class);  
+        Root<Contrato> root = query.from(Contrato.class); 
+        query.where(cb.notEqual(root.get("emailsAviso"),""),cb.isNotNull(root.get("emailsAviso")));
 
-	@SuppressWarnings("unchecked")
-	public List<Contrato> listaContratosByCCusto(List<String> custos) {
-		Boolean ativo=true;
-		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT c.* ");
-		sb.append(" FROM contrato c");
-		sb.append(" join c. r");
-		sb.append(" join c.responsavel r");
-		sb.append(" join r.custo cc");
-		sb.append(" WHERE");
-		sb.append(" c.ativo= :ativo ");
-		sb.append(" cc.codigo in ( :custos ) ");
-		return this.manager.createQuery(" from contrato where ativo= :ativo order by id desc").setParameter("ativo", ativo).getResultList();	
-	}
-	
-	
-	public void delete(Contrato c){	
-		//this.manager.createNativeQuery(" delete from doccontrato where contrato_id= :id").setParameter("id", c.getId()).executeUpdate();		
-		//this.manager.createNativeQuery(" delete from contrato where id= :id").setParameter("id", c.getId()).executeUpdate();		
-	}
-	
-	public List<String> emailsCadastrados(){
-		String sql = "SELECT emailsAviso FROM contrato";
-		@SuppressWarnings("unchecked")
-		List<String> list = this.manager.createNativeQuery(sql).getResultList();
-		Set<String> emails = new HashSet<String>();
-		for(String o:list){
-			if(o!=null){
-				String e[] = o.split(",");
-				for(String x:e)
-					if(x!=",") emails.add(x);				
-			}
-		}
-		List<String> all = new ArrayList<String>(emails);
-		return all;	
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Contrato> listPrimeiroAviso() {
-		Boolean ativo=true;
-		String sql=" from contrato where DATEADD(DAY, -1*(diasAviso), fim) = :hoje and ativo= :ativo";
-		Date hoje = DateUtil.hoje();
-		return this.manager.createQuery(sql).setParameter("ativo", ativo).setParameter("hoje", hoje).getResultList();	
-	}
+        TypedQuery<Contrato> typedQuery = manager.createQuery(query);        
+        List<Contrato> cs = typedQuery.getResultList();            
+        Set<String> emails = cs.stream().filter(c -> !c.getEmailsAviso().isEmpty())
+            .map(c -> c.getEmailsAviso().split(",")).flatMap(Arrays::stream).collect(Collectors.toSet());
+        return new ArrayList<String>(emails);    
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<Contrato> listPrimeiroAviso() {
+        Boolean ativo=true;
+        String sql=" from contrato where DATEADD(DAY, -1*(diasAviso), fim) = :hoje and ativo= :ativo";
+        Date hoje = DateUtil.hoje();
+        return manager.createQuery(sql).setParameter("ativo", ativo).setParameter("hoje", hoje).getResultList();    
+    }
 }

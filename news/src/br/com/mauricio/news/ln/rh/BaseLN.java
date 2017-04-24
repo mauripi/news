@@ -7,11 +7,11 @@ import br.com.mauricio.news.dao.rh.BaseDao;
 import br.com.mauricio.news.model.rh.Base;
 import br.com.mauricio.news.model.Login;
 
+/**
+ * @author Mauricio Cruz
+ */
 public class BaseLN implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -745593021993066877L;
 
 
