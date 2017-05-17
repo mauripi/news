@@ -98,7 +98,7 @@ public class BaixaBemBean implements Serializable {
 			baixabens = gln.listWithoutRemoved("baixabem", "id desc");
 		}else{
 			BaixaBemLN bln = new BaixaBemLN();
-			baixabens = bln.listaPorUsuario(usuario);			
+			baixabens = bln.getByUser(usuario);			
 		}
 	}
 
@@ -127,7 +127,7 @@ public class BaixaBemBean implements Serializable {
 
 	public void encontrarBem(){
 		BaixaBemLN ln = new BaixaBemLN();
-		patrimonios = ln.obterPatrimonios(codigo, data);
+		patrimonios = ln.getPatrimonios(codigo, data);
 		if(patrimonios.size()<1){
 			msg = "Nenhum registro encontrado para este número de patrimônio. ";
 			baixabem.setDataaquisicao(null);
@@ -214,7 +214,7 @@ public class BaixaBemBean implements Serializable {
 	
 	private void enviaEmail(BaixaBem b) {
 		BaixaBemLN bln = new BaixaBemLN();
-		bln.enviarEmail(b);
+		bln.sendEmail(b);
 	}
 
 	private void enviaEmailBemExcluido(BaixaBem b) {
@@ -278,14 +278,7 @@ public class BaixaBemBean implements Serializable {
 			totalCompra = totalCompra+i.getVlraquisicao();
 			totalResidual = totalResidual+i.getVlrresidual();
 		}
-		
-		
-		//String sjus[] = baixabem.getJustificativa().replace("*", ";").split("   ;");
-		//baixabem.setJustificativa(sjus[0]);
-		//encontrarBem();
 		controlaCadastro=0;
-		///exibeArquivo();
-		
 		edita();
 	}
 

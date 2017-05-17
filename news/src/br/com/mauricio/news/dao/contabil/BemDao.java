@@ -33,7 +33,7 @@ public class BemDao {
 		this.factory.close();		
 	}	
 	
-	public List<Patrimonio> obterPatrimonios(String codigo, Date data) throws IOException{
+	public List<Patrimonio> getPatrimonios(String codigo, Date data) throws IOException{
 		abrirConexao();
 		LocalDate dt = new LocalDate(data);
 		int mes=dt.getMonthOfYear()-1;

@@ -60,20 +60,15 @@ public class RelMovimentoBemLN implements Serializable{
 	    param.put("dataemissao", m.getDataemissao());
 	    param.put("datasaida", m.getDatasaida());
 	    
-	    if(m.getEspacoLocado()==0)
-	    	param.put("espacoLocado", "Não");
-	    else
-	    	param.put("espacoLocado", "Sim");
+	    if(m.getEspacoLocado()==0) param.put("espacoLocado", "Não");
+	    else param.put("espacoLocado", "Sim");
 	    
-	    if(m.getComFrete()==0)
-	    	param.put("comFrete", "Não");
-	    else
-	    	param.put("comFrete", "Sim");
+	    if(m.getComFrete()==0) param.put("comFrete", "Não");
+	    else param.put("comFrete", "Sim");
 	    
 	    param.put("motivo", m.getMotivo());
 	    param.put("solicitante", m.getSolicitante().getNome());
 
-	    // para resolver o problema da moeda
 	    param.put("REPORT_LOCALE", new Locale("pt", "BR"));
 	    param.put("logo", ec.getRealPath("/sistema/img/logo.jpg"));
 
@@ -120,20 +115,15 @@ public class RelMovimentoBemLN implements Serializable{
 	    param.put("dataemissao", m.getDataemissao());
 	    param.put("datasaida", m.getDatasaida());
 	    
-	    if(m.getEspacoLocado()==0)
-	    	param.put("espacoLocado", "Não");
-	    else
-	    	param.put("espacoLocado", "Sim");
+	    if(m.getEspacoLocado()==0) param.put("espacoLocado", "Não");
+	    else param.put("espacoLocado", "Sim");
 	    
-	    if(m.getComFrete()==0)
-	    	param.put("comFrete", "Não");
-	    else
-	    	param.put("comFrete", "Sim");
+	    if(m.getComFrete()==0) param.put("comFrete", "Não");
+	    else param.put("comFrete", "Sim");
 	    
 	    param.put("motivo", m.getMotivo());
 	    param.put("solicitante", m.getSolicitante().getNome());
 
-	    // para resolver o problema da moeda
 	    param.put("REPORT_LOCALE", new Locale("pt", "BR"));
 	    param.put("logo", ec.getRealPath("/sistema/img/logo.jpg"));
 

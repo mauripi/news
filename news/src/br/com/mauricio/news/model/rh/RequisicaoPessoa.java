@@ -92,6 +92,8 @@ public class RequisicaoPessoa  implements Serializable{
 	private String fatdes;	
 	@Column(length=1000)
 	private String fatind;
+	
+	
 	public Integer getId() {
 		return id;
 	}

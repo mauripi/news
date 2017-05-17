@@ -23,11 +23,11 @@ import br.com.mauricio.news.model.engenharia.MENGLOC;
 public class NotaDebitoBean  implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private NotaDebitoEnergia debito;
-	private NotaDebitoEnergia debitoSel;
+	private NotaDebitoEnergia debito = new NotaDebitoEnergia();
+	private NotaDebitoEnergia debitoSel = new NotaDebitoEnergia();
 	private List<NotaDebitoEnergia> debitos = new ArrayList<NotaDebitoEnergia>();
 	private GenericLN<NotaDebitoEnergia> gln;
-	private MENGLOC mengloc;
+	private MENGLOC mengloc = new MENGLOC();
 	private List<MENGLOC> menglocs = new ArrayList<MENGLOC>();
 	private int controlaCadastro = 0;
 	private String msg;
@@ -42,7 +42,7 @@ public class NotaDebitoBean  implements Serializable {
 
 	public void listar(){
 		gln = new GenericLN<NotaDebitoEnergia>();
-		debitos = gln.listWithoutRemoved("notadebitopraca", "mes,ano desc");
+		debitos = gln.listWithoutRemoved("notadebitopraca", "mes,ano");
 	}
 
 	public void listarLoc(){

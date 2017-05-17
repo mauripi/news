@@ -282,4 +282,11 @@ public class MCLIFOR implements Serializable{
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return  nomfan + " " + cgccpf + " " + endrua + "  " + endcpl
+				+ " " + endbai + " " + endcep + " " + endcid + " " + foncon
+				+ nomcon + " " + emacon;
+	}
+	
 }

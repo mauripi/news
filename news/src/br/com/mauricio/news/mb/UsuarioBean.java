@@ -56,9 +56,8 @@ public class UsuarioBean implements Serializable {
 		todosModulos = listAllModulos();
 		CCustoDao daoc = new CCustoDao();
 		centroCustos = daoc.list();
-		setUsuariosPrestacao(new DualListModel<Login>(logins, new ArrayList<Login>()));
-		setUsuariosModulos(new DualListModel<Modulo>(todosModulos, new ArrayList<Modulo>()));
-
+		usuariosPrestacao = new DualListModel<Login>(logins, new ArrayList<Login>());
+		usuariosModulos = new DualListModel<Modulo>(todosModulos, new ArrayList<Modulo>());
 	}
 
 	private List<Modulo> listAllModulos() {
@@ -94,7 +93,7 @@ public class UsuarioBean implements Serializable {
 			init();
 		}
 	}
-	
+
 	public void grava(){		
 		if(this.login.getNome()=="" || this.login.getCpf()==""){
 			msg = "Verifique se os campos Nome e Usuário estão preenchidos.";
@@ -118,6 +117,7 @@ public class UsuarioBean implements Serializable {
 					if(controlaCadastro==2){
 						LoginLN ln = new LoginLN();
 						msg = ln.atualiza(this.login);
+						System.out.println(msg);
 						mensagens();
 						limpaCadastro();
 						init();
@@ -145,10 +145,10 @@ public class UsuarioBean implements Serializable {
 		
 	public void usuarioSelecionado(SelectEvent event){		
 		LoginLN ln = new LoginLN();
-		this.login = ln.findById((Login) event.getObject());		
-		setUsuariosPrestacao(new DualListModel<Login>(logins, login.getUsuariosPrestacao()));
+		this.login = ln.findById((Login) event.getObject());
+		usuariosPrestacao = new DualListModel<Login>(logins, login.getUsuariosPrestacao());
 		atualizaModulos();
-		setUsuariosModulos(new DualListModel<Modulo>(modulosSemPermisao, modulosUsuario));
+		usuariosModulos = new DualListModel<Modulo>(modulosSemPermisao, modulosUsuario);
 		edita();
 	}
 
@@ -168,8 +168,8 @@ public class UsuarioBean implements Serializable {
 		Login l = new Login();
 		this.login = l;
 		controlaCadastro=0;
-		setUsuariosPrestacao(new DualListModel<Login>(new ArrayList<Login>(), new ArrayList<Login>()));
-		setUsuariosModulos(new DualListModel<Modulo>(new ArrayList<Modulo>(), new ArrayList<Modulo>()));
+		usuariosPrestacao = new  DualListModel<Login>(new ArrayList<Login>(), new ArrayList<Login>());
+		usuariosModulos = new DualListModel<Modulo>(new ArrayList<Modulo>(), new ArrayList<Modulo>());
 	}
 
 	public void resetarSenha(){
@@ -182,7 +182,7 @@ public class UsuarioBean implements Serializable {
 	
 	public void mensagens(){
         FacesContext context = FacesContext.getCurrentInstance();  	          
-        context.addMessage(null, new FacesMessage("",msg));  		
+        context.addMessage(null, new FacesMessage(msg,""));  		
 	}
 
 	public void fechar(){

@@ -18,7 +18,6 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - ENGENHARIA</ui:define>
 <ui:define name="conteudo">
-<ui:debug hotkey="x"/>
 <f:facet name="header">Cadastro dos Rateios</f:facet>
 
 <h:form id="formCad">
@@ -53,7 +52,7 @@
 		<br></br>
 		<hr></hr>
 	    <p:dataTable id="tbdesp" var="d" value="#{notadebitoMB.debitos}" selectionMode="single" 
-	     	selection="#{notadebitoMB.debitoSel}" rowKey="#{d.id}" emptyMessage="">
+	     	selection="#{notadebitoMB.debitoSel}" emptyMessage="" paginator="true" paginatorPosition="bottom" rowKey="#{d.id}" rows="15">
 	    	<f:facet name="header">Gastos cadastrado</f:facet>
 			<p:ajax event="rowSelect" listener="#{notadebitoMB.selecao}" update=":formCad" />
 			
@@ -73,6 +72,7 @@
 		    </p:column>	   	               	        
 	    </p:dataTable>
 	</p:panel>
+	
 </h:form>
 
 

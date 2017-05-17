@@ -54,13 +54,20 @@ public class SaveFile {
      }     
     
     public static void copiar(String origem, String destino){
-        File source = new File(origem);
-        File dest = new File(destino);
-        try {
-            FileUtils.copyFile(source, dest);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }    	
+		Thread thread = new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+		    	try {    	
+			        File source = new File(origem);
+			        File dest = new File(destino);
+			        FileUtils.copyFile(source, dest);
+			        Thread.sleep(2000);
+		    	} catch (Exception e) {
+		    		System.out.println(e.getLocalizedMessage());
+		    	}
+		    }		            
+		});		        
+		thread.start();        
     }
 
     public static void criarPasta(String caminho) {
@@ -70,14 +77,25 @@ public class SaveFile {
 	}
 
 	public static void criaArquivo(FileUploadEvent upload, String caminho) throws IOException {
-		InputStream initialStream = upload.getFile().getInputstream();
-		byte[] buffer = new byte[initialStream.available()];
-		initialStream.read(buffer);
-	    File targetFile = new File(caminho+"//"+upload.getFile().getFileName());
-	    criarPasta(caminho);
-	    OutputStream outStream = new FileOutputStream(targetFile);
-		outStream.write(buffer);
-		outStream.close();
+		Thread thread = new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+		    	try {
+					InputStream initialStream = upload.getFile().getInputstream();
+					byte[] buffer = new byte[initialStream.available()];
+					initialStream.read(buffer);
+				    File targetFile = new File(caminho+"//"+upload.getFile().getFileName());
+				    criarPasta(caminho);
+				    OutputStream outStream = new FileOutputStream(targetFile);
+					outStream.write(buffer);
+					outStream.close();
+					Thread.sleep(2000);
+		    	} catch (Exception e) {
+		    		System.out.println(e.getLocalizedMessage());
+		    	}
+		    }		            
+		});		        
+		thread.start();
 	}
 
 	public static void criaArquivo(InputStream is, String caminho) throws IOException,FileNotFoundException{
@@ -101,5 +119,9 @@ public class SaveFile {
         }
         return files;
     }
+
+	public static void criaArquivo(String string, String novocaminho) {
+		
+	}
 	
 }

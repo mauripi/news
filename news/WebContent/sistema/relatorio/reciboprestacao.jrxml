@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reciboprestacao" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0a4480b-4c1f-4976-b9a6-1dc368c514ad">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="datarecibo" class="java.lang.String"/>
+	<parameter name="valor" class="java.lang.String"/>
+	<parameter name="valorextenso" class="java.lang.String"/>
+	<field name="colaborador.nome" class="java.lang.String"/>
+	<field name="motivodespesa" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="802" splitType="Stretch">
+			<rectangle>
+				<reportElement x="25" y="27" width="499" height="357" uuid="c53f203b-e33d-426c-9f37-433b6ca18184"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="11" y="400" width="532" height="2" forecolor="#999999" backcolor="#999999" uuid="3758d07f-b6ee-4847-a2cb-7cbba824c7af"/>
+			</rectangle>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement x="54" y="311" width="235" height="18" uuid="5c075e95-bf57-48b3-8c95-c5f1254e71c3"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{datarecibo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="25" y="42" width="499" height="34" uuid="a8acbf31-1231-4d90-acd7-7b01ca8fd1c6"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="20" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="54" y="42" width="60" height="60" uuid="805c1488-24d8-451e-96b6-ce068c10d88e"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="287" y="329" width="216" height="1" uuid="6e838910-a229-431c-8484-c68497ae671f"/>
+			</line>
+			<textField>
+				<reportElement x="287" y="330" width="216" height="20" uuid="afc5ad29-2037-4a61-a990-b99f831ad7e3"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{colaborador.nome}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="54" y="242" width="449" height="20" uuid="dbbe6a2e-48e8-446e-a592-73f256303886"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Por expressão legítima da verdade, dou plena quitação.]]></text>
+			</staticText>
+			<textField pattern="">
+				<reportElement x="377" y="76" width="116" height="20" uuid="867c458d-2c6e-414b-a4f1-6bbf5c7d4d7e"/>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{valor}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement x="54" y="707" width="213" height="15" uuid="9469c86e-2e83-428f-a376-a7e058a77313"/>
+				<textFieldExpression><![CDATA[$P{datarecibo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="399" y="469" width="100" height="20" uuid="3703a6cc-0c1c-4315-b234-f8574370d490"/>
+				<textFieldExpression><![CDATA[$P{valor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="250" y="510" width="253" height="15" uuid="e720dd9e-9211-4f5b-bc19-95bd3ff67d62"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rede Mulher de Televisão, CNPJ 02.344.518/0001-78,]]></text>
+			</staticText>
+			<image onErrorType="Blank">
+				<reportElement x="54" y="435" width="41" height="39" uuid="6d2558d7-156f-4ce6-a091-b7019148678f"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="49" y="525" width="444" height="95" uuid="85fef160-5ede-4907-9c69-91ac1174820b"/>
+				<textFieldExpression><![CDATA[" a importância supra de " +$P{valor}  + " ( "+ $P{valorextenso} +"), "+ $F{motivodespesa}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="25" y="420" width="499" height="357" uuid="5f87d559-dcb2-40f5-836e-875447c28c89"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="25" y="435" width="499" height="34" uuid="0cce7b9b-bcdd-460d-849b-ed2cbfd60eb8"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" size="20" isBold="true" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[RECIBO]]></text>
+			</staticText>
+			<line>
+				<reportElement x="287" y="722" width="216" height="1" uuid="d33d5182-d64c-4254-8173-511bbd485481"/>
+			</line>
+			<textField>
+				<reportElement x="287" y="723" width="216" height="20" uuid="fe1dab29-f807-44d8-9794-0fa4d15e09c1"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{colaborador.nome}]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Blank">
+				<reportElement x="54" y="435" width="60" height="60" uuid="01aa7420-1d9b-455a-b421-bfabb7e9ac0f"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField pattern="">
+				<reportElement x="377" y="469" width="116" height="20" uuid="29c76e7b-3056-42df-bbb1-0d3899e0bdaf"/>
+				<textElement textAlignment="Right">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{valor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="54" y="169" width="451" height="63" uuid="99d279fd-835c-46d4-b3c7-f58f8e848d28"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ref. " +$F{motivodespesa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement x="54" y="704" width="235" height="18" uuid="ddc80a00-cbcd-4377-bf91-adee375ea8d1"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{datarecibo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="54" y="635" width="449" height="20" uuid="5d62cf13-a8ab-4d0a-9f15-79dadd3f4134"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Por expressão legítima da verdade, dou plena quitação.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="54" y="114" width="451" height="44" uuid="6cf6e1bd-735a-4fc0-8896-24c180f1706c"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Declaro   para os   devidos   fins,  que recebi da   Rede Mulher de Televisão LTDA, CNPJ 02.344.518/0001-78, a importância supra de " +$P{valor}  + " ("+ $P{valorextenso} +"). "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="54" y="508" width="451" height="44" uuid="42612585-d595-49ff-9230-4910a6f5efdf"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Declaro   para os   devidos   fins,  que recebi da   Rede Mulher de Televisão LTDA, CNPJ 02.344.518/0001-78, a importância supra de " +$P{valor}  + " ("+ $P{valorextenso} +"). "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="54" y="563" width="451" height="63" uuid="6e71aa38-e6fa-4115-bc87-be0a353c3f21"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ref. " +$F{motivodespesa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+</jasperReport>

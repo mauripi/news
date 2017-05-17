@@ -22,7 +22,6 @@ import br.com.mauricio.news.util.SaveFile;
 public class ContratoLN implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     private EntityManager manager;
     private static String CAMINHO_PASTA_CONTRATOS = "C:\\ARQUIVOS_CONTRATOS\\";
     
@@ -31,8 +30,12 @@ public class ContratoLN implements Serializable {
         this.manager = c.getEntityManager();
     }
 
-    public String delete(){
-        return null;
+    public String delete(Contrato contrato){
+    	File pastaAnexos = new File(CAMINHO_PASTA_CONTRATOS+ contrato.getId().toString());
+    	pastaAnexos.deleteOnExit();
+    	GenericLN<Contrato> gln = new GenericLN<Contrato>();
+    	gln.remove(gln.find(new Contrato(), contrato.getId()));    	
+        return "Contrato removido!";
     }
 
     public List<Contrato> list(Login userLogado) {
@@ -54,7 +57,6 @@ public class ContratoLN implements Serializable {
         arquivosParaWeb(anexos,contrato);
         return anexos;
     }
-
 
     private void arquivosParaWeb(List<String> anexos, Contrato c){
         String caminho = CAMINHO_PASTA_CONTRATOS + c.getId().toString() + "\\";
@@ -91,6 +93,12 @@ public class ContratoLN implements Serializable {
         }
     }
 
+
+    public List<Contrato> listAtivo(){
+    	ContratoDao dao = new ContratoDao(manager);
+		return dao.listaContratosAtivos();
+    }
+ 
     
     
 }

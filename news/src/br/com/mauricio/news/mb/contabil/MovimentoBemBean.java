@@ -171,13 +171,12 @@ public class MovimentoBemBean implements Serializable {
 			movimentobem.setItens(itens);
 			if(controlaCadastro==2)						
 				msg = ln.update(movimentobem,itensRemovido);	
-				postSaveUpdate(ln);
 			if(controlaCadastro==1){
 				msg = ln.add(movimentobem);
 				salvarArquivo();
 				enviaEmail();
-				postSaveUpdate(ln);
 			}
+			postSaveUpdate(ln);
 			movimentobem = new MovimentoBem();
 			controlaCadastro = 0;	
 		}else{

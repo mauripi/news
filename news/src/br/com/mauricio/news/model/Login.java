@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -50,13 +49,13 @@ public class Login extends Auditoria implements Serializable{
 	@Column(columnDefinition="bit")
 	private int trocarSenha;
 	
-	@ManyToMany(cascade=CascadeType.MERGE)
+	@ManyToMany
     @JoinTable(name = "acesso", joinColumns = @JoinColumn(name = "login_id"), inverseJoinColumns = @JoinColumn(name = "modulo_id"))
 	@ForeignKey(name="FK_login_modulo")
 	@LazyCollection(LazyCollectionOption.FALSE)	
     private List<Modulo> acessos;
 	
-	@OneToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+	@OneToMany
 	@LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name="permissaoprestacao", joinColumns={@JoinColumn(name="permissao_de")}, inverseJoinColumns={@JoinColumn(name="permisao_para")})
     private List<Login> usuariosPrestacao;

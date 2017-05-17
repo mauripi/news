@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PersistenceUnit;
 
 import org.hibernate.annotations.Type;
+
+import br.com.mauricio.news.util.DateUtil;
 /**
 *
 * @author MAURICIO CRUZ
@@ -331,4 +333,18 @@ public class Contrato implements Serializable{
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		String data = "";
+		if(inicio!=null)
+			data = DateUtil.formatDataFromBanco(inicio);
+			
+		if(fim!=null)
+			data = data + " " + DateUtil.formatDataFromBanco(fim);
+		
+		return  objeto + " " + origem + " " + tipocontrato + " "
+				+ data + " " + tipoValor + " " + valorTotal + " "
+				+ valorMensal + " " + mclifor + " " + responsavel + " " + observacao;
+	}
+	
 }

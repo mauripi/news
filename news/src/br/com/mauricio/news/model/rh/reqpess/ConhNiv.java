@@ -1,7 +1,7 @@
 package br.com.mauricio.news.model.rh.reqpess;
 
 public enum ConhNiv {
-	SEMPRE(0),ALGUMAS_VEZES(1),NUNCA(2);
+	BÁSICO(0),INTERMEDIÁRIO(1),AVANÇADO(2);
 	
     @SuppressWarnings("unused")
 	private int value;

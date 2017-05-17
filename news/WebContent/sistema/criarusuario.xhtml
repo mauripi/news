@@ -54,14 +54,10 @@
 						<p:commandButton value="Editar" action="#{usuarioMB.edita}" update=":formCad" disabled="#{usuarioMB.login.id==null}"/>
 						<p:commandButton value="Resetar Senha" action="#{usuarioMB.resetarSenha}" disabled="#{usuarioMB.login.id==null}" update=":formCad,:formMsg"/>
 						<p:commandButton value="Cancelar" action="#{usuarioMB.limpaCadastro}" update=":formCad" disabled="#{usuarioMB.login.id==null}"/>
-						<p:commandButton value="Gravar" action="${usuarioMB.grava}" update=":formCad,:formMsg,:form_tb" disabled="#{usuarioMB.controlaCadastro==0}"/>
+						<p:commandButton value="Gravar" action="${usuarioMB.grava}" update=":formCad,:formMsg," disabled="#{usuarioMB.controlaCadastro==0}"/>
 					</p:panelGrid>			
 				</f:facet>
-			</p:panel>
-		</h:form> 	
 <br></br>
-		<h:form id="form_tb" style="font-size: 0.9em !important;">
-
 			<p:dataTable id="tb" var="u" value="#{usuarioMB.logins}"			  
 		               paginator="true" paginatorPosition="bottom" rows="20" rowKey="#{u.id}"
 		               selectionMode="single" resizableColumns="true" filteredValue=""						
@@ -84,13 +80,14 @@
 						<h:outputText value="#{u.email}"/> 
 		            </p:column> 		            
 			</p:dataTable>
-		</h:form>
-	
+			</p:panel>
+		</h:form> 	
+
 	</p:layoutUnit>
-</p:layout>
     <h:form id="formMsg" style="font-size:small;">                      
         <p:growl id="msg" showDetail="true" life="4000"/> 
     </h:form>
+</p:layout>
 
 	</ui:define>			
 

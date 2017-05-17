@@ -52,12 +52,12 @@ public class BaseDao{
 				+ " mes=(select max(m.mes) from base m where m.ano=(select max(c.ano) from base c)) "
 				+ "and ano=(select max(a.ano) from base a) ";
 		try{
-			funcao = this.manager.createNativeQuery(sql).setParameter("chapa",l.getChapa()).getSingleResult();		
+			funcao = this.manager.createNativeQuery(sql).setParameter("chapa",l.getChapa()).getResultList().get(0);		
 		}catch(NoResultException e){
 			 sql="select funcao from base where chapa= :chapa and "
 					+ " mes=(select max(m.mes-1) from base m where m.ano=(select max(c.ano) from base c)) "
 					+ "and ano=(select max(a.ano) from base a) ";	
-			funcao = this.manager.createNativeQuery(sql).setParameter("chapa",l.getChapa()).getSingleResult();
+			funcao = this.manager.createNativeQuery(sql).setParameter("chapa",l.getChapa()).getResultList().get(0);
 		}
 		return (String) funcao;
 	}

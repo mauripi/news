@@ -1,10 +1,7 @@
 package br.com.mauricio.news.ln.contabil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,19 +37,19 @@ public class BaixaBemLN implements Serializable {
 		this.manager = manager;
 	}	
 	
-	public List<Patrimonio> obterPatrimonios(String codigo, Date data){
+	public List<Patrimonio> getPatrimonios(String codigo, Date data){
 		BemDao dao = new BemDao();
 		try {
-			return dao.obterPatrimonios(codigo, data);
+			return dao.getPatrimonios(codigo, data);
 		} catch (IOException e) {
 			System.out.println(e.getLocalizedMessage());
 			return new ArrayList<Patrimonio>();
 		}
 	}
 	
-	public List<BaixaBem> listaPorUsuario(Login usuario){
+	public List<BaixaBem> getByUser(Login usuario){
 		BaixaBemDao dao = new BaixaBemDao();
-		return dao.listaPorUsuario(usuario);
+		return dao.getByUser(usuario);
 	}
 	
 	public void enviarEmailExclusao(BaixaBem bem) {
@@ -62,129 +59,56 @@ public class BaixaBemLN implements Serializable {
 		if(ValidaEmail.validar(bem.getSolicitante().getEmail()))
 			destinatarios.add(bem.getSolicitante().getEmail());
 		List<File> anexos = new ArrayList<File>();
-		Email email = new Email("Intranet Record News", destinatarios, "Exlusão da Solicitação de Baixa de Patrimônio", montaCorpodoEmailExclusao(bem),anexos);
+		Email email = new Email("Intranet Record News", destinatarios, "Exlusão da Solicitação de Baixa de Patrimônio", getBodyEmailExclusao(bem),anexos);
 		email.start();
 	}
 	
-	private String montaCorpodoEmailExclusao(BaixaBem bem) {
+	private String getBodyEmailExclusao(BaixaBem bem) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("<html>");
-		sb.append("<body>");
-		sb.append("<h1>");
-		sb.append("<span style='font-family: arial; font-size: 18pt';>Controle de Baixa de Patrim&ocirc;nios </span>");
-		sb.append("</h1>");
-		sb.append("<p>&nbsp;</p>");
+		sb.append("<html><body><h1><span style='font-family: arial; font-size: 18pt';>Controle de Baixa de Patrim&ocirc;nios </span></h1><p></p>");
 		sb.append("<p><strong>Solicita&ccedil;&atilde;o de Baixa de Bem Nro. "+ bem.getId()+" removida.:</strong> </p>");
-		sb.append("<p><strong>Usu&aacute;rio:</strong> "+ bem.getSolicitante().getNome() +"</p>");		
-		sb.append("<p>&nbsp;</p>");	
-		sb.append("<p>&nbsp;</p>");	
-		sb.append("<p>Favor, n&atilde;o responder.</p><p>Atenciosamente.</p>");		
-		sb.append("<p>&nbsp;</p>");	
+		sb.append("<p><strong>Usu&aacute;rio:</strong> "+ bem.getSolicitante().getNome() +"</p><p></p><p></p>");		
+		sb.append("<p>Favor, n&atilde;o responder.</p><p>Atenciosamente.</p><p></p>");		
 		sb.append("<p><span style='font-family: arial; font-size: 10pt';>Este email foi enviado automaticamente do TI Sistemas.</span></p>");
 		sb.append("<p><span style='font-family: arial; font-size: 10pt;'>Abaixo segue detalhes da baixa do bem e relat&oacute;rio em anexo :</span></p>");
-		sb.append("</body>");	
-		sb.append("</html>");	
+		sb.append("</body></html>");
 		return sb.toString();		
-
 	}
 
-	public void enviarEmail(BaixaBem bem){
+	public void sendEmail(BaixaBem bem){
 		List<String> destinatarios = new ArrayList<String>();
 		destinatarios.add("acorrea@recordnews.com.br");
 		destinatarios.add("flettieri@recordnews.com.br");
 		if(ValidaEmail.validar(bem.getSolicitante().getEmail()))
-			destinatarios.add(bem.getSolicitante().getEmail());
-		
+			destinatarios.add(bem.getSolicitante().getEmail());		
 		File file = new File("C:\\windows\\temp\\contabil\\"+"baixabem"+bem.getId()+".pdf");
 		List<File> anexos = new ArrayList<File>();
-		anexos.add(file);			
-		
-		Email email = new Email("Intranet Record News", destinatarios, "Baixa de Patrimônio", montaCorpodoEmail(bem),anexos);
+		anexos.add(file);					
+		Email email = new Email("Intranet Record News", destinatarios, "Baixa de Patrimônio", getBodyEmail(bem),anexos);
 		email.start();
 	}
 	
-	private String montaCorpodoEmail(BaixaBem bem){
+	private String getBodyEmail(BaixaBem bem){
 		StringBuilder sb = new StringBuilder();
-		sb.append("<html>");
-		sb.append("<body>");
-		sb.append("<h1>");
-		sb.append("<span style='font-family: arial; font-size: 18pt';>Controle de Baixa de Patrim&ocirc;nios </span>");
-		sb.append("</h1>");
+		sb.append("<html><body><h1>");
+		sb.append("<span style='font-family: arial; font-size: 18pt';>Controle de Baixa de Patrim&ocirc;nios </span></h1>");
 		sb.append("<p><span style='font-family: arial; font-size: 10pt';>Este email foi enviado automaticamente do TI Sistemas.</span></p>");
-		sb.append("<p><span style='font-family: arial; font-size: 10pt;'>Abaixo segue detalhes da baixa do bem e relat&oacute;rio em anexo :</span></p>");
-		sb.append("<p>&nbsp;</p>");
+		sb.append("<p><span style='font-family: arial; font-size: 10pt;'>Abaixo segue detalhes da baixa do bem e relat&oacute;rio em anexo :</span></p><p></p>");
 		sb.append("<p><strong>Solicitante:</strong> "+ bem.getSolicitante().getNome() +"</p>");
 		sb.append("<p><strong>Filial:</strong> "+ bem.getFilial().getNome() +"</p>");
-		sb.append("<p><strong>Centro de Custo:</strong> "+ bem.getCcusto().getNome() +"</p>");
-		sb.append("<p>&nbsp;</p>");	
+		sb.append("<p><strong>Centro de Custo:</strong> "+ bem.getCcusto().getNome() +"</p><p></p>");
 		sb.append("<p>Favor, n&atilde;o responder.</p><p>Atenciosamente.</p>");		
-		sb.append("</body>");		
-		sb.append("</html>");	
+		sb.append("</body></html>");	
 		return sb.toString();		
 	}
-
 	
-	public void carregaArquivo(BaixaBem bem,String caminhoOrigem) {
+	public void carregaArquivo(BaixaBem bem,String caminhoOrigem) throws IOException {
 		ServletContext sContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
 		String caminhoDestino =sContext.getRealPath("/temp/contabil/"+bem.getId()+"/");
-
-		File folder = new File(caminhoDestino);
-
-        if (!folder.exists())
-             folder.mkdirs();
-        File raiz = new File(caminhoOrigem);
-        if(raiz.listFiles() != null){
-	 		for(File f: raiz.listFiles()) {
-	 			if(f.isFile()) {
-	 	             String arquivo = caminhoDestino + File.separator + f.getName(); 	
-	 	             try {
-	 					SaveFile.criaArquivo(f, arquivo);
-	 				} catch (IOException e) {
-	 					e.printStackTrace();
-	 				}
-	 			}
-	 		}
-        }
+		List<String> filesInFolder = SaveFile.listFilesInFolder(caminhoOrigem);
+		filesInFolder.forEach(a -> SaveFile.copiar(caminhoOrigem + File.separator + a, caminhoDestino + File.separator + a));
 	}
 
-	public String recebeArquivoUpload(InputStream is, String nome, String caminho){
-		
-        FileOutputStream os = null;
-        String erro="";
-        try {
-        	criarPasta(caminho);      	
-            File file = new File(caminho + nome);        	
-            os = new FileOutputStream(file);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
-        } catch (FileNotFoundException e) {
-        	erro = "Ocorreu erro ao importar arquivo.";
-			System.out.println("Erro localizado em: BaixaBemLN.recebeArquivoUpload() catch (FileNotFoundException e)" + e.getLocalizedMessage());
-		} catch (IOException e) {
-			erro = "Ocorreu erro ao importar arquivo.";
-			System.out.println("Erro localizado em: BaixaBemLN.recebeArquivoUpload()  catch (IOException e) " + e.getLocalizedMessage());
-		} finally {
-			if(os!=null)
-				try {
-					os.close();
-				} catch (IOException e) {
-					erro = "Ocorreu erro ao importar arquivo.";
-					System.out.println("Erro localizado em: BaixaBemLN.recebeArquivoUpload() finally os.close()  " + e.getLocalizedMessage());
-				}
-        }
-		return erro;
-	}
-	
-	private void criarPasta(String caminho) {
-        File folder = new File(caminho);
-        if (!folder.exists())
-            folder.mkdirs();	
-	}	
-	
-	
 	
 	public GenericDao<BaixaBem> getDao() {
 		return dao;

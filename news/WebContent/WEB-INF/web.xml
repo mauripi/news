@@ -67,14 +67,14 @@
     <filter-name>primeUploadFilter</filter-name>
     <servlet-name>Faces Servlet</servlet-name>
   </filter-mapping>
-<context-param>  
-  <param-name>com.sun.faces.disableVersionTracking</param-name>  
-  <param-value>true</param-value>  
-</context-param> 
-<context-param>
-    <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
-    <param-value>true</param-value>
-</context-param>
+	<context-param>  
+	  <param-name>com.sun.faces.disableVersionTracking</param-name>  
+	  <param-value>true</param-value>  
+	</context-param> 
+	<context-param>
+	    <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+	    <param-value>true</param-value>
+	</context-param>
   <error-page>
     <exception-type>java.lang.Exception</exception-type>
     <location>/erro.xhtml</location>
@@ -84,8 +84,7 @@
     <location>/login.xhtml</location>
   </error-page>
   <listener>
-	<listener-class>
-		org.quartz.ee.servlet.QuartzInitializerListener
-	</listener-class>
+  <listener-class>org.quartz.ee.servlet.QuartzInitializerListener</listener-class>
   </listener> 
+ 
 </web-app>

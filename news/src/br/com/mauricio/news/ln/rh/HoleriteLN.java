@@ -15,7 +15,7 @@ public class HoleriteLN implements Serializable {
 
 	private static final long serialVersionUID = -745593021993066877L;
 	
-	public List<Holerite> listaHolerite(Login l,int mes,int ano,int periodo){
+	public List<Holerite> getHolerites(Login l,int mes,int ano,int periodo){
 		VencimentoDao vDao = new VencimentoDao();
 		List<Vencimento> vencs = vDao.getVencimentos(l, mes, ano,periodo);
 		List<Holerite> hls = new ArrayList<Holerite>();		

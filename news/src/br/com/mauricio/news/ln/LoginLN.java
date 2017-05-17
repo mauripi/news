@@ -20,6 +20,7 @@ import org.apache.commons.mail.SimpleEmail;
 import br.com.mauricio.news.dao.AcessoDao;
 import br.com.mauricio.news.dao.GenericDao;
 import br.com.mauricio.news.dao.LoginDao;
+import br.com.mauricio.news.dao.LoginFotoDao;
 import br.com.mauricio.news.dao.rh.BaseDao;
 import br.com.mauricio.news.model.CCusto;
 import br.com.mauricio.news.model.Filial;
@@ -42,10 +43,12 @@ public class LoginLN implements Serializable{
 		LoginDao dao = new LoginDao();
 		autoriza=dao.validaLogin(cpf, senha);
 		if(autoriza==true){//se tiver acesso coloca usuario na sessao
-			this.login = dao.retornaUsuario(cpf, senha);
+			login = dao.retornaUsuario(cpf, senha);
 			FacesContext cx = FacesContext.getCurrentInstance();
 	        HttpSession sessao = (HttpSession) cx.getExternalContext().getSession(false);
-	        sessao.setAttribute("login", this.login);
+	        sessao.setAttribute("login", login);
+			LoginFotoDao daoL = new LoginFotoDao();
+			daoL.userFoto(login);	        
 		}
 		return autoriza;		
 	}
@@ -72,28 +75,13 @@ public class LoginLN implements Serializable{
 	}
 
 	public String atualiza(Login l){
-		GenericDao<Login> dao = new GenericDao<Login>();
-		GenericDao<CCusto> daoc = new GenericDao<CCusto>();
-		GenericDao<Filial> daof = new GenericDao<Filial>();
-		l.setCusto(daoc.findById(l.getCusto().getClass(), l.getCusto().getId()));
-		l.setFilial(daof.findById(l.getFilial().getClass(), l.getFilial().getId()));
-		removeModulos(l);
-		removePermissao(l);
-		List<Modulo> modulos =l.getAcessos(); 
-		l.setAcessos(new ArrayList<Modulo>());
-		GenericDao<Modulo> daom = new GenericDao<Modulo>();
-		for(Modulo m:modulos)
-			l.getAcessos().add(daom.findById(Modulo.class, m.getId()));
-		
-		List<Login> logins =l.getUsuariosPrestacao(); 
-		l.setUsuariosPrestacao(new ArrayList<Login>());
-		GenericDao<Login> daol = new GenericDao<Login>();
-		for(Login lg:logins)
-			l.getUsuariosPrestacao().add(daol.findById(Login.class, lg.getId()));
-
-		dao.update(l);
-		msg = "Usuário atualizado com sucesso.";
 		try {
+			GenericDao<Login> dao = new GenericDao<Login>();
+			removeModulos(l);
+			removePermissao(l);
+			dao.update(l);
+			msg = "Usuário atualizado com sucesso.";
+			
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage() + " -- Erro na Atualização do Usuário");

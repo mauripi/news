@@ -12,10 +12,14 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import br.com.mauricio.news.dao.CCustoDao;
+import br.com.mauricio.news.ln.GenericLN;
 import br.com.mauricio.news.ln.LoginLN;
 import br.com.mauricio.news.model.CCusto;
 import br.com.mauricio.news.model.Login;
+import br.com.mauricio.news.model.rh.RequisicaoConhecimento;
 import br.com.mauricio.news.model.rh.RequisicaoPessoa;
+import br.com.mauricio.news.model.rh.reqpess.ConhFreq;
+import br.com.mauricio.news.model.rh.reqpess.ConhNiv;
 
 @ViewScoped
 @ManagedBean(name="reqpessoaMB")
@@ -27,6 +31,8 @@ public class RequisicaoPessoaBean implements Serializable{
     private LoginLN loginLN;
     private RequisicaoPessoa requisicao = new RequisicaoPessoa();
 	private List<Login> todosUsuarios = new ArrayList<Login>();
+	private List<RequisicaoConhecimento> todosConhecimentos;
+	private RequisicaoConhecimento conhecimento = new RequisicaoConhecimento();
 	private List<CCusto> centroCustos;
 	private CCusto centroCusto;
 	private String sexo;
@@ -35,6 +41,9 @@ public class RequisicaoPessoaBean implements Serializable{
 	private int reqidade;
 	private int reqexp;
 	private int horext=0;
+	private boolean idadeEntre;
+	private boolean idadeInferior;
+	private boolean idadeSuperior;
 	
 	@PostConstruct
 	public void init(){
@@ -49,16 +58,21 @@ public class RequisicaoPessoaBean implements Serializable{
 	}
 
 	private void listar(){
+		GenericLN<RequisicaoConhecimento> gln = new GenericLN<RequisicaoConhecimento>();
 		loginLN=new LoginLN();
 		todosUsuarios=loginLN.listaUsuarios("nome");
 		CCustoDao daoc = new CCustoDao();
-		centroCustos = daoc.list();		
+		centroCustos = daoc.list();	
+		todosConhecimentos = gln.listWithoutRemoved("reqconhecimento", "descricao");
 	}
 	
 	public boolean frequenciaHoraExtra(){
-		System.out.println("kfk" + horext);
 		if(horext==1) return true;
 		return false;
+	}
+
+	public void radioIdade(){
+		System.out.println(reqidade);
 	}
 	
     public List<Login> completeTextRequisitante(String query) {
@@ -67,7 +81,26 @@ public class RequisicaoPessoaBean implements Serializable{
         	if(l.getNome().toLowerCase().contains(query.toLowerCase()))results.add(l);  
         return results;
     }	
+
+    public List<RequisicaoConhecimento> completeTextConhecimento(String query) {
+    	List<RequisicaoConhecimento> results = new ArrayList<RequisicaoConhecimento>();
+        for(RequisicaoConhecimento c:todosConhecimentos) 
+        	if(c.getDescricao().toLowerCase().contains(query.toLowerCase()))results.add(c);  
+        return results;
+    }
     
+    public void addConhecimento(){
+    	requisicao.getConhecimentos().add(conhecimento);
+    	conhecimento = new RequisicaoConhecimento();
+    }
+    
+    public ConhFreq[] getConhFreq() {
+        return ConhFreq.values();
+    }
+    
+    public ConhNiv[] getConhNiv() {
+        return ConhNiv.values();
+    }
 	public Date getToday() {
         return new Date();
     }
@@ -176,6 +209,46 @@ public class RequisicaoPessoaBean implements Serializable{
 
 	public void setHorext(int horext) {
 		this.horext = horext;
+	}
+
+	public List<RequisicaoConhecimento> getTodosConhecimentos() {
+		return todosConhecimentos;
+	}
+
+	public void setTodosConhecimentos(List<RequisicaoConhecimento> todosConhecimentos) {
+		this.todosConhecimentos = todosConhecimentos;
+	}
+
+	public RequisicaoConhecimento getConhecimento() {
+		return conhecimento;
+	}
+
+	public void setConhecimento(RequisicaoConhecimento conhecimento) {
+		this.conhecimento = conhecimento;
+	}
+
+	public boolean isIdadeEntre() {
+		return idadeEntre;
+	}
+
+	public void setIdadeEntre(boolean idadeEntre) {
+		this.idadeEntre = idadeEntre;
+	}
+
+	public boolean isIdadeInferior() {
+		return idadeInferior;
+	}
+
+	public void setIdadeInferior(boolean idadeInferior) {
+		this.idadeInferior = idadeInferior;
+	}
+
+	public boolean isIdadeSuperior() {
+		return idadeSuperior;
+	}
+
+	public void setIdadeSuperior(boolean idadeSuperior) {
+		this.idadeSuperior = idadeSuperior;
 	}	
 	
 }

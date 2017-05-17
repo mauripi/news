@@ -18,6 +18,6 @@ public class DocMovimentoBemDao {
 
 	@SuppressWarnings("unchecked")
 	public List<DocMovimentoBem> listarAnexos(MovimentoBem movimentobem) {
-		return this.manager.createQuery(" from docmovimentobem d where d.movimentobem= :mb ").setParameter("movimentobem", movimentobem).getResultList();		
+		return this.manager.createQuery(" from docmovimentobem d where d.movimentobem= :mb ").setParameter("mb", movimentobem).getResultList();		
 	}
 }

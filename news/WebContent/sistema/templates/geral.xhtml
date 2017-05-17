@@ -3,22 +3,22 @@
 
 
 <html   xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://java.sun.com/jsf/html"
-        xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:ui="http://java.sun.com/jsf/facelets"
-        xmlns:p="http://primefaces.org/ui"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
         xmlns:pe="http://primefaces.org/ui/extensions">
 
 <h:head>
 <title><ui:insert name="titulo"></ui:insert></title>
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
-<link rel="stylesheet" href="css/rh.css" type="text/css" media="screen" /> 
 <link rel="stylesheet" href="templates/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="templates/style.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/primefaces.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/showcase.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/form.css" type="text/css" media="screen" />
- 
+
+
 </h:head>      
 
 <h:body>
@@ -69,11 +69,12 @@
             <p:menuitem value="Fluxo de Demandas da Engenh." actionListener="#{acessoBean.controleTarefaVisao}" title="Fluxo de Demandas da Engenharia" disabled="#{!acessoBean.temAcessoControleTarefaVisao}" /> 
 		    <p:menuitem value="Despesas Transporte" actionListener="#{acessoBean.viewGastoTransp}"  target="_blank" ajax="false"  rendered="#{acessoBean.temAcessoControleTransporte}"/>  
             <p:menuitem value="Rateio Energia - Consolidado" actionListener="#{acessoBean.notaDebitoConsolidado}" target="_blank" ajax="false"  disabled="#{!acessoBean.temAcessoControleTarefaVisao}" /> 
-            <p:menuitem value="Contratos" actionListener="#{acessoBean.contratoVisao}" rendered="false"/>        
+            <p:menuitem value="Contratos" actionListener="#{acessoBean.contratoVisao}" rendered="true"/>        
         </p:submenu>        
         <p:submenu label="Financeiro">
             <p:menuitem value="Importar Planilha Custos"  actionListener="#{acessoBean.importarFluxoDiario}" disabled="#{!acessoBean.temAcessoImportarFluxoDiario}" rendered="#{acessoBean.temAcessoImportarFluxoDiario}"/>
-            <p:menuitem value="Custos Mensais" actionListener="#{acessoBean.fluxodiario}" disabled="#{!acessoBean.temAcessoFluxoDiario}"/>           
+            <p:menuitem value="Custos Mensais" actionListener="#{acessoBean.fluxodiario}" disabled="#{!acessoBean.temAcessoFluxoDiario}"/>       
+            <p:menuitem value="Recibo da Prestação" action="reciboprestacao?faces-redirect=true" disabled="#{!acessoBean.temAcessoFluxoDiario}"/>    
         </p:submenu>    
         <p:submenu label="Contabilidade"> 
             <p:menuitem value="SIG" actionListener="#{acessoBean.sig}" disabled="#{!acessoBean.temAcessoSig}" />

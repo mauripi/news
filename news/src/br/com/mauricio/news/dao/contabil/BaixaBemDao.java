@@ -3,6 +3,12 @@ package br.com.mauricio.news.dao.contabil;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import br.com.mauricio.news.cnn.Conexao;
 import br.com.mauricio.news.model.Login;
@@ -15,21 +21,27 @@ import br.com.mauricio.news.model.contabil.BaixaBem;
 */
 public class BaixaBemDao{
 	private EntityManager manager;
+	private CriteriaBuilder cb;
 	
 	public BaixaBemDao(){
 		Conexao c = new Conexao();
 		this.manager = c.getEntityManager();
+		cb = this.manager.getCriteriaBuilder();
 	}
+	
 	public BaixaBemDao(EntityManager manager){
 		this.manager = manager;
+		cb = this.manager.getCriteriaBuilder();
 	}
 		
-
-	@SuppressWarnings("unchecked")
-	public List<BaixaBem> listaPorUsuario(Login usuario) {
-		//String s = "%-00";
-		//return this.manager.createQuery(" from baixabem where solicitante = :usuario and patrimonio like :patrimonio order by id desc").setParameter("usuario", usuario).setParameter("patrimonio", s).getResultList();	
-		return this.manager.createQuery(" from baixabem where solicitante = :usuario order by id desc").setParameter("usuario", usuario).getResultList();	
+	public List<BaixaBem> getByUser(Login usuario) {
+        CriteriaQuery<BaixaBem> query = cb.createQuery(BaixaBem.class);
+        Root<BaixaBem> root = query.from(BaixaBem.class);        
+        Path<Login> path = root.get("solicitante");        
+        Predicate predicate = cb.equal(path, usuario);       
+        query.where(predicate);
+        TypedQuery<BaixaBem> typedQuery = manager.createQuery(query);        
+        return typedQuery.getResultList();
 	}
 	
 

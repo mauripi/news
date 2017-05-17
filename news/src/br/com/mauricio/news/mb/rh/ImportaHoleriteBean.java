@@ -52,12 +52,12 @@ public class ImportaHoleriteBean implements Serializable {
     	if(is!=null){
 	    	if(mes!=""&&ano!=""&&periodo!=0){
 		    	ImportaHoleriteLN ln = new ImportaHoleriteLN();    
-		    	msg = ln.recebeArquivoUpload(is,nomeArquivo);
+		    	msg = ln.saveFile(is,nomeArquivo);
 		    	if(msg!=""){
 		    		msg = "Arquivo não importado. Ocorreu erro no recebimento do arquivo.";
 		    		mensagens();
 		    	}else{
-		    		msg = ln.validaArquivo(mes,ano,periodo);
+		    		msg = ln.fileValidate(mes,ano,periodo);
 		        	if(msg!="")
 		        		mensagens();
 		    	}

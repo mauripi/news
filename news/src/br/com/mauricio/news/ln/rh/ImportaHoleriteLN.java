@@ -34,11 +34,11 @@ public class ImportaHoleriteLN implements Serializable {
 	private List<Base> bases = new ArrayList<Base>();
 
     
-	public String recebeArquivoUpload(InputStream is, String nome){
+	public String saveFile(InputStream is, String nome){
         String erro="";
         try {
         	SaveFile.criaArquivo(is, CAMINHO_PARA_SALVAR_ARQUIVO_IMPORTADO + nome);
-            gravaNomeDoUltimoArquivoImportado(nome);
+        	saveLastFileNameInProperty(nome);
         } catch (FileNotFoundException e) {
         	erro = "Ocorreu erro ao importar arquivo.";
 			System.out.println("Erro localizado em: ImportaHoleriteLN().recebeArquivoUpload() catch (FileNotFoundException e)" + e.getLocalizedMessage());
@@ -49,17 +49,17 @@ public class ImportaHoleriteLN implements Serializable {
 		return erro;
 	}
 	
-	public String validaArquivo(String mes, String ano, Integer periodo){
+	public String fileValidate(String mes, String ano, Integer periodo){
 		Integer iMes = Integer.parseInt(mes);
 		Integer iAno = Integer.parseInt(ano);
 		String erro="";
-		if (buscaNomeDoUltimoArquivoImportado().equals("")){
+		String fileName = getNameLastFileImported();
+		if (fileName.equals("")){
 			System.out.println("Erro localizado em: ImportaHoleriteLN().validaArquivo()  buscaNomeDoUltimoArquivoImportado().equals() vazio");
 			erro = "Ocorreu erro ao importar arquivo.";
 		}else{
-			String nomeArquivo = buscaNomeDoUltimoArquivoImportado();
 			try {
-				lerArquivo(CAMINHO_PARA_SALVAR_ARQUIVO_IMPORTADO+nomeArquivo);
+				readFileBase(CAMINHO_PARA_SALVAR_ARQUIVO_IMPORTADO+fileName);
 			} catch (IOException e) {
 				System.out.println("Erro localizado em: ImportaHoleriteLN().validaArquivo()  catch (IOException e) " + e.getLocalizedMessage());
 				erro = "Ocorreu erro ao importar arquivo.";
@@ -67,21 +67,20 @@ public class ImportaHoleriteLN implements Serializable {
 	        	System.out.println("Erro localizado em: ImportaHoleriteLN().validaArquivo()  catch (NumberFormatException e) " + e.getLocalizedMessage());
 				erro = "Ocorreu erro ao importar arquivo.";
 	        }		
-			if(verificaMesAnoPeriodoInformado(mes,ano,periodo)){
+			if(validateMonthYearPeriod(mes,ano,periodo)){
 	        	System.out.println("Erro localizado em: ImportaHoleriteLN().validaArquivo().verificaMesAnoPeriodoInformado(mes,ano,periodo)  Mês ou Ano informado diferente do arquivo importado!.) ");
 				erro = "Mês ou Ano ou Tipo de Holerite informado diferente do arquivo importado!.";				
 			}else{
-				verificaSeExistemRegistrosDeBaseNoBanco(iMes,iAno,periodo);
-				gravarBases();
-				verificaSeExistemRegistrosDeVencimentoNoBanco(iMes,iAno,periodo);
-				gravarVencimentos(iMes,iAno,periodo);
+				removeOnExixtsInformationDatabase(iMes,iAno,periodo);
+				saveBases();
+				saveVencimentos(iMes,iAno,periodo);
 				erro="Arquivo importado com sucesso!";				
 			}
 		}
 		return erro;		
 	}
   
-    private String buscaNomeDoUltimoArquivoImportado(){  
+    private String getNameLastFileImported(){  
             props = new Properties(); 
             String nomeArquivo="";
             try{  
@@ -97,8 +96,7 @@ public class ImportaHoleriteLN implements Serializable {
             return nomeArquivo;
     }  
   
-    public void gravaNomeDoUltimoArquivoImportado(String nome) {
-
+    public void saveLastFileNameInProperty(String nome) {
     	OutputStream out = null;
     	props = new Properties();
         try {
@@ -112,7 +110,7 @@ public class ImportaHoleriteLN implements Serializable {
         }
     }	
 	
-	public void lerArquivo(String arquivo) throws IOException,NumberFormatException {
+	public void readFileBase(String arquivo) throws IOException,NumberFormatException {
 		bases = new ArrayList<Base>();
 		
 		FileReader arq = new FileReader(arquivo); 
@@ -147,66 +145,62 @@ public class ImportaHoleriteLN implements Serializable {
 					b.setSalarioBase(Double.parseDouble(s[9].replace(" ", "").replace(",", ".")));	
 			}
 			if(b.getAno()!=0)
-				bases.add(b);	
-			
+				bases.add(b);				
 		} 
-		arq.close(); 
-		
+		arq.close(); 		
 	}
 	
-	public Boolean verificaMesAnoPeriodoInformado(String mes, String ano, Integer periodo){
+	public Boolean validateMonthYearPeriod(String mes, String ano, Integer period){
+		System.out.println(mes);
+		System.out.println(ano);
+		System.out.println(period);
+		System.out.println("");
+		bases.forEach(x -> System.out.println(x.getPeriodo()));
 		Boolean erro=false;
-		int i = 0;
-		if(periodo==11)
-			i=2;
-		if(periodo==31||periodo==32)
-			i=3;
-		if(periodo==14)
-			i=14;
-		if(periodo==92)
-			i=92;		
 		for(Base b:bases)
-			if(b.getAno()!=Integer.parseInt(ano)||b.getMes()!=Integer.parseInt(mes)||b.getPeriodo()!=i)
+			if(b.getAno()!=Integer.parseInt(ano)||b.getMes()!=Integer.parseInt(mes)||b.getPeriodo()!=getPeriod(period))
 				erro=true;			
 		return erro;
 	}
 
-	public void verificaSeExistemRegistrosDeBaseNoBanco(int mes, int ano, int periodo){
-		int i = 0;
-		if(periodo==11)
-			i=2;
-		if(periodo==31||periodo==32)
-			i=3;
-		if(periodo==14)
-			i=14;
-		if(periodo==92)
-			i=92;		
-		BaseDao dao = new BaseDao();
-		dao.deletaPorMesAnoPeriodo(mes, ano, i);
+	public void removeOnExixtsInformationDatabase(int mes, int ano, int period){
+		BaseDao daob = new BaseDao();
+		VencimentoDao daov = new VencimentoDao();
+		daob.deletaPorMesAnoPeriodo(mes, ano, getPeriod(period));
+		daov.deletaPorMesAnoPeriodo(mes, ano, getPeriod(period));
 	}
 
-	public void verificaSeExistemRegistrosDeVencimentoNoBanco(int mes, int ano, int periodo){
-		int i = 0;
-		
-		if(periodo==11)
-			i=2;
-		if(periodo==31||periodo==32)
-			i=3;
-		if(periodo==14)
-			i=14;
-		if(periodo==92)
-			i=92;		
-		VencimentoDao dao = new VencimentoDao();
-		dao.deletaPorMesAnoPeriodo(mes, ano, i);
+	private int getPeriod(int p){
+		int i=0;
+		switch (p) {
+			case 11:
+				i=2;
+				break;
+			case 31:
+				i=3;
+				break;
+			case 32:
+				i=3;
+				break;
+			case 14:
+				i=14;
+				break;
+			case 92:
+				i=92;
+				break;
+			default:
+				i=p;
+				break;
+		}
+		return i;
 	}
 	
-	public void gravarBases(){
+	public void saveBases(){
 		GenericDao<Base> dao = new GenericDao<Base>();
 		dao.saveList(bases);		
 	}
 	
-	
-	public void gravarVencimentos(int mes, int ano, int periodo){
+	public void saveVencimentos(int mes, int ano, int periodo){
 		GenericDao<Vencimento> daog = new GenericDao<Vencimento>();
 		VetorhDao dao = new VetorhDao();
 		daog.saveList(dao.buscaEventosFolha(ano, mes, periodo));		

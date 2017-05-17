@@ -1,19 +1,22 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:b="http://bootsfaces.net/ui">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"   	
+    	xmlns:b="http://bootsfaces.net/ui"
+    	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <h:head>
+
 
 </h:head>
 
 <h:body>
-<ui:composition template="templates/geral.xhtml"> 
+<ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - RH</ui:define>
 <ui:define name="conteudo">
-	<b:form id="formCad">
+	<h:form id="formCad">
 		<p:panel header="Requisição de Pessoal" style="width:900px; " >
 			<p:panelGrid columns="4" >
 				<p:outputLabel value="Requisitante:"/>
@@ -22,6 +25,7 @@
 				    typeahead-values="#{reqpessoaMB.completeTextRequisitante(teste)}"/>
 
 				<p:outputLabel value="DEPTO:"/>
+
 				<b:selectOneMenu id="depto" value="#{reqpessoaMB.requisicao.reqccu.nome}" >
 					<f:selectItem itemLabel="#{reqpessoaMB.requisicao.reqccu.nome}" itemValue="#{reqpessoaMB.requisicao.reqccu.nome}" />
 					<f:selectItems value="#{reqpessoaMB.centroCustos}" var="c" itemLabel="#{c.filial.nome} - #{c.nome}" itemValue="#{c}" />
@@ -31,7 +35,9 @@
 				<p:outputLabel value="Horário:" />
 				<b:inputText value="#{reqpessoaMB.requisicao.reqhor}" placeholder="Horário"  id="horario"/>	
 			</p:panelGrid>
+
 			<p:separator style="width:100%;" />			
+
 			<p:panelGrid columns="2" >
 				<p:outputLabel value="Necessidade de hora-extra?:" />
 				<p:selectOneRadio id="horext" value="#{reqpessoaMB.horext}" >
@@ -40,6 +46,7 @@
 		            <p:ajax process="@this"  update=":formCad:freq"/>
 		        </p:selectOneRadio>
 			</p:panelGrid>
+
 			<h:panelGroup id="freq" layout="block">
 				<p:panelGrid columns="2" rendered="#{reqpessoaMB.frequenciaHoraExtra()}" >
 					<p:outputLabel value="Frequência:" />
@@ -52,6 +59,7 @@
 					
 				</p:panelGrid>
 			</h:panelGroup>
+
 			<p:separator style="width:100%;" />
 			
 			<p:panelGrid columns="1" style="width:100%">
@@ -71,28 +79,40 @@
 			<p:panelGrid columns="1">
 				<p:outputLabel value="Idade:"/>
 			</p:panelGrid>
-			<div style="margin-left: 30px !important;margin-bottom: 10px;">
-				<b:row class="form-inline">
-					<b:radiobutton value="#{reqpessoaMB.reqidade}" itemLabel="Entre" itemValue="0" /><span> </span>
-					<p:inputNumber value="#{reqpessoaMB.requisicao.idaenta}" size="4" maxlength="2" maxValue="99" minValue="14"/>
-					<span> a </span>
-					<p:inputNumber value="#{reqpessoaMB.requisicao.idaentb}" size="4" maxlength="2" maxValue="99" minValue="14"/>
-					<span> anos </span>	
-				</b:row>
-				<br></br>
-				<b:row class="form-inline">
-					<b:radiobutton value="#{reqpessoaMB.reqidade}" itemLabel="Inferior ou igual a" itemValue="1" /><span> </span>
-					<p:inputNumber value="#{reqpessoaMB.requisicao.idainf}" size="4" maxlength="2" maxValue="99" minValue="14"/>
-					<span> anos </span>	
-				</b:row>
-				<br></br>
-				<b:row class="form-inline">
-					<b:radiobutton value="#{reqpessoaMB.reqidade}" itemLabel="Superior ou igual a" itemValue="2" /><span> </span>
-					<p:inputNumber value="#{reqpessoaMB.requisicao.idasup}" size="4" maxlength="2" maxValue="99" minValue="14"/>
-					<span> anos </span>	
-				</b:row>				
-		    </div>
-	
+
+		    <p:outputPanel id="customPanel" >
+		        <p:selectOneRadio id="customRadio" value="#{reqpessoaMB.reqidade}" layout="custom" >
+		            <f:selectItem itemLabel="Entre" itemValue="0" />
+		            <f:selectItem itemLabel="Inferior ou igual a" itemValue="1" />
+		            <f:selectItem itemLabel="Superior ou igual a" itemValue="2" />
+		            <p:ajax process="@this"  update=":formCad:customPanel" />
+		        </p:selectOneRadio>		 			
+		        <h:panelGrid columns="6" cellpadding="5" >
+		            <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+		            <h:outputLabel for="opt1" value="Entre" />
+		            <p:inputNumber value="#{reqpessoaMB.requisicao.idaenta}" size="4" maxlength="2" maxValue="99" disabled="#{reqpessoaMB.reqidade ne 0}"
+		            	minValue="14" style="padding-left: 5px;padding-right: 5px;"/>
+		            <h:outputLabel for="opt1" value="a" style="padding-right: 5px;"/>
+		            <p:inputNumber value="#{reqpessoaMB.requisicao.idaentb}" size="4" maxlength="2" maxValue="99" disabled="#{reqpessoaMB.reqidade ne 0}"
+		            	minValue="14" style="padding-right: 5px;"/>
+		            <h:outputLabel for="opt1" value="anos" />
+			    </h:panelGrid>		
+		        <h:panelGrid columns="4" cellpadding="5" >
+		            <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+		            <h:outputLabel for="opt2" value="Inferior ou igual a" />
+		            <p:inputNumber value="#{reqpessoaMB.requisicao.idainf}" size="4" maxlength="2" maxValue="99"  disabled="#{reqpessoaMB.reqidade ne 1}"
+		            	minValue="14" style="padding-left: 10px;padding-right: 5px;"/>
+		            <h:outputLabel for="opt2" value="anos" style="padding-right: 5px;"/>
+			    </h:panelGrid>	
+		        <h:panelGrid columns="4" cellpadding="5" >
+		            <p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+		            <h:outputLabel for="opt3" value="Superior ou igual a" />
+		            <p:inputNumber value="#{reqpessoaMB.requisicao.idasup}" size="4" maxlength="2" maxValue="99"  disabled="#{reqpessoaMB.reqidade ne 2}"
+		            	minValue="14" style="padding-left: 5px;padding-right: 5px;"/>
+		            <h:outputLabel for="opt3" value="anos" style="padding-right: 5px;"/>
+			    </h:panelGrid>
+		 	</p:outputPanel>       	
+
 			<p:separator style="width:100%;" />
 
 			<p:panelGrid columns="4" >
@@ -109,42 +129,50 @@
      			<b:inputText value="#{reqpessoaMB.requisicao.anoper}" placeholder="Ano/Período" size="25"/>
 			</p:panelGrid>					    
 
-			<p:panelGrid columns="2">
+			<p:panelGrid columns="3" style="width:100%">
 				<p:outputLabel value="Experiência" />
-				<b:panelGrid columns="3" style="font-size: small !important;font-weight:normal !important;" >
-					<b:radiobutton value="#{reqpessoaMB.reqexp}" itemLabel="Na vaga específica" itemValue="0" />
-					<b:radiobutton value="#{reqpessoaMB.reqexp}" itemLabel="Na área" itemValue="1"/>
-					<b:radiobutton value="#{reqpessoaMB.reqexp}" itemLabel="Outros" itemValue="2" />
-				</b:panelGrid>
+		        <p:selectOneRadio value="#{reqpessoaMB.reqexp}">
+		            <f:selectItem itemLabel="Na vaga específica" itemValue="0" />
+		            <f:selectItem itemLabel="Na área" itemValue="1" />
+		            <f:selectItem itemLabel="Outros" itemValue="2" />
+		            <p:ajax process="@this"  update=":formCad:expout" />
+		        </p:selectOneRadio>	
+				<b:inputTextarea value="#{reqpessoaMB.requisicao.expout}" placeholder="Outras Experiências" id="expout" rows="2" disabled="#{reqpessoaMB.reqexp ne 2}"/>			        
 			</p:panelGrid>
-
+ 
 			<p:separator style="width:100%;" /> 
-			<b:panelGrid columns="3"  layout="grid">
-				<p:outputLabel value="Conhecimentos"/>
-				<p:outputLabel value="Frequência"/>
-				<p:outputLabel value="Nível"/>
-			</b:panelGrid>	
-			<br></br>
-			<br></br>
-			<b:well>
-		 		<p:repeat value="#{reqpessoaMB.todosUsuarios}" var="u">
-					<b:panelGrid columns="3" layout="grid">			
-						<p:outputLabel value="#{u.nome}" style="font-weight: normal !important;"/>
-						<b:selectOneMenu value="#{u.nome}" >
+
+			<p:scrollPanel style="height:200px;border:none;" id="know" >
+				<p:panelGrid columns="2" >
+					<b:inputText value="#{reqpessoaMB.conhecimento.descricao}" 
+					    placeholder="Digite o Conhecimento" id="novoconhecimento" typeahead="true" size="30"
+					    typeahead-values="#{reqpessoaMB.completeTextConhecimento(teste)}"/>
+					<b:commandButton value="Adicionar" ajax="true" update="know"
+                 			actionListener="#{reqpessoaMB.addConhecimento}"  />	
+				</p:panelGrid>	
 							
-							<f:selectItem itemLabel="Sempre" itemValue="1"/>
-							<f:selectItem itemLabel="Algumas vezes" itemValue="2"/>
-							<f:selectItem itemLabel="Nunca" itemValue="3"/>
-						</b:selectOneMenu>
-						<b:selectOneMenu value="#{u.nome}">
-							<f:selectItem itemLabel="Básico" itemValue="1"/>
-							<f:selectItem itemLabel="Intermediário" itemValue="2"/>
-							<f:selectItem itemLabel="Avançado" itemValue="3"/>
-						</b:selectOneMenu>
-				
-					</b:panelGrid>
-				</p:repeat>			
- 			</b:well>	
+				<b:well style="margin-left: 10px;margin-right: 10px;">
+					<b:panelGrid columns="3"  layout="grid">
+						<p:outputLabel value="Conhecimento"/>
+						<p:outputLabel value="Frequência"/>
+						<p:outputLabel value="Nível"/>
+					</b:panelGrid>			
+					<br></br>	
+			 		<p:repeat value="#{reqpessoaMB.requisicao.conhecimentos}" var="c" >
+						<b:panelGrid columns="3" layout="grid" >			
+							<p:outputLabel value="#{c.descricao}" style="font-weight: normal !important;"/>
+							<b:selectOneMenu value="#{c.conhfreq}" >
+								<f:selectItems value="#{reqpessoaMB.conhFreq}" /> 
+							</b:selectOneMenu>
+							<b:selectOneMenu value="#{c.conhniv}">
+								<f:selectItems value="#{reqpessoaMB.conhNiv}" />
+							</b:selectOneMenu>
+					
+						</b:panelGrid>
+					</p:repeat>			
+	 			</b:well>	
+ 			</p:scrollPanel>
+
 			<p:panelGrid columns="1" style="width:100%">
 				<p:outputLabel value="Observações:"/>
 				<b:inputTextarea placeholder="Observações" value="#{reqpessoaMB.requisicao.reqobs}" rows="3"/>
@@ -166,9 +194,12 @@
 				<p:outputLabel value="Quais são as características comportamentais indesejáveis do candidato?"/>
 				<b:inputTextarea placeholder="Características comportamentais indesejáveis" value="#{reqpessoaMB.requisicao.fatind}" rows="3"/>
 			</p:panelGrid>			
-			
+
+			<f:facet name="footer">
+				<b:commandButton value="Gravar" ajax="true" update="know" actionListener="#{reqpessoaMB.addConhecimento}"  />	
+			</f:facet>
 		</p:panel>
-	</b:form>
+	</h:form>
 </ui:define>
 </ui:composition>    
 </h:body>    

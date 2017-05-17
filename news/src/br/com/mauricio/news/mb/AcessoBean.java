@@ -267,6 +267,15 @@ public class AcessoBean implements Serializable {
 		}
 	}
 
+	public void reciboPrestacao() throws IOException{
+		if (this.login.getId()==null){
+			sair();
+		}else{
+			FacesContext cx = FacesContext.getCurrentInstance();
+			cx.getExternalContext().redirect("reciboprestacao.jsf");
+		}
+	}
+	
 	public void adiantamento() throws IOException{
 		if (this.login.getId()==null){
 			sair();

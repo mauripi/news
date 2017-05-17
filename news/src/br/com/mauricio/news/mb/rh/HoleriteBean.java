@@ -47,28 +47,28 @@ public class HoleriteBean implements Serializable{
 	public HoleriteBean(){
 		FacesContext cx = FacesContext.getCurrentInstance();
         HttpSession sessao = (HttpSession) cx.getExternalContext().getSession(false);		
-		this.usuarioLogado = (Login) sessao.getAttribute("login");
+		usuarioLogado = (Login) sessao.getAttribute("login");
 		carregaSelecaoDosPeriodos(usuarioLogado);
 		funcionarios.addAll(getFuncionarios());
 	}
 	
-	public void getHolerite(){ //para os funcionários comuns
+	public void getHolerite(){
 		HoleriteLN hLn = new HoleriteLN();
-		this.holerites = hLn.listaHolerite(this.usuarioLogado, this.baseSelecionada.getMes(), this.baseSelecionada.getAno(),this.baseSelecionada.getPeriodo());
-		this.totalDesconto = hLn.getTotalDesconto(this.holerites);
-		this.totalProvento = hLn.getTotalProvento(this.holerites);
-		this.totalLiquido = hLn.getTotalLiquido(this.totalProvento,this.totalDesconto);
-		this.fgtsMes = hLn.calculaFGTS(holerites,baseSelecionada,this.usuarioLogado);
+		holerites = hLn.getHolerites(usuarioLogado, baseSelecionada.getMes(), baseSelecionada.getAno(),baseSelecionada.getPeriodo());
+		totalDesconto = hLn.getTotalDesconto(holerites);
+		totalProvento = hLn.getTotalProvento(holerites);
+		totalLiquido = hLn.getTotalLiquido(totalProvento,totalDesconto);
+		fgtsMes = hLn.calculaFGTS(holerites,baseSelecionada,usuarioLogado);
 	}
 
 
-	public void getHoleriteFuncionario(){//para funcionarios que podem vizualizar todos
+	public void getHoleriteFuncionario(){
 		HoleriteLN hLn = new HoleriteLN();
-		this.holerites = hLn.listaHolerite(this.funcionarioSelecionado, this.baseSelecionada.getMes(), this.baseSelecionada.getAno(),this.baseSelecionada.getPeriodo());
-		this.totalDesconto = hLn.getTotalDesconto(this.holerites);
-		this.totalProvento = hLn.getTotalProvento(this.holerites);
-		this.totalLiquido = hLn.getTotalLiquido(this.totalProvento,this.totalDesconto);
-		this.fgtsMes = hLn.calculaFGTS(holerites,baseSelecionada,this.funcionarioSelecionado);
+		holerites = hLn.getHolerites(funcionarioSelecionado, baseSelecionada.getMes(), baseSelecionada.getAno(),baseSelecionada.getPeriodo());
+		totalDesconto = hLn.getTotalDesconto(holerites);
+		totalProvento = hLn.getTotalProvento(holerites);
+		totalLiquido = hLn.getTotalLiquido(totalProvento,totalDesconto);
+		fgtsMes = hLn.calculaFGTS(holerites,baseSelecionada,funcionarioSelecionado);
 	}
 	
 	public void usuarioSelecionado(){
@@ -88,11 +88,11 @@ public class HoleriteBean implements Serializable{
 		this.bases = bLn.listaPeriodosDisponiveis(funcionarioSelecionado,ano); 
 	}
 	
-	public void getImprimir(){ //para os funcionários comuns
+	public void getImprimir(){
 		RelatorioLN rLn = new RelatorioLN();
 		try {
-			rLn.geraRelatorioPedido(this.holerites, this.totalLiquido, this.baseSelecionada, 
-					this.totalProvento, this.totalDesconto, this.usuarioLogado);
+			rLn.geraRelatorioPedido(holerites, totalLiquido, baseSelecionada, 
+					totalProvento, totalDesconto, usuarioLogado);
 		} catch (IOException e) {
 			System.out.println(e.getLocalizedMessage() + " ===> em holeritebean getImprimir()");
 			e.printStackTrace();
@@ -104,11 +104,11 @@ public class HoleriteBean implements Serializable{
 		}
 	}
  	
-	public void getImprimirHoleriteFuncionario(){//para funcionarios que podem vizualizar todos
+	public void getImprimirHoleriteFuncionario(){
 		RelatorioLN rLn = new RelatorioLN();
 		try {
-			rLn.geraRelatorioPedido(this.holerites, this.totalLiquido, this.baseSelecionada, 
-					this.totalProvento, this.totalDesconto, this.funcionarioSelecionado);
+			rLn.geraRelatorioPedido(holerites, totalLiquido, baseSelecionada, 
+					totalProvento, totalDesconto, funcionarioSelecionado);
 		} catch (IOException e) {
 			System.out.println(e.getLocalizedMessage() + " ===> em holeritebean getImprimirHoleriteFuncionario()");
 			e.printStackTrace();

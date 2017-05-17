@@ -26,10 +26,10 @@ public class NotaDebitoEnergiaDao implements Serializable {
 	
 	public boolean existeNaBase(NotaDebitoEnergia debito){		
 		boolean t=false;
-		String sql = " From notadebitopraca where mes= :mes and ano= :ano and praca= :praca";
+		String sql = " From notadebitopraca where mes= :mes and ano= :ano and mengloc= :mengloc";
 		@SuppressWarnings("unchecked")
 		List<NotaDebitoEnergia> list = this.manager.createQuery(sql).setParameter("mes", debito.getMes())
-				.setParameter("ano", debito.getAno()).setParameter("praca", debito.getMengloc()).getResultList();
+				.setParameter("ano", debito.getAno()).setParameter("mengloc", debito.getMengloc()).getResultList();
 		if(list.size()>0)
 			t=true;
 		return t;
@@ -37,10 +37,10 @@ public class NotaDebitoEnergiaDao implements Serializable {
 	
 	public boolean existeNaBaseMaisDeUm(NotaDebitoEnergia debito) {
 		boolean t=false;
-		String sql = " From notadebitopraca where mes= :mes and ano= :ano and praca= :praca";
+		String sql = " From notadebitopraca where mes= :mes and ano= :ano and mengloc= :mengloc";
 		@SuppressWarnings("unchecked")
 		List<NotaDebitoEnergia> list = this.manager.createQuery(sql).setParameter("mes", debito.getMes())
-				.setParameter("ano", debito.getAno()).setParameter("praca", debito.getMengloc()).getResultList();
+				.setParameter("ano", debito.getAno()).setParameter("mengloc", debito.getMengloc()).getResultList();
 		if(list.size()>1)
 			t=true;
 		return t;

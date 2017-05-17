@@ -16,12 +16,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.joda.time.LocalDate;
 import org.primefaces.component.wizard.Wizard;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
-
 import br.com.mauricio.news.ln.ContratoLN;
 import br.com.mauricio.news.ln.GenericLN;
 import br.com.mauricio.news.model.Contrato;
@@ -98,8 +98,8 @@ public class ContratoBean implements Serializable {
             msg = "Nenhum registro selecionado para exclusão.";
             mensagens();            
         }else{
-            gln = new GenericLN<Contrato>();
-            msg = gln.update(contrato);
+        	ContratoLN ln = new ContratoLN();
+            msg = ln.delete(contrato);
             mensagens();
             limpaCadastro();
             listar();
@@ -274,9 +274,23 @@ public class ContratoBean implements Serializable {
         }
     }    
 
+    public void cliforSelect(SelectEvent event){
+    	contrato.setMclifor((MCLIFOR) event.getObject());
+    }
+    
+    public String getPrimeiroAvisoEm(){
+    	LocalDate data = new LocalDate(contrato.getFim()).minusDays(contrato.getDiasAviso());
+		return DateUtil.formatDataFromBanco(data.toDate());    	
+    }
+    
     public void handleFileUpload(FileUploadEvent event){
         ContratoLN ln = new ContratoLN();
         ln.recebeArquivoUpload(event,contrato);
+        try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
         anexos = new ArrayList<String>();
         anexos = ln.getAnexos(contrato);
     }
