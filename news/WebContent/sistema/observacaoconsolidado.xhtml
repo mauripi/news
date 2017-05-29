@@ -20,14 +20,14 @@
 <ui:define name="conteudo">
 
 <f:facet name="header">Atualizar Observação de Lançamento Consolidado</f:facet>
-<p:panel rendered="true" style="width:40%;">
+<p:panel rendered="true" >
 
 <h:form>
 	<p:panelGrid columns="2">	
 
 		<p:outputLabel value="Conta:" for="cc" />
         <p:autoComplete id="cc" value="#{historicoconsolidadoMB.planoSelecionado}" completeMethod="#{historicoconsolidadoMB.completeText}" 
-        	var="c" itemLabel="#{c.descta}" itemValue="#{c}" size="60" converter="planoConverter" maxResults="8" >
+        	var="c" itemLabel="#{c.descta}" itemValue="#{c}" size="50" converter="planoConverter" maxResults="8" >
         	<p:ajax event="keyup" update=":formCad"/>
             <p:column>
                 <h:outputText value="#{c.clacta}"/>
@@ -66,7 +66,7 @@
 	</p:panelGrid> 
 	<br></br>
 	<br></br>
-	<p:commandButton value="Localizar"  action="#{historicoconsolidadoMB.localizaSolicitacao}"  update=":formMsg, :formCad"/>
+	<p:commandButton value="Localizar" icon="ui-icon-search" action="#{historicoconsolidadoMB.localizaSolicitacao}"  update=":formMsg, :formCad"/>
 	<br></br>
 	<br></br>
 	<br></br>

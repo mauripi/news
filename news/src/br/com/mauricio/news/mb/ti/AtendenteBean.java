@@ -56,7 +56,7 @@ public class AtendenteBean implements Serializable {
 			mensagens();			
 		}else{
 			gln = new GenericLN<Atendente>();
-			msg = gln.update(atendenteSel);
+			msg = gln.remove(gln.find(new Atendente(), atendenteSel.getId()));
 			mensagens();
 			limpaCadastro();
 			listar();

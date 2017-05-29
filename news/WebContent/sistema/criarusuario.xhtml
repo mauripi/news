@@ -14,85 +14,92 @@
 <h:body>
 	
 <ui:composition template="templates/geral.xhtml">
-  <ui:define name="titulo">RECORD NEWS</ui:define>
-	<ui:define name="conteudo">
-<p:layout fullPage="false" rendered="#{acessoBean.temAcessoUsuario}">
-
-	<p:layoutUnit position="center" header="Cadastro de Usuários" style="border: none !important; ">
-		<h:form  id="formCad" style="width:100%;font-size: 110%;">
-			<p:panel id="panel">
-
-				<p:panelGrid columns="3">
-					<h:outputLabel value="Nome"/>
-					<h:outputLabel value="Chapa"/>
-					<h:outputLabel value="CPF"/>
-					<p:inputText value="#{usuarioMB.login.nome}" disabled="#{usuarioMB.controlaCadastro==0}" size="50"/>				
-					<p:inputText id="chapa" value="#{usuarioMB.login.chapa}" disabled="#{usuarioMB.controlaCadastro==0}" size="7" maxlength="6" validatorMessage="Chapa: Somente números são permitidos.">
-						<f:validateRegex pattern="[0-9]+$" for="chapa"/>
-					</p:inputText>
-					<p:inputText id="cpf" value="#{usuarioMB.login.cpf}" disabled="#{usuarioMB.controlaCadastro==0}" size="10" maxlength="11" validatorMessage="CPF: Somente números são permitidos.">
-						<f:validateRegex pattern="[0-9]+$"/>
-					</p:inputText>
-				</p:panelGrid>
-				<p:panelGrid columns="4">				
-					<h:outputLabel value="E-mail"/>
-					<h:outputLabel value="Filial"/>
-					<h:outputLabel value="Centro de Custo"/>
-					<h:outputLabel value="Ativo"/>
-					<p:inputText  value="#{usuarioMB.login.email}" disabled="#{usuarioMB.controlaCadastro==0}" size="40"/>				
-					<p:selectOneMenu value="#{usuarioMB.login.filial}" converter="filialConverter" disabled="#{usuarioMB.controlaCadastro==0}">
-						<f:selectItems value="#{usuarioMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
-					</p:selectOneMenu>	
-					<p:selectOneMenu value="#{usuarioMB.login.custo}" converter="ccustoConverter" disabled="#{usuarioMB.controlaCadastro==0}">
-						<f:selectItems value="#{usuarioMB.centroCustos}" var="c" itemLabel="#{c.nome}" itemValue="#{c}" />
-					</p:selectOneMenu>						
-					<p:selectBooleanCheckbox value="#{usuarioMB.login.ativo}"   disabled="#{usuarioMB.controlaCadastro==0}"/>	
-				</p:panelGrid>
-				<f:facet name="footer">
-					<p:panelGrid columns="6">
-						<p:commandButton value="Novo" action="#{usuarioMB.novo}" update=":formCad"/>
-						<p:commandButton value="Editar" action="#{usuarioMB.edita}" update=":formCad" disabled="#{usuarioMB.login.id==null}"/>
-						<p:commandButton value="Resetar Senha" action="#{usuarioMB.resetarSenha}" disabled="#{usuarioMB.login.id==null}" update=":formCad,:formMsg"/>
-						<p:commandButton value="Cancelar" action="#{usuarioMB.limpaCadastro}" update=":formCad" disabled="#{usuarioMB.login.id==null}"/>
-						<p:commandButton value="Gravar" action="${usuarioMB.grava}" update=":formCad,:formMsg," disabled="#{usuarioMB.controlaCadastro==0}"/>
-					</p:panelGrid>			
-				</f:facet>
-<br></br>
-			<p:dataTable id="tb" var="u" value="#{usuarioMB.logins}"			  
-		               paginator="true" paginatorPosition="bottom" rows="20" rowKey="#{u.id}"
-		               selectionMode="single" resizableColumns="true" filteredValue=""						
-						emptyMessage="Nenhum registro encontrado!">
-		          <p:ajax event="rowSelect" listener="#{usuarioMB.usuarioSelecionado}" update=":formCad" />
+<ui:define name="titulo">RECORD NEWS-RH</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">	
+	<f:facet name="header">Cadastro de Usuários</f:facet>
 	
-		           <p:column filterBy="#{u.chapa}" headerText="Matrícula" filterMatchMode="contains" sortBy="#{u.chapa}" style="width:10%;text-align:center;">
-						<h:outputText value="#{u.chapa}" /> 
-		            </p:column>  		          
-		           <p:column filterBy="#{u.nome}" headerText="Nome" filterMatchMode="contains" sortBy="#{u.nome}" style="width:40%;text-align:left;" filterStyle="width:80%;text-align:left;">
-						<h:outputText value="#{u.nome}" /> 
-		            </p:column>  
-		           <p:column headerText="CPF" style="width:15%;text-align:center;">
-						<h:outputText value="#{u.cpf}" /> 
-		            </p:column>  		            		            					
-		           <p:column  headerText="Filial" sortBy="#{u.filial.id}" style="width:15%;text-align:left;">
-						<h:outputText value="#{u.filial.id} - #{u.filial.nome}"/> 
-		            </p:column>  
-		           <p:column  headerText="E-mail" style="width:20%;text-align:left;">
-						<h:outputText value="#{u.email}"/> 
-		            </p:column> 		            
-			</p:dataTable>
+	
+		<h:form  id="formtb" >
+		<p:panelGrid columns="2">
+			<p:commandButton  icon="ui-icon-plus" value="Novo Usuário" title="Novo"  action="#{usuarioMB.novo}"
+				 update=":formCad" oncomplete="PF('dgCad').show();"/>
+		</p:panelGrid>	 			 
+	 	<br></br>           
+				<p:dataTable id="tbItens" var="u" value="#{usuarioMB.logins}"			  
+			               paginator="true" paginatorPosition="bottom" rows="20" rowKey="#{u.id}"
+			               selectionMode="single" resizableColumns="true" filteredValue=""						
+							emptyMessage="Nenhum registro encontrado!">
+							
+			          <p:ajax event="rowSelect" listener="#{usuarioMB.usuarioSelecionado}" update=":formCad" oncomplete="PF('dgCad').show()" />
+		
+			           <p:column filterBy="#{u.chapa}" headerText="Matrícula" filterMatchMode="contains" sortBy="#{u.chapa}" style="width:10%;text-align:center;">
+							<h:outputText value="#{u.chapa}" /> 
+			            </p:column>  		          
+			           <p:column filterBy="#{u.nome}" headerText="Nome" filterMatchMode="contains" sortBy="#{u.nome}" style="width:30%;text-align:left;" filterStyle="width:50%;">
+							<h:outputText value="#{u.nome}" /> 
+			            </p:column>  
+			           <p:column headerText="CPF" style="width:15%;text-align:center;">
+							<h:outputText value="#{u.cpf}" /> 
+			            </p:column>  		            		            					
+			           <p:column  headerText="Filial" sortBy="#{u.filial.id}" style="width:15%;text-align:left;">
+							<h:outputText value="#{u.filial.id} - #{u.filial.nome}"/> 
+			            </p:column>  
+			           <p:column  headerText="E-mail" style="width:20%;text-align:left;">
+							<h:outputText value="#{u.email}"/> 
+			            </p:column>         		            
+				</p:dataTable>
+		</h:form>
+		
+		
+	<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Usuário" resizable="false" >	
+	<h:form id="formCad">		
+			<p:panel>
+			<p:panelGrid columns="3">
+				<h:outputLabel value="Nome"/>
+				<h:outputLabel value="Chapa"/>
+				<h:outputLabel value="CPF"/>
+				<p:inputText value="#{usuarioMB.login.nome}" disabled="#{usuarioMB.controlaCadastro==0}" size="50"/>				
+				<p:inputText id="chapa" value="#{usuarioMB.login.chapa}" disabled="#{usuarioMB.controlaCadastro==0}" size="7" maxlength="6" validatorMessage="Chapa: Somente números são permitidos.">
+					<f:validateRegex pattern="[0-9]+$" for="chapa"/>
+				</p:inputText>
+				<p:inputText id="cpf" value="#{usuarioMB.login.cpf}" disabled="#{usuarioMB.controlaCadastro==0}" size="10" maxlength="11" validatorMessage="CPF: Somente números são permitidos.">
+					<f:validateRegex pattern="[0-9]+$"/>
+				</p:inputText>
+			</p:panelGrid>
+			<p:panelGrid columns="4">				
+				<h:outputLabel value="E-mail"/>
+				<h:outputLabel value="Filial"/>
+				<h:outputLabel value="Centro de Custo"/>
+				<h:outputLabel value="Ativo"/>
+				<p:inputText  value="#{usuarioMB.login.email}" disabled="#{usuarioMB.controlaCadastro==0}" size="40"/>				
+				<p:selectOneMenu value="#{usuarioMB.login.filial}" converter="filialConverter" disabled="#{usuarioMB.controlaCadastro==0}">
+					<f:selectItems value="#{usuarioMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
+				</p:selectOneMenu>	
+				<p:selectOneMenu value="#{usuarioMB.login.custo}" converter="ccustoConverter" disabled="#{usuarioMB.controlaCadastro==0}">
+					<f:selectItems value="#{usuarioMB.centroCustos}" var="c" itemLabel="#{c.nome}" itemValue="#{c}" />
+				</p:selectOneMenu>						
+				<p:selectBooleanCheckbox value="#{usuarioMB.login.ativo}"   disabled="#{usuarioMB.controlaCadastro==0}"/>	
+			</p:panelGrid>
+			<f:facet name="footer">
+				<p:panelGrid columns="3">
+					<p:commandButton value="Resetar Senha" icon=" ui-icon-arrowrefresh-1-w " action="#{usuarioMB.resetarSenha}" disabled="#{usuarioMB.login.id==null}" update=":formCad,:formMsg"/>
+					<p:commandButton value="Gravar" icon="ui-icon-check" action="${usuarioMB.grava}" update=":formCad, :formtb, :formMsg," disabled="#{usuarioMB.controlaCadastro==0}"/>
+					<p:commandButton value="Cancelar" icon="ui-icon-cancel" action="#{usuarioMB.limpaCadastro}" update=":formCad" disabled="#{usuarioMB.login.id==null}" onclick="PF('delDialog').hide()"/>
+				</p:panelGrid>			
+			</f:facet>
 			</p:panel>
-		</h:form> 	
+			</h:form>
+		</p:dialog>	 	
 
-	</p:layoutUnit>
+
     <h:form id="formMsg" style="font-size:small;">                      
         <p:growl id="msg" showDetail="true" life="4000"/> 
     </h:form>
-</p:layout>
-
-	</ui:define>			
-
-</ui:composition>
-	
+    
+    
+</p:panel>
+</ui:define>			
+</ui:composition>	
 </h:body>	
-
 </html>

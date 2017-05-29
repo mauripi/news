@@ -2,7 +2,9 @@ package br.com.mauricio.news.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -150,7 +152,19 @@ public class MCliForBean implements Serializable{
 			mensagens("Endereço não localizado.");
 		}
 	}
-	
+
+    public void chooseCliFor() {
+        Map<String,Object> options = new HashMap<String, Object>();
+        options.put("resizable", false);
+        options.put("draggable", false);
+        options.put("modal", true);     
+        RequestContext.getCurrentInstance().openDialog("cadclifor", options, null);
+    }
+     
+    public void onCliForChosen(SelectEvent event) {
+    	clifor = (MCLIFOR) event.getObject();  
+    }        
+    	
 	public void onRowSelect(SelectEvent event) {
 		clifor = (MCLIFOR) event.getObject();
 		cep = clifor.getEndcep();

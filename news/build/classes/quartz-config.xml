@@ -42,8 +42,8 @@
 		
 		<job>
 			<name>ProximosAvisoContratoJob</name>
-			<group>News</group>
-			<description>Aviso de término de contrato</description>
+			<group>News1</group>
+			<description>Aviso de término de proximos aviso do contrato</description>
 			<job-class>br.com.mauricio.news.agendamento.ProximosAvisoContratoJob</job-class>
 		</job>
 
@@ -51,7 +51,7 @@
 			<cron>
 				<name>proximosAvisoContratoJob</name>
 				<job-name>ProximosAvisoContratoJob</job-name>
-				<job-group>News</job-group>
+				<job-group>News1</job-group>
 				<cron-expression>0 0 8 * * ?</cron-expression>
 			</cron>
 		</trigger>				

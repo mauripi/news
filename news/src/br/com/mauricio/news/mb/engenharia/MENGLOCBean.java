@@ -54,7 +54,7 @@ public class MENGLOCBean  implements Serializable {
 			mensagens();			
 		}else{
 			gln = new GenericLN<MENGLOC>();
-			msg = gln.update(mengloc);
+			msg = gln.remove(gln.find(new MENGLOC(), mengloc.getId()));
 			mensagens();
 			limpaCadastro();
 			listar();

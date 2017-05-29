@@ -21,34 +21,42 @@
 <ui:define name="conteudo">
 
 <f:facet name="header">Contratos - RECORD NEWS</f:facet>
-<h:form>
+<b:panelGrid colSpans="6,6" id="stateGridId">
+	<h:form>
+		<b:panel look="primary" 
+		                title="Contratos cadastrados">
+			    <b:inputText id="mybid" class="mybid-example" value="#{contratoVisaoMB.pesquisa}" label="" >
+			        <f:facet name="append">
+			            <b:commandButton look="primary" value="Localizar" ajax="true" 
+			            	actionListener="#{contratoVisaoMB.pesquisar}" update="tb,:formMsg"/>
+			        </f:facet>
+			    </b:inputText>	
+				<b:dataTable id="tb" value="#{contratoVisaoMB.contratosPesquisados}" var="c"
+					border="true" searching="false" >
+			        <b:dataTableColumn value="#{c.objeto}" label="Objeto"/>
+			        <b:dataTableColumn value="#{c.mclifor.nomfan}" label="Cliente / Fornecedor"/>
+			        <b:dataTableColumn>
+			            <b:commandButton value="Abrir" icon="edit" ajax="true"
+			                onclick="ajax:contratoVisaoMB.visualizar()" />
+		
+			       </b:dataTableColumn>        
+			    </b:dataTable>	  		    
+		</b:panel>
+	</h:form>
+</b:panelGrid>
 
-<p:panelGrid columns="2" layout="grid">
-	<p:panelGrid columns="1" >
-	    <b:inputText id="mybid" class="mybid-example" value="#{contratoVisaoMB.pesquisa}" label="" >
-	        <f:facet name="append">
-	            <b:commandButton look="primary" value="Localizar" ajax="true" 
-	            	actionListener="#{contratoVisaoMB.pesquisar}" update="contr_filtered,:formMsg"/>
-	        </f:facet>
-	    </b:inputText>		  		    
-	    <p:dataTable id="contr_filtered" var="c" value="#{contratoVisaoMB.contratosPesquisados}" emptyMessage="" 
-	    	selectionMode="single" selection="#{contratoVisaoMB.contrato}" rowKey="#{c.id}" rows="10" scrollable="true"  scrollHeight="300">
-	        <p:ajax event="rowSelect"  />
-	        <p:column headerText="Objeto">
-	            <h:outputText value="#{c.objeto}" />
-	        </p:column>
-	        <p:column headerText="Cliente / Fornecedor">
-	            <h:outputText value="#{c.mclifor.nomfan}" />
-	        </p:column>
-	    </p:dataTable>       
-	</p:panelGrid>             	
-    <p:panel id="receita_despesa" widgetVar="receita_despesa" header="Relação Receitas x Despesas2" >
-        <h:outputText value="Relação Receitas x Despesas" />
-    </p:panel>       
-</p:panelGrid>
-
-</h:form>
-
+<b:modal id="amodal" title="Modal Example" styleClass="modalPseudoClass">
+    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+    <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
+    <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
+    <f:facet name="footer">
+        <b:button value="Close" dismiss="modal" />
+        <b:button value="Ok" look="primary" dismiss="modal" />
+    </f:facet>
+</b:modal>
 
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="4000"/> 

@@ -67,7 +67,6 @@ public class AreaSolicitacaoBean  implements Serializable{
 			
 			if(controlaCadastro==2)	
 				msg = gln.update(area);
-			
 			mensagens();
 			listar();
 			limpaCadastro();	

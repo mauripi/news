@@ -18,18 +18,18 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - ENGENHARIA</ui:define>
 <ui:define name="conteudo">
+<p:panel class="conteudo">
 
 <f:facet name="header">Controle de Sinais</f:facet>
 
-<h:form id="formSelecao" style="width:600px;">
-	<p:commandButton value="Novo" action="#{controlesinalMB.novo}" update=":formCad"  oncomplete="PF('dgCad').show()"/>
+<h:form id="formtb" >
+	<p:commandButton value="Novo Cadastro" icon="ui-icon-plus" action="#{controlesinalMB.novo}" update=":formCad"  oncomplete="PF('dgCad').show()"/><br/><br/>
     <p:dataTable id="ctr" var="c" value="#{controlesinalMB.controlesinais}" selectionMode="single" 
     	selection="#{controlesinalMB.controlesinalSel}" rowKey="#{c.id}" emptyMessage="" rows="20" paginator="true" paginatorPosition="bottom">
-    	<f:facet name="header">Cadastrados</f:facet>
 		<p:ajax event="rowSelect" listener="#{controlesinalMB.selecao}" update=":formCad"  oncomplete="PF('dgCad').show()"/>
 
         <p:column headerText="Data" width="15%;" filterBy="#{c.dataproblema}">
-             <h:outputText value="#{c.dataproblema}">
+          <h:outputText value="#{c.dataproblema}">
 			<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 		  </h:outputText>
 		</p:column>       
@@ -38,120 +38,143 @@
         </p:column>			       
         <p:column headerText="Problema" width="200px;"  filterBy="#{c.problema}">
             <h:outputText value="#{c.problema}" />
+        </p:column>	
+         <p:column headerText="Técnico" width="20%;" filterBy="#{c.tecnico}">
+            <h:outputText value="#{c.tecnico}" />
         </p:column>			       
+        <p:column headerText="Tipo Manutenção" width="200px;"  filterBy="#{c.tipomanutencao}">
+            <h:outputText value="#{c.tipomanutencao}" />
+        </p:column>			
+         <p:column headerText="Próxima Preventiva" width="200px;"  filterBy="#{c.proximapreventiva}">
+           <h:outputText value="#{c.proximapreventiva}">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+		  </h:outputText>
+        </p:column>	       
+     <p:column style="width:32px;text-align: center">
+          <p:commandButton update=":formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+              <f:setPropertyActionListener value="#{bem}" target="#{controlesinalMB.controlesinal}" />
+          </p:commandButton>
+      </p:column>	        
+        		       
                
     </p:dataTable>
-</h:form>
+</h:form></p:panel> 
 
 
 <p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Controle de Sinais" width="40%;" resizable="false">
 
 	<h:form id="formCad">
-		<p:panel id="panel" rendered="#{acessoBean.temAcessoControleSinal}">
-			<p:panelGrid columns="3" >
-				<h:outputLabel value="Posto"/>
-				<h:outputLabel value="Técnico"/>
-				<h:outputLabel value="Problema"/>
-		        <p:autoComplete id="posto" value="#{controlesinalMB.posto}" completeMethod="#{controlesinalMB.completePosto}" size="30"
-		        		disabled="#{controlesinalMB.controlaCadastro eq 0}" placeholder="Digite o posto"
-	                    var="p" itemLabel="#{p.nome}" itemValue="#{p}" converter="postoConverter" forceSelection="true" 
-	                    required="true" requiredMessage="Informe o posto"/>			
-				<p:inputText id="tec" value="#{controlesinalMB.controlesinal.tecnico}" placeholder="Nome do Técnico ou Empresa" maxlength="150" size="30" disabled="#{controlesinalMB.controlaCadastro eq 0}"
-					required="true" requiredMessage="Informe o nome do técnico ou empresa"/>
-				<p:inputText id="prob" value="#{controlesinalMB.controlesinal.problema}" placeholder="Defeito Reclamado" maxlength="254" size="60" disabled="#{controlesinalMB.controlaCadastro eq 0}"
-					required="true" requiredMessage="Informe o problema ou defeito reclamado"/>
-			</p:panelGrid>
-			<p:panelGrid columns="4" >
-				<h:outputLabel value="Tipo Equipamento"/>
-				<h:outputLabel value="Tipo Manutenção"/>
-				<h:outputLabel value="Data do Problema"/>
-				<h:outputLabel value="Nº Patrimônio"/>
 	
-		        <p:selectOneMenu id="teqp" value="#{controlesinalMB.controlesinal.tipoequipamento}" style="width:130px;"
-		        	disabled="#{controlesinalMB.controlaCadastro eq 0}" styleClass="oneMenu">
-		            <f:selectItem itemLabel="Selecione o Equipamento" itemValue="" />
-		            <f:selectItem itemLabel="TX" itemValue="TX" />
-		            <f:selectItem itemLabel="Ar Condicionado" itemValue="Ar Condicionado" />
-		        </p:selectOneMenu>
-		        <p:selectOneMenu id="tmanut" value="#{controlesinalMB.controlesinal.tipomanutencao}"  style="width:130px;"
-		        	disabled="#{controlesinalMB.controlaCadastro eq 0}" styleClass="oneMenu">
-		            <f:selectItem itemLabel="Manutenção Corretiva ou Preventiva" itemValue="" />
-		            <f:selectItem itemLabel="Corretiva" itemValue="Corretiva" />
-		            <f:selectItem itemLabel="Preventiva" itemValue="Preventiva" />
-		        </p:selectOneMenu>
-				<p:calendar id="dtpro" value="#{controlesinalMB.controlesinal.dataproblema}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
-					disabled="#{controlesinalMB.controlaCadastro==0}" required="true" requiredMessage="Informe data do problema"/>								
-				<p:inputText value="#{controlesinalMB.controlesinal.patrimonio}" maxlength="250" size="50" disabled="#{controlesinalMB.controlaCadastro==0}" />				
-	 		
-	 		</p:panelGrid>
-	 		
-	 		<p:panelGrid columns="3" >
-				<h:outputLabel value="Data da Solução"/>
-				<h:outputLabel value="Solução"/>
-				<h:outputLabel value="Pendências"/>
+	    <p:tabView style="width:800px;height:500px;" id="painelTab">
+	        <p:tab title="Geral">
+			    <p:panel header="Dados Gerais" >
+						<p:panelGrid columns="2" >  
+							<h:outputLabel value="Registro:"/>
+							<h:outputLabel value="#{controlesinalMB.posto.id}"/>
+							<h:outputLabel value="Posto:"/>
+					        <p:autoComplete id="posto" value="#{controlesinalMB.posto}" completeMethod="#{controlesinalMB.completePosto}" size="30"
+					        		disabled="#{controlesinalMB.controlaCadastro eq 0}" placeholder="Digite o posto"
+				                    var="p" itemLabel="#{p.nome}" itemValue="#{p}" converter="postoConverter" forceSelection="true" 
+				                    required="true" requiredMessage="Informe o posto"/>			
+							<h:outputLabel value="Técnico:"/>
+							<p:inputText id="tec" value="#{controlesinalMB.controlesinal.tecnico}" placeholder="Nome do Técnico ou Empresa" maxlength="150" size="30" disabled="#{controlesinalMB.controlaCadastro eq 0}"
+								required="true" requiredMessage="Informe o nome do técnico ou empresa"/>
+							<h:outputLabel value="Problema:	"/>
+							<p:inputText id="prob" value="#{controlesinalMB.controlesinal.problema}" placeholder="Defeito Reclamado" maxlength="254" size="60" disabled="#{controlesinalMB.controlaCadastro eq 0}"
+								required="true" requiredMessage="Informe o problema ou defeito reclamado"/>
+							<h:outputLabel value="Data do Problema:"/>
+							<p:calendar id="dtpro" value="#{controlesinalMB.controlesinal.dataproblema}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
+								disabled="#{controlesinalMB.controlaCadastro==0}" required="true" requiredMessage="Informe data do problema"/>								
 	
-				<p:calendar id="dtsol" value="#{controlesinalMB.controlesinal.datasolucao}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
-					disabled="#{controlesinalMB.controlaCadastro==0}"/>								
-				<p:inputTextarea id="solu" value="#{controlesinalMB.controlesinal.solucao}" placeholder="Solução" maxlength="1500" 
-					disabled="#{controlesinalMB.controlaCadastro eq 0}" style="width:250px;"/>
-				<p:inputTextarea id="pende" value="#{controlesinalMB.controlesinal.pendencia}" placeholder="Pendências" maxlength="1500" 
-					disabled="#{controlesinalMB.controlaCadastro eq 0}" style="width:250px;"/>
-	 		</p:panelGrid>		
-	 
-	 		<p:panelGrid columns="4" >
-				<h:outputLabel value="Valor do Atendimento"/>
-				<h:outputLabel value="Compra de Peça"/>
-				<h:outputLabel value="Valor da Peça"/>
-				<h:outputLabel value="Próxima Preventiva"/>
-				
-				<p:inputText id="vla" value="#{controlesinalMB.controlesinal.valoratendimento}" size="20" disabled="#{controlesinalMB.controlaCadastro eq 0}" >
-				 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
-				</p:inputText>	
-		        <p:selectOneMenu id="cmpe" value="#{controlesinalMB.controlesinal.comprapeca}"  style="width:80px;"
-		        	disabled="#{controlesinalMB.controlaCadastro eq 0}" styleClass="oneMenu">
-		            <f:selectItem itemLabel="Compra de Peça?" itemValue="" />
-		            <f:selectItem itemLabel="Sim" itemValue="Sim" />
-		            <f:selectItem itemLabel="Não" itemValue="Não" />
-		        </p:selectOneMenu>
-				<p:inputText id="vlp" value="#{controlesinalMB.controlesinal.valorpeca}" size="20" disabled="#{controlesinalMB.controlaCadastro eq 0}" >
-				 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
-				</p:inputText>									
-				<p:calendar id="dtpre" value="#{controlesinalMB.controlesinal.proximapreventiva}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
-					disabled="#{controlesinalMB.controlaCadastro==0}" />								
+						</p:panelGrid>
+			        
+			    </p:panel>
+	        </p:tab>
+	        <p:tab title="Equipamento">
+	        	<p:panel header="Dados do Equipamento:" >
+					<p:panelGrid columns="2" >
+						<h:outputLabel value="Tipo Equipamento:"/>
+				        <p:selectOneMenu id="teqp" value="#{controlesinalMB.controlesinal.tipoequipamento}"
+				        	disabled="#{controlesinalMB.controlaCadastro eq 0}" >
+				            <f:selectItem itemLabel="Selecione o Equipamento" itemValue="" />
+				            <f:selectItem itemLabel="TX" itemValue="TX" />
+				            <f:selectItem itemLabel="Ar Condicionado" itemValue="Ar Condicionado" />
+				        </p:selectOneMenu>
+						<h:outputLabel value="Tipo Manutenção:"/>
+				        <p:selectOneMenu id="tmanut" value="#{controlesinalMB.controlesinal.tipomanutencao}"
+				        	disabled="#{controlesinalMB.controlaCadastro eq 0}">
+				            <f:selectItem itemLabel="Manutenção Corretiva ou Preventiva" itemValue="" />
+				            <f:selectItem itemLabel="Corretiva" itemValue="Corretiva" />
+				            <f:selectItem itemLabel="Preventiva" itemValue="Preventiva" />
+				        </p:selectOneMenu>
+						<h:outputLabel value="Nº Patrimônio:"/>		
+						<p:inputText value="#{controlesinalMB.controlesinal.patrimonio}" maxlength="250" size="50" disabled="#{controlesinalMB.controlaCadastro==0}" />					 		
+			 		</p:panelGrid>   
+		 		</p:panel>     
+	        </p:tab>        
+	        <p:tab title="Conclusão da Visita">
+		        <p:panel header="Dados da Visita" id="visita">
+			 		<p:panelGrid columns="2" >
+						<h:outputLabel value="Data da Solução:"/>
+						<p:calendar id="dtsol" value="#{controlesinalMB.controlesinal.datasolucao}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
+							disabled="#{controlesinalMB.controlaCadastro==0}"/>								
+						<h:outputLabel value="Solução:"/>
+						<p:inputTextarea id="solu" value="#{controlesinalMB.controlesinal.solucao}" placeholder="Solução" maxlength="1500" 
+							disabled="#{controlesinalMB.controlaCadastro eq 0}" style="width:250px;"/>
+						<h:outputLabel value="Pendências:"/>	
+						<p:inputTextarea id="pende" value="#{controlesinalMB.controlesinal.pendencia}" placeholder="Pendências" maxlength="1500" 
+							disabled="#{controlesinalMB.controlaCadastro eq 0}" style="width:250px;"/>
 	
-	 		</p:panelGrid>
-	 		
-			<br></br>
-			<hr></hr>
-			<p:panelGrid columns="2">
-				<h:outputLabel value="Selecione o arquivo do Relatório em pdf a ser importado."/>
-				<h:outputLabel value="Seleção da Foto"/>
-			    <p:fileUpload fileUploadListener="#{controlesinalMB.handleFileUpload}" mode="advanced"  disabled="#{controlesinalMB.controlaCadastro != 2}" 
-			    	dragDropSupport="false" sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(pdf)$/"
-			    	label="Selecionar" uploadLabel="Importar" cancelLabel="Cancelar"/>
-				<p:fileUpload fileUploadListener="#{controlesinalMB.fotoPosto}" 
-				       mode="advanced" dragDropSupport="false" disabled="#{controlesinalMB.controlaCadastro != 2}"
-				       multiple="true" update=":formMsg" sizeLimit="7000000" 
-				       fileLimit="15" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
-				       fileLimitMessage="Permitido apenas 15 arquivo por vez."
-				       invalidFileMessage="Tipo de Arquivo inválido. Somente gif, jpg ou png."
-				       invalidSizeMessage="Tamanho do arquivo não permitido. Limite 7 Mb."
-				       cancelLabel="Cancelar" uploadLabel="Enviar" label="Localizar"
-				  />		
-			</p:panelGrid>
-			<br></br>
-			<p:commandButton value="#{controlesinalMB.controlesinal.arquivo}" oncomplete="PF('arq').show()" rendered="#{controlesinalMB.controlesinal.arquivo != null}"/>
-			<p:commandButton value="Vizualizar Fotos" action="#{controlesinalMB.openImages}" ajax="false" onclick="form.target='_blank'" rendered="#{controlesinalMB.images.size() > 0}"/>
-			<hr></hr>
-						
-			<f:facet name="footer">
-				<p:panelGrid columns="6" style="border: none !important; ">
-					<p:commandButton value="Remover" action="#{controlesinalMB.exclui}" disabled="#{controlesinalMB.controlesinal.id==null}" update=":formCad,:formMsg" />
-					<p:commandButton value="Limpar" action="#{controlesinalMB.limpaCadastro}" update=":formCad" />
-					<p:commandButton value="Gravar" action="#{controlesinalMB.grava}" update=":formCad,:formMsg"  oncomplete="PF('dgCad').hide()" />
-				</p:panelGrid>		
-			</f:facet>
-		</p:panel>	
+						<h:outputLabel value="Valor do Atendimento:"/>
+						<p:inputText id="vla" value="#{controlesinalMB.controlesinal.valoratendimento}" size="20" disabled="#{controlesinalMB.controlaCadastro eq 0}" >
+						 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+						</p:inputText>	           															 	
+						<h:outputLabel value="Compra de Peça:"/>
+				        <p:selectOneRadio  id="cmpe" value="#{controlesinalMB.controlesinal.comprapeca}" disabled="#{controlesinalMB.controlaCadastro eq 0}" >
+				            <f:selectItem itemLabel="Sim" itemValue="Sim" />
+				            <f:selectItem itemLabel="Não" itemValue="Não" />
+				            <p:ajax event="change" update="visita" process="@parent"/>
+				        </p:selectOneRadio >
+						<h:outputLabel id="lvlp" value="Valor da Peça:"  rendered="#{controlesinalMB.controlesinal.comprapeca eq 'Sim'}"/>
+						<p:inputText id="vlp" value="#{controlesinalMB.controlesinal.valorpeca}" size="20" disabled="#{controlesinalMB.controlaCadastro eq 0}" rendered="#{controlesinalMB.controlesinal.comprapeca eq 'Sim'}">
+						 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+						</p:inputText>									
+						<h:outputLabel value="Próxima Preventiva:" />					
+						<p:calendar id="dtpre" value="#{controlesinalMB.controlesinal.proximapreventiva}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
+							disabled="#{controlesinalMB.controlaCadastro==0}" />										
+			 		</p:panelGrid>  
+		 		</p:panel>      
+	        </p:tab>   
+	        
+	        <p:tab title="Anexos">
+		        <p:panel header="Anexos">
+					<p:panelGrid columns="1">
+						<h:outputLabel value="Selecione o arquivo do Relatório em pdf a ser importado."/>
+					    <p:fileUpload fileUploadListener="#{controlesinalMB.handleFileUpload}" mode="advanced"  disabled="#{controlesinalMB.controlaCadastro != 2}" 
+					    	dragDropSupport="false" sizeLimit="1000000" fileLimit="1" allowTypes="/(\.|\/)(pdf)$/"
+					    	label="Selecionar" uploadLabel="Importar" cancelLabel="Cancelar"/>
+						<h:outputLabel value="Seleção da Foto"/>
+						<p:fileUpload fileUploadListener="#{controlesinalMB.fotoPosto}" 
+						       mode="advanced" dragDropSupport="false" disabled="#{controlesinalMB.controlaCadastro != 2}"
+						       multiple="true" update=":formMsg" sizeLimit="7000000" 
+						       fileLimit="15" allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+						       fileLimitMessage="Permitido apenas 15 arquivo por vez."
+						       invalidFileMessage="Tipo de Arquivo inválido. Somente gif, jpg ou png."
+						       invalidSizeMessage="Tamanho do arquivo não permitido. Limite 7 Mb."
+						       cancelLabel="Cancelar" uploadLabel="Enviar" label="Localizar"
+						  />	
+						<p:commandButton icon="ui-icon-search" value="#{controlesinalMB.controlesinal.arquivo}" oncomplete="PF('arq').show()" rendered="#{controlesinalMB.controlesinal.arquivo != null}"/>
+						<p:commandButton  icon="ui-icon-search" value="Vizualizar Fotos" action="#{controlesinalMB.openImages}" ajax="false" onclick="form.target='_blank'" rendered="#{controlesinalMB.images.size() > 0}"/>
+						  	
+					</p:panelGrid>  
+				</p:panel>      
+	        </p:tab>              
+	    </p:tabView>	
+		<p:panelGrid columns="2" style="border: none !important; ">
+			<p:commandButton value="Gravar"  icon="ui-icon-check" action="#{controlesinalMB.grava}" update=":formCad,:formMsg"  oncomplete="PF('dgCad').hide()" />
+			<p:commandButton value="Cancelar"  icon="ui-icon-cancel" action="#{controlesinalMB.limpaCadastro}" update=":formCad" oncomplete="PF('dgCad').hide()"/>
+		</p:panelGrid>		
+	
 	</h:form>
 
 </p:dialog>
@@ -163,6 +186,22 @@
         </object>
 	</h:form>
 </p:dialog>
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{controlesinalMB.controlesinal.id}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" icon="ui-icon-check" action="#{controlesinalMB.exclui}" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar"  icon="ui-icon-cancel" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
+
 
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="4000"/> 

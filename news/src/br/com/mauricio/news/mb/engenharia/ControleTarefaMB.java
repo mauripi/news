@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Days;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 import br.com.mauricio.news.ln.GenericLN;
@@ -102,7 +103,7 @@ public class ControleTarefaMB implements Serializable{
 			msg=gln.update(tarefa);
 		if(controlaCadastro==1)
 			msg=gln.add(tarefa);
-		
+		RequestContext.getCurrentInstance().execute("PF('dgCad').hide()");
 		limpaCadastro();
 		mensagens();
 	}

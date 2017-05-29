@@ -28,7 +28,6 @@ public class PrimeiroAvisoContratoJob  implements Job {
 		System.out.println(new DateTime() +" => Iniciando processo automático para envio email contrato Primeiro Aviso..."); 
 		String CAMINHO_PASTA_CONTRATOS = "C:\\ARQUIVOS_CONTRATOS\\";
 		List<Contrato> list = getList();
-		
 		if(list.size()==0){
 			System.out.println("Não há emails a serem enviados.");
 		}else{	

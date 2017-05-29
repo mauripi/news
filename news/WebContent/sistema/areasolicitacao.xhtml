@@ -18,11 +18,41 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - TI</ui:define>
 <ui:define name="conteudo">
-
+<p:panel class="conteudo">
 <f:facet name="header">Cadastro de Tipos de Solicitação</f:facet>
 
-<h:form id="formCad">
-	<p:panel  style="width:40%;">
+<h:form id="formtb">
+	<br></br>
+	<p:commandButton  icon="ui-icon-plus" value="Novo Tipo" title="Nova Adiantamento"  action="#{areaSolicitacaoMB.novo}"
+		 update=":formCad" oncomplete="PF('dgCad').show();"/>
+ 	<br></br>                    
+	<br></br>	
+    <p:dataTable id="tb" var="a" value="#{areaSolicitacaoMB.areas}" rows="15" paginator="true" paginatorPosition="bottom"
+	   	selectionMode="single" selection="#{areaSolicitacaoMB.areaSel}" rowKey="#{a.id}" emptyMessage="">
+     	
+    	<f:facet name="header">Tipos cadastrados</f:facet>
+		<p:ajax event="rowSelect" listener="#{areaSolicitacaoMB.selecao}" update=":formCad" oncomplete="PF('dgCad').show();"/>
+		<p:column headerText="Area" width="5%">
+            <h:outputText value="#{a.id}" />
+        </p:column>
+		<p:column headerText="Area" width="35%">
+            <h:outputText value="#{a.categoria}" />
+        </p:column>
+        <p:column headerText="Tipo" width="35%">
+            <h:outputText value="#{a.descricao}" />
+        </p:column>
+        <p:column style="width:32px;text-align: center">
+            <p:commandButton update=":formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+                <f:setPropertyActionListener value="#{a}" target="#{areaSolicitacaoMB.area}" />
+            </p:commandButton>
+        </p:column>	
+    </p:dataTable>				
+</h:form>
+</p:panel>
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Tipos de Solicitação" resizable="false" width="60%;" height="220px;">
+<h:form id="formCad" style="width:120 %;">
+
 		<p:panelGrid columns="2">
 			<h:outputLabel value="Categoria"/>
 			<p:selectOneMenu id="cat" value="#{areaSolicitacaoMB.categoriaSelecionada}" style="widht:90%;" disabled="#{areaSolicitacaoMB.controlaCadastro == 0}">
@@ -32,32 +62,32 @@
 			<h:outputLabel value="Tipo"/>
 			<p:inputText value="#{areaSolicitacaoMB.area.descricao}" size="30" maxlength="50" disabled="#{areaSolicitacaoMB.controlaCadastro == 0}" />		
 		</p:panelGrid>
-		<f:facet name="footer">
-			<p:panelGrid columns="6" style="border: none !important; ">
-				<p:commandButton value="Novo" action="#{areaSolicitacaoMB.novo}" update=":formCad" />
-				<p:commandButton value="Limpar" action="#{areaSolicitacaoMB.limpaCadastro}" update=":formCad" />
-				<p:commandButton value="Excluir" action="#{areaSolicitacaoMB.exclui}" update=":formCad,:formMsg" />
-				<p:commandButton value="Gravar" action="#{areaSolicitacaoMB.grava}" update=":formCad,:formMsg" />
-			</p:panelGrid>
-		</f:facet>
-		<br></br>
-		<hr></hr>
-	    <p:dataTable id="area" var="a" value="#{areaSolicitacaoMB.areas}" selectionMode="single" 
-	    
-	     	selection="#{areaSolicitacaoMB.areaSel}" rowKey="#{a.id}" emptyMessage="">
-	    	<f:facet name="header">Tipos cadastrados</f:facet>
-			<p:ajax event="rowSelect" listener="#{areaSolicitacaoMB.selecao}" update=":formCad" />
-			<p:column headerText="Area" width="35%">
-	            <h:outputText value="#{a.categoria}" />
-	        </p:column>
-	        <p:column headerText="Tipo" width="35%">
-	            <h:outputText value="#{a.descricao}" />
-	        </p:column>
 
-	    </p:dataTable>				
-	    
-	</p:panel>
+		<p:panelGrid columns="2" style="border: none !important; ">
+			<p:commandButton value="Gravar"  icon="ui-icon-check"  action="#{areaSolicitacaoMB.grava}" update=":formCad,:formMsg,:formtb"  oncomplete="PF('dgCad').hide()" />
+			<p:commandButton  icon="ui-icon-cancel" value="Cancelar" action="#{areaSolicitacaoMB.limpaCadastro}"/>
+
+		</p:panelGrid>
+
 </h:form>
+</p:dialog>
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{areaSolicitacaoMB.area.id} - 
+					#{areaSolicitacaoMB.area.descricao}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{areaSolicitacaoMB.exclui}" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
+
 
 
 <h:form id="formMsg">                      
@@ -65,6 +95,7 @@
 </h:form>
 </ui:define>
 </ui:composition>	
+
 </h:body>	
 
 </html>

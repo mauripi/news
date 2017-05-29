@@ -20,7 +20,7 @@
 <ui:define name="conteudo">
 
 <f:facet name="header">Atualizar Consolidado</f:facet>
-<p:panel rendered="true" style="width:40%;">
+<p:panel rendered="true">
 
 <h:form>
 	<p:panelGrid columns="2">	
@@ -51,7 +51,7 @@
 	</p:panelGrid> 
 	<br></br>
 	<br></br>
-	<p:commandButton value="Atualizar" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" action="#{consolidadoMB.atualizaPeriodo}"  update=":formMsg, down"/>
+	<p:commandButton value="Atualizar" icon="ui-icon-check" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" action="#{consolidadoMB.atualizaPeriodo}"  update=":formMsg, down"/>
 	<br></br>
 	<br></br>
 	<br></br>

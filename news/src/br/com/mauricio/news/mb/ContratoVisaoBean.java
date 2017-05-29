@@ -115,7 +115,11 @@ public class ContratoVisaoBean implements Serializable {
 		        .collect(Collectors.toList());
     }
 
-    public void mensagens(String msg){
+    public void visualizar(){
+    	System.out.println(contrato.getId());
+    }
+    
+     public void mensagens(String msg){
         FacesContext context = FacesContext.getCurrentInstance();                
         context.addMessage(null, new FacesMessage(msg,""));          
     }  

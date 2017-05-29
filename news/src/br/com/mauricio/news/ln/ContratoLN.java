@@ -42,10 +42,10 @@ public class ContratoLN implements Serializable {
         ContratoDao cdao = new ContratoDao(manager);
         String codigo = userLogado.getCusto().getCodigo();
         List<Contrato> list = new ArrayList<Contrato>();
-        if(codigo.equals("30006")||codigo.equals("30018")||userLogado.getChapa().equals("000755")){
+        if(codigo.equals("30006")||codigo.equals("30018")||codigo.equals("30016")||userLogado.getChapa().equals("000755")){
             list = cdao.listaContratosAtivos();
         }else{
-            List<String> custos = Arrays.asList("30034", "30071","30107");
+            List<String> custos = Arrays.asList("30034", "30071", "30107");
             list = cdao.listaContratosByCCusto(custos);
         }
         return list;

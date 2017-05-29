@@ -13,8 +13,8 @@
 <title><ui:insert name="titulo"></ui:insert></title>
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
 <link rel="stylesheet" href="templates/reset.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="templates/style.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/primefaces.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="templates/style.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/showcase.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/form.css" type="text/css" media="screen" />
 
@@ -77,8 +77,10 @@
             <p:menuitem value="Recibo da Prestação" action="reciboprestacao?faces-redirect=true" disabled="#{!acessoBean.temAcessoFluxoDiario}"/>    
         </p:submenu>    
         <p:submenu label="Contabilidade"> 
-            <p:menuitem value="SIG" actionListener="#{acessoBean.sig}" disabled="#{!acessoBean.temAcessoSig}" />
-            <p:menuitem value="Consolidado" actionListener="#{acessoBean.controleConsolidado}"  disabled="#{!acessoBean.temAcessoControletConsolidado}" rendered="#{acessoBean.temAcessoControletConsolidado}"/>           
+            <p:menuitem value="Importar Períodos"  action="importconsolidado?faces-redirect=true"   disabled="#{!acessoBean.temAcessoControletConsolidado}" rendered="#{acessoBean.temAcessoControletConsolidado}" />
+            <p:menuitem value="Adicionar Comentários na Conta"  action="observacaoconsolidado?faces-redirect=true"  disabled="#{!acessoBean.temAcessoControletConsolidado}" rendered="#{acessoBean.temAcessoControletConsolidado}" />
+            <p:menuitem value="Consolidado" action="consolidado?faces-redirect=true"   disabled="#{!acessoBean.temAcessoControletConsolidado}" rendered="#{acessoBean.temAcessoControletConsolidado}" target="_blank" ajax="false"  />
+            <p:menuitem value="SIG" actionListener="#{acessoBean.sig}" disabled="#{!acessoBean.temAcessoSig}" />         
         </p:submenu>           
         <p:submenu label="Compras">
             <p:menuitem value="Contratos" actionListener="#{acessoBean.contrato}" rendered="#{acessoBean.temAcessoContrato}" />

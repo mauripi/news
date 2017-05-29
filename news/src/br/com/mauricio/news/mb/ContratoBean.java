@@ -279,8 +279,14 @@ public class ContratoBean implements Serializable {
     }
     
     public String getPrimeiroAvisoEm(){
-    	LocalDate data = new LocalDate(contrato.getFim()).minusDays(contrato.getDiasAviso());
-		return DateUtil.formatDataFromBanco(data.toDate());    	
+    	String s="";
+    	try{
+	    	LocalDate data = new LocalDate(contrato.getFim()).minusDays(contrato.getDiasAviso());
+	    	s = DateUtil.formatDataFromBanco(data.toDate());  
+    	}catch(Exception e){
+    		s="";
+    	}
+		return s;  	
     }
     
     public void handleFileUpload(FileUploadEvent event){

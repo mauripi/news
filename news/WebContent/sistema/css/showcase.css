@@ -84,9 +84,9 @@ body{margin:0px; height:100%; overflow-x:hidden; overflow-y:auto; background-col
 				
 	
 	/* content side style*/
-	#CONTENTSIDE{width:auto; overflow:hidden; z-index:1;  background-color:#eff3f6;}
+	#CONTENTSIDE{width:auto; overflow:hidden; z-index:1;  background-color:#1f3063;}
 		#CONTENTSIDEindent{width:100%; height:auto;}
-			.ContentSideSections{display:block; border-bottom:solid 1px #bcc7cf; padding:30px;}
+			.ContentSideSections{display:block; border-bottom:solid 1px #1f3063; padding:30px;}
 			.MOBILE .ContentSideSections{padding:14px 24px;}
 			#PFTopLinksCover{background-color:#1f3063;} /* #3e5795 */
 			#PFMobileTopLinksCover{ position:inherit;}

@@ -3,10 +3,10 @@
 
 
 <html 	xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:h="http://java.sun.com/jsf/html"  
-   		xmlns:f="http://java.sun.com/jsf/core" 
-    	xmlns:p="http://primefaces.org/ui"
-    	xmlns:ui="http://java.sun.com/jsf/facelets">
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
@@ -31,10 +31,10 @@
 			<p></p>
 		<br></br>   			
 	    <p:dataTable id="tb" var="c" value="#{contratoMB.contratos}"  rows="15" paginator="true" paginatorPosition="bottom"
-	    	selectionMode="single" selection="#{contratoMB.contrato}" rowKey="#{c}" emptyMessage="">
+	    	selectionMode="single" selection="#{contratoMB.contrato}" rowKey="#{c.id}" emptyMessage="">
 
         	<p:ajax event="rowSelect" listener="#{contratoMB.onRowSelect}" update=":formMsg,:formCad" 
-        			oncomplete="PF('dgCad').show(), PrimeFaces.monitorDownload(start, stop)"/>
+        			oncomplete="PF('dgCad').show();"/>
 
 	       <p:column headerText="Nº"  width="32px;" sortBy="#{c.id}">
 	            <h:outputText value="#{c.id}" />
@@ -276,7 +276,7 @@
 						</p:panelGrid>
 						<f:facet name="footer">
 							<p:panelGrid columns="2" >
-								<p:commandButton value="Salvar" action="#{contratoMB.grava}" ajax="false"  update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide(), PrimeFaces.monitorDownload(start, stop)"/>
+								<p:commandButton value="Salvar" action="#{contratoMB.grava}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
 								<p:commandButton value="Cancelar"  oncomplete="PF('dgCad').hide()"/>
 							</p:panelGrid>
 						</f:facet>						
@@ -322,7 +322,7 @@
 
 			<f:facet name="footer">
 				<p:panelGrid columns="2">
-					<p:commandButton value="Sim" action="#{contratoMB.exclui}" update=":formMsg,:formCad" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Sim" action="#{contratoMB.exclui}" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
 					<p:commandButton value="Cancelar" onclick="PF('delDialog').hide()"/> 
 				</p:panelGrid>		
 			</f:facet>
@@ -330,10 +330,7 @@
 	</h:form>	
 </p:dialog>
 
-<p:dialog modal="false" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false"  >
-    <p:graphicImage value="img/ajaxloadingbar.gif" />
-</p:dialog>
-	
+
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="8000"/> 
 </h:form>
@@ -341,6 +338,15 @@
 </ui:composition>	
 
 
+<script type="text/javascript">
+function start() {
+    PF('statusDialog').show();
+}
+ 
+function stop() {
+    PF('statusDialog').hide();
+}
+</script>
 </h:body>	
 
 </html>

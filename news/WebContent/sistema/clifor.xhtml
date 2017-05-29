@@ -13,16 +13,23 @@
 
 
 </h:head>
-   	
 <h:body>
-
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS</ui:define>
 <ui:define name="conteudo">
+<p:panel class="conteudo">
 <f:facet name="header">Clientes / Fornecedores</f:facet>
-
-<p:panel>
 	<h:form id="formtb">	
+	<br></br>
+	<p:panelGrid columns="2">
+		<p:commandButton  actionListener="#{cliforBean.chooseCliFor}"  icon="ui-icon-plus" value="Novo Cliente Fornecedor" title="Novo">
+			 <p:ajax event="dialogReturn" listener="#{cliforBean.onCliForChosen}" update=":formCad, :formtb"/>
+		</p:commandButton>
+	</p:panelGrid>	 		
+	
+		 
+ 	<br></br>                    
+	<br></br>
   			
 	    <p:dataTable id="tb" var="c" value="#{cliforBean.allCliFor}"  rows="15" paginator="true" paginatorPosition="bottom"  
 	    	selectionMode="single" selection="#{cliforBean.clifor}" rowKey="#{c}" emptyMessage="">
@@ -112,8 +119,8 @@
 		</p:tabView> 
 
     	<p:panelGrid columns="2">
-    		<p:commandButton value="Salvar" actionListener="#{cliforBean.salvarAtualizar}" update=":formMsg,:formCad,:formtb" />
-    		<p:commandButton value="Cancelar" actionListener="#{cliforBean.init}" update=":formMsg,:formCad,:formtb" oncomplete="PF('dgCad').hide()"/>
+    		<p:commandButton value="Salvar" icon="ui-icon-check" actionListener="#{cliforBean.salvarAtualizar}" update=":formMsg,:formCad,:formtb" />
+    		<p:commandButton icon="ui-icon-cancel" value="Cancelar" actionListener="#{cliforBean.init}" update=":formMsg,:formCad,:formtb" oncomplete="PF('dgCad').hide()"/>
     	</p:panelGrid>
 				
   	</h:form>

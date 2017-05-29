@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 
 import org.apache.commons.io.FileUtils;
 import br.com.mauricio.news.model.Login;
+import br.com.mauricio.news.util.SaveFile;
 
 /**
 *
@@ -29,6 +30,7 @@ public class LoginFotoDao {
 		try {
 			if (foto!=null){
 		        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("");
+		        SaveFile.criarPasta(path+"\\sistema\\tmp\\");
 		        String dest = path+"\\sistema\\tmp\\"+login.getCpf()+".jpg";
 				FileUtils.writeByteArrayToFile(new File(dest), foto);
 			}

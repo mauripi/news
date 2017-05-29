@@ -87,7 +87,9 @@ public class UsuarioBean implements Serializable {
 		}else{
 			LoginLN ln = new LoginLN();
 			this.login.setRemovido(1);
-			msg = ln.remove(this.login);
+			this.login.setAtivo(false);
+			ln.atualiza(login);
+			msg="Excluído com Sucesso";
 			mensagens();
 			limpaCadastro();
 			init();

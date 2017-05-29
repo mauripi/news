@@ -29,7 +29,6 @@ public class ProximosAvisoContratoJob  implements Job {
 		System.out.println(new DateTime() +" => Iniciando processo automático para envio email contrato Proximos Aviso..."); 
 		String CAMINHO_PASTA_CONTRATOS = "C:\\ARQUIVOS_CONTRATOS\\";
 		List<Contrato> list = getList();
-		
 		if(list.size()==0){
 			System.out.println("Não há emails a serem enviados.");
 		}else{	

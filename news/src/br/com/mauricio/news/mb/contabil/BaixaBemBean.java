@@ -15,9 +15,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.event.FlowEvent;
-
-import net.sf.jasperreports.engine.JRException;
 import br.com.mauricio.news.ln.FilialLN;
 import br.com.mauricio.news.ln.GenericLN;
 import br.com.mauricio.news.ln.contabil.BaixaBemLN;
@@ -52,10 +49,7 @@ public class BaixaBemBean implements Serializable {
     private List<Patrimonio> patrimonios = new ArrayList<Patrimonio>();
     private String codigo;
     private Date data = new Date();
-
-
 	private String descricao="";
-	private boolean skip;
 	private Double totalCompra;
 	private Double totalResidual;
 	private Boolean isVenda=false;
@@ -118,7 +112,7 @@ public class BaixaBemBean implements Serializable {
 		}else{
 			gln = new GenericLN<BaixaBem>();
 			enviaEmailBemExcluido(baixabemSel);
-			msg = gln.remove(baixabemSel);
+			msg = gln.remove(gln.find(new BaixaBem(), baixabem.getId()));
 			mensagens();
 			limpaCadastro();
 			listar();
@@ -196,21 +190,59 @@ public class BaixaBemBean implements Serializable {
 			listar();
 			limpaCadastro();	
 		}else{
-			msg = "Favor preencha todos campos, pois são obrigatórios.";
-			mensagens();
+			if(msgs.size()>0)
+				mensagens(msgs);
+
 		}
 	}
 	
-	public void imprimir() {
-		RelBaixaBemLN rel = new RelBaixaBemLN();
-		try {
-			rel.imprimir(baixabem);
-		} catch (IOException | JRException e) {
-			msg = msg + " Mas não foi possivel imprimir relatório.";
-			System.out.println(e.getLocalizedMessage() + " BaixaBemBean.imprimir() IOException");
-			mensagens();
+	public void selectTipoVenda(){
+		isVenda = false;
+		if(tipoBaixa!=null)
+			if(tipoBaixa==TipoBaixa.VENDA)
+				isVenda=true;
+	}
+	
+	private boolean validaCampos(){
+		msgs= new ArrayList<String>();
+		boolean isValid=true;
+		if(usuario==null){
+			isValid = false;
+			msgs.add("Saia do sistema e entre novamente!");
 		}
-	}	
+		
+		if(tipoBaixa==null){
+			isValid = false;
+			msgs.add("Informe o tipo de baixa.");
+		}else{
+			if(tipoBaixa==TipoBaixa.VENDA){
+				isVenda=true;
+				if(baixabem.getVlrvenda()==null){
+					isValid = false;
+					msgs.add("Informe o valor da venda.");
+				}
+			}else{
+				isVenda=false;
+			}
+		}
+		
+		if(itens.size()<1){
+			isValid = false;
+			msgs.add("Adicione os patrimônios");
+		}
+		
+		if(baixabem.getJustificativa().length()<1){
+			isValid = false;
+			msgs.add("Informe a justificativa.");
+		}
+
+		if(data==null){
+			isValid = false;
+			msgs.add("Informe o data da baixa.");
+		}
+		
+		return isValid;		
+	}
 	
 	private void enviaEmail(BaixaBem b) {
 		BaixaBemLN bln = new BaixaBemLN();
@@ -290,64 +322,6 @@ public class BaixaBemBean implements Serializable {
 			items[i++] = new SelectItem(t, t.name());
 	 	return items;
  	}
-
-	private boolean validaCampos(){
-		if(usuario==null)
-			return false;
-
-		if(baixabem.getJustificativa()==null)
-			return false;
-		if(baixabem.getTipoBaixa()==TipoBaixa.VENDA)
-			if(baixabem.getVlrvenda()==null)
-				return false;
-		if(data==null)
-			return false;
-		
-		return true;		
-	}
-	
-    public String onFlowProcess(FlowEvent event) {
-	   	if(controlaCadastro!=0){
-	       if(skip) {
-	            skip = false;   //reset in case user goes back
-	            return "confirm";
-	        }else {
-	        	msgs = new ArrayList<String>();
-	        	if(event.getOldStep().equals("gerais")){
-	        		if(tipoBaixa==null)
-	        			msgs.add("Informe o tipo de baixa.");
-	        		else
-	        			if(tipoBaixa==TipoBaixa.VENDA)
-	        				isVenda=true;
-	        			else
-	        				isVenda=false;
-	        		if(msgs.size()>0){
-	        			mensagens(msgs);
-	        			return event.getOldStep();
-	        		}
-	        	}
-	        	if(event.getOldStep().equals("patrimonios")){
-	        		if(itens.size()<1)
-	        			msgs.add("Adicione os patrimônios");
-	        		if(msgs.size()>0){
-	        			mensagens(msgs);
-	        			return event.getOldStep();
-	        		}       		
-	        	} 
-	        	if(event.getOldStep().equals("just")){
-	        		if(baixabem.getJustificativa()==null)
-	        			msgs.add("Adicione a justificativa");
-	        		if(msgs.size()>0){
-	        			mensagens(msgs);
-	        			return event.getOldStep();
-	        		}       		
-	        	} 	        	
-	        	
-	            return event.getNewStep();
-	        }
-	   	}
-		return "gerais";
-   }	
 	
 	private void mensagens(List<String> ms) {
         FacesContext context = FacesContext.getCurrentInstance(); 
@@ -508,14 +482,6 @@ public class BaixaBemBean implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
-	}
-
-	public boolean isSkip() {
-		return skip;
-	}
-
-	public void setSkip(boolean skip) {
-		this.skip = skip;
 	}
 
 	public List<ItemBaixaBem> getItens() {

@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-
 <html 	xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:h="http://java.sun.com/jsf/html"  
-   		xmlns:f="http://java.sun.com/jsf/core" 
-    	xmlns:p="http://primefaces.org/ui"
-    	xmlns:ui="http://java.sun.com/jsf/facelets">
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
-
 
 </h:head>
    	
@@ -18,97 +15,50 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - ENGENHARIA</ui:define>
 <ui:define name="conteudo">
-
+<p:panel class="conteudo">
+<p:panel id="panel" rendered="#{acessoBean.temAcessoControleTarefa}">
 <f:facet name="header">Controle de Atividades</f:facet>
 
-<p:panel id="panel" rendered="#{acessoBean.temAcessoControleTarefa}">
-	<h:form id="formCad">
-		<p:panelGrid columns="2" >
-			<h:outputLabel value="Atividade"/>
-			<h:outputLabel value="Responsável"/>
-			<p:inputText id="atv" value="#{controletarefaMB.tarefa.atividade}" placeholder="Atividade" maxlength="100"  style="width:400px;" 
-				required="true" requiredMessage="Descreva a Atividade" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
-			<p:inputText id="rsp" value="#{controletarefaMB.tarefa.responsavel}" placeholder="Responsavel" maxlength="100"  style="width:130px;"
-				required="true" requiredMessage="Informe o Responsável" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
-		</p:panelGrid>
-		<p:panelGrid columns="3" >		
-			<h:outputLabel value="Início"/>
-			<h:outputLabel value="Conclusão"/>
-			<h:outputLabel value="Orçamento"/>
-			<p:calendar id="dti" value="#{controletarefaMB.tarefa.datainicio}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
-				required="true" requiredMessage="Informe o início da Tarefa" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
-			<p:calendar id="dtf" value="#{controletarefaMB.tarefa.datafim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
-				required="true" requiredMessage="Informe o fim da Tarefa" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
-			<p:inputText id="vlr" value="#{controletarefaMB.tarefa.valor}" size="13" disabled="#{controletarefaMB.controlaCadastro == 0}">
-				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-			</p:inputText>		
-	    </p:panelGrid>
-		<p:panelGrid columns="2" >		
-			<h:outputLabel value="Nº Patrimônio"/>
-	        <h:outputLabel for="moeda" value="Moeda" />
-			<p:inputText value="#{controletarefaMB.tarefa.patrimonio}" maxlength="250" size="50" disabled="#{controletarefaMB.controlaCadastro==0}" />					
-	        <p:selectOneRadio id="moeda" value="#{controletarefaMB.tarefa.moeda}">
-	            <f:selectItem itemLabel="R$" itemValue="1" />
-	            <f:selectItem itemLabel="US$" itemValue="2" />
-	            <f:selectItem itemLabel="€" itemValue="3" />
-	        </p:selectOneRadio>
-	    </p:panelGrid>	    
-	    
-	    <p:panelGrid columns="2" >
-			<h:outputLabel value="Observação"/>
-			<p:inputTextarea id="obs" value="#{controletarefaMB.tarefa.observacao}" counter="display" counterTemplate="{0} carecteres restantes." autoResize="true"
-				placeholder="Pendências" maxlength="2000" style="width:450px;" disabled="#{controletarefaMB.controlaCadastro == 0}"/>			
-			<h:outputLabel value=""/>
-			<h:outputText id="display" />
-		</p:panelGrid>
+	<h:form id="formtb">
 		<br></br>
-		<p:panelGrid columns="4"  style="border: none !important;">	
-			<p:commandButton value="Novo" action="#{controletarefaMB.novo}" update=":formCad" disabled="#{controletarefaMB.controlaCadastro == 1 || controletarefaMB.tarefa.id != null}"/>	
-            <p:commandButton value="Salvar"  action="#{controletarefaMB.gravar}" update=":formCad,:formMsg,:formTb" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
-            <p:commandButton value="Excluir" action="#{controletarefaMB.exclui}" update=":formCad,:formMsg,:formTb"  disabled="#{controletarefaMB.controlaCadastro == 0}"/>
-            <p:commandButton value="Cancelar" action="#{controletarefaMB.limpaCadastro}" update=":formCad,:formMsg,:formTb" disabled="#{controletarefaMB.controlaCadastro == 0}"/>					
-		</p:panelGrid>
-	
-	<br></br>
-	<p:separator/>
-	</h:form>
-
-	<h:form id="formTb">
+		<p:panelGrid columns="2">
+			<p:commandButton  icon="ui-icon-plus" value="Nova Atividade" title="Novo"  action="#{controletarefaMB.novo}"
+				 update=":formCad" oncomplete="PF('dgCad').show();"/>
+		</p:panelGrid>	 			 
+	 	<br></br>                    	
 	    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 	        <p:outputLabel for="flt" value="Filtro" />
 	        <p:selectOneRadio id="flt" value="#{controletarefaMB.filtro}">
-	        	<p:ajax event="change" listener="#{controletarefaMB.filtragem}" update="tb"/>
+	        	<p:ajax event="change" listener="#{controletarefaMB.filtragem}" update="formtb"/>
 	            <f:selectItem itemLabel="Em Andamento" itemValue="0" />
-	            <f:selectItem itemLabel="Finalizados" itemValue="1" />
+	            <f:selectItem itemLabel="Finalizados" itemValue="1"  />
 	            <f:selectItem itemLabel="Todos" itemValue="2" />
 	        </p:selectOneRadio>
 	    </h:panelGrid>
  		  
-	    <p:dataTable id="tb" var="trf" widgetVar="tarefasTb" value="#{controletarefaMB.tarefasFiltradas}" selectionMode="single" emptyMessage=""
-	    	selection="#{controletarefaMB.tarefa}" rowKey="#{trf.id}">
-
-	        <p:ajax event="rowSelect" listener="#{controletarefaMB.onRowSelect}" update=":formCad,:formMsg" />
-	        
+	    <p:dataTable id="tbItens" var="trf" widgetVar="tarefasTb" value="#{controletarefaMB.tarefasFiltradas}" selectionMode="single" emptyMessage=""
+	    	selection="#{controletarefaMB.tarefa}" rowKey="#{trf.id}"  rowStyleClass="#{trf.aprovado eq true ? 'fundoVerde' : 'fundoAmarelo'}" rowIndexVar="rowIndex">
+	    		        
 	        <p:column headerText="Id"  style="width:5%;" sortBy="#{trf.id}">
 	            <h:outputText value="#{trf.id}" />
 	        </p:column>
-	        <p:column headerText="Atividade" style="width:20%;"  filterBy="#{trf.atividade}"  filterMatchMode="contains">
+	        <p:column headerText="Atividade" style="width:30%;"  filterBy="#{trf.atividade}"  filterMatchMode="contains">
 	            <h:outputText value="#{trf.atividade}" />
 	        </p:column>
-	        <p:column headerText="Responsável" style="width:15%;"  filterBy="#{trf.responsavel}"  filterMatchMode="contains">
+	        <p:column headerText="Responsável" style="width:12%;"  filterBy="#{trf.responsavel}"  filterMatchMode="contains">
 	            <h:outputText value="#{trf.responsavel}" />
 	        </p:column>
-	        <p:column headerText="Inicio" style="width:15%;" sortBy="#{trf.datainicio}">
+	        <p:column headerText="Inicio" style="width:10%;" sortBy="#{trf.datainicio}">
 				<h:outputText value="#{trf.datainicio}">
 					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 				</h:outputText>
 	         </p:column>
-	         <p:column headerText="Conclusão" style="width:15%;" sortBy="#{trf.datafim}">
+	         <p:column headerText="Conclusão" style="width:10%;" sortBy="#{trf.datafim}">
 				<h:outputText value="#{trf.datafim}">
 					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 				</h:outputText>
 	         </p:column> 
-			<p:column headerText="Orçamento" style="text-align: right;width:15%;" sortBy="#{trf.valor}" >
+			<p:column headerText="Orçamento" style="text-align: right;width:10%;" sortBy="#{trf.valor}" >
 				<h:outputText value="#{controletarefaMB.simboloMoeda(trf.moeda)}"/>
 				<h:outputText value="#{trf.valor}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />	           																
@@ -120,12 +70,86 @@
 	        <p:column headerText="Observações" style="width:30%;"  >
 	            <h:outputText value="#{trf.observacao}" />
 	        </p:column>	    
-	        <p:column headerText="Status" style="width:20%;" sortBy="#{trf.aprovado}">
-	            <p:inputSwitch value="#{trf.aprovado}" onLabel="Aprovado" offLabel="Não Approvado" disabled="true"/>
-	        </p:column>		                              
+	        <p:column headerText="Status da Aprovação" style="width:13%;">
+	        	<h:outputText value="#{trf.aprovado eq true ? 'Aprovado' : 'Ainda não aprovado'}" />
+	        </p:column>          
+	        <p:column  width="68px;">
+	             <p:commandButton actionListener="#{controletarefaMB.edita}" icon="ui-icon-pencil" update=":formCad" oncomplete="PF('dgCad').show();" rendered="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim) ne 100}">
+	             	<f:setPropertyActionListener value="#{trf}" target="#{controletarefaMB.tarefa}" />
+	             </p:commandButton>
+	            <p:commandButton update=":formDel, :formtb" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover" rendered="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim) ne 100}">
+	                <f:setPropertyActionListener value="#{trf}" target="#{controletarefaMB.tarefa}" />
+	            </p:commandButton>
+			</p:column>
 	    </p:dataTable>
 	</h:form>
 </p:panel>
+</p:panel>
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Demanda" resizable="false" >
+
+	<h:form id="formCad">
+		<p:panelGrid columns="1" >
+			<h:outputLabel value="Atividade:"/>
+			<p:inputText id="atv" value="#{controletarefaMB.tarefa.atividade}" placeholder="Atividade" maxlength="100"  style="width:400px;" 
+				required="true" requiredMessage="Descreva a Atividade" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
+			<h:outputLabel value="Responsável: "/>
+			<p:inputText id="rsp" value="#{controletarefaMB.tarefa.responsavel}" placeholder="Responsavel" maxlength="100"  size="30"
+				required="true" requiredMessage="Informe o Responsável" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
+		</p:panelGrid>
+		<p:panelGrid columns="2" >		
+			<h:outputLabel value="Início:"/>
+			<h:outputLabel value="Conclusão:"/>
+			<p:calendar id="dti" value="#{controletarefaMB.tarefa.datainicio}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
+				required="true" requiredMessage="Informe o início da Tarefa" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
+			<p:calendar id="dtf" value="#{controletarefaMB.tarefa.datafim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
+				required="true" requiredMessage="Informe o fim da Tarefa" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
+	    </p:panelGrid>
+		<p:panelGrid columns="1" >	
+			<h:outputLabel value="Orçamento:"/>
+			<p:inputText id="vlr" value="#{controletarefaMB.tarefa.valor}" size="30" disabled="#{controletarefaMB.controlaCadastro == 0}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+			</p:inputText>		
+			
+	        <h:outputLabel for="moeda" value="Moeda:" />
+	        <p:selectOneRadio id="moeda" value="#{controletarefaMB.tarefa.moeda}">
+	            <f:selectItem itemLabel="R$" itemValue="1" />
+	            <f:selectItem itemLabel="US$" itemValue="2" />
+	            <f:selectItem itemLabel="€" itemValue="3" />
+	        </p:selectOneRadio>
+			<h:outputLabel value="Nº Patrimônio:"/>
+			<p:inputText value="#{controletarefaMB.tarefa.patrimonio}" maxlength="250" size="50" disabled="#{controletarefaMB.controlaCadastro==0}" />					
+			<h:outputLabel value="Observação:"/>
+			<p:inputTextarea id="obs" value="#{controletarefaMB.tarefa.observacao}" counter="display" counterTemplate="{0} carecteres restantes." autoResize="true"
+				placeholder="Pendências" maxlength="2000" style="width:450px;" disabled="#{controletarefaMB.controlaCadastro == 0}"/>			
+			<h:outputText id="display" />
+		</p:panelGrid>
+		<br></br>
+		<p:panelGrid columns="4"  style="border: none !important;">	
+            <p:commandButton value="Gravar" icon="ui-icon-check"  actionListener="#{controletarefaMB.gravar}" update=":formCad,:formMsg,:formtb" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
+            <p:commandButton value="Cancelar"  icon="ui-icon-cancel" actionListener="#{controletarefaMB.limpaCadastro}" 
+            	process="@this" update=":formCad,:formtb" oncomplete="PF('dgCad').hide()" />					
+		</p:panelGrid>
+	</h:form>
+
+</p:dialog>
+
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{controletarefaMB.tarefa.id} - #{controletarefaMB.tarefa.atividade}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" actionListener="#{controletarefaMB.exclui}"  icon="ui-icon-check" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar"  icon="ui-icon-cancel" onclick="PF('delDialog').hide()" /> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
+
 
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="4000"/> 

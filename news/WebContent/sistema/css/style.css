@@ -8,6 +8,13 @@ body{
     background: #ffffff;
 }
 
+
+
+#painelTab {
+	padding: 0px;
+	margin: 2em 0px;
+}
+
 .ui-datatable-even {
     background: #F2F5F9;
 }

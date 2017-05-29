@@ -28,20 +28,15 @@ public class ReciboPrestacaoBean implements Serializable {
 	}
 
 	public void prestacaoSelecionada(){
+		limpar();
 		GenericLN<PrestacaoConta> gln = new GenericLN<PrestacaoConta>();
 		prestacao = gln.find(new PrestacaoConta(), id);
 		if(prestacao!=null){
-			if(prestacao.getDataadiantamento()!=null){
-				calculaTotais();
-				motivoDespesa = prestacao.getMotivodespesa();
-				if(totalRestituir<=new Double("0.0")){
-					mensagem("Não existe valor a pagar para esta prestação!");
-					limpar();
-				}
-			}else{
+			calculaTotais();
+			motivoDespesa = prestacao.getMotivodespesa();
+			if(totalRestituir<=new Double("0.0"))
 				mensagem("Não existe valor a pagar para esta prestação!");
-				limpar();
-			}
+			
 		}else{
 			limpar();
 			mensagem("Presção não localizada!");
@@ -66,6 +61,8 @@ public class ReciboPrestacaoBean implements Serializable {
 				totalDespesa =totalDespesa + d.getValor();
 		
     	if(prestacao.getValoradiantado()!=null)
+    		if(prestacao.getValoradiantado()==new Double("0.0"))
+    			totalRestituir = totalDespesa;
 			if(prestacao.getValoradiantado()<totalDespesa)
 				totalRestituir =totalDespesa-prestacao.getValoradiantado();
 
