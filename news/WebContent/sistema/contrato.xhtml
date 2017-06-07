@@ -27,14 +27,13 @@
 
 	    </h:panelGrid>
 		<br></br>   
-			<p:commandButton onclick="PF('dgCad').show()" action="#{contratoMB.novo}" value="Novo Contrato" title="Novo"  update=":formCad"/>
+			<p:commandButton onclick="PF('dgCad').show()" icon="ui-icon-plus" action="#{contratoMB.novo}" value="Novo Contrato" title="Novo"  update=":formCad"/>
 			<p></p>
 		<br></br>   			
 	    <p:dataTable id="tb" var="c" value="#{contratoMB.contratos}"  rows="15" paginator="true" paginatorPosition="bottom"
 	    	selectionMode="single" selection="#{contratoMB.contrato}" rowKey="#{c.id}" emptyMessage="">
 
-        	<p:ajax event="rowSelect" listener="#{contratoMB.onRowSelect}" update=":formMsg,:formCad" 
-        			oncomplete="PF('dgCad').show();"/>
+        	<p:ajax event="rowSelect" listener="#{contratoMB.onRowSelect}" update=":formMsg,:formCad" oncomplete="PF('dgCad').show();"/>
 
 	       <p:column headerText="Nº"  width="32px;" sortBy="#{c.id}">
 	            <h:outputText value="#{c.id}" />
@@ -70,224 +69,166 @@
 	</h:form>
 </p:panel>	
 
-<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" width="800">
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" width="800" height="500">
 
-	<h:form id="formCad">
-		<p:panel>
-			<p:wizard id="wiz" flowListener="#{contratoMB.onFlowProcess}" 
-					backLabel="Anterior" nextLabel="Próximo"  step="gerais" > 
-		        <p:tab id="gerais" title="Dados Gerais" >
-            		<p:panel header="Dados Gerais" >
-		            	<p:messages autoUpdate="true"/>
-						<p:panelGrid columns="2" >
-							<p:outputLabel value="Contrato nro.:"/>
-							<h:outputText value="#{contratoMB.contrato.id}"/>	
-							<p:outputLabel value="Origem:"/>
-					        <p:selectOneMenu value="#{contratoMB.contrato.origem}"  disabled="#{contratoMB.controlaCadastro eq 0}">
-					            <f:selectItem itemLabel="Compra" itemValue="C" />
-					            <f:selectItem itemLabel="Venda" itemValue="V" />
-					        </p:selectOneMenu>
-					        
-							<p:outputLabel value="Objeto:"/>
-							<p:inputText id="obj" value="#{contratoMB.contrato.objeto}" placeholder="Objetivo do contrato" size="45" disabled="#{contratoMB.controlaCadastro eq 0}"
-								required="true" requiredMessage="Informe o objetivo do contrato"/>
-							<p:outputLabel value="Tipo do Contrato:"/>
-					        <p:selectOneMenu id="tp" value="#{contratoMB.tipoContrato}"  disabled="#{contratoMB.controlaCadastro eq 0}" style="width:130px;"
-					        		 converter="tipoContratoConverter">
-					            <f:selectItems value="#{contratoMB.tipoContratos}" var="t" itemLabel="#{t.descricao}" itemValue="#{t}" />
-					        </p:selectOneMenu>	
-					     </p:panelGrid>
-					     <p:panelGrid columns="3" >
-							<p:outputLabel value="Cliente / Fornecedor:"/>		        
-					        <p:autoComplete id="clifor" value="#{contratoMB.contrato.mclifor}" completeMethod="#{contratoMB.completeCliFor}"  disabled="#{contratoMB.controlaCadastro eq 0}"
-			                     size="45"   var="cl" itemLabel="#{cl.nomfan}" itemValue="#{cl}" converter="mcliforConverter" forceSelection="true">
-			                	<p:ajax event="itemSelect" listener="#{contratoMB.cliforSelect}" update="dadosContato"/>
-			                </p:autoComplete>
-			                <p:commandButton icon="ui-icon-plus" actionListener="#{contratoMB.chooseCliFor}" process="@this">
-						        <p:ajax event="dialogReturn" listener="#{contratoMB.onCliForChosen}" update="clifor"/>
-						    </p:commandButton>  					          
-						 </p:panelGrid>
-						 <p:panelGrid columns="2" id="dadosContato">
-							<p:outputLabel value="Contato Cliente / Forn.:"/>
-							<h:outputText value="#{contratoMB.contrato.mclifor.nomcon}"/>
-							<p:outputLabel value="Fone Cliente / Forn.:"/>	
-							<h:outputText value="#{contratoMB.contrato.mclifor.foncon}"/>								
-							<p:outputLabel value="E-mail Cliente / Forn.:"/>	
-							<h:outputText value="#{contratoMB.contrato.mclifor.emacon}"/>
-						</p:panelGrid>	
-						<p:panelGrid columns="2">							 
-							<h:outputLabel for="dtiv" value="Data Início:"/>
-							<p:calendar id="dtiv" value="#{contratoMB.contrato.inicio}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
-								disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato">	
-								<p:ajax event="dateSelect" update="dtif"/>		
-							</p:calendar>								
-							<h:outputLabel for="dtif" value="Data Término:"/>		        
-							<p:calendar id="dtif" value="#{contratoMB.contrato.fim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" mindate="#{contratoMB.contrato.inicio}"
-								 disabled="#{contratoMB.controlaCadastro==0}" required="true" requiredMessage="Informe data de vigência inicial do contrato"/>								
-							<p:outputLabel value="Responsável:"/>
-							<p:inputText id="resp" value="#{contratoMB.contrato.responsavel}" placeholder="Responsavel do contrato" size="45" disabled="#{contratoMB.controlaCadastro eq 0}"/>
-					        <p:outputLabel value="Contrato Ativo:"/>
-					        <p:selectBooleanCheckbox value="#{contratoMB.contrato.ativo}"  disabled="#{contratoMB.controlaCadastro eq 0}"/>								
-						
-						</p:panelGrid>
-		            </p:panel>
-		        </p:tab>	
+<h:form id="formCad">
+	<p:tabView  > 
+        <p:tab id="gerais" title="Dados Gerais" ><br/><br/>
+			<p:panelGrid columns="2" >
+				<p:outputLabel value="Contrato nro.:"/>
+				<h:outputText value="#{contratoMB.contrato.id}"/>	
+				<p:outputLabel value="Origem:"/>
+		        <p:selectOneMenu value="#{contratoMB.contrato.origem}" >
+		            <f:selectItem itemLabel="Compra" itemValue="C" />
+		            <f:selectItem itemLabel="Venda" itemValue="V" />
+		        </p:selectOneMenu>
+		        
+				<p:outputLabel value="Objeto:"/>
+				<p:inputText id="obj" value="#{contratoMB.contrato.objeto}" placeholder="Objetivo do contrato" size="45"
+					required="true" requiredMessage="Informe o objetivo do contrato"/>
+				<p:outputLabel value="Tipo do Contrato:"/>
+		        <p:selectOneMenu id="tp" value="#{contratoMB.tipoContrato}"  style="width:130px;"
+		        		 converter="tipoContratoConverter">
+		            <f:selectItems value="#{contratoMB.tipoContratos}" var="t" itemLabel="#{t.descricao}" itemValue="#{t}" />
+		        </p:selectOneMenu>	
+		     </p:panelGrid>
+		     <p:panelGrid columns="3" >
+				<p:outputLabel value="Cliente / Fornecedor:"/>		        
+		        <p:autoComplete id="clifor" value="#{contratoMB.contrato.mclifor}" completeMethod="#{contratoMB.completeCliFor}" 
+                     size="45"   var="cl" itemLabel="#{cl.nomfan}" itemValue="#{cl}" converter="mcliforConverter" forceSelection="true">
+                	<p:ajax event="itemSelect" listener="#{contratoMB.cliforSelect}" update="dadosContato"/>
+                </p:autoComplete>
+                <p:commandButton icon="ui-icon-plus" actionListener="#{contratoMB.chooseCliFor}" process="@this">
+			        <p:ajax event="dialogReturn" listener="#{contratoMB.onCliForChosen}" update="clifor"/>
+			    </p:commandButton>  					          
+			 </p:panelGrid>
+			 <p:panelGrid columns="2" id="dadosContato">
+				<p:outputLabel value="Contato Cliente / Forn.:"/>
+				<h:outputText value="#{contratoMB.contrato.mclifor.nomcon}"/>
+				<p:outputLabel value="Fone Cliente / Forn.:"/>	
+				<h:outputText value="#{contratoMB.contrato.mclifor.foncon}"/>								
+				<p:outputLabel value="E-mail Cliente / Forn.:"/>	
+				<h:outputText value="#{contratoMB.contrato.mclifor.emacon}"/>
+			</p:panelGrid>	
+			<p:panelGrid columns="2">							 
+				<h:outputLabel for="dtiv" value="Data Início:"/>
+				<p:calendar id="dtiv" value="#{contratoMB.contrato.inicio}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
+					 required="true" requiredMessage="Informe data de vigência inicial do contrato">	
+					<p:ajax event="dateSelect" update="dtif"/>		
+				</p:calendar>								
+				<h:outputLabel for="dtif" value="Data Término:"/>		        
+				<p:calendar id="dtif" value="#{contratoMB.contrato.fim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" mindate="#{contratoMB.contrato.inicio}"
+					  required="true" requiredMessage="Informe data de vigência inicial do contrato"/>								
+				<p:outputLabel value="Responsável:"/>
+				<p:inputText id="resp" value="#{contratoMB.contrato.responsavel}" placeholder="Responsavel do contrato" size="45"/>
+		        <p:outputLabel value="Contrato Ativo:"/>
+		        <p:selectBooleanCheckbox value="#{contratoMB.contrato.ativo}" />								
+			</p:panelGrid>
+        </p:tab>	
 
-		        <p:tab id="finan" title="Financeiro" >
-            		<p:panel header="Dados Financeiro" >
-		            	<p:messages autoUpdate="true"/>
-						<p:panelGrid columns="2" >
-							<p:outputLabel value="Valor Mensal:"/>
-							<p:inputText value="#{contratoMB.contrato.valorMensal}" size="10" disabled="#{contratoMB.controlaCadastro==0}" >
-							 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
-							</p:inputText>								
-							<p:outputLabel value="Valor Total:"/>
-							<p:inputText value="#{contratoMB.contrato.valorTotal}" size="10" disabled="#{contratoMB.controlaCadastro==0}" >
-							 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
-							</p:inputText>								
-							
-						</p:panelGrid>
-		            </p:panel>
-		        </p:tab>				
+        <p:tab id="finan" title="Financeiro" ><br/><br/>	            	
+			<p:panelGrid columns="2" >
+				<p:outputLabel value="Valor Mensal:"/>
+				<p:inputText value="#{contratoMB.contrato.valorMensal}" size="10"  >
+				 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+				</p:inputText>								
+				<p:outputLabel value="Valor Total:"/>
+				<p:inputText value="#{contratoMB.contrato.valorTotal}" size="10"  >
+				 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
+				</p:inputText>								
+			</p:panelGrid>
+        </p:tab>				
 
-				<p:tab id="anexos" title="Documentos" >	
-					<p:panel>
-						<p:commandButton value="Adicionar" icon="ui-icon-extlink" onclick="PF('upl').show()" />
-						<p></p>
-					    <p:dataTable var="a" value="#{contratoMB.anexos}" emptyMessage="Não há anexos"  resizableColumns="true" liveResize="true"
-										    			paginatorPosition="bottom" paginator="true" rows="7" >
-					        <p:column headerText="Documento">
-					            <h:outputText value="#{a}" style="width:32px;text-align: center"/>
-					        </p:column>
-					        <p:column style="width:32px;text-align: center">
-					             <p:commandButton update=":formCad,:formD" oncomplete="PF('anx').show()"
-					             	 action="#{contratoMB.montaCaminho}" title="Mostrar" icon="ui-icon-search" >
-					                <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
-					            </p:commandButton>
-					        </p:column>
-					        <p:column style="width:32px;text-align: center">
-					             <p:commandButton action="#{contratoMB.removeAnexo}" title="Remover" icon="ui-icon-trash" update=":formMsg,:formCad">
-					                <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
-					            </p:commandButton>					            
-					        </p:column>					        
-					    </p:dataTable>
-				    </p:panel>
-		        </p:tab>	
-				
-				<p:tab id="skd" title="Agendamentos" >	
-            		<p:panel header="Agendamentos" >
-		            	<p:messages autoUpdate="true"/>
-		            	<p:panelGrid columns="2">
-							<p:outputLabel value="Dias para aviso:"/>
-							<p:inputMask id="diasaviso" maxlength="3" value="#{contratoMB.contrato.diasAviso}"  type="number"  disabled="#{contratoMB.controlaCadastro eq 0}" 
-									 converterMessage="Dias para aviso deve conter somente números.">
-								<p:ajax event="blur" listener="#{contratoMB.onBlurDiasAviso}" update=":formCad"/>
-							</p:inputMask>		  
-							<p:outputLabel value="Dias aviso IGP-M"/>
-							<p:inputMask id="avsigpm" maxlength="3" value="#{contratoMB.contrato.avigpm}"  type="number"  disabled="#{contratoMB.controlaCadastro eq 0}" 
-									 converterMessage="Dias para aviso deve conter somente números.">
-								<p:ajax event="blur" listener="#{contratoMB.onBlurDiasAviso}" update=":formCad"/>
-							</p:inputMask>		  
-							<p:outputLabel value="Repetir envio:"/>	
-					        <p:selectOneMenu value="#{contratoMB.contrato.repetirAviso}"  disabled="#{contratoMB.controlaCadastro eq 0}">
-					        	<f:selectItem itemLabel="Não repetir" itemValue="0" />
-					            <f:selectItem itemLabel="Um dia" itemValue="1" />
-					            <f:selectItem itemLabel="Dois dias" itemValue="2" />
-					            <f:selectItem itemLabel="Três dias" itemValue="3" />
-					            <f:selectItem itemLabel="Quatro dias" itemValue="4" />	
-					            <f:selectItem itemLabel="Cinco dias" itemValue="5" />
-					            <f:selectItem itemLabel="Seis dias" itemValue="6" />
-					            <f:selectItem itemLabel="Sete dias" itemValue="7" />						            
-					            <f:selectItem itemLabel="Dez dias" itemValue="10" />
-					            <f:selectItem itemLabel="Quinze dias" itemValue="15" />
-					            <f:selectItem itemLabel="Vinte dias" itemValue="20" />					            				            
-					        </p:selectOneMenu> 
-							<p:outputLabel value="Assunto do e-mail"/>	
-							<p:inputText value="#{contratoMB.contrato.assuntoEmail}"  disabled="#{contratoMB.controlaCadastro eq 0}"/>	
-				        </p:panelGrid>	
-				        <p:panelGrid columns="1">
-							<p:outputLabel value="Mensagem do e-mail:"/>	
-							<p:inputTextarea maxlength="300" rows="6" cols="60" autoResize="false" value="#{contratoMB.contrato.mensagemEmail}"  disabled="#{contratoMB.controlaCadastro eq 0}"/>													        	
-				        </p:panelGrid>
-				        <p:outputLabel value="Adicionar e-mail:"/>
-				        <p:autoComplete id="enveml"  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}"  
-				        		 disabled="#{contratoMB.controlaCadastro eq 0 or contratoMB.contrato.diasAviso eq null}" size="35" />
-						<p:commandButton id="cmdeml" value="Incluir" update="emlst" 
-							action="#{contratoMB.addEmail}" disabled="#{contratoMB.contrato.diasAviso eq null}"/>
+		<p:tab id="anexos" title="Documentos" >	<br/><br/>
+			<p:commandButton value="Adicionar" icon="ui-icon-extlink" onclick="PF('upl').show()" />
+			<p:outputLabel value=""/>
+		    <p:dataTable var="a" value="#{contratoMB.anexos}" emptyMessage="Não há anexos"  resizableColumns="true" liveResize="true"
+							    			paginatorPosition="bottom" paginator="true" rows="7" >
+		        <p:column headerText="Documento">
+		            <h:outputText value="#{a}" style="width:32px;text-align: center"/>
+		        </p:column>
+		        <p:column style="width:32px;text-align: center">
+		             <p:commandButton update=":formCad,:formD" oncomplete="PF('anx').show()"
+		             	 action="#{contratoMB.montaCaminho}" title="Mostrar" icon="ui-icon-search" >
+		                <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
+		            </p:commandButton>
+		        </p:column>
+		        <p:column style="width:32px;text-align: center">
+		             <p:commandButton action="#{contratoMB.removeAnexo}" title="Remover" icon="ui-icon-trash" update=":formMsg,:formCad">
+		                <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
+		            </p:commandButton>					            
+		        </p:column>					        
+		    </p:dataTable>
+        </p:tab>	
+		
+		<p:tab id="skd" title="Agendamentos" >	<br/><br/>		            	
+           	<p:panelGrid columns="2">
+				<p:outputLabel value="Dias para aviso:"/>
+				<p:inputMask id="diasaviso" maxlength="3" value="#{contratoMB.contrato.diasAviso}"  type="number"  
+						 converterMessage="Dias para aviso deve conter somente números.">
+					<p:ajax event="blur" listener="#{contratoMB.onBlurDiasAviso}" update="enveml,cmdeml"/>
+				</p:inputMask>		  
+				<p:outputLabel value="Dias aviso IGP-M"/>
+				<p:inputMask id="avsigpm" maxlength="3" value="#{contratoMB.contrato.avigpm}"  type="number"  
+						 converterMessage="Dias para aviso deve conter somente números."/>
+				<p:outputLabel value="Repetir envio:"/>	
+		        <p:selectOneMenu value="#{contratoMB.contrato.repetirAviso}" >
+		        	<f:selectItem itemLabel="Não repetir" itemValue="0" />
+		            <f:selectItem itemLabel="Um dia" itemValue="1" />
+		            <f:selectItem itemLabel="Dois dias" itemValue="2" />
+		            <f:selectItem itemLabel="Três dias" itemValue="3" />
+		            <f:selectItem itemLabel="Quatro dias" itemValue="4" />	
+		            <f:selectItem itemLabel="Cinco dias" itemValue="5" />
+		            <f:selectItem itemLabel="Seis dias" itemValue="6" />
+		            <f:selectItem itemLabel="Sete dias" itemValue="7" />						            
+		            <f:selectItem itemLabel="Dez dias" itemValue="10" />
+		            <f:selectItem itemLabel="Quinze dias" itemValue="15" />
+		            <f:selectItem itemLabel="Vinte dias" itemValue="20" />					            				            
+		        </p:selectOneMenu> 
+				<p:outputLabel value="Assunto do e-mail"/>	
+				<p:inputText value="#{contratoMB.contrato.assuntoEmail}" />	
+	        </p:panelGrid>	
+	        <p:panelGrid columns="1">
+				<p:outputLabel value="Mensagem do e-mail:"/>	
+				<p:inputTextarea maxlength="300" rows="3" cols="40" autoResize="false" value="#{contratoMB.contrato.mensagemEmail}" />													        	
+	        </p:panelGrid>
+	        <p:outputLabel value="Adicionar e-mail:"/>
+	        <p:autoComplete id="enveml"  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}"  
+	        		 disabled="#{contratoMB.contrato.diasAviso eq null}" size="35" />
+			<p:commandButton id="cmdeml" value="Incluir" update="emlst,:formMsg" icon="ui-icon-mail-closed" 
+				action="#{contratoMB.addEmail}" disabled="#{contratoMB.contrato.diasAviso eq null}"/>
 
-					    <p:dataTable id="emlst" value="#{contratoMB.emails}" var="e"  emptyMessage=""  style="width:70%;" 
-										    	   		paginatorPosition="bottom" paginator="true" rows="4" >
-					        <f:facet name="header">
-					            Enviar email para:
-					        </f:facet>
-					        <p:column style="width:90%">
-					        	<h:outputText value="#{e}" style="display:inline-block"/>
-					        </p:column>
-					        <p:column style="width:10%;">
-						        <p:commandLink update=":formCad"  title="Remover" styleClass="ui-icon ui-icon-trash" >
-						        	<p:collector value="#{e}" removeFrom="#{contratoMB.emails}" unique="true"/>
-						            <h:outputText value="#{e}" />
-						        </p:commandLink>					        
-					        </p:column>	
-					    </p:dataTable>
-																        							          						        
-		            </p:panel>		            
-		        </p:tab>
+		    <p:dataTable id="emlst" value="#{contratoMB.emails}" var="e"  emptyMessage=""  style="width:70%;" 
+							    	   		paginatorPosition="bottom" paginator="true" rows="4" >
+		        <f:facet name="header">
+		            Enviar email para:
+		        </f:facet>
+		        <p:column style="width:90%">
+		        	<h:outputText value="#{e}" style="display:inline-block"/>
+		        </p:column>
+		        <p:column style="width:10%;">
+			        <p:commandLink update=":formCad"  title="Remover" styleClass="ui-icon ui-icon-trash" >
+			        	<p:collector value="#{e}" removeFrom="#{contratoMB.emails}" unique="true"/>
+			            <h:outputText value="#{e}" />
+			        </p:commandLink>					        
+		        </p:column>	
+		    </p:dataTable>	            
+        </p:tab>
 
-		        <p:tab id="obs" title="Observações" >
-            		<p:panel header="Observações" >
-		            	<p:messages autoUpdate="true"/>
-						<p:panelGrid columns="1" >
-							<p:outputLabel value="Observações:"/>
-							<p:inputTextarea maxlength="1000" rows="10" cols="60" autoResize="false" value="#{contratoMB.contrato.observacao}" 
-									 disabled="#{contratoMB.controlaCadastro eq 0}"/>													        	
+        <p:tab id="obs" title="Observações" ><br/><br/>		            	
+			<p:panelGrid columns="1" >
+				<p:outputLabel value="Observações:"/>
+				<p:inputTextarea maxlength="1000" rows="20" cols="75" autoResize="false" value="#{contratoMB.contrato.observacao}"/>
+			</p:panelGrid>
+        </p:tab>					        		        	        					
+	</p:tabView>
+		<p:panelGrid columns="2" >
+			<p:commandButton value="Gravar" icon="ui-icon-check" action="#{contratoMB.grava}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
+			<p:commandButton value="Cancelar"  icon="ui-icon-cancel" oncomplete="PF('dgCad').hide()"/>
+		</p:panelGrid>
+</h:form>
 
-						</p:panelGrid>
-		            </p:panel>
-		        </p:tab>				
-
-		        <p:tab id="Confirmation" title="Confirmar" >		        	        					
-            		<p:panel header="Confirmar" >
-		            	<p:messages autoUpdate="true"/>
-						<p:panelGrid columns="2" >
-							<p:outputLabel value="Contrato nro.:"/>
-							<h:outputText value="#{contratoMB.contrato.id}"/>	
-							<p:outputLabel value="Origem:"/>
-					        <h:outputText value="#{contratoMB.contrato.origem eq 'C' ? 'Compra' : 'Venda'}" />					        
-							<p:outputLabel value="Objeto:"/>
-							<h:outputText value="#{contratoMB.contrato.objeto}" />
-							<p:outputLabel value="Tipo do Contrato:"/>
-					        <h:outputText value="#{contratoMB.tipoContrato.descricao}"  />	
-							<p:outputLabel value="Cliente / Fornecedor:"/>		        
-					        <h:outputText value="#{contratoMB.contrato.mclifor.nomfan}" />        
-							<p:outputLabel value="Data Início:"/>
-	                        <h:outputText value="#{contratoMB.contrato.inicio}" styleClass="outputLabel">
-	                        	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
-				  			</h:outputText>														
-							<p:outputLabel value="Data Término:"/>		        
-	                        <h:outputText value="#{contratoMB.contrato.fim}" styleClass="outputLabel">
-	                        	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
-				  			</h:outputText>		
-							<p:outputLabel value="Data do primeiro aviso:"/>		        
-	                        <h:outputText value="#{contratoMB.primeiroAvisoEm}" styleClass="outputLabel"/>				  			
-				  									
-					        <p:outputLabel value="Contrato Ativo:"/>
-					        <h:outputText value="#{contratoMB.contrato.ativo eq true ? 'Ativo' : 'Inativo'}" />								
-						</p:panelGrid>
-						<f:facet name="footer">
-							<p:panelGrid columns="2" >
-								<p:commandButton value="Salvar" action="#{contratoMB.grava}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
-								<p:commandButton value="Cancelar"  oncomplete="PF('dgCad').hide()"/>
-							</p:panelGrid>
-						</f:facet>						
-		            </p:panel>
-		        </p:tab> 		        		        	        					
-			</p:wizard>
- 
-		</p:panel>
-	</h:form>
 </p:dialog>
-
 
 <p:dialog header="Anexo" widgetVar="anx" showEffect="fade" hideEffect="fade" width="900" height="600"   appendTo="@(body)">
    <h:form id="formD">
@@ -297,16 +238,14 @@
 	</h:form>        
 </p:dialog>
 
-
-<p:dialog header="Enviar documentos" widgetVar="upl" showEffect="fade" hideEffect="fade"  
-   		draggable="false" closable="false" resizable="false"  appendTo="@(body)">
+<p:dialog header="Enviar documentos" widgetVar="upl" showEffect="fade" hideEffect="fade"  draggable="false" closable="false" resizable="false"  appendTo="@(body)">
 	<h:form id="formUpload" style="height:250px;">
-		   	<p:panelGrid columns="1">
-			    <p:fileUpload fileUploadListener="#{contratoMB.handleFileUpload}" mode="advanced" dragDropSupport="true"
-			                  multiple="true" update=":formMsg,:formCad"  fileLimit="10" allowTypes="/(\.|\/)(pdf)$/" 
-			                  label="Selecionar..."  auto="true" 
-			                  oncomplete="PF('upl').hide()" invalidFileMessage="Somente arquivos .pdf"/>		
-			</p:panelGrid>
+	   	<p:panelGrid columns="1">
+		    <p:fileUpload fileUploadListener="#{contratoMB.handleFileUpload}" mode="advanced" dragDropSupport="true"
+                  multiple="true" update=":formMsg,:formCad"  fileLimit="10" allowTypes="/(\.|\/)(pdf)$/" 
+                  label="Selecionar..."  auto="true" 
+                  oncomplete="PF('upl').hide()" invalidFileMessage="Somente arquivos .pdf"/>		
+		</p:panelGrid>
 	</h:form>
 </p:dialog>
 
@@ -317,8 +256,7 @@
 <p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão de Contrato" resizable="false" >
 	<h:form id="formDel">
 		<p:panel header="Exclusão">
-			<p><span>Tem certeza que quer excluir o registro #{contratoMB.contrato.id} - 
-					#{contratoMB.contrato.mclifor.nomfan}</span></p>
+			<p><span>Tem certeza que quer excluir o registro #{contratoMB.contrato.id} - #{contratoMB.contrato.mclifor.nomfan}</span></p>
 
 			<f:facet name="footer">
 				<p:panelGrid columns="2">

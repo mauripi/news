@@ -17,10 +17,8 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.joda.time.LocalDate;
-import org.primefaces.component.wizard.Wizard;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 import br.com.mauricio.news.ln.ContratoLN;
 import br.com.mauricio.news.ln.GenericLN;
@@ -87,6 +85,7 @@ public class ContratoBean implements Serializable {
     public void novo(){
         contrato = new Contrato();
         controlaCadastro=1;
+        limpaCadastro();
     }
 
     public void edita(){
@@ -135,14 +134,11 @@ public class ContratoBean implements Serializable {
             else
                 emails = new ArrayList<String>();                    
     }
-    
-    private boolean validaCampos(){
-
-        return true;        
-    }
-    
+       
     public void limpaCadastro(){
         contrato = new Contrato();
+        allEmailsCadastrados = new ArrayList<String>();
+        anexos = new ArrayList<String>();
         controlaCadastro=0;
         
     }
@@ -177,9 +173,11 @@ public class ContratoBean implements Serializable {
     }
     
     private void setaPrimeiraAba(){
+    	/*
         Wizard wizard = (Wizard) FacesContext.getCurrentInstance().getViewRoot().findComponent(":formCad:wiz");
         wizard.setStep("gerais");
         RequestContext.getCurrentInstance().update("formCad");
+        */
     }
 
     public void onBlurDiasAviso(){
@@ -219,50 +217,31 @@ public class ContratoBean implements Serializable {
         if(mclifor.getId()!=null)
             contrato.setMclifor(mclifor);
     }        
-    
-    public String onFlowProcess(FlowEvent event) {
-        if(skip) {
-            skip = false;   //reset in case user goes back
-            return "confirm";
-        }else {
-            msgs = new ArrayList<String>();
-            if(event.getOldStep().equals("gerais")){
-                if(contrato.getObjeto().length()<1){
-                    msgs.add("Informe o objeto do contrato.");
-                }
-                if(contrato.getMclifor()==null){                   
-                    msgs.add("Informe o Cliente ou Fornecedor");
-                }
-                if(contrato.getInicio().equals(null)){
-                    msgs.add("Informe a data inicial.");
-                }   
-                if(contrato.getFim().equals(null)){
-                    msgs.add("Informe a data final.");
-                }   
-                if(DateUtil.isMaior(contrato.getInicio(), contrato.getFim())){
-                    msgs.add("Data inicial é maior que a data final.");
-                }                
-                if(msgs.size()>0){
-                    mensagens(msgs);
-                    return event.getOldStep();
-                }else{
-                    if(contrato.getId()==null){
-                        gln = new GenericLN<Contrato>();
-                        contrato.setTipocontrato(tipoContrato);
-                        contrato.setUsuario(userLogado);                        
-                        gln.addT(contrato);
-                    }
-                }
-            }
-            if(event.getOldStep().equals("skd")){
-                if(msgs.size()>0){
-                    mensagens(msgs);
-                    return event.getOldStep();
-                }                
-            }
-            return event.getNewStep();
+
+    private boolean validaCampos(){
+    	boolean isValid=true;
+        if(contrato.getObjeto().length()<1){
+            msgs.add("Informe o objeto do contrato.");
+            isValid=false;
         }
-    }    
+        if(contrato.getMclifor()==null){                   
+            msgs.add("Informe o Cliente ou Fornecedor");
+            isValid=false;
+        }
+        if(contrato.getInicio().equals(null)){
+            msgs.add("Informe a data inicial.");
+            isValid=false;
+        }   
+        if(contrato.getFim().equals(null)){
+            msgs.add("Informe a data final.");
+            isValid=false;
+        }   
+        if(DateUtil.isMaior(contrato.getInicio(), contrato.getFim())){
+            msgs.add("Data inicial é maior que a data final.");
+            isValid=false;
+        }   
+         return isValid;        
+    }
    
     public void addEmail() {
         if(ValidaEmail.validar(emailAgendamento)){
@@ -291,6 +270,12 @@ public class ContratoBean implements Serializable {
     
     public void handleFileUpload(FileUploadEvent event){
         ContratoLN ln = new ContratoLN();
+        if(contrato.getId()==null){
+            gln = new GenericLN<Contrato>();
+            contrato.setTipocontrato(tipoContrato);
+            contrato.setUsuario(userLogado);                        
+            gln.addT(contrato);
+        }
         ln.recebeArquivoUpload(event,contrato);
         try {
 			Thread.sleep(3000);
@@ -301,7 +286,8 @@ public class ContratoBean implements Serializable {
         anexos = ln.getAnexos(contrato);
     }
     
-    private void mensagens(List<String> ms) {
+    @SuppressWarnings("unused")
+	private void mensagens(List<String> ms) {
         FacesContext context = FacesContext.getCurrentInstance(); 
         for(String m:ms)
             context.addMessage(null, new FacesMessage(m,m));              

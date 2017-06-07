@@ -70,6 +70,7 @@ public class ReciboPrestacaoBean implements Serializable {
 	
 	public void imprimir(){
 		ReciboPrestacaoLN ln = new ReciboPrestacaoLN();
+		prestacao.setMotivodespesa(motivoDespesa);
 		ln.gerarRecibo(prestacao, dataRecibo, totalRestituir);	
 		limpar();
 	}

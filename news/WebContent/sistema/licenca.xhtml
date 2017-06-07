@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html 	xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:h="http://java.sun.com/jsf/html"  
-   		xmlns:f="http://java.sun.com/jsf/core" 
-    	xmlns:p="http://primefaces.org/ui"
-    	xmlns:ui="http://java.sun.com/jsf/facelets">
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
@@ -16,59 +15,98 @@
    	
 <h:body>
 <ui:composition template="templates/geral.xhtml">
-<ui:define name="titulo">RECORD NEWS - COMPRAS</ui:define>
+<ui:define name="titulo">RECORD NEWS</ui:define>
 <ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Cadastro de Licença</f:facet>
 
-<f:facet name="header">Cadastro de Licenças</f:facet>
-
-<h:form id="formCad">
-	<p:panel rendered="#{acessoBean.temAcessoLicenca}"  style="width:50%;">
-		<p:panelGrid columns="4">
-			<h:outputLabel value="Descrição"/> 
-			<h:outputLabel value="Chave"/>
-			<h:outputLabel value="Validade"/>
-			<h:outputLabel value="Quantidade"/>
-			<p:inputText value="#{licencaMB.lic.descricao}" placeholder="Descrição da Licença" size="50" maxlength="100" disabled="#{licencaMB.controlaCadastro eq 0}"/>
-			<p:inputText value="#{licencaMB.lic.chave}" placeholder="Descrição da Licença" size="20" maxlength="60" disabled="#{licencaMB.controlaCadastro eq 0}"/>
-			<p:calendar value="#{licencaMB.lic.validade}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" disabled="#{licencaMB.controlaCadastro eq 0}"/>								
-			<p:inputText value="#{licencaMB.lic.qtd}" placeholder="Quant." size="5" disabled="#{licencaMB.controlaCadastro eq 0}"/>
-		</p:panelGrid>
-		<f:facet name="footer">
-			<p:panelGrid columns="6" style="border: none !important; ">
-				<p:commandButton value="Novo" action="#{licencaMB.novo}" update=":formCad" />
-				<p:commandButton value="Remover" action="#{licencaMB.exclui}" disabled="#{licencaMB.lic.id==null}" update=":formCad" />
-				<p:commandButton value="Limpar" action="#{licencaMB.limpaCadastro}" update=":formCad" />
-				<p:commandButton value="Gravar" action="#{licencaMB.grava}" update=":formCad,:formMsg" />
-			</p:panelGrid>
-		</f:facet>
+	<h:form id="formtb" >
 		<br></br>
-		<hr></hr>
+		<p:panelGrid columns="1">
+			<p:commandButton  icon="ui-icon-plus" value="Nova Licença" title="Novo"  action="#{licencaMB.novo}"
+				 update=":formCad" oncomplete="PF('dgCad').show();"/>
+		</p:panelGrid>	
+		 			 
+	 	<br></br>                    
+		<br></br>
 	    <p:dataTable id="lic" var="l" value="#{licencaMB.licencas}" selectionMode="single" 
 	     	selection="#{licencaMB.licSel}" rowKey="#{l.id}" emptyMessage="">
-	    	<f:facet name="header">Licenças cadastrados</f:facet>
-			<p:ajax event="rowSelect" listener="#{licencaMB.selecao}" update=":formCad" />
+			<p:ajax event="rowSelect" listener="#{licencaMB.selecao}" update=":formCad" oncomplete="PF('dgCad').show();"/>
 	        <p:column headerText="Descrição" width="40%">
 	            <h:outputText value="#{l.descricao}" />
 	        </p:column>
 	        <p:column headerText="Chave" width="20%">
 	            <h:outputText value="#{l.chave}" />
 	        </p:column>
-	       <p:column headerText="Validade" style="width:20%;">
-                	  <h:outputText value="#{l.validade}">
-				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
-			  </h:outputText>
-          </p:column> 
-	        <p:column headerText="Quantidade" width="20%">
+		    <p:column headerText="Validade" style="width:12%;text-align: center">
+				<h:outputText value="#{l.validade}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>
+	        </p:column> 
+	        <p:column headerText="Quantidade" width="7%" style="text-align: center">
 	            <h:outputText value="#{l.qtd}" />
-	        </p:column>	 	            
+	        </p:column>	
+	        <p:column style="width:32px;text-align: center">
+	            <p:commandButton update=":formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+	                <f:setPropertyActionListener value="#{l}" target="#{licencaMB.lic}" />
+	            </p:commandButton>
+	        </p:column>	  	         	            
 	    </p:dataTable>
-	</p:panel>
+	</h:form>
+</p:panel>
+
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de licença" resizable="false" >
+<h:form id="formCad">
+
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Descrição"/> 
+			<p:inputText value="#{licencaMB.lic.descricao}" placeholder="Descrição da Licença" size="50" maxlength="100" disabled="#{licencaMB.controlaCadastro eq 0}"/>
+			<h:outputLabel value="Chave"/>
+			<p:inputText value="#{licencaMB.lic.chave}" placeholder="Descrição da Licença" size="20" maxlength="60" disabled="#{licencaMB.controlaCadastro eq 0}"/>
+			<h:outputLabel value="Validade"/>
+			<p:calendar value="#{licencaMB.lic.validade}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" disabled="#{licencaMB.controlaCadastro eq 0}"/>								
+			<h:outputLabel value="Quantidade"/>
+			<p:inputText value="#{licencaMB.lic.qtd}" placeholder="Quant." size="5" disabled="#{licencaMB.controlaCadastro eq 0}"/>
+		</p:panelGrid>
+
+	<br></br>
+	<p:panelGrid columns="2">
+		<p:commandButton value="Gravar" action="#{licencaMB.grava}" update=":formMsg,:formCad,:formtb" icon="ui-icon-check" 
+			onstart="PF('status').hide()" onsuccess="PF('status').hide()" disabled="#{licencaMB.controlaCadastro == 0}"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{licencaMB.limpaCadastro}" 
+			onclick="PF('dgCad').hide()" update=":formCad" disabled="#{licencaMB.controlaCadastro == 0}"/>					
+	</p:panelGrid>																				
+	
+
 </h:form>
 
+</p:dialog>
+
+<p:dialog widgetVar="status" appendTo="@(body)"  modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloading.gif" />
+</p:dialog>
+
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{licencaMB.lic.id}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{licencaMB.exclui}"  icon="ui-icon-check" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar"  icon="ui-icon-cancel" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
 
 <h:form id="formMsg">                      
-    <p:growl id="msg" showDetail="true" life="4000"/> 
+    <p:growl id="msg" showDetail="true" life="6000"/> 
 </h:form>
+
 </ui:define>
 </ui:composition>	
 </h:body>	

@@ -20,7 +20,7 @@ time, mark, audio, video {
   border: 0;
   font-size: 100% !important;
   font: inherit; 
-  vertical-align: middle;
+ /* vertical-align: ;*/ 
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 

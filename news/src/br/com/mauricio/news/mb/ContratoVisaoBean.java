@@ -2,6 +2,7 @@ package br.com.mauricio.news.mb;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,14 +13,11 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.model.DashboardColumn;
-import org.primefaces.model.DashboardModel;
-import org.primefaces.model.DefaultDashboardColumn;
-import org.primefaces.model.DefaultDashboardModel;
-
+import org.primefaces.event.SelectEvent;
 import br.com.mauricio.news.ln.ContratoLN;
 import br.com.mauricio.news.model.Contrato;
 import br.com.mauricio.news.model.Login;
+import br.com.mauricio.news.util.DateUtil;
 
 @ManagedBean(name="contratoVisaoMB")
 @ViewScoped
@@ -39,64 +37,14 @@ public class ContratoVisaoBean implements Serializable {
     private List<String> anexos;
     private String anexo;
     private String pesquisa;
+    private String pathPdfAnexo="";
     
-    private DashboardModel model;
-    
-	
     @PostConstruct
     public void init(){
         contrato = new Contrato();
-        usuarioLogado();       
-        changeDatas();
-        createDashboard();
+        listar();
+        usuarioLogado();
     }
-    
-    private void createDashboard() {
-        model = new DefaultDashboardModel();
-        DashboardColumn column1 = new DefaultDashboardColumn();
-        DashboardColumn column2 = new DefaultDashboardColumn();
-        DashboardColumn column3 = new DefaultDashboardColumn();
-        DashboardColumn column4 = new DefaultDashboardColumn();
-        column1.addWidget("contratos");
-        column1.addWidget("grafico_geral");
-        
-        column2.addWidget("receita_despesa");        
-        column2.addWidget("sem_valores");
-
-        column3.addWidget("receita_despesa3");        
-        column3.addWidget("sem_valores3");
-        
-        column4.addWidget("receita_despesa4");        
-        column4.addWidget("sem_valores4");
-        
-        model.addColumn(column1);
-        model.addColumn(column2);
-        model.addColumn(column3);
-        model.addColumn(column4);
-	}
-
-	public void changeDatas() {
-    	listar();
-		for(Contrato c : listAll){
-			if(c.getValorMensal()==0 || c.getValorTotal()==0){
-				if (c.getOrigem().equals("V")) listVlrZeradosReceita.add(c);
-				else listVlrZeradosDespesa.add(c);
-				listVlrZerados.add(c);
-			}else{
-				if (c.getOrigem().equals("V")) listComVlrReceita.add(c);
-				else listComVlrDespesa.add(c);
-				listComVlr.add(c);
-			}
-		}
-		System.out.println("Total de Contratos Ativos: " + listAll.size());
-		System.out.println("Total de Contratos de Receita: " + (listComVlrReceita.size()  +  listVlrZeradosReceita.size()));
-		System.out.println("Total de Contratos de Receita sem Valores: " + listVlrZeradosReceita.size());
-		System.out.println("Total de Contratos de Receita com Valores: " + listComVlrReceita.size());		
-		System.out.println("Total de Contratos de Despesa: " + (listComVlrDespesa.size()  +  listVlrZeradosDespesa.size()));
-		System.out.println("Total de Contratos de Despesa sem Valores: " + listVlrZeradosDespesa.size());
-		System.out.println("Total de Contratos de Despesa com Valores: " + listComVlrDespesa.size());
-		
-	}
 
 	private void usuarioLogado(){
         FacesContext cx = FacesContext.getCurrentInstance();
@@ -115,8 +63,22 @@ public class ContratoVisaoBean implements Serializable {
 		        .collect(Collectors.toList());
     }
 
+    public void onRowSelect(SelectEvent event){
+    	contrato=(Contrato) event.getObject();
+        ContratoLN ln = new ContratoLN();
+        anexos = ln.getAnexos(contrato);
+    }
+    
     public void visualizar(){
     	System.out.println(contrato.getId());
+    }
+    
+    public void montaCaminho(){
+        pathPdfAnexo = ""+contrato.getId()+"/"+anexo;
+    }
+    
+    public String diasParaTermino(Date fim){
+    	return DateUtil.diferencaEmDias(new Date(), fim)+""; 	
     }
     
      public void mensagens(String msg){
@@ -213,14 +175,6 @@ public class ContratoVisaoBean implements Serializable {
 		this.anexo = anexo;
 	}
 
-	public DashboardModel getModel() {
-		return model;
-	}
-
-	public void setModel(DashboardModel model) {
-		this.model = model;
-	}
-
 	public List<Contrato> getContratosPesquisados() {
 		return contratosPesquisados;
 	}
@@ -235,6 +189,14 @@ public class ContratoVisaoBean implements Serializable {
 
 	public void setPesquisa(String pesquisa) {
 		this.pesquisa = pesquisa;
+	}
+
+	public String getPathPdfAnexo() {
+		return pathPdfAnexo;
+	}
+
+	public void setPathPdfAnexo(String pathPdfAnexo) {
+		this.pathPdfAnexo = pathPdfAnexo;
 	}
 	
 }

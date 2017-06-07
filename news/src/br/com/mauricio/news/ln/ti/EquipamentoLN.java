@@ -36,6 +36,8 @@ public class EquipamentoLN implements Serializable {
 	public String create(Equipamento e) {
 		dao = new GenericDao<Equipamento>();
 		GenericDao<TipoEquipamento> daot = new GenericDao<TipoEquipamento>();
+		System.out.println( e);
+		System.out.println(e.getTipo());
 		e.setTipo((TipoEquipamento) daot.findById(TipoEquipamento.class, e.getTipo().getId()));
 		dao.save(e);
 		return "Castrado com sucesso.";

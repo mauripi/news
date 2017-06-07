@@ -18,95 +18,136 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - TI</ui:define>
 <ui:define name="conteudo">
-
+<p:panel class="conteudo">
 <f:facet name="header">Controle de Equipamentos da TI</f:facet>
 
-<h:form id="formCad">
-	<p:panel id="panel" rendered="#{acessoBean.temAcessoEquipamentos}"  style="width:70%;">
-		<p:panelGrid columns="6" >
-			<h:outputLabel value="Tipo"/>
-			<h:outputLabel value="Marca"/>
-			<h:outputLabel value="Modelo"/>
-			<h:outputLabel value="Série"/>
-			<h:outputLabel value="Patrimônio"/>
-			<h:outputLabel value="Filial"/>			
-	        <p:selectOneMenu id="tp" value="#{equipamentoMB.tipoEquipamento}"  disabled="#{equipamentoMB.controlaCadastro eq 0}" styleClass="oneMenu" converter="tipoEquipamentoConverter">
-				<p:ajax event="change" listener="#{equipamentoMB.selecaoTipoEquipamento}" update="imem, ihd, ihn, pk"/>
-	            <f:selectItems value="#{equipamentoMB.tipoEquipamentos}" var="t" itemLabel="#{t.descricao}" itemValue="#{t}" />
-	        </p:selectOneMenu>			
-			<p:inputText value="#{equipamentoMB.equipamento.marca}" placeholder="Marca" size="20" disabled="#{equipamentoMB.controlaCadastro eq 0}"
-				required="true" requiredMessage="Informe a marca do equipamento"/>
-			<p:inputText value="#{equipamentoMB.equipamento.modelo}" placeholder="Modelo" size="20" disabled="#{equipamentoMB.controlaCadastro eq 0}"
-				required="true" requiredMessage="Informe o modelo do equipamento"/>
-			<p:inputText value="#{equipamentoMB.equipamento.serie}" placeholder="Série" size="20" disabled="#{equipamentoMB.controlaCadastro eq 0}"
-				required="true" requiredMessage="Informe a série do equipamento"/>
-			<p:inputText value="#{equipamentoMB.equipamento.patrimonio}" placeholder="Patrimonio" size="10" disabled="#{equipamentoMB.controlaCadastro eq 0}"/>			
-			<p:selectOneMenu value="#{equipamentoMB.equipamento.filial}" converter="filialConverter" disabled="#{equipamentoMB.controlaCadastro==0}">
-				<f:selectItems value="#{equipamentoMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
-			</p:selectOneMenu>	
-		</p:panelGrid>
-		<p:panelGrid columns="6" >
-			<h:outputLabel value="Local"/>	
-			<h:outputLabel value="Observações"/>
-			<h:outputLabel value="Merória (Gb)"/>	
-			<h:outputLabel value="HD (Gb)"/>
-			<h:outputLabel value="HostName"/>	
-			<h:outputLabel value="IP"/>	
-			<p:selectOneMenu id="loc" value="#{equipamentoMB.equipamento.local}" converter="localequipamentoConverter" disabled="#{equipamentoMB.controlaCadastro==0}">
-				<f:selectItems value="#{equipamentoMB.locais}" var="l" itemLabel="#{l.descricao}" itemValue="#{l}" />
-			</p:selectOneMenu>						
-			<p:inputText value="#{equipamentoMB.equipamento.observacao}" placeholder="Observações" size="50" maxlength="300" disabled="#{equipamentoMB.controlaCadastro eq 0}"/>								 
-			<p:inputText id="imem" value="#{equipamentoMB.equipamento.memoria}" placeholder="Memória (GB)" size="5" disabled="#{equipamentoMB.controlaCadastro eq 0 or !equipamentoMB.exibeCampoMemoriaHD}"/>
-			<p:inputText id="ihd" value="#{equipamentoMB.equipamento.hd}" placeholder="HD (GB)" size="5" disabled="#{equipamentoMB.controlaCadastro eq 0 or !equipamentoMB.exibeCampoMemoriaHD}" />			
-			<p:inputText id="ihn" value="#{equipamentoMB.equipamento.host}" placeholder="Host Name" size="5" disabled="#{equipamentoMB.controlaCadastro eq 0 or !equipamentoMB.exibeCampoMemoriaHD}" />			
-			<p:inputMask value="#{equipamentoMB.equipamento.ip}" mask="999.999.999.999" placeholder="IP" size="15" disabled="#{equipamentoMB.controlaCadastro eq 0}"/>	 
- 		</p:panelGrid>
-		<p:panelGrid columns="3" rendered="#{acessoBean.temAcessoEquipamentos}">
-			<f:facet name="header">Licenças</f:facet>
-		    <p:pickList id="pk" value="#{equipamentoMB.equipamentoLicencas}" 
-		    	var="l" itemLabel="#{l.descricao}" itemValue="#{l}"  disabled="#{equipamentoMB.controlaCadastro eq 0 or !equipamentoMB.exibeCampoMemoriaHD}"
-		    	showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" 
-		    	converter="licencaConverter">
-		    		<p:ajax event="transfer" listener="#{equipamentoMB.onTransfer}" update="pk" />
-		    	    <f:facet name="sourceCaption">Disponíveis</f:facet>
-        			<f:facet name="targetCaption">Do Equipamento</f:facet>
-		    </p:pickList>
-		</p:panelGrid>		
-		<f:facet name="footer">
-			<p:panelGrid columns="6" style="border: none !important; ">
-				<p:commandButton value="Novo" action="#{equipamentoMB.novo}" update=":formCad" />
-				<p:commandButton value="Remover" action="#{equipamentoMB.exclui}" disabled="#{equipamentoMB.equipamento.id==null}" update=":formCad,:formMsg" />
-				<p:commandButton value="Limpar" action="#{equipamentoMB.limpaCadastro}" update=":formCad" />
-				<p:commandButton value="Gravar" action="#{equipamentoMB.grava}" update=":formCad,:formMsg" />
-			</p:panelGrid>		
-	<p:panel rendered="#{acessoBean.temAcessoEquipamentos}"  style="width:50%;">
-	    <p:dataTable id="tb" var="e" value="#{equipamentoMB.equipamentos}" selectionMode="single"
-	    		 selection="#{equipamentoMB.equipamentoSel}" rowKey="#{e.id}" emptyMessage="">
-	    	<f:facet name="header">Equipamentos cadastrados</f:facet>
-			<p:ajax event="rowSelect" listener="#{equipamentoMB.selecao}" update=":formCad" />
-			
-	        <p:column headerText="Tipo" width="20%">
-	            <h:outputText value="#{e.tipo.descricao}" />
-	        </p:column>	      
-        
-	        <p:column headerText="Marca" width="30%">
-	            <h:outputText value="#{e.marca}" />
-	        </p:column>
-	        <p:column headerText="Modelo" width="10%">
-	            <h:outputText value="#{e.modelo}" />
-	        </p:column>
-	        <p:column headerText="Série" width="30%">
-	            <h:outputText value="#{e.serie}" />
-	        </p:column>
+<h:form id="formtb">
+	<br></br>
+	<p:panelGrid columns="2">
+		<p:commandButton  icon="ui-icon-plus" value="Novo Equipamento" title="Novo"  action="#{equipamentoMB.novo}"
+			 update=":formCad" oncomplete="PF('dgCad').show();"/>
+	</p:panelGrid>	 			 
+ 	<br></br>                    
+	<br></br>
 
-	               
-	    </p:dataTable>
-	</p:panel>	
-		</f:facet>
-	</p:panel>	
-
+    <p:dataTable id="tb" var="e" value="#{equipamentoMB.equipamentos}" selectionMode="single"
+    		 selection="#{equipamentoMB.equipamentoSel}" rowKey="#{e.id}" emptyMessage="">
+		<p:ajax event="rowSelect" listener="#{equipamentoMB.selecao}" update=":formCad" oncomplete="PF('dgCad').show();"/>
+		
+        <p:column headerText="Tipo" width="20%">
+            <h:outputText value="#{e.tipo.descricao}" />
+        </p:column>	      
+       
+        <p:column headerText="Marca" width="30%">
+            <h:outputText value="#{e.marca}" />
+        </p:column>
+        <p:column headerText="Modelo" width="10%">
+            <h:outputText value="#{e.modelo}" />
+        </p:column>
+        <p:column headerText="Série" width="30%">
+            <h:outputText value="#{e.serie}" />
+        </p:column>
+        <p:column style="width:32px;text-align: center">
+            <p:commandButton update=":formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover" >
+                <f:setPropertyActionListener value="#{e}" target="#{equipamentoMB.equipamento}" />
+            </p:commandButton>
+        </p:column>	        
+                
+    </p:dataTable>
 	
 </h:form>
+</p:panel>
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Equipamento" resizable="false" >
+<h:form id="formCad" >
+
+<p:panel>
+<p:tabView style="width:600px;height:400px;" id="tabview">
+	<p:tab title="Identificação">
+		<p:panel>
+			<p:panelGrid columns="2">
+				<h:outputLabel value="Tipo:"/>
+		       <p:selectOneMenu id="tp" value="#{equipamentoMB.tipoEquipamento}" converter="tipoEquipamentoConverter">
+		            <f:selectItems value="#{equipamentoMB.tipoEquipamentos}" var="t" itemLabel="#{t.descricao}" itemValue="#{t}" />
+		        </p:selectOneMenu>	        		
+				<h:outputLabel value="Marca:"/>
+				<p:inputText value="#{equipamentoMB.equipamento.marca}" placeholder="Marca" size="20" />
+				<h:outputLabel value="Modelo:"/>
+				<p:inputText value="#{equipamentoMB.equipamento.modelo}" placeholder="Modelo" size="20" />
+				<h:outputLabel value="Série:"/>
+				<p:inputText value="#{equipamentoMB.equipamento.serie}" placeholder="Série" size="20" />
+				<h:outputLabel value="Patrimônio:"/>
+				<p:inputText value="#{equipamentoMB.equipamento.patrimonio}" placeholder="Patrimonio" size="15" />			
+				<h:outputLabel value="Merória (Gb):"/>	
+				<p:inputText id="imem" value="#{equipamentoMB.equipamento.memoria}" placeholder="Memória (GB)" size="15" />
+				<h:outputLabel value="HD (Gb):"/>
+				<p:inputText id="ihd" value="#{equipamentoMB.equipamento.hd}" placeholder="HD (GB)" size="15"/>			
+				<h:outputLabel value="HostName:"/>	
+				<p:inputText id="ihn" value="#{equipamentoMB.equipamento.host}" placeholder="Host Name" size="15" />			
+				<h:outputLabel value="IP:"/>	
+				<p:inputMask value="#{equipamentoMB.equipamento.ip}" mask="999.999.999.999" placeholder="IP" size="15"/>	 
+			</p:panelGrid>	
+		</p:panel>	
+	</p:tab>
+	<p:tab title="Geral">
+		<p:panel>
+			<p:panelGrid columns="2">
+				<h:outputLabel value="Filial:"/>			
+				<p:selectOneMenu value="#{equipamentoMB.equipamento.filial}" converter="filialConverter" disabled="#{equipamentoMB.controlaCadastro==0}">
+					<f:selectItems value="#{equipamentoMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
+				</p:selectOneMenu>	
+				<h:outputLabel value="Local:"/>	
+				<p:selectOneMenu id="loc" value="#{equipamentoMB.equipamento.local}" converter="localequipamentoConverter" disabled="#{equipamentoMB.controlaCadastro==0}">
+					<f:selectItems value="#{equipamentoMB.locais}" var="l" itemLabel="#{l.descricao}" itemValue="#{l}" />
+				</p:selectOneMenu>						
+				<h:outputLabel value="Observações:"/>			
+				<p:inputText value="#{equipamentoMB.equipamento.observacao}" placeholder="Observações" size="40" maxlength="300" disabled="#{equipamentoMB.controlaCadastro eq 0}"/>								 
+			</p:panelGrid>
+		</p:panel>			
+	</p:tab>
+	
+	<p:tab title="Licenças">
+		<p:panel>
+			<p:panelGrid columns="3" rendered="#{acessoBean.temAcessoEquipamentos}">
+				<f:facet name="header">Licenças</f:facet>
+			    <p:pickList id="pk" value="#{equipamentoMB.equipamentoLicencas}" 
+			    	var="l" itemLabel="#{l.descricao}" itemValue="#{l}"  disabled="#{equipamentoMB.controlaCadastro eq 0 or !equipamentoMB.exibeCampoMemoriaHD}"
+			    	showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains" 
+			    	converter="licencaConverter">
+			    		<p:ajax event="transfer" listener="#{equipamentoMB.onTransfer}" update="pk" />
+			    	    <f:facet name="sourceCaption">Disponíveis</f:facet>
+	        			<f:facet name="targetCaption">Do Equipamento</f:facet>
+			    </p:pickList>
+			</p:panelGrid>	
+		</p:panel>	
+	</p:tab>
+</p:tabView>
+	<f:facet name="footer">
+		<p:panelGrid columns="2" style="border: none !important; ">
+			<p:commandButton value="Gravar"  icon="ui-icon-check" action="#{equipamentoMB.grava}" update=":formCad,:formMsg"/>
+			<p:commandButton value="Cancelar"  icon="ui-icon-cancel" action="#{equipamentoMB.limpaCadastro}" update=":formCad" oncomplete="PF('dgCad').hide();"/>
+		</p:panelGrid>	
+	</f:facet>
+</p:panel>	
+</h:form>
+</p:dialog>
+
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{equipamentoMB.equipamento.id} - #{equipamentoMB.equipamento.modelo}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{equipamentoMB.exclui}"  icon="ui-icon-check" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar"  icon="ui-icon-cancel" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
+
 
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="4000"/> 

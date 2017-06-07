@@ -17,15 +17,14 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - RH</ui:define>
 <ui:define name="conteudo">
+<p:panel class="conteudo">
 <f:facet name="header">Acesso aos Informes de Rendimento do Imposto de Renda</f:facet>
-<p:panel rendered="#{acessoBean.temAcessoImpostoDeRenda}" style="background: transparent !important;border: 0 !important;">
+
 	
-<center>
+
 	<h:form id="form" style="width: 30%;text-align: center;">
 	    <p:dataTable id="tb" var="i" value="#{informeBean.informes}">
-	        <f:facet name="header">
-	            Informes
-	        </f:facet>
+	        
 	        <p:column headerText="Ano" style="width:32px;text-align: center">
 	            <h:outputText value="#{i.ano}" />
 	        </p:column>
@@ -36,7 +35,6 @@
 	        </p:column>
 	    </p:dataTable>
 	</h:form>
-</center>
 </p:panel>
 <h:form id="formD">
    <p:dialog header="Informe de Rendimento" widgetVar="inf" showEffect="fade" hideEffect="fade" width="900" height="600" rendered="#{acessoBean.temAcessoImpostoDeRenda}">

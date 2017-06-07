@@ -10,6 +10,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 
 import org.primefaces.event.TransferEvent;
 import org.primefaces.model.DualListModel;
@@ -59,7 +60,9 @@ public class EquipamentoBean implements Serializable {
 	public void init(){
 		listar();
 		listas();
-		setEquipamentoLicencas(new DualListModel<Licenca>(todasLicencas, new ArrayList<Licenca>()));		
+		setEquipamentoLicencas(new DualListModel<Licenca>(todasLicencas, new ArrayList<Licenca>()));
+		tipoEquipamento = new TipoEquipamento();
+		tipoEquipamento=tipoEquipamentos.get(0);
 	}
 
 	public void listar(){
@@ -76,7 +79,7 @@ public class EquipamentoBean implements Serializable {
 		
 		locais = glle.listAll(new LocalEquipamento(), "descricao");
 		todasLicencas = gll.listAll(new Licenca(), "descricao");		
-		tipoEquipamentos = daoF.list("tipoequipamento", "id");
+		tipoEquipamentos = daoF.list("tipoequipamento", "id");		
 		filiais = lnf.list();
 		todosColaboradores = lnl.listaColaboradoresAtivos();
 	}
@@ -199,7 +202,7 @@ public class EquipamentoBean implements Serializable {
     	}
     } 
     
-	public void selecaoTipoEquipamento(){
+	public void selecaoTipoEquipamento(final AjaxBehaviorEvent event){
 		if(tipoEquipamento.getDescricao().equals("Computador")||tipoEquipamento.getDescricao().equals("Servidor")||tipoEquipamento.getDescricao().equals("Notebook")){
 			setEquipamentoLicencas(new DualListModel<Licenca>(todasLicencas, new ArrayList<Licenca>()));
 			exibeCampoMemoriaHD = true;

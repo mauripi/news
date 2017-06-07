@@ -65,7 +65,7 @@ public class NotaDebitoBean  implements Serializable {
 			mensagens();			
 		}else{
 			gln = new GenericLN<NotaDebitoEnergia>();
-			msg = gln.update(debito);
+			msg = gln.remove(gln.find(new NotaDebitoEnergia(), debito.getId()));
 			mensagens();
 			limpaCadastro();
 			listar();

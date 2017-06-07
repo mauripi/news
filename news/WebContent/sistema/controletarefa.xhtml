@@ -15,8 +15,8 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - ENGENHARIA</ui:define>
 <ui:define name="conteudo">
-<p:panel class="conteudo">
-<p:panel id="panel" rendered="#{acessoBean.temAcessoControleTarefa}">
+<p:panel class="conteudo" rendered="#{acessoBean.temAcessoControleTarefa}">
+
 <f:facet name="header">Controle de Atividades</f:facet>
 
 	<h:form id="formtb">
@@ -37,7 +37,7 @@
 	    </h:panelGrid>
  		  
 	    <p:dataTable id="tbItens" var="trf" widgetVar="tarefasTb" value="#{controletarefaMB.tarefasFiltradas}" selectionMode="single" emptyMessage=""
-	    	selection="#{controletarefaMB.tarefa}" rowKey="#{trf.id}"  rowStyleClass="#{trf.aprovado eq true ? 'fundoVerde' : 'fundoAmarelo'}" rowIndexVar="rowIndex">
+	    	selection="#{controletarefaMB.tarefa}" rowKey="#{trf.id}" >
 	    		        
 	        <p:column headerText="Id"  style="width:5%;" sortBy="#{trf.id}">
 	            <h:outputText value="#{trf.id}" />
@@ -70,8 +70,8 @@
 	        <p:column headerText="Observações" style="width:30%;"  >
 	            <h:outputText value="#{trf.observacao}" />
 	        </p:column>	    
-	        <p:column headerText="Status da Aprovação" style="width:13%;">
-	        	<h:outputText value="#{trf.aprovado eq true ? 'Aprovado' : 'Ainda não aprovado'}" />
+	        <p:column headerText="Status da Aprovação" style="width:19%;">
+	        	 <p:inputSwitch value="#{trf.aprovado}" onLabel="Aprovado" offLabel="Não Aprovado" disabled="true"/>
 	        </p:column>          
 	        <p:column  width="68px;">
 	             <p:commandButton actionListener="#{controletarefaMB.edita}" icon="ui-icon-pencil" update=":formCad" oncomplete="PF('dgCad').show();" rendered="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim) ne 100}">
@@ -83,7 +83,7 @@
 			</p:column>
 	    </p:dataTable>
 	</h:form>
-</p:panel>
+
 </p:panel>
 
 <p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Demanda" resizable="false" >

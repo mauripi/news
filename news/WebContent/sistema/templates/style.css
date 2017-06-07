@@ -2,15 +2,19 @@
     margin-left: 0px !important;
     margin-top: -1px !important;
 }
-.fundoAmarelo {
-    background: #DEE636 !important ;
-    color:#000;
+
+
+.ui-inputswitch-on {
+	background: green !important ;
+    color:#FFF !important;
 }
 
-.fundoVerde {
-    background: #31D747 !important ;
-    color:#000;
+.ui-inputswitch-off{
+    background: yellow !important ;
+    color:#000;	
+	
 }
+
 .ui-layout-north{
     z-index:auto !important;
     overflow:visible !important;  

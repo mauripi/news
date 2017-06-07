@@ -33,7 +33,7 @@ public class PostoBean implements Serializable {
 	private String CAMINHO_DO_ARQUIVO = "C:\\ARQUIVOS_INTRANET\\ENGENHARIA\\POSTO\\";
 	private String nomeArquivo="";
 	private InputStream is;
-
+	private int controlaCadastro = 0;
 	
 	@PostConstruct
 	public void init(){
@@ -41,6 +41,15 @@ public class PostoBean implements Serializable {
 		listar();	
 	}
 
+	public void novo(){
+		posto = new Posto();
+		controlaCadastro=1;
+	}	
+
+	public void edita(){
+		controlaCadastro=2;
+	}
+	
 	public void listar(){
 		GenericLN<Posto> gln = new GenericLN<Posto>();
 		postos = gln.listWithoutRemoved("posto", "id desc");
@@ -63,15 +72,17 @@ public class PostoBean implements Serializable {
 	public void grava(){	
 		if(validaCampos()){			
 			PostoLN ln = new PostoLN();
-			if(posto.getId()!=null){
-				posto.getFotos().addAll(fotos);
-				msg=ln.update(posto);
-				mensagens();
-				limpaCadastro();	
-			}else{
+			if(controlaCadastro==1)	{
 				posto.setFotos(fotos);
-				ln.add(posto);	
-			}
+				msg=ln.add(posto);				
+			}		
+
+			if(controlaCadastro==2)	{
+				posto.getFotos().addAll(fotos);
+				msg=ln.update(posto);				
+			}		
+			mensagens();
+			limpaCadastro();	
 			listar();
 		}else{
 			msg = "Favor preencha o nome do posto, pois é obrigatório.";
@@ -80,8 +91,11 @@ public class PostoBean implements Serializable {
 	}
 	
 	private boolean validaCampos(){	
-		if(posto.getNome().length()==0)
-			return false;
+		/*
+		if(posto.getId()!=null)
+			if(posto.getNome().length()==0)
+				return false;
+		*/
 		return true;		
 	}
 	
@@ -207,6 +221,14 @@ public class PostoBean implements Serializable {
 
 	public void setPostoSel(Posto postoSel) {
 		this.postoSel = postoSel;
+	}
+
+	public int getControlaCadastro() {
+		return controlaCadastro;
+	}
+
+	public void setControlaCadastro(int controlaCadastro) {
+		this.controlaCadastro = controlaCadastro;
 	}
 
 }

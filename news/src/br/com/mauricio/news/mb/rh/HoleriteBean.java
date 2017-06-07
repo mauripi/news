@@ -19,6 +19,7 @@ import br.com.mauricio.news.ln.RelatorioLN;
 import br.com.mauricio.news.model.Login;
 import br.com.mauricio.news.model.rh.Base;
 import br.com.mauricio.news.model.rh.Holerite;
+import br.com.mauricio.news.util.FormataNumero;
 
 /*
 * @author MAURICIO CRUZ
@@ -58,7 +59,7 @@ public class HoleriteBean implements Serializable{
 		totalDesconto = hLn.getTotalDesconto(holerites);
 		totalProvento = hLn.getTotalProvento(holerites);
 		totalLiquido = hLn.getTotalLiquido(totalProvento,totalDesconto);
-		fgtsMes = hLn.calculaFGTS(holerites,baseSelecionada,usuarioLogado);
+		fgtsMes = hLn.calculaFGTS(holerites,baseSelecionada,usuarioLogado);		
 	}
 
 
@@ -119,10 +120,15 @@ public class HoleriteBean implements Serializable{
 			e.printStackTrace();
 		}
 	}	
+
+	public String formataCpf(String cpf){
+		if (cpf.length()==11) return FormataNumero.cpfToString(cpf);
+		return cpf;
+	}
 	
 	public void mensagens(){
         FacesContext context = FacesContext.getCurrentInstance();  	          
-        context.addMessage(null, new FacesMessage("",msg));  		
+        context.addMessage(null, new FacesMessage("",msg));
 	}
  	/*=============GETTERS E SETTERS====================*/
 

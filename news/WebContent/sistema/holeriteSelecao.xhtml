@@ -17,6 +17,7 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - RH</ui:define>
 <ui:define name="conteudo">
+<p:panel class="conteudo">
 <f:facet name="header">Holerites dos Funcionários</f:facet>
 <p:panel  rendered="#{acessoBean.temAcessoHoleriteselecao}" style="background: transparent !important;border: 0 !important;">
 
@@ -28,18 +29,14 @@
 		  
 		        <p:ajax event="rowSelect" listener="#{holeriteBean.usuarioSelecionado}"   
 		                    update=":form:bases" oncomplete="PF('selecaoPeriodo').show()" />  
-		   
-		        <f:facet name="header">  
-		            Selecione um funcionário para a vizualização 
-		        </f:facet>  
-		  
+
 		        <p:column headerText="Chapa" filterBy="#{f.chapa}" footerText="Registros selecionados"  
-                	filterMatchMode="contains" filterStyle="width:60%;" style="width:10%;">  
+                	filterMatchMode="contains" filterStyle="width:60%;" style="width:10%; text-align:center;">  
 		            #{f.chapa}  
 		        </p:column>  
 		  
-		        <p:column  filterBy="#{f.cpf}" headerText="CPF" style="width:20%;">  
-		            #{f.cpf}  
+		        <p:column  filterBy="#{f.cpf}" headerText="CPF" style="width:20%; text-align:center;">  
+		        	<h:outputText value="#{holeriteBean.formataCpf(f.cpf)}"/>
 		        </p:column>  
 		  
 		        <p:column  filterBy="#{f.nome}" headerText="Nome do Funcionario" style="width:70%;">  
@@ -52,8 +49,8 @@
 </p:panel>	
 <h:form id="form" style="width: 50%;text-align: center;" >
 	<p:dialog id="selecaoPeriodo" widgetVar="selecaoPeriodo" header="Seleção do Período" height="400" width="650" rendered="#{acessoBean.temAcessoHoleriteselecao}" >
-		<p:panelGrid columns="1">
-			<h:outputLabel value="Selecione o Ano."/>
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Selecione o Ano:"/>
 			<p:selectOneMenu value="#{holeriteBean.ano}" style="width:120px;">
 			    <f:selectItem itemLabel="2017" itemValue="2017"/>
 				<f:selectItem itemLabel="2016" itemValue="2016"/>			
@@ -66,10 +63,10 @@
 		<br></br>
 		<p:dataTable id="bases" var="b" value="#{holeriteBean.bases}" paginator="true" rows="10" paginatorPosition="bottom">
 		  	<f:facet name="header" >#{holeriteBean.funcionarioSelecionado.nome} - Chapa: #{holeriteBean.funcionarioSelecionado.chapa}</f:facet>
-			<p:column headerText="Mês/Ano">
+			<p:column headerText="Mês/Ano" width="80px;">
 				<h:outputText value="#{b.mes}/#{b.ano}" />
 			</p:column>
-			<p:column headerText="Função">
+			<p:column headerText="Função" width="70%;">
 				<h:outputText value="#{b.funcao}"/>
 			</p:column>
 			<p:column headerText="Visualizar">
@@ -80,6 +77,7 @@
 		</p:dataTable>
 	</p:dialog>
 </h:form>
+</p:panel>
 		
 <h:form id="dgForm">
 	<p:dialog id="visual" widgetVar="visual" header="Visualização do Holerite" height="400" width="650" rendered="#{acessoBean.temAcessoHoleriteselecao}">
@@ -102,16 +100,16 @@
 		<p:panel>
 			<p:panelGrid columns="4" style="font-size:8px;width: 100%;" styleClass="headerDados" >
 				<p:column style=" width: 10%">
-					<p:outputLabel value="CHAPA" />			
+					<p:outputLabel value="CHAPA:" />			
 				</p:column>
 				<p:column style=" width: 40%">
-					<p:outputLabel value="NOME DO FUNCIONÁRIO" />			
+					<p:outputLabel value="NOME DO FUNCIONÁRIO:" />			
 				</p:column>				
 				<p:column style=" width: 10%">
-					<p:outputLabel value="CBO"/>			
+					<p:outputLabel value="CBO:"/>			
 				</p:column>
 				<p:column style=" width: 40%">
-					<p:outputLabel value="FUNÇÃO"/>			
+					<p:outputLabel value="FUNÇÃO:"/>			
 				</p:column>						
 				<p:column style=" width: 10%">
 					<p:outputLabel value="#{holeriteBean.baseSelecionada.chapa}" />	
@@ -131,7 +129,7 @@
 		<p:panel>
 			<p:dataTable id="hol" var="h" value="#{holeriteBean.holerites}" 
 					style="font-size:10px"  scrollHeight="150">
-				<p:column headerText="Cód" style="width:5%">  
+				<p:column headerText="Cód" style="width:10%">  
           			<h:outputText value="#{h.codigo}" />  
         		</p:column> 
 				<p:column headerText="Descrição" style="width:75%">  
@@ -192,16 +190,16 @@
 		<p:panel>
 			<p:panelGrid columns="4" style="font-size:8px;width: 100%" >
 				<p:column style=" width: 25%">
-					<p:outputLabel value="Salário Base" />			
+					<p:outputLabel value="Salário Base:" />			
 				</p:column>
 				<p:column style=" width: 25%">
-					<p:outputLabel value="Base INSS" />			
+					<p:outputLabel value="Base INSS:" />			
 				</p:column>				
 				<p:column style=" width:25%">
-					<p:outputLabel value="Base FGTS"/>			
+					<p:outputLabel value="Base FGTS:"/>			
 				</p:column>
 				<p:column style=" width: 25%">
-					<p:outputLabel value="FGTS do Mês"/>			
+					<p:outputLabel value="FGTS do Mês:"/>			
 				</p:column>						
 				<p:column style=" width: 25%">	
 					<h:outputText value="#{holeriteBean.baseSelecionada.salarioBase}">

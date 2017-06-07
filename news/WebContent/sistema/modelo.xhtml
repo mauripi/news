@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Modelo</f:facet>
+
+	<h:form id="formtb" >
+		<br></br>
+		<p:panelGrid columns="2">
+			<p:commandButton  icon="ui-icon-plus" value="Novo" title="Novo"  action="#{modeloMB.novo}"
+				 update=":formCad" oncomplete="PF('dgCad').show();"/>
+			<p:commandButton icon="ui-icon-print" value="Imprimir" ajax="false" action="${modeloMB.imprimir}" disabled="#{modeloMB.modelo.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
+		</p:panelGrid>	
+		 			 
+	 	<br></br>                    
+		<br></br>
+
+<p:ajax event="rowSelect" listener="#{baixabemMB.selecao}" update=":formCad"  oncomplete="PF('dgCad').show();"/>
+	</h:form>
+</p:panel>
+
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Modelos" resizable="false" >
+<h:form id="formCad">
+
+	<br></br>
+	<p:panelGrid columns="2">
+		<p:commandButton value="Gravar" action="#{modeloMB.grava}" update=":formMsg,:formCad,:formtb" icon="ui-icon-check" 
+			onstart="PF('status').hide()" onsuccess="PF('status').hide()" disabled="#{modeloMB.controlaCadastro == 0}"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{modeloMB.limpaCadastro}" 
+			onclick="PF('dgCad').hide()" update=":formCad" disabled="#{modeloMB.controlaCadastro == 0}"/>					
+	</p:panelGrid>																				
+	
+
+</h:form>
+
+</p:dialog>
+
+<p:dialog widgetVar="status" appendTo="@(body)"  modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloading.gif" />
+</p:dialog>
+
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{modeloMB.modelo.id}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{modeloMB.exclui}"  icon="ui-icon-check" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar"  icon="ui-icon-cancel" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="6000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

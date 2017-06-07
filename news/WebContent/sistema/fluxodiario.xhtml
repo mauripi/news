@@ -6,7 +6,8 @@
 		xmlns:h="http://java.sun.com/jsf/html"  
    		xmlns:f="http://java.sun.com/jsf/core" 
     	xmlns:p="http://primefaces.org/ui"
-    	xmlns:ui="http://java.sun.com/jsf/facelets">
+    	xmlns:ui="http://java.sun.com/jsf/facelets"
+    	xmlns:b="http://bootsfaces.net/ui">
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
@@ -18,27 +19,29 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - Financeiro</ui:define>
 <ui:define name="conteudo">
+<p:panel class="conteudo">
 <f:facet name="header">Acompanhamento dos Custos</f:facet>	
 <h:form>
+<br/><br/>
 <p:panelGrid columns="3">
-	<h:outputLabel value="Ano" style="padding-rigth: 15px;"/>
-       <p:selectOneMenu id="ano" value="#{fluxodiarioMB.ano}" style="width:125px">
-           <f:selectItem itemLabel="2015" itemValue="2015" />
-           <f:selectItem itemLabel="2016" itemValue="2016" />
-           <f:selectItem itemLabel="2017" itemValue="2017" />
-       </p:selectOneMenu>
-       <p:commandButton value="Exibir" action="#{fluxodiarioMB.exibir}" update=":formTb:tb,:formTb:chart" />
+	<h:outputLabel value="Ano:"/>
+    <p:selectOneMenu id="ano" value="#{fluxodiarioMB.ano}" style=" padding-right:0px;">
+        <f:selectItem itemLabel="2015" itemValue="2015" />
+        <f:selectItem itemLabel="2016" itemValue="2016" />
+        <f:selectItem itemLabel="2017" itemValue="2017" />
+    </p:selectOneMenu>
+    <p:commandButton value="Visualizar" icon="ui-icon-search" action="#{fluxodiarioMB.exibir}" update=":formTb:tb,:formTb:chart" />
 </p:panelGrid>
-<br></br>
-
 </h:form>
+<br/><br/><br/>
 <h:form id="formTb"> 
-<p:panelGrid columns="2">
-
+<b:container fluid="true">
+<b:row>
+   <b:column medium-screen="4">
     <p:dataTable id="tb" var="c" value="#{fluxodiarioMB.custos}" 
-    			rowKey="#{c}" style="width:550px;" emptyMessage="registro não encontrado!">
+    			rowKey="#{c}"  emptyMessage="registro não encontrado!">
     			
-        <p:column headerText="Mês" width="50">
+        <p:column headerText="Mês" style="text-align: left;" width="70">
             <h:outputText value="#{fluxodiarioMB.nomeMes(c.mes)}" />
         </p:column>
          
@@ -65,16 +68,16 @@
 			</p:commandLink>
         </p:column> 
      </p:dataTable>
-
-	<p:chart id="chart" type="line" model="#{fluxodiarioMB.areaModel}" style="height:500px;width:700px;" />
-
-</p:panelGrid>
-
-    
+	</b:column>
+	<b:column medium-screen="8">
+		<p:chart id="chart" type="line" model="#{fluxodiarioMB.areaModel}" style="height:600px;width:900px; vertical-align:top;" />
+	</b:column>
+</b:row>
+</b:container>  
 </h:form>
-
+</p:panel>
 <h:form id="formLanc">
-	<p:dialog widgetVar="dgLanc" width="50%" height="500"  appendTo="@(body)" modal="true">
+	<p:dialog widgetVar="dgLanc" width="60%" height="600"  appendTo="@(body)" modal="true">
 	<f:facet name="header">#{fluxodiarioMB.descricaoTipo}</f:facet>
 		<p:dataTable var="l" value="#{fluxodiarioMB.detalhes}" >
 		

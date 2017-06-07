@@ -31,7 +31,7 @@ public class LicencaLN implements Serializable {
 
 	public List<Licenca> getList() {
 		dao = new GenericDao<Licenca>();
-		return dao.list("Licenca", "id");
+		return dao.list("licenca", "id");
 	}
 	
 	public void atualizaLicencasEquipamento(Licenca l,int operacao){

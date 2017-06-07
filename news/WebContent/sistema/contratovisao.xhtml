@@ -14,55 +14,148 @@
 
  
 </h:head>
-   	
+    	
 <h:body>
 <ui:composition template="templates/geral.xhtml">
-<ui:define name="titulo">RECORD NEWS - COMPRAS</ui:define>
+<ui:define name="titulo">RECORD NEWS</ui:define>
 <ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Visão dos Contratos</f:facet>
 
-<f:facet name="header">Contratos - RECORD NEWS</f:facet>
-<b:panelGrid colSpans="6,6" id="stateGridId">
-	<h:form>
-		<b:panel look="primary" 
-		                title="Contratos cadastrados">
-			    <b:inputText id="mybid" class="mybid-example" value="#{contratoVisaoMB.pesquisa}" label="" >
-			        <f:facet name="append">
-			            <b:commandButton look="primary" value="Localizar" ajax="true" 
-			            	actionListener="#{contratoVisaoMB.pesquisar}" update="tb,:formMsg"/>
-			        </f:facet>
-			    </b:inputText>	
-				<b:dataTable id="tb" value="#{contratoVisaoMB.contratosPesquisados}" var="c"
-					border="true" searching="false" >
-			        <b:dataTableColumn value="#{c.objeto}" label="Objeto"/>
-			        <b:dataTableColumn value="#{c.mclifor.nomfan}" label="Cliente / Fornecedor"/>
-			        <b:dataTableColumn>
-			            <b:commandButton value="Abrir" icon="edit" ajax="true"
-			                onclick="ajax:contratoVisaoMB.visualizar()" />
-		
-			       </b:dataTableColumn>        
-			    </b:dataTable>	  		    
-		</b:panel>
+	<h:form id="formtb" > 
+	 	<br></br>                    
+		<br></br>
+	    <p:dataTable id="tb" var="c" value="#{contratoVisaoMB.listAll}"  rows="15" paginator="true" paginatorPosition="bottom"
+	    	selectionMode="single" selection="#{contratoVisaoMB.contrato}" rowKey="#{c.id}" emptyMessage="">
+
+        	<p:ajax event="rowSelect" listener="#{contratoVisaoMB.onRowSelect}" update=":formMsg,:formCad,:dgCad" 
+        			oncomplete="PF('dgCad').show();"/>
+
+	       <p:column headerText="Nº"  width="32px;" sortBy="#{c.id}">
+	            <h:outputText value="#{c.id}" />
+	       </p:column>	 
+	       <p:column headerText="Objeto" width="30%" filterBy="#{c.objeto}"  filterMatchMode="contains">
+	            <h:outputText value="#{c.objeto}" />
+	       </p:column>	        	       	
+	       <p:column headerText="Origem" width="40px;" sortBy="#{c.origem}">
+	            <h:outputText value="#{c.origem eq 'C' ?  'Compra' : 'Venda'}" />
+	       </p:column>	
+	        <p:column headerText="Início Vigênc." width="60px;">
+              <h:outputText value="#{c.inicio}">
+				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			  </h:outputText>
+            </p:column>		       
+	        <p:column headerText="Fim Vigênc." width="60px;" sortBy="#{c.fim}">
+              <h:outputText value="#{c.fim}">
+				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			  </h:outputText>
+            </p:column>		        	
+	       <p:column headerText="Cliente / Fornecedor" width="25%" sortBy="#{c.mclifor.nomfan}" filterBy="#{c.mclifor.nomfan}"  filterMatchMode="contains">
+	            <h:outputText value="#{c.mclifor.nomfan}" />
+	       </p:column>	   
+	       <p:column headerText="Tipo" width="100px;"  sortBy="#{c.tipocontrato.descricao}"  filterBy="#{c.tipocontrato.descricao}"  filterMatchMode="contains">
+	            <h:outputText value="#{c.tipocontrato.descricao}" />
+	       </p:column>			           		
+	    </p:dataTable>
 	</h:form>
-</b:panelGrid>
+</p:panel>
 
-<b:modal id="amodal" title="Modal Example" styleClass="modalPseudoClass">
-    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-    <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.</p>
-    <p>Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.</p>
-    <f:facet name="footer">
-        <b:button value="Close" dismiss="modal" />
-        <b:button value="Ok" look="primary" dismiss="modal" />
-    </f:facet>
-</b:modal>
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="#{contratoVisaoMB.contrato.objeto}">
+<h:form id="formCad" style=" width:800px; height:600px;">
+	<p:fieldset legend="INFORMAÇÕES">
+		<p:panelGrid columns="2">
+			<p:outputLabel value="Empresa:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.mclifor.nomfan}" />
+			
+			<p:outputLabel value="Contato:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.mclifor.nomcon}" />
+			
+			<p:outputLabel value="Telefone:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.mclifor.foncon}" />
+			
+			<p:outputLabel value="Email:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.mclifor.emacon}" />
+			
+			<p:outputLabel value="Responsável do Contrato:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.responsavel}" />
+			
+			<p:outputLabel value="Tipo de Contrato:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.tipocontrato.descricao}" />
+		</p:panelGrid>
+	
+	</p:fieldset>
+	<br/>
+	<p:fieldset legend="DADOS DO CONTRATO">
+		<p:panelGrid columns="6">
+			<p:outputLabel value="Início:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.inicio}" >
+                  	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+  			</h:outputText>
+  			
+			<p:outputLabel value="Término:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.fim}" >
+                  	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+  			</h:outputText>
+  							
+			<p:outputLabel value="Dias para término:"/>
+			<h:outputText value="#{contratoVisaoMB.diasParaTermino(contratoVisaoMB.contrato.fim)}" />
+			
+			<p:outputLabel value="Valor Mensal:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.valorMensal}" >
+            	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>
+			
+			<p:outputLabel value="Valor Total:"/>
+			<h:outputText value="#{contratoVisaoMB.contrato.valorTotal}" >
+            	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>
+		</p:panelGrid>
+	</p:fieldset><br/>
+	<p:fieldset legend="OBSERVAÇÃO">
+		<p:panelGrid columns="1">
+			<h:outputText value="#{contratoVisaoMB.contrato.observacao}" />
+		</p:panelGrid>
+	</p:fieldset><br/>
+	<p:fieldset legend="DOCUMENTOS">
+	    <p:dataTable var="a" value="#{contratoVisaoMB.anexos}" emptyMessage="Não há anexos"  resizableColumns="true" liveResize="true"
+						    			paginatorPosition="bottom" paginator="true" rows="7" >
+	        <p:column headerText="Documento">
+	            <h:outputText value="#{a}" style="width:32px;text-align: center"/>
+	        </p:column>
+	        <p:column style="width:32px;text-align: center">
+	             <p:commandButton update=":formCad,:formD" oncomplete="PF('anx').show()"
+	             	 action="#{contratoVisaoMB.montaCaminho}" title="Mostrar" icon="ui-icon-search" >
+	                <f:setPropertyActionListener value="#{a}" target="#{contratoVisaoMB.anexo}" />
+	            </p:commandButton>
+	        </p:column>			        
+	    </p:dataTable>			
+	</p:fieldset>
+	<br/>
+		<p:button value="Sair" icon="ui-icon-close" onclick="PF('dgCad').hide()" />	
+<br/><br/>
+</h:form>
+</p:dialog>
+
+<p:dialog widgetVar="status" appendTo="@(body)"  modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloading.gif" />
+</p:dialog>
+
+   <h:form id="formD">
+<p:dialog header="Anexo" widgetVar="anx" showEffect="fade" hideEffect="fade" width="900" height="600"   appendTo="@(body)">
+  
+		<object type="application/pdf" data="#{request.contextPath}/sistema/tmp/#{contratoVisaoMB.contrato.id}/#{contratoVisaoMB.anexo}?pfdrid_c=true" height="500px" width="100%">
+            Seu navegador não pode exibir o pdf ou o arquivo não existe.
+        </object>
+</p:dialog>
+	</h:form>        
+
 
 <h:form id="formMsg">                      
-    <p:growl id="msg" showDetail="true" life="4000"/> 
+    <p:growl id="msg" showDetail="true" life="6000"/> 
 </h:form>
+
 </ui:define>
 </ui:composition>	
 </h:body>	
-
 </html>

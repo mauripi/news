@@ -18,9 +18,9 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - FINANCEIRO</ui:define>
 <ui:define name="conteudo">
-
+<p:panel class="conteudo">
 <f:facet name="header">Importação de Fluxo Diário</f:facet>
-<p:panel rendered="true" style="width:70%;">
+
 
 <h:form>
 	<p:panelGrid columns="1">
@@ -34,7 +34,7 @@
 <br></br>
 <h:form>
 	<p:panelGrid columns="2">
-		<h:outputLabel value="Mês" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Mês:" style="padding-rigth : 15px;"/>
         <p:selectOneMenu id="mes" value="#{fluxodiarioMB.mes}" style="width:125px">
             <f:selectItem itemLabel="" itemValue="0" />
             <f:selectItem itemLabel="Janeiro" itemValue="1" />
@@ -51,7 +51,7 @@
             <f:selectItem itemLabel="Dezembro" itemValue="12" />
         </p:selectOneMenu>
         
-		<h:outputLabel value="Ano" style="padding-rigth: 15px;"/>
+		<h:outputLabel value="Ano:" style="padding-rigth: 15px;"/>
         <p:selectOneMenu id="ano" value="#{fluxodiarioMB.ano}" style="width:125px">
             <f:selectItem itemLabel="2016" itemValue="2016" />
             <f:selectItem itemLabel="2017" itemValue="2017" />
@@ -60,13 +60,13 @@
 	</p:panelGrid>
 	<br></br>
 	<p:panelGrid columns="7" >
-		<h:outputLabel value="Data" style="padding-rigth : 15px;"/>
-		<h:outputLabel value="Documento" style="padding-rigth : 15px;"/>
-		<h:outputLabel value="Histórico" style="padding-rigth : 15px;"/>
-		<h:outputLabel value="Entrada" style="padding-rigth : 15px;"/>
-		<h:outputLabel value="Saída" style="padding-rigth : 15px;"/>
-		<h:outputLabel value="Saldo" style="padding-rigth : 15px;"/>
-		<h:outputLabel value="Tipo de Custo" style="padding-rigth : 15px;"/>	
+		<h:outputLabel value="Data:" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Documento:" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Histórico:" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Entrada:" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Saída:" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Saldo:" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Tipo de Custo:" style="padding-rigth : 15px;"/>	
 		
         <p:selectOneMenu id="dt" value="#{fluxodiarioMB.campoData}" style="width:55px">
         	<f:selectItem itemLabel="" itemValue="" />
@@ -103,7 +103,10 @@
         </p:selectOneMenu>	                                              
 	</p:panelGrid>	
 	<br></br>
-		<p:commandButton value="Enviar" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  action="#{fluxodiarioMB.importar}" update=":formMsg, down"/>
+	<p:panelGrid columns="1" >
+		<p:commandButton value="Gravar" icon="ui-icon-check" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  action="#{fluxodiarioMB.importar}" update=":formMsg, down"/>
+	</p:panelGrid>
+	<br/><br/>
 </h:form>	
 	
 </p:panel>

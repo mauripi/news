@@ -18,7 +18,7 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - DIRETORIA</ui:define>
 <ui:define name="conteudo">
-<p:panel class="conteudo">
+
 <f:facet name="header">Controle de Atividades da Engenharia</f:facet>
 
 <p:panel id="panel" rendered="#{acessoBean.temAcessoControleTarefaVisao}">
@@ -33,7 +33,7 @@
 	        </p:selectOneRadio>
 	    </h:panelGrid>
  		  
-	    <p:dataTable id="tb" var="trf" value="#{controletarefaMB.tarefasFiltradas}" emptyMessage="" rowStyleClass="#{trf.aprovado eq true ? 'fundoVerde' : 'fundoAmarelo'}" rowIndexVar="rowIndex" >
+	    <p:dataTable id="tb" var="trf" value="#{controletarefaMB.tarefasFiltradas}" emptyMessage="">
 	        <f:facet name="header">
 	            Atividades
 	        </f:facet>
@@ -66,14 +66,13 @@
 	        <p:column headerText="Observações" style="width:40%;" sortBy="#{trf.valor}">
 	            <h:outputText value="#{trf.observacao}" />
 	        </p:column>	    
-	        <p:column headerText="Aprovação" style="width:20%;">
+	        <p:column headerText="Aprovação" style="width:22%;">
 	            <p:inputSwitch value="#{trf.aprovado}" onLabel="Aprovado" offLabel="Não Approvado">
                  	<p:ajax listener="#{controletarefaMB.atualizaAprovacao(trf.aprovado, trf)}" update=":formTb" />
         		</p:inputSwitch>
 	        </p:column>		                              
 	    </p:dataTable>
 	</h:form>
-</p:panel>
 </p:panel>
 
 <h:form id="formMsg">                      

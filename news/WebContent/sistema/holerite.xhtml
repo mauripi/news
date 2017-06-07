@@ -17,13 +17,14 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - RH</ui:define>
 <ui:define name="conteudo">
+<p:panel class="conteudo">
 		<f:facet name="header">Acesso aos seus Holerites</f:facet>
-<p:panel rendered="#{acessoBean.temAcessoHolerite}" style="border:0 !important;background: transparent !important;">
-	<center>
-		<h:form id="form" style="width: 40%;font-size:90%;text-align: center;">
-			<p:panelGrid columns="1">
-				<h:outputLabel value="Selecione o Ano."/>
-				<p:selectOneMenu value="#{holeriteBean.ano}" style="width:120px;">
+
+
+		<h:form id="form" style="width: 40%;">
+			<p:panelGrid columns="2">
+				<h:outputLabel value="Selecione o Ano:"/>
+				<p:selectOneMenu value="#{holeriteBean.ano}">
 					<f:selectItem itemLabel="2017" itemValue="2017"/>
 					<f:selectItem itemLabel="2016" itemValue="2016"/>				
 					<f:selectItem itemLabel="2015" itemValue="2015"/>
@@ -35,24 +36,22 @@
 			<br></br>
 
 			
-			<p:dataTable id="bases" var="b" value="#{holeriteBean.bases}" paginator="true" rows="12">
-			  	<f:facet name="header" >HOLERITES</f:facet>
-				<p:column headerText="Mês/Ano" style="width:20%">
+			<p:dataTable id="bases" var="b" value="#{holeriteBean.bases}" paginator="true" paginatorPosition="bottom" rows="15">
+
+				<p:column headerText="Mês/Ano" style="width:20%; text-align:center;">
 					<h:outputText value="#{b.mes}/#{b.ano}" />
 				</p:column>
 				<p:column headerText="Função" style="width:60%">
 					<h:outputText value="#{b.funcao}"/>
 				</p:column>
-				<p:column headerText="Visualizar" style="width:20%">
+				<p:column headerText="Visualizar" style="width:20%; text-align:center;">
 		               <p:commandButton id="selectButton" action="#{holeriteBean.getHolerite}" icon="ui-icon-search" update=":dgForm" oncomplete="PF('visual').show()">
 		               		<f:setPropertyActionListener value="#{b}" target="#{holeriteBean.baseSelecionada}" />             		
 		               </p:commandButton>
 				</p:column>
-		
-				
 			</p:dataTable>
 		</h:form>
-	</center>
+
 </p:panel>
 <h:form id="dgForm">
 	<p:dialog id="visual" widgetVar="visual" header="Visualização do Holerite" height="400" width="700px"  rendered="#{acessoBean.temAcessoHolerite}">

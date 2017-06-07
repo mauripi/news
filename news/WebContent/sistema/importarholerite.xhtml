@@ -18,8 +18,9 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - RH</ui:define>
 <ui:define name="conteudo">
+<p:panel class="conteudo">
 <f:facet name="header">Importação dos Holerites</f:facet>
-<p:panel rendered="true" style="width:40%;">
+
 
 
 <h:form>
@@ -34,7 +35,7 @@
 <br></br>
 <h:form>
 	<p:panelGrid columns="3">
-		<h:outputLabel value="Tipo Holerite" style="padding-rigth : 15px;"/>
+		<h:outputLabel value="Tipo Holerite:" style="padding-rigth : 15px;"/>
         <p:selectOneMenu id="per" value="#{importHoleriteMB.periodo}" style="width:125px">
             <f:selectItem itemLabel="" itemValue="0" />
             <f:selectItem itemLabel="Mensal" itemValue="11" />
@@ -44,22 +45,25 @@
             <f:selectItem itemLabel="PLR" itemValue="92" />
         </p:selectOneMenu>
 		<h:message for="per" style="color:red"  />	
-		<h:outputLabel value="Mês" style="padding-rigth : 15px;"/>
-		<p:inputText value="#{importHoleriteMB.mes}" id="mes"  maxlength="2" size="2" required="true" requiredMessage="Informe o Mês" validatorMessage="Permitido apenas de 1 a 12">
+		<h:outputLabel value="Mês:" style="padding-rigth : 15px;"/>
+		<p:inputText value="#{importHoleriteMB.mes}" id="mes"  maxlength="2" size="7" required="true" requiredMessage="Informe o Mês" validatorMessage="Permitido apenas de 1 a 12">
 			<f:validateRegex pattern="1[0-2]|[1-9]" for="mes"/>
 		</p:inputText>
 		<h:message for="mes" style="color:red"  />
-		<h:outputLabel value="Ano" style="padding-rigth: 15px;"/>
-		<p:inputText value="#{importHoleriteMB.ano}" id="ano" maxlength="4" size="5" required="true" requiredMessage="Informe o Ano"/>
+		<h:outputLabel value="Ano:" style="padding-rigth: 15px;"/>
+		<p:inputText value="#{importHoleriteMB.ano}" id="ano" maxlength="4" size="7" required="true" requiredMessage="Informe o Ano"/>
 		<h:message for="ano" style="color:red" />
 	</p:panelGrid>
 	<br></br>
 	<br></br>
-		<p:commandButton value="Enviar" ajax="false"  action="#{importHoleriteMB.importar}" update=":formMsg"/>
+		<p:panelGrid columns="1">
+		<p:commandButton value="Gravar" icon="ui-icon-check" ajax="false"  action="#{importHoleriteMB.importar}" update=":formMsg"/>
+		</p:panelGrid>
+		<br/><br/>
 </h:form>	
 	
-</p:panel>
 
+</p:panel>
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="8000"/> 
 </h:form>

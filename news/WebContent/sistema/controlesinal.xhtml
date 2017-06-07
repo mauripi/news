@@ -22,7 +22,7 @@
 
 <f:facet name="header">Controle de Sinais</f:facet>
 
-<h:form id="formtb" >
+<h:form id="formtb" ><br/>
 	<p:commandButton value="Novo Cadastro" icon="ui-icon-plus" action="#{controlesinalMB.novo}" update=":formCad"  oncomplete="PF('dgCad').show()"/><br/><br/>
     <p:dataTable id="ctr" var="c" value="#{controlesinalMB.controlesinais}" selectionMode="single" 
     	selection="#{controlesinalMB.controlesinalSel}" rowKey="#{c.id}" emptyMessage="" rows="20" paginator="true" paginatorPosition="bottom">
@@ -164,7 +164,7 @@
 						       cancelLabel="Cancelar" uploadLabel="Enviar" label="Localizar"
 						  />	
 						<p:commandButton icon="ui-icon-search" value="#{controlesinalMB.controlesinal.arquivo}" oncomplete="PF('arq').show()" rendered="#{controlesinalMB.controlesinal.arquivo != null}"/>
-						<p:commandButton  icon="ui-icon-search" value="Vizualizar Fotos" action="#{controlesinalMB.openImages}" ajax="false" onclick="form.target='_blank'" rendered="#{controlesinalMB.images.size() > 0}"/>
+						<p:commandButton  icon="ui-icon-search" value="Vizualizar Fotos" action="#{controlesinalMB.openImages}" ajax="false" oncomplete="form.target='_blank'"  rendered="#{controlesinalMB.images.size() > 0}"/>
 						  	
 					</p:panelGrid>  
 				</p:panel>      

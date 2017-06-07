@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html 	xmlns="http://www.w3.org/1999/xhtml"
-		xmlns:h="http://java.sun.com/jsf/html"  
-   		xmlns:f="http://java.sun.com/jsf/core" 
-    	xmlns:p="http://primefaces.org/ui"
-    	xmlns:ui="http://java.sun.com/jsf/facelets">
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
@@ -16,69 +15,98 @@
    	
 <h:body>
 <ui:composition template="templates/geral.xhtml">
-<ui:define name="titulo">RECORD NEWS - ENGENHARIA</ui:define>
+<ui:define name="titulo">RECORD NEWS</ui:define>
 <ui:define name="conteudo">
-<f:facet name="header">Cadastro dos Rateios</f:facet>
+<p:panel class="conteudo">
+<f:facet name="header">Rateio de Débito</f:facet>
 
-<h:form id="formCad">
-	<p:panel rendered="#{acessoBean.temAcessoControleSinal}"  style="width:50%;">
-		<p:panelGrid columns="2">
-			<h:outputLabel value="Local"/>   
-	        <p:autoComplete id="pra" value="#{notadebitoMB.mengloc}" completeMethod="#{notadebitoMB.completeLoc}" size="50"
-	        		disabled="#{notadebitoMB.controlaCadastro eq 0}" placeholder="Digite o nome do Local" 
-                    var="d" itemLabel="#{d.nome}" itemValue="#{d}" converter="menglocConverter" forceSelection="true"
-                    required="true" requiredMessage="Informe a Praça" />
-
-			<h:outputLabel value="Mês"/> 
-			
-			<p:inputText value="#{notadebitoMB.debito.mes}"  size="8" maxlength="2" disabled="#{notadebitoMB.controlaCadastro eq 0}"/>
-
-			<h:outputLabel value="Ano"/> 
-			<p:inputText value="#{notadebitoMB.debito.ano}"  size="8" maxlength="4" disabled="#{notadebitoMB.controlaCadastro eq 0}"/>
-			<h:outputLabel value="Valor"/> 
-			<p:inputText id="vlr" value="#{notadebitoMB.debito.valor}" size="13" disabled="#{notadebitoMB.controlaCadastro == 0}">
-				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-			</p:inputText>							
-
-		</p:panelGrid>
-		<f:facet name="footer">
-			<p:panelGrid columns="6" style="border: none !important; ">
-				<p:commandButton value="Novo" action="#{notadebitoMB.novo}" update=":formCad" />
-				<p:commandButton value="Remover" action="#{notadebitoMB.exclui}" disabled="#{notadebitoMB.debito.id==null}" update=":formCad" />
-				<p:commandButton value="Limpar" action="#{notadebitoMB.limpaCadastro}" update=":formCad" />
-				<p:commandButton value="Gravar" action="#{notadebitoMB.grava}" update=":formCad,:formMsg" />
-			</p:panelGrid>
-		</f:facet>
+	<h:form id="formtb" >
 		<br></br>
-		<hr></hr>
-	    <p:dataTable id="tbdesp" var="d" value="#{notadebitoMB.debitos}" selectionMode="single" 
+		<p:panelGrid columns="1">
+			<p:commandButton  icon="ui-icon-plus" value="Novo Cadastro" title="Novo"  action="#{notadebitoMB.novo}"
+				 update=":formCad" oncomplete="PF('dgCad').show();"/>
+		</p:panelGrid>		 
+	 	<br></br>                    
+		<br></br>
+		<p:dataTable id="tbdesp" var="d" value="#{notadebitoMB.debitos}" selectionMode="single" 
 	     	selection="#{notadebitoMB.debitoSel}" emptyMessage="" paginator="true" paginatorPosition="bottom" rowKey="#{d.id}" rows="15">
-	    	<f:facet name="header">Gastos cadastrado</f:facet>
-			<p:ajax event="rowSelect" listener="#{notadebitoMB.selecao}" update=":formCad" />
+			<p:ajax event="rowSelect" listener="#{notadebitoMB.selecao}" update=":formCad"  oncomplete="PF('dgCad').show();" />
 			
-	        <p:column headerText="Mes" width="8%"  filterBy="#{d.mes}"  filterMatchMode="contains">
+	        <p:column headerText="Mes" width="5%"  filterBy="#{d.mes}"  filterMatchMode="contains" style="text-align: center">
 	            <h:outputText value="#{d.mes}" />
 	        </p:column>
-	        <p:column headerText="Ano" width="10%" filterBy="#{d.ano}"  filterMatchMode="contains">
+	        <p:column headerText="Ano" width="5%" filterBy="#{d.ano}"  filterMatchMode="contains" style="text-align: center">
 	            <h:outputText value="#{d.ano}" />
 	        </p:column>	        			
 	        <p:column headerText="Local" width="40%" filterBy="#{d.mengloc.nome}"  filterMatchMode="contains">
 	            <h:outputText value="#{d.mengloc.nome}" />
 	        </p:column>              	 
-	        <p:column headerText="Valor" style="width:9%;text-align: right;">
-				<h:outputText value="#{d.valor}" style="ttext-align: right;">
+	        <p:column headerText="Valor" width="5%" style="text-align: right;">
+				<h:outputText value="#{d.valor}" style="text-align: right;">
 					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
 				</h:outputText>	
-		    </p:column>	   	               	        
+		    </p:column>
+		    <p:column style="width:32px;text-align: center">
+	            <p:commandButton update=":formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+	                <f:setPropertyActionListener value="#{d}" target="#{notadebitoMB.debito}" />
+	            </p:commandButton>
+	        </p:column>	 	   	               	        
 	    </p:dataTable>
-	</p:panel>
-	
-</h:form>
+	</h:form>
+</p:panel>
 
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Modelos" resizable="false" >
+<h:form id="formCad">
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Local:"/>   
+	        <p:autoComplete id="pra" value="#{notadebitoMB.mengloc}" completeMethod="#{notadebitoMB.completeLoc}" size="50"
+	        		 placeholder="Digite o nome do Local" 
+                    var="d" itemLabel="#{d.nome}" itemValue="#{d}" converter="menglocConverter" forceSelection="true"
+                    required="true" requiredMessage="Informe a Praça" />
+			<h:outputLabel value="Mês:"/> 
+			<p:inputText value="#{notadebitoMB.debito.mes}"  size="8" maxlength="2" />
+			<h:outputLabel value="Ano:"/> 
+			<p:inputText value="#{notadebitoMB.debito.ano}"  size="8" maxlength="4" />
+			<h:outputLabel value="Valor:"/> 
+			<p:inputText id="vlr" value="#{notadebitoMB.debito.valor}" size="13" >
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+			</p:inputText>							
+		</p:panelGrid>
+	<br></br>
+	<p:panelGrid columns="2">
+		<p:commandButton value="Gravar" action="#{notadebitoMB.grava}" update=":formMsg,:formCad,:formtb" icon="ui-icon-check" 
+			onstart="PF('status').hide()" onsuccess="PF('status').hide()" />
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{notadebitoMB.limpaCadastro}" 
+			onclick="PF('dgCad').hide()" update=":formCad" />					
+	</p:panelGrid>																				
+</h:form>
+</p:dialog>
+
+<p:dialog widgetVar="status" appendTo="@(body)"  modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloading.gif" />
+</p:dialog>
+
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{notadebitoMB.debito.id}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{notadebitoMB.exclui}"  icon="ui-icon-check" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar"  icon="ui-icon-cancel" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
 
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="6000"/> 
 </h:form>
+
 </ui:define>
 </ui:composition>	
 </h:body>	

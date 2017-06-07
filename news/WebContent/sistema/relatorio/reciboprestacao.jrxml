@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reciboprestacao" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0a4480b-4c1f-4976-b9a6-1dc368c514ad">
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="357"/>
 	<parameter name="logo" class="java.lang.String"/>
 	<parameter name="datarecibo" class="java.lang.String"/>
 	<parameter name="valor" class="java.lang.String"/>
@@ -50,7 +50,7 @@
 				<textFieldExpression><![CDATA[$F{colaborador.nome}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="54" y="242" width="449" height="20" uuid="dbbe6a2e-48e8-446e-a592-73f256303886"/>
+				<reportElement x="54" y="255" width="449" height="20" uuid="dbbe6a2e-48e8-446e-a592-73f256303886"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -116,7 +116,7 @@
 				<textFieldExpression><![CDATA[$P{valor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="54" y="169" width="451" height="63" uuid="99d279fd-835c-46d4-b3c7-f58f8e848d28"/>
+				<reportElement x="54" y="178" width="451" height="74" uuid="99d279fd-835c-46d4-b3c7-f58f8e848d28"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -130,14 +130,14 @@
 				<textFieldExpression><![CDATA[$P{datarecibo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="54" y="635" width="449" height="20" uuid="5d62cf13-a8ab-4d0a-9f15-79dadd3f4134"/>
+				<reportElement x="54" y="648" width="449" height="20" uuid="5d62cf13-a8ab-4d0a-9f15-79dadd3f4134"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Por expressão legítima da verdade, dou plena quitação.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="54" y="114" width="451" height="44" uuid="6cf6e1bd-735a-4fc0-8896-24c180f1706c"/>
+				<reportElement x="54" y="114" width="451" height="60" uuid="6cf6e1bd-735a-4fc0-8896-24c180f1706c"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
@@ -151,7 +151,7 @@
 				<textFieldExpression><![CDATA["Declaro   para os   devidos   fins,  que recebi da   Rede Mulher de Televisão LTDA, CNPJ 02.344.518/0001-78, a importância supra de " +$P{valor}  + " ("+ $P{valorextenso} +"). "]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="54" y="563" width="451" height="63" uuid="6e71aa38-e6fa-4115-bc87-be0a353c3f21"/>
+				<reportElement x="54" y="573" width="451" height="74" uuid="6e71aa38-e6fa-4115-bc87-be0a353c3f21"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>

@@ -12,7 +12,7 @@ public class SendMail {
 	private final static String userAut = "ti_sistema@recordnews.com.br";
 	private final static String hostSmtp = "smtp.gmail.com";
 	private final static String sslSmtpPort = "587";
-	private final static String pwd = "consolador";
+	private final static String pwd = "news@2017";
 	
 
 	public static void sendHtml(HtmlEmail email){ 

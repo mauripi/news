@@ -72,7 +72,7 @@ public class Email  extends Thread {
 	        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 		           protected PasswordAuthentication getPasswordAuthentication() //"ti_sistema@recordnews.com.br", "rnews@#2015"
 		           {
-		                 return new PasswordAuthentication("ti_sistema@recordnews.com.br", "consolador");
+		                 return new PasswordAuthentication("ti_sistema@recordnews.com.br", "news@2017");
 		           }
 		      });	
 		    /** Ativa Debug para sessão */
