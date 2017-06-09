@@ -18,10 +18,11 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - TI</ui:define>
 <ui:define name="conteudo">
-
+<p:panel class="conteudo">
+<f:facet name="header">Solicitações de Help Desk</f:facet><br/>
 
 <h:form id="formtb">
-	<p:commandButton onclick="PF('dgCad').show()" action="#{solicitacaoMB.novo}" value="Nova Solicitação" title="Nova Solicitação"  update=":formCad"/>
+	<p:commandButton onclick="PF('dgCad').show()" action="#{solicitacaoMB.novo}" value="Nova Solicitação" icon="ui-icon-plus" title="Nova Solicitação"  update=":formCad"/>
  	<br></br>                    
 	<br></br>
     <p:dataTable id="tb" var="s" value="#{solicitacaoMB.solicitacoes}" rows="20" paginator="true" emptyMessage="">
@@ -62,7 +63,7 @@
     </p:dataTable>
 
 </h:form>
-
+</p:panel>
 <p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Nova Solicitação" resizable="false" >
 <h:form id="formCad" style="width:120 %;">
 

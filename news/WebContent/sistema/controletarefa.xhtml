@@ -71,7 +71,7 @@
 	            <h:outputText value="#{trf.observacao}" />
 	        </p:column>	    
 	        <p:column headerText="Status da Aprovação" style="width:19%;">
-	        	 <p:inputSwitch value="#{trf.aprovado}" onLabel="Aprovado" offLabel="Não Aprovado" disabled="true"/>
+	        	 <p:inputSwitch value="#{trf.aprovado}" onLabel="Aprovado" offLabel="Não Aprovado" disabled="true" style="text-align: center;"/>
 	        </p:column>          
 	        <p:column  width="68px;">
 	             <p:commandButton actionListener="#{controletarefaMB.edita}" icon="ui-icon-pencil" update=":formCad" oncomplete="PF('dgCad').show();" rendered="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim) ne 100}">

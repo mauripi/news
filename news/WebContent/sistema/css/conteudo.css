@@ -1,0 +1,62 @@
+html{
+	height: 100% !important; 
+}
+
+#conteudo{
+	margin:30px auto auto auto;	
+	width:90%;
+	font-size: 12px !important;
+	height: 100% !important;
+
+}
+
+.ui-panel .ui-panel-content {
+    border: 0;
+    background: 0;
+    padding: .5em 1em;
+    height: 100%;
+}
+
+.ui-panel {
+	height: 100%;
+	position: static;
+}
+.ui-widget-content {
+    border: 1px solid #649cd3;
+    background: #FFF;
+    color: #151515;
+}
+
+.ui-panelgrid .ui-panelgrid-cell {
+    border-width: 1px;
+    border-style: solid;
+    border-color: inherit;
+    padding: 5px;
+}
+
+.ui-grid-col-2 {
+    width: 50%;
+}
+
+
+element.style {
+    width: 55%;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-list-item {
+    border: 0 none;
+    margin: 1px 0;
+    padding: 3px 5px;
+    white-space: nowrap;
+    color: #4f4f4f;
+}
+
+.ui-widget .ui-widget {
+    font-size: 1em;
+    color: #4f4f4f;
+}
+
+.ui-widget {
+    color: #4f4f4f;
+   	text-align: left;
+}

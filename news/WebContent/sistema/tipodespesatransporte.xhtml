@@ -19,10 +19,10 @@
 <ui:define name="titulo">RECORD NEWS - TRANSPORTES</ui:define>
 <ui:define name="conteudo">
 
-<f:facet name="header">Cadastro dos Tipos de Despesas</f:facet>
 
 <h:form id="formCad">
-	<p:panel rendered="#{acessoBean.temAcessoControleTransporte}"  style="width:50%;">
+	<p:panel rendered="#{acessoBean.temAcessoControleTransporte}" >
+<f:facet name="header">Cadastro dos Tipos de Despesas</f:facet>
 		<p:panelGrid columns="2">
 			<h:outputLabel value="Descrição"/> 
 			<p:inputText value="#{tipodesptranspMB.despesa.despesa}" placeholder="Descrição da Despesa" size="50" maxlength="100" disabled="#{tipodesptranspMB.controlaCadastro eq 0}"/>

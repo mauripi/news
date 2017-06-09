@@ -17,11 +17,11 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS</ui:define>
 <ui:define name="conteudo">
-<f:facet name="header">Movimentação de Patrimônios</f:facet>
 
 <h:form id="formCad">
                  
 <p:panel>
+<f:facet name="header">Movimentação de Patrimônio</f:facet>
     <p:wizard flowListener="#{movimentobemMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo"  >
    
         <p:tab id="gerais" title="Dados Gerais" >

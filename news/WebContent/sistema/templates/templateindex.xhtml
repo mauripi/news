@@ -12,11 +12,11 @@
 <link rel="stylesheet" href="css/layout.css" media="screen" />
 <link rel="stylesheet" href="css/menubar.css" media="screen" />
 <link rel="stylesheet" href="css/conteudo.css" media="screen" />
-<link rel="stylesheet" href="templates/style.css" media="screen" />
+<link rel="stylesheet" href="css/index.css" media="screen" />
 </h:head>      
   
  <h:body>
- <h:form id="form-header">
+  <h:form>
 
  	<div class="page-header">
 	<a href="index.jsf"><img src="img/news2.png" id="logo" ></img></a>  
@@ -24,7 +24,7 @@
 	  	<div class="user-header-dados">
 	  		<p id="primeiro" >#{acessoBean.login.nome}</p>
 	  		<p id="segundo">#{acessoBean.login.custo.nome}</p>
-	  		<p id="sair"><p:commandLink value="Sair" actionListener="#{acessoBean.sair}" style="color:#FFF; fonte-size: small !important;"/> </p>
+	  		<p id="sair"><p:commandLink value="Sair" actionListener="#{acessoBean.sair}" style="color:#FFF;"/> </p>
 	  	</div>
 	  	<div class="user-header-foto">
 	  		<img src="tmp/#{acessoBean.login.cpf}.jpg" id="foto"></img>
@@ -100,8 +100,8 @@
        		<p:menuitem value="Custos Mensais" action="fluxodiario?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}" />
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>
        		<p:menuitem value="Importar Planilha de Custos" action="importarfluxodiario?faces-redirect=true" rendered="#{acessoBean.temAcessoImportarFluxoDiario}"/>
-       		<p:separator/>
-       		<p:menuitem value="Prestação de Contas" action="prestacao?faces-redirect=true"  />     
+       		<p:separator />
+       		<p:menuitem value="Prestação de Contas" action="prestacao?faces-redirect=true" />     
         </p:submenu>
     
      	<p:submenu label="RH">
@@ -118,7 +118,7 @@
        		<p:menuitem value="Holerite" action="holerite?faces-redirect=true" />
         </p:submenu>
         
-        <p:submenu label="TI">
+		<p:submenu label="TI">
         		<p:menuitem value="Adm de Usuário" action="usuario?faces-redirect=true" rendered="#{acessoBean.temAcessoPainelChamado}"/>
         		<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
         		<p:menuitem value="Alterar Senha" action="trocarsenha?faces-redirect=true"/>
@@ -159,9 +159,9 @@
        </p:menubar>
        
  </h:form>
+
  <div id="conteudo" >
  	<ui:insert name="conteudo"/>
  </div>
- 
  </h:body>
  </html>

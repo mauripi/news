@@ -171,6 +171,12 @@ public class ContratoBean implements Serializable {
         edita();
         setaPrimeiraAba();
     }
+  
+    public void contratoSelecionado(Contrato c) {
+        ContratoLN ln = new ContratoLN();
+        anexos = ln.getAnexos(c);
+        tipoContrato = c.getTipocontrato();
+    }   
     
     private void setaPrimeiraAba(){
     	/*
@@ -297,7 +303,12 @@ public class ContratoBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();                
         context.addMessage(null, new FacesMessage(msg,""));          
     }
-    
+
+    public String diasParaTermino(Date fim){
+    	if(fim!=null)
+    		return DateUtil.diferencaEmDias(new Date(), fim)+""; 	
+    	return "";
+    }
 
     //--------------------------GETTERS E SETTERS ----------------------------------
     public Date getToday() {

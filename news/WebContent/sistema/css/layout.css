@@ -1,0 +1,99 @@
+body {
+	top: 0px;
+	margin: 0px;
+	width: 100%;
+}
+
+html{
+	/*background-color: #ECEFF1;*/
+	background-image: url('../img/tudo.jpg') !important; 
+	background-repeat: no-repeat !important;
+    background-size: cover;
+	width: 100%;
+	height: 100%;
+}
+
+
+#logo{
+	height: 70px;
+	padding-left:70px;
+	padding-top:2px;
+}
+
+#foto{
+	width:50px;
+	height:50px;
+	border-radius: 50px;
+}
+
+hr{
+	height:4px;
+	background-color:#649cd3;
+	margin-top:0px;
+	margin-bottom:0px;
+	border-bottom: none;
+}
+
+#primeiro{
+    padding-top: 15px;
+    margin: 0px;
+    font-size:14px;
+}
+
+#segundo{
+	padding-top: 1px;
+    margin: 0px;
+    font-size:13px;
+}
+
+
+.user-header{
+	float:right;	
+	padding-right:75px;
+	margin:0px;
+}
+
+/*.user-header-dados h4{
+    padding-top: 20px;
+    margin: 0px;
+    font-size:19px;
+}*/
+
+.user-header-dados p{
+    margin: 0px;
+    text-align:right;
+}
+
+.user-header-dados{
+	float:left;
+	padding-right:10px;
+}
+
+.user-header-foto{
+	float:right;
+	padding-top:13px;
+}
+
+.page-header{
+	background-color: #0C183C;
+	color: #FFF;
+	padding-top:0px;
+	height:75px;
+}
+
+.navbar-inverse {
+    background-image: linear-gradient(to bottom, #b1bdc8 0%, #b1bdc8 100%);
+	background-color: #b1bdc8;
+	border-color: #b1bdc8;
+}
+
+.ui-menubar,.ui-menu-child,.ui-menu {
+	border: 0px none;
+}
+.submenu .ui-menuitem-link > .ui-icon-triangle-1-s{
+  	display: none !important;  
+}
+.ui-widget {
+    color: #ffffff;
+    text-align: left;
+}

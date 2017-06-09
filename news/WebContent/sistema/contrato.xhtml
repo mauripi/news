@@ -19,9 +19,10 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - TI</ui:define>
 <ui:define name="conteudo">
-<f:facet name="header">Controle de Contratos</f:facet>
+
 
 <p:panel>
+<f:facet name="header">Controle de Contratos</f:facet>
 	<h:form id="formtb">	
 	    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
 
@@ -53,15 +54,22 @@
               <h:outputText value="#{c.fim}">
 				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 			  </h:outputText>
-            </p:column>		        	
+            </p:column>		
+	        <p:column headerText="Dias Fim" width="60px;" style="text-align: center;">
+              	<h:outputText value="#{contratoMB.diasParaTermino(c.fim)}"/>
+            </p:column>	                    	
 	       <p:column headerText="Cliente / Fornecedor" width="25%" sortBy="#{c.mclifor.nomfan}" filterBy="#{c.mclifor.nomfan}"  filterMatchMode="contains">
 	            <h:outputText value="#{c.mclifor.nomfan}" />
 	       </p:column>	   
 	       <p:column headerText="Tipo" width="100px;"  sortBy="#{c.tipocontrato.descricao}"  filterBy="#{c.tipocontrato.descricao}"  filterMatchMode="contains">
 	            <h:outputText value="#{c.tipocontrato.descricao}" />
 	       </p:column>			           		
-	        <p:column style="width:32px;text-align: center">
+	        <p:column style="width:70px;text-align: center">
 	            <p:commandButton update=":formCad,:formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+	                <f:setPropertyActionListener value="#{c}" target="#{contratoMB.contrato}" />
+	            </p:commandButton>	        
+	            <p:commandButton update=":vwFormCad" oncomplete="PF('vwDgCad').show()" 
+	            		actionListener="#{contratoMB.contratoSelecionado(c)}" icon="ui-icon-search" title="Visualizar">
 	                <f:setPropertyActionListener value="#{c}" target="#{contratoMB.contrato}" />
 	            </p:commandButton>
 	        </p:column>	
@@ -229,6 +237,85 @@
 </h:form>
 
 </p:dialog>
+
+
+<p:dialog id="vwDgCad" widgetVar="vwDgCad" appendTo="@(body)" modal="true" header="#{contratoMB.contrato.objeto}">
+<h:form id="vwFormCad" style=" width:800px; height:600px;">
+	<p:fieldset legend="INFORMAÇÕES">
+		<p:panelGrid columns="2">
+			<p:outputLabel value="Empresa:"/>
+			<h:outputText value="#{contratoMB.contrato.mclifor.nomfan}" />
+			
+			<p:outputLabel value="Contato:"/>
+			<h:outputText value="#{contratoMB.contrato.mclifor.nomcon}" />
+			
+			<p:outputLabel value="Telefone:"/>
+			<h:outputText value="#{contratoMB.contrato.mclifor.foncon}" />
+			
+			<p:outputLabel value="Email:"/>
+			<h:outputText value="#{contratoMB.contrato.mclifor.emacon}" />
+			
+			<p:outputLabel value="Responsável do Contrato:"/>
+			<h:outputText value="#{contratoMB.contrato.responsavel}" />
+			
+			<p:outputLabel value="Tipo de Contrato:"/>
+			<h:outputText value="#{contratoMB.contrato.tipocontrato.descricao}" />
+		</p:panelGrid>
+	
+	</p:fieldset>
+	<br/>
+	<p:fieldset legend="DADOS DO CONTRATO">
+		<p:panelGrid columns="6">
+			<p:outputLabel value="Início:"/>
+			<h:outputText value="#{contratoMB.contrato.inicio}" >
+                  	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+  			</h:outputText>
+  			
+			<p:outputLabel value="Término:"/>
+			<h:outputText value="#{contratoMB.contrato.fim}" >
+                  	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+  			</h:outputText>
+  							
+			<p:outputLabel value="Dias para término:"/>
+			<h:outputText value="#{contratoMB.diasParaTermino(contratoMB.contrato.fim)}" />
+			
+			<p:outputLabel value="Valor Mensal:"/>
+			<h:outputText value="#{contratoMB.contrato.valorMensal}" >
+            	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>
+			
+			<p:outputLabel value="Valor Total:"/>
+			<h:outputText value="#{contratoMB.contrato.valorTotal}" >
+            	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>
+		</p:panelGrid>
+	</p:fieldset><br/>
+	<p:fieldset legend="OBSERVAÇÃO">
+		<p:panelGrid columns="1">
+			<h:outputText value="#{contratoMB.contrato.observacao}" />
+		</p:panelGrid>
+	</p:fieldset><br/>
+	<p:fieldset legend="DOCUMENTOS">
+	    <p:dataTable var="a" value="#{contratoMB.anexos}" emptyMessage="Não há anexos"  resizableColumns="true" liveResize="true"
+						    			paginatorPosition="bottom" paginator="true" rows="7" >
+	        <p:column headerText="Documento">
+	            <h:outputText value="#{a}" style="width:32px;text-align: center"/>
+	        </p:column>
+	        <p:column style="width:32px;text-align: center">
+	             <p:commandButton update=":formCad,:formD" oncomplete="PF('anx').show()"
+	             	 action="#{contratoMB.montaCaminho}" title="Mostrar" icon="ui-icon-search" >
+	                <f:setPropertyActionListener value="#{a}" target="#{contratoMB.anexo}" />
+	            </p:commandButton>
+	        </p:column>			        
+	    </p:dataTable>			
+	</p:fieldset>
+	<br/>
+		<p:button value="Sair" icon="ui-icon-close" onclick="PF('dgCad').hide()" />	
+<br/><br/>
+</h:form>
+</p:dialog>
+
+
 
 <p:dialog header="Anexo" widgetVar="anx" showEffect="fade" hideEffect="fade" width="900" height="600"   appendTo="@(body)">
    <h:form id="formD">

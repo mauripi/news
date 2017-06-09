@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header"> Procedimentos </f:facet><br/>
+ 
+<h:form id="delete">
+    <p:fileUpload fileUploadListener="#{procedimentoMB.handleFileUpload}" mode="advanced" dragDropSupport="false"
+           update="messages,:delete,conteudo" sizeLimit="10000000000" fileLimit="3" allowTypes="/(\.|\/)(pdf)$/" 
+           		fileLimitMessage="Erro" invalidSizeMessage="Mensagem com tamanho inválido"
+           		cancelLabel="Cancelar" uploadLabel="Salvar" label="Cadastrar"  auto="true"/>
+ 
+    <p:growl id="messages" showDetail="true" />
+    
+    <p:dataTable value="#{procedimentoMB.arquivos}" var="p"  id="conteudo" paginator="true" rows="10" styleClass="paginated" paginatorPosition="bottom">
+       <p:column style="width:52px;"  headerText="Visualizar" >
+        <p:commandLink update=":marques" onclick="PF('dlg1').show()" title="visualizar" styleClass="ui-icon ui-icon-search" style="float:left;">
+            <f:setPropertyActionListener value="#{p}" target="#{procedimentoMB.arquivo}" />
+            <h:outputText value="#{p}" />
+        </p:commandLink>
+       </p:column   > 
+       <p:column style="width:52px;" headerText="Remover">
+        <p:commandLink action="#{procedimentoMB.removeArquivo}" update=":delete" title="remover" styleClass="ui-icon ui-icon-trash" style="float:left;">
+            <f:setPropertyActionListener value="#{p}" target="#{procedimentoMB.arquivo}" />
+            <h:outputText value="#{p}" />
+        </p:commandLink>
+       </p:column> 
+       <p:column headerText="Procedimento" filterBy="#{p}"> 
+        <h:outputText value="#{p}" style="display:inline-block"/>
+        </p:column> 
+    </p:dataTable>    
+</h:form> 
+
+<p:dialog header="Procedimentos Internos" widgetVar="dlg1" width="600"  appendTo="@(body)" modal="true" >
+<h:form id="marques">
+	<object type="application/pdf" data="#{request.contextPath}/temp/procedimento/#{procedimentoMB.arquivo}?pfdrid_c=true" height="500px" width="100%">
+	    Your browser can't display pdf, <a href="#{request.contextPath}/temp/procedimento/#{procedimentoMB.arquivo}">click</a> to download pdf instead.
+	</object>
+</h:form>
+</p:dialog>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="4000"/> 
+</h:form>
+
+</p:panel>
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

@@ -662,13 +662,16 @@ public class AcessoBean implements Serializable {
 			try {
 				this.login = ln.findById(this.login);
 				this.login.setSenha(Cripto.criptografa(getSenha1()));
-				this.login.setTrocarSenha(1);
+				//this.login.setTrocarSenha(1);
 				this.login.setDataAlteracao(new Date(System.currentTimeMillis()));
 				this.login.setUsuarioAlteracao(UsuarioLogado.getUser());
 				ln.atualiza(this.login);
-				RequestContext.getCurrentInstance().closeDialog("trocarsenha");
+				msg = "Senha atualizada com sucesso.";
+				mensagens();
+				FacesContext.getCurrentInstance().getExternalContext().redirect("index.jsf");
 			} catch (NoSuchAlgorithmException e) {
-				RequestContext.getCurrentInstance().closeDialog("trocarsenha");
+				msg = "Senha não pode ser atualizada.";
+				mensagens();
 				e.printStackTrace();
 			}
 		}

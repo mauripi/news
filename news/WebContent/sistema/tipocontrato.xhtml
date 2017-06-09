@@ -22,7 +22,7 @@
 <f:facet name="header">Cadastro de Tipos de Contratos</f:facet>
 
 <h:form id="formCad">
-	<p:panel  rendered="#{acessoBean.temAcessoTipoContrato}"  style="width:40%;">
+	<p:panel  rendered="#{acessoBean.temAcessoTipoContrato}" >
 		<p:panelGrid columns="2">
 			<h:outputLabel value="Nome"/>
 			<p:inputText value="#{tipocontratoMB.tipo.descricao}" placeholder="Descrição do Tipo de Contrato" size="30" disabled="#{tipocontratoMB.controlaCadastro eq 0}"/>

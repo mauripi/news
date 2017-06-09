@@ -1,0 +1,91 @@
+
+/*Configuração de Fontes*/
+@font-face {
+	font-family: futuraheavy;
+	src: local('CSS/FuturaStd-Heavy.otf'), url('CSS/FuturaStd-Heavy.otf');	
+}
+@font-face {
+	font-family: futuramedium;
+	src: local('CSS/FuturaStd-Medium.otf'), url('CSS/FuturaStd-Medium.otf')	
+}
+	
+.menu-geral.menu {
+	width:100%;
+	margin-top:0px;
+	display: flex;
+	justify-content: center;
+}
+
+/*Configurações Padrões*/
+ul.menu, .menu li, .menu a{ 
+	margin:0; 
+	padding:0; 
+	list-style:none; 
+	text-decoration:none; 
+	
+}
+	
+ul.menu ul{ 
+	position:absolute; 
+	display:none; 
+}
+
+/* Configurações nivel 0*/
+ul.menu{ 
+	float: left; 
+	font-family: futuraheavy, Verdana, Geneva, sans-serif; 
+	text-transform:uppercase; 
+	font-weight: bold; 
+	letter-spacing:1px; 
+	font-size: 11.2px;
+	padding:0 0%;
+}
+.menu li{ 
+	float:left; 
+	width:initial; 
+	position:relative;
+}
+.menu li a{ 
+	display:block; 
+	padding:0 20px; 
+	line-height:28px; 
+	height:28px; 
+	float:left; 
+	transition:all 0.1s linear; 
+}
+
+/*-------------------------------------------------------------------Conf_submenu----------------------------------------------------*/
+/* Configurações nivel 1*/
+.menu li:hover > ul.submenu-1{ font-family: futuramedium, Verdana, Geneva, sans-serif; float:right; display:block; top:28px; left:0; padding:0px;   }
+.menu ul.submenu-1 a{  width:250px; padding:0 20px;  }
+
+/* Configurações nivel 2*/
+.menu li:hover > ul.submenu-2{ display:block; top:0; left:100%; padding:0px; width:100%; float:right; }
+.menu ul.submenu-2 a{  width:250px;  padding:0 20px; }
+
+/* Configurações nivel 3*/
+.menu li:hover > ul.submenu-3{ display:block; top:0; left:100%; padding:5px; width:100%;float:right;  }
+.menu ul.submenu-3 a{  width:250px;  padding:0 20px; }
+
+
+/*Configurações de cores*/
+
+/*nivel 1*/
+.menu{background:#b1bdc8; }
+.menu a{ color:#FFF;}
+.menu li:hover > a{ background:#d4dee8;  color:#7e8892;} /*Configuração do menu hover*/
+
+/*nivel 2*/
+.submenu-1{ background:#b1bdc8;}
+.submenu-1 a{color:#FFF;}
+.submenu-1 li:hover > a{ color:#7e8892; background:#d4dee8; } /*Configuração do menu hover*/
+
+/*nivel 3*/
+.submenu-2{ background:#b1bdc8;}
+.submenu-2 a{color:#FFF;}
+.submenu-2 li:hover > a{ background:#d4dee8; } /*Configuração do menu hover*/
+
+/*nivel 3*/
+.submenu-3{ background:#b1bdc8;}
+.submenu-3 a{color:#fff;}
+.submenu-3 li:hover > a{ background:#d4dee8; } /*Configuração do menu hover*/
