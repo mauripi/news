@@ -74,10 +74,10 @@
 	        	 <p:inputSwitch value="#{trf.aprovado}" onLabel="Aprovado" offLabel="Não Aprovado" disabled="true" style="text-align: center;"/>
 	        </p:column>          
 	        <p:column  width="68px;">
-	             <p:commandButton actionListener="#{controletarefaMB.edita}" icon="ui-icon-pencil" update=":formCad" oncomplete="PF('dgCad').show();" rendered="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim) ne 100}">
+	             <p:commandButton actionListener="#{controletarefaMB.edita}" icon="ui-icon-pencil" update=":formCad" oncomplete="PF('dgCad').show();">
 	             	<f:setPropertyActionListener value="#{trf}" target="#{controletarefaMB.tarefa}" />
 	             </p:commandButton>
-	            <p:commandButton update=":formDel, :formtb" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover" rendered="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim) ne 100}">
+	            <p:commandButton update=":formDel, :formtb" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover" >
 	                <f:setPropertyActionListener value="#{trf}" target="#{controletarefaMB.tarefa}" />
 	            </p:commandButton>
 			</p:column>
@@ -86,31 +86,26 @@
 
 </p:panel>
 
-<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Demanda" resizable="false" >
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Demanda" resizable="false" width="600" height="600" >
 
 	<h:form id="formCad">
-		<p:panelGrid columns="1" >
+		<p:panelGrid columns="2" >
 			<h:outputLabel value="Atividade:"/>
 			<p:inputText id="atv" value="#{controletarefaMB.tarefa.atividade}" placeholder="Atividade" maxlength="100"  style="width:400px;" 
 				required="true" requiredMessage="Descreva a Atividade" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
 			<h:outputLabel value="Responsável: "/>
 			<p:inputText id="rsp" value="#{controletarefaMB.tarefa.responsavel}" placeholder="Responsavel" maxlength="100"  size="30"
-				required="true" requiredMessage="Informe o Responsável" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
-		</p:panelGrid>
-		<p:panelGrid columns="2" >		
+				required="true" requiredMessage="Informe o Responsável" disabled="#{controletarefaMB.controlaCadastro == 0}"/>	
 			<h:outputLabel value="Início:"/>
-			<h:outputLabel value="Conclusão:"/>
 			<p:calendar id="dti" value="#{controletarefaMB.tarefa.datainicio}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
 				required="true" requiredMessage="Informe o início da Tarefa" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
+			<h:outputLabel value="Conclusão:"/>
 			<p:calendar id="dtf" value="#{controletarefaMB.tarefa.datafim}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" 
 				required="true" requiredMessage="Informe o fim da Tarefa" disabled="#{controletarefaMB.controlaCadastro == 0}"/>
-	    </p:panelGrid>
-		<p:panelGrid columns="1" >	
 			<h:outputLabel value="Orçamento:"/>
-			<p:inputText id="vlr" value="#{controletarefaMB.tarefa.valor}" size="30" disabled="#{controletarefaMB.controlaCadastro == 0}">
+			<p:inputText id="vlr" value="#{controletarefaMB.tarefa.valor}" size="11" disabled="#{controletarefaMB.controlaCadastro == 0}" >
 				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-			</p:inputText>		
-			
+			</p:inputText>					
 	        <h:outputLabel for="moeda" value="Moeda:" />
 	        <p:selectOneRadio id="moeda" value="#{controletarefaMB.tarefa.moeda}">
 	            <f:selectItem itemLabel="R$" itemValue="1" />
@@ -119,6 +114,8 @@
 	        </p:selectOneRadio>
 			<h:outputLabel value="Nº Patrimônio:"/>
 			<p:inputText value="#{controletarefaMB.tarefa.patrimonio}" maxlength="250" size="50" disabled="#{controletarefaMB.controlaCadastro==0}" />					
+	    </p:panelGrid>
+		<p:panelGrid columns="1" >	
 			<h:outputLabel value="Observação:"/>
 			<p:inputTextarea id="obs" value="#{controletarefaMB.tarefa.observacao}" counter="display" counterTemplate="{0} carecteres restantes." autoResize="true"
 				placeholder="Pendências" maxlength="2000" style="width:450px;" disabled="#{controletarefaMB.controlaCadastro == 0}"/>			

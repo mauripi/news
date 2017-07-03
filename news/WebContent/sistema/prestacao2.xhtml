@@ -17,6 +17,7 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - Financeiro</ui:define> 
 <ui:define name="conteudo">
+<p:panel class="conteudo">
 
 <f:facet name="header">Prestações de Contas</f:facet>
 <h:form id="formCad">
@@ -197,7 +198,7 @@
 	</f:facet>
 </p:panel>
 </h:form>
-
+</p:panel>
 <p:dialog id="dgSel" widgetVar="dgSel" appendTo="@(body)" modal="true" header="Últimas Prestações" resizable="false" width="50%">
 		<h:form id="formSel" >
 
@@ -249,6 +250,7 @@
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="4000"/> 
 </h:form>
+
 </ui:define>
 </ui:composition>	
 </h:body>	

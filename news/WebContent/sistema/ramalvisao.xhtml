@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Ramais</f:facet>
+
+<h:form>
+      <p:accordionPanel var="empresa" value="#{ramalvisaoMB.empresas}" activeIndex="false" >
+         <p:tab title="#{empresa.nome}">
+		     <p:accordionPanel  var="local" value="#{empresa.locais}" activeIndex="false">
+		        <p:tab title="#{local.nome}">
+					<p:accordionPanel  var="depto" value="#{local.deptos}" activeIndex="false">
+				        <p:tab title="#{depto.nome}">
+						    <p:dataTable id="pst" var="l" value="#{depto.ramais}" emptyMessage="">								
+								<p:column headerText="Nome" > 
+						            <h:outputText value="#{l.nome}" />
+						        </p:column>
+						        <p:column headerText="Cargo">
+						            <h:outputText value="#{l.cargo}"  />
+						        </p:column>
+						        <p:column headerText="Email"  >
+						            <h:outputText value="#{l.email}"  />
+						        </p:column>
+						        <p:column headerText="Telefone"> 
+						            <h:outputText value="#{l.telefone}" />
+						        </p:column>
+						        <p:column headerText="Ramal Interno" >
+						            <h:outputText value="#{l.ramalint}"  />
+						        </p:column>
+						        <p:column headerText="Ramal Externo" >
+						            <h:outputText value="#{l.ramalext}"  />
+						        </p:column>	                
+						    </p:dataTable>					
+				        </p:tab>
+				    </p:accordionPanel>
+		        </p:tab>
+		    </p:accordionPanel>
+        </p:tab>
+    </p:accordionPanel>
+</h:form>
+</p:panel>
+
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

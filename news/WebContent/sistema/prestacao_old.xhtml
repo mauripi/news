@@ -17,27 +17,21 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - Financeiro</ui:define> 
 <ui:define name="conteudo">
+<p:panel class="conteudo">
 
 <f:facet name="header">Prestações de Contas</f:facet>
 <h:form id="formCad">
-<p:panel rendered="#{acessoBean.temAcessoPrestacaoDeContas}" style="border:0 !important;">
 
 	<p:panelGrid columns="2" style="text-align: left !important;">
 		<p:selectOneMenu id="sel" value="#{prestacaoMB.colaborador}" converter="loginConverter" >
 			<p:ajax event="change" update=":formCad" listener="#{prestacaoMB.colaboradorSelececionado}"/>
 			<f:selectItems value="#{prestacaoMB.colaboradores}" itemLabel="#{c.nome}" itemValue="#{c}" var="c" />
 		</p:selectOneMenu>	
-		<p:commandButton value="Últimas Prestações" action="#{prestacaoMB.colaboradorSelececionado}" update=":formSel"  oncomplete="PF('dgSel').show()"/>
-		
+		<p:commandButton value="Últimas Prestações" action="#{prestacaoMB.colaboradorSelececionado}" update=":formSel"  oncomplete="PF('dgSel').show()"/>	
 	</p:panelGrid>	
 	
 	
-	<p:panel>
-	    <p:wizard flowListener="#{prestacaoMB.onFlowProcess}" backLabel="Anterior" nextLabel="Próximo" >
 
-	        <p:tab id="gerais" title="Dados Gerais" >
-	            <p:panel header="Dados Gerais" >
-	            	<p:messages autoUpdate="true"/>
 					<p:panelGrid columns="1">
 						<h:outputLabel value="Prestação nro. #{prestacaoMB.prestacao.id}" />
 						<h:outputLabel value="Motivo da Despesa *"/>				
@@ -60,12 +54,10 @@
 							</p:inputText>					
 						</p:panelGrid>	
 					</p:outputPanel>					            
-	            </p:panel>
-	        </p:tab>
 
-	        <p:tab id="cmprvts" title="Comprovantes" >
+
 	            <p:panel header="Comprovantes" >
-	            <p:messages autoUpdate="true"/>
+
 					<p:panelGrid columns="5">
 						<h:outputLabel value="Data da Nota"/>
 						<h:outputLabel value="Num.Doc."/>
@@ -115,89 +107,41 @@
 					</p:panelGrid>
 			            
 	            </p:panel>
-	        </p:tab>
-	        
-	        <p:tab id="confirm" title="Confirmação">
-	            <p:panel header="Confirmação">
-	                <h:panelGrid id="confirmation" columns="2" columnClasses="grid,grid">
-	                    <h:panelGrid columns="2" columnClasses="label, value">
-	                        <h:outputLabel value="Motivo: " />
-	                        <h:outputText value="#{prestacaoMB.prestacao.motivodespesa}" styleClass="outputLabel"/>
-	                        <h:outputLabel value="Tipo: " />
-	                        <h:outputText value="#{prestacaoMB.tipo==1? 'Adiantamento' : 'Reembolso Direto'}" styleClass="outputLabel"/>
-	                        <h:outputLabel value="Data do Adiantamento: " rendered="#{prestacaoMB.tipo==1}"/>
-	                        <h:outputText value="#{prestacaoMB.prestacao.dataadiantamento}" styleClass="outputLabel" rendered="#{prestacaoMB.tipo==1}">
-	                        	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
-				  			</h:outputText>
-				  			<h:outputLabel value="Valor do Adiantamento: " rendered="#{prestacaoMB.tipo==1}"/>
-					        <h:outputText value="#{prestacaoMB.prestacao.valoradiantado}" rendered="#{prestacaoMB.tipo==1}">
-					        	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-					        </h:outputText>                       
-						</h:panelGrid>
-	                </h:panelGrid>
-                   <br></br>
-				   <p:dataTable id="despT" var="d" value="#{prestacaoMB.prestacao.despesas}" emptyMessage="" widgetVar="despT" 
-				   			rows="7" paginator="true" paginatorPosition="bottom" style="width:50%;">
-				 
-				       <p:column headerText="Data" style="width:15%;">
-			              <h:outputText value="#{d.data}">
-							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
-						  </h:outputText>
-			          </p:column>			 
-			          <p:column headerText="Nº NF/CF" style="width:15%;">
-			              <h:outputText value="#{d.documento}" />
-				      </p:column>
-			          <p:column headerText="Valor" style="width:15%;text-align: right;">
-						<h:outputText value="#{d.valor}" style="text-align: right;">
-							<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
-						</h:outputText>	
-				      </p:column>
-			          <p:column headerText="Fornecedor" style="width:65%;">
-			              <h:outputText value="#{d.descricao}" />
-				      </p:column>				      			      
-				   </p:dataTable>
-                  
-                   <br></br>
-					<f:facet name="footer">
-						<p:commandButton value="Salvar" action="${prestacaoMB.grava}" update=":formCad,:formMsg" icon="ui-icon-disk"/>
-					</f:facet>
-	            </p:panel>
-	        </p:tab>
 
-	    </p:wizard>
+	<p:panel>
+		<f:facet name="footer">	
+			<p:panelGrid columns="4"  layout="grid" style="text-align:center;font-stretch: narrower !important;font-weight: bold !important;width:50%;" id="totais">
+				<h:outputLabel value="VALOR DO ADIANTAMENTO" style="font-stretch: narrower !important;font-weight: bold !important;"/>						
+				<h:outputLabel value="TOTAL DE DESPESAS" style="font-stretch: narrower !important;font-weight: bold !important;"/>
+				<h:outputLabel value="TOTAL A RESTITUIR" style="font-stretch: narrower !important;font-weight: bold !important;"/>
+				<h:outputLabel value="TOTAL A RECEBER" style="font-stretch: narrower !important;font-weight: bold !important;"/>
+				<h:outputText value="#{prestacaoMB.prestacao.valoradiantado}" style="font-size: large !important;font-weight: bold !important;">
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>	
+				<h:outputText value="#{prestacaoMB.totalDespesa}" style="font-size: large !important;font-weight: bold !important;">
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>
+				<h:outputText value="#{prestacaoMB.totalRestituir}" style="font-size: large !important;font-weight: bold !important;">
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>
+				<h:outputText value="#{prestacaoMB.totalReceber}" style="font-size: large!important;font-weight: bold !important;">
+					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+				</h:outputText>
+			</p:panelGrid>
+			<br></br>		
+			<p:panelGrid columns="6" style="border:0 !important;">
+				<p:commandButton value="Salvar" action="${prestacaoMB.grava}" update=":formCad,:formMsg" icon="ui-icon-disk"/>
+				<p:commandButton value="Novo" action="#{prestacaoMB.novo}" update=":formCad" />
+				<p:commandButton value="Excluir" action="#{prestacaoMB.exclui}" disabled="#{prestacaoMB.prestacao.id==null}" update=":formCad,:formMsg" />
+				<p:commandButton value="Cancelar" action="#{prestacaoMB.limpaCadastro}" update=":formCad" oncomplete="PF('wiz').step(0)"/>
+				<p:commandButton value="Imprimir" ajax="false" action="${prestacaoMB.imprimir}" disabled="#{prestacaoMB.prestacao.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
+			</p:panelGrid>	
+					
+		</f:facet>
 	</p:panel>
 
-	<f:facet name="footer">	
-		<p:panelGrid columns="4"  layout="grid" style="text-align:center;font-stretch: narrower !important;font-weight: bold !important;width:50%;" id="totais">
-			<h:outputLabel value="VALOR DO ADIANTAMENTO" style="font-stretch: narrower !important;font-weight: bold !important;"/>						
-			<h:outputLabel value="TOTAL DE DESPESAS" style="font-stretch: narrower !important;font-weight: bold !important;"/>
-			<h:outputLabel value="TOTAL A RESTITUIR" style="font-stretch: narrower !important;font-weight: bold !important;"/>
-			<h:outputLabel value="TOTAL A RECEBER" style="font-stretch: narrower !important;font-weight: bold !important;"/>
-			<h:outputText value="#{prestacaoMB.prestacao.valoradiantado}" style="font-size: large !important;font-weight: bold !important;">
-				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
-			</h:outputText>	
-			<h:outputText value="#{prestacaoMB.totalDespesa}" style="font-size: large !important;font-weight: bold !important;">
-				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
-			</h:outputText>
-			<h:outputText value="#{prestacaoMB.totalRestituir}" style="font-size: large !important;font-weight: bold !important;">
-				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
-			</h:outputText>
-			<h:outputText value="#{prestacaoMB.totalReceber}" style="font-size: large!important;font-weight: bold !important;">
-				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
-			</h:outputText>
-		</p:panelGrid>
-		<br></br>		
-		<p:panelGrid columns="6" style="border:0 !important;">
-			<p:commandButton value="Novo" action="#{prestacaoMB.novo}" update=":formCad" />
-			<p:commandButton value="Excluir" action="#{prestacaoMB.exclui}" disabled="#{prestacaoMB.prestacao.id==null}" update=":formCad,:formMsg" />
-			<p:commandButton value="Cancelar" action="#{prestacaoMB.limpaCadastro}" update=":formCad" oncomplete="PF('wiz').step(0)"/>
-			<p:commandButton value="Imprimir" ajax="false" action="${prestacaoMB.imprimir}" disabled="#{prestacaoMB.prestacao.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
-		</p:panelGrid>	
-				
-	</f:facet>
-</p:panel>
 </h:form>
-
+</p:panel>
 <p:dialog id="dgSel" widgetVar="dgSel" appendTo="@(body)" modal="true" header="Últimas Prestações" resizable="false" width="50%">
 		<h:form id="formSel" >
 
@@ -249,6 +193,7 @@
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="4000"/> 
 </h:form>
+
 </ui:define>
 </ui:composition>	
 </h:body>	

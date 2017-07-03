@@ -15,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.FlowEvent;
+import org.primefaces.event.SelectEvent;
 
 import net.sf.jasperreports.engine.JRException;
 import br.com.mauricio.news.ln.RelatorioLN;
@@ -111,7 +112,8 @@ public class PrestacaoBean implements Serializable {
 			}	
 			if(controlaCadastro==2){		
 				prestacao.setDataAlteracao(new Date(System.currentTimeMillis()));
-				prestacao.setUsuarioAlteracao(funcionario);			
+				prestacao.setUsuarioAlteracao(funcionario);	
+				despesaParaRemover.stream().map(d -> !d.getId().equals(null));
 				msg = ln.update(this.prestacao,despesaParaRemover);
 			}
 			mensagens();
@@ -137,7 +139,7 @@ public class PrestacaoBean implements Serializable {
 		totalDespesa = new Double("0.0");
 		totalReceber = new Double("0.0");
 		totalRestituir = new Double("0.0");
-		controlaCadastro =0;
+		controlaCadastro = 0;
 		despesaParaRemover = new ArrayList<Despesa>();
 	}
 
@@ -154,6 +156,16 @@ public class PrestacaoBean implements Serializable {
 			mensagens();
 			e.printStackTrace();
 		}
+	}
+
+	public void selecao(SelectEvent event){
+		prestacao = (PrestacaoConta) event.getObject();
+		calculaTotais();
+		if(prestacao.getDataadiantamento()==null&&(prestacao.getValoradiantado()==0.0||prestacao.getValoradiantado()==null))
+			tipo=2;
+		else
+			tipo=1;
+		edita();
 	}
 	
 	public void prestacaoSelecionada(){

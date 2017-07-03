@@ -24,13 +24,18 @@
 <p:panel>
 <f:facet name="header">Controle de Contratos</f:facet>
 	<h:form id="formtb">	
-	    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-
-	    </h:panelGrid>
 		<br></br>   
-			<p:commandButton onclick="PF('dgCad').show()" icon="ui-icon-plus" action="#{contratoMB.novo}" value="Novo Contrato" title="Novo"  update=":formCad"/>
-			<p></p>
-		<br></br>   			
+		<p:commandButton onclick="PF('dgCad').show()" icon="ui-icon-plus" action="#{contratoMB.novo}" value="Novo Contrato" title="Novo"  update=":formCad"/>
+
+	    <h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+	        <p:outputLabel for="filtro" value="Listar contratos:" />
+	        <p:selectOneRadio id="filtro" value="#{contratoMB.isInativo}">
+	            <f:selectItem itemLabel="Ativos" itemValue="0" />
+	            <f:selectItem itemLabel="Inativos" itemValue="1" />
+	            <p:ajax event="change" listener="#{contratoMB.listar}" update=":formtb"/>
+	        </p:selectOneRadio>
+	    </h:panelGrid>
+  			
 	    <p:dataTable id="tb" var="c" value="#{contratoMB.contratos}"  rows="15" paginator="true" paginatorPosition="bottom"
 	    	selectionMode="single" selection="#{contratoMB.contrato}" rowKey="#{c.id}" emptyMessage="">
 
@@ -45,7 +50,7 @@
 	       <p:column headerText="Origem" width="40px;" sortBy="#{c.origem}">
 	            <h:outputText value="#{c.origem eq 'C' ?  'Compra' : 'Venda'}" />
 	       </p:column>	
-	        <p:column headerText="Início Vigênc." width="60px;">
+	        <p:column headerText="Início Vigênc." width="60px;"  sortBy="#{c.inicio}">
               <h:outputText value="#{c.inicio}">
 				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 			  </h:outputText>
@@ -55,6 +60,11 @@
 				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 			  </h:outputText>
             </p:column>		
+	        <p:column headerText="Prim. Aviso" width="60px;">
+              <h:outputText value="#{contratoMB.dataPrimeiroAviso(c.fim, c.diasAviso)}">
+				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			  </h:outputText>
+            </p:column>	            
 	        <p:column headerText="Dias Fim" width="60px;" style="text-align: center;">
               	<h:outputText value="#{contratoMB.diasParaTermino(c.fim)}"/>
             </p:column>	                    	
@@ -77,11 +87,11 @@
 	</h:form>
 </p:panel>	
 
-<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" width="800" height="500">
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" width="800" height="600">
 
 <h:form id="formCad">
 	<p:tabView  > 
-        <p:tab id="gerais" title="Dados Gerais" ><br/><br/>
+        <p:tab id="gerais" title="Dados Gerais" ><br/>
 			<p:panelGrid columns="2" >
 				<p:outputLabel value="Contrato nro.:"/>
 				<h:outputText value="#{contratoMB.contrato.id}"/>	
@@ -134,7 +144,7 @@
 			</p:panelGrid>
         </p:tab>	
 
-        <p:tab id="finan" title="Financeiro" ><br/><br/>	            	
+        <p:tab id="finan" title="Financeiro" ><br/>	            	
 			<p:panelGrid columns="2" >
 				<p:outputLabel value="Valor Mensal:"/>
 				<p:inputText value="#{contratoMB.contrato.valorMensal}" size="10"  >
@@ -147,7 +157,7 @@
 			</p:panelGrid>
         </p:tab>				
 
-		<p:tab id="anexos" title="Documentos" >	<br/><br/>
+		<p:tab id="anexos" title="Documentos" >	<br/>
 			<p:commandButton value="Adicionar" icon="ui-icon-extlink" onclick="PF('upl').show()" />
 			<p:outputLabel value=""/>
 		    <p:dataTable var="a" value="#{contratoMB.anexos}" emptyMessage="Não há anexos"  resizableColumns="true" liveResize="true"
@@ -169,7 +179,7 @@
 		    </p:dataTable>
         </p:tab>	
 		
-		<p:tab id="skd" title="Agendamentos" >	<br/><br/>		            	
+		<p:tab id="skd" title="Agendamentos" >	<br/>		            	
            	<p:panelGrid columns="2">
 				<p:outputLabel value="Dias para aviso:"/>
 				<p:inputMask id="diasaviso" maxlength="3" value="#{contratoMB.contrato.diasAviso}"  type="number"  
@@ -201,7 +211,7 @@
 				<p:inputTextarea maxlength="300" rows="3" cols="40" autoResize="false" value="#{contratoMB.contrato.mensagemEmail}" />													        	
 	        </p:panelGrid>
 	        <p:outputLabel value="Adicionar e-mail:"/>
-	        <p:autoComplete id="enveml"  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}"  
+	        <p:autoComplete id="enveml"  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}"  autocomplete="true" forceSelection="true"
 	        		 disabled="#{contratoMB.contrato.diasAviso eq null}" size="35" />
 			<p:commandButton id="cmdeml" value="Incluir" update="emlst,:formMsg" icon="ui-icon-mail-closed" 
 				action="#{contratoMB.addEmail}" disabled="#{contratoMB.contrato.diasAviso eq null}"/>
@@ -223,7 +233,7 @@
 		    </p:dataTable>	            
         </p:tab>
 
-        <p:tab id="obs" title="Observações" ><br/><br/>		            	
+        <p:tab id="obs" title="Observações" ><br/>		            	
 			<p:panelGrid columns="1" >
 				<p:outputLabel value="Observações:"/>
 				<p:inputTextarea maxlength="1000" rows="20" cols="75" autoResize="false" value="#{contratoMB.contrato.observacao}"/>
@@ -314,8 +324,6 @@
 <br/><br/>
 </h:form>
 </p:dialog>
-
-
 
 <p:dialog header="Anexo" widgetVar="anx" showEffect="fade" hideEffect="fade" width="900" height="600"   appendTo="@(body)">
    <h:form id="formD">

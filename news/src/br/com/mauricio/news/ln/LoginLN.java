@@ -77,8 +77,6 @@ public class LoginLN implements Serializable{
 	public String atualiza(Login l){
 		try {
 			GenericDao<Login> dao = new GenericDao<Login>();
-			removeModulos(l);
-			removePermissao(l);
 			dao.update(l);
 			msg = "Usuário atualizado com sucesso.";
 			

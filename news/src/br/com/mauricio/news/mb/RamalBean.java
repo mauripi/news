@@ -12,21 +12,24 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 
 import br.com.mauricio.news.ln.GenericLN;
-import br.com.mauricio.news.model.EmpresaRamal;
+import br.com.mauricio.news.model.Ramal;
+import br.com.mauricio.news.model.DeptoRamal;
 
 /**
 *
 * @author MAURICIO CRUZ and CAROLINE MARQUES
 */
-
-@ManagedBean (name="empresaramalMB")
+@ManagedBean (name="ramalMB")
 @ViewScoped
-public class EmpresaRamalBean implements Serializable{
+public class RamalBean implements Serializable {
+
 
 	private static final long serialVersionUID = 1L;
 	private int controlaCadastro = 0;
-	private EmpresaRamal empresa;
-	private List<EmpresaRamal> empresas;
+	private Ramal ramal;
+	private List<Ramal> ramais;
+	private DeptoRamal depto;
+	private List<DeptoRamal> deptos;
 	private List<String> msgs;
 	private String msg;
 	
@@ -34,10 +37,11 @@ public class EmpresaRamalBean implements Serializable{
 	@PostConstruct
 	public void init(){
 		lista();
+		listaDeptos();
 	}
 		
 	public void novo(){
-		empresa = new EmpresaRamal();
+		ramal = new Ramal();
 		controlaCadastro = 1;
 	}
 
@@ -46,28 +50,34 @@ public class EmpresaRamalBean implements Serializable{
 	}
 
 	public void lista(){
-		GenericLN<EmpresaRamal> gln = new GenericLN<EmpresaRamal>();
-		empresas = gln.listWithoutRemoved("empresaramal", "id");
+		GenericLN<Ramal> gln = new GenericLN<Ramal>();
+		ramais = gln.listWithoutRemoved("ramal", "id");
+	}	
+	
+	public void listaDeptos(){
+		GenericLN<DeptoRamal> gln = new GenericLN<DeptoRamal>();
+		deptos = gln.listWithoutRemoved("deptoramal", "id");
 	}	
 	
 	public void exclui (){
-		GenericLN<EmpresaRamal> gln = new GenericLN<EmpresaRamal>();
-		msg = gln.remove(gln.find(new EmpresaRamal(), empresa.getId()));
+		GenericLN<Ramal> gln = new GenericLN<Ramal>();
+		msg = gln.remove(gln.find(new Ramal(), ramal.getId()));
 		mensagens();
 		lista();
 	}
 	
 	public void limpaCadastro(){
-		empresa = new EmpresaRamal();
+		ramal = new Ramal();
 		controlaCadastro = 0;
 		lista();
 	}
 	
 	public void grava(){
-		GenericLN<EmpresaRamal> gln = new GenericLN<EmpresaRamal>();
+		ramal.setDepto(depto);
+		GenericLN<Ramal> gln = new GenericLN<Ramal>();
 		if(validar()){
-			if(controlaCadastro==1) msg = gln.add(empresa);
-			if(controlaCadastro==2) msg = gln.update(empresa);
+			if(controlaCadastro==1) msg = gln.add(ramal);
+			if(controlaCadastro==2) msg = gln.update(ramal);
 			
 			mensagens();
 			limpaCadastro();
@@ -75,13 +85,14 @@ public class EmpresaRamalBean implements Serializable{
 	}
 	
 	public void selecao(SelectEvent event){
-		empresa=(EmpresaRamal) event.getObject();
+		ramal=(Ramal) event.getObject();
+		depto=ramal.getDepto();
 		edita();
 	}
 	
 	private boolean validar() {
 		boolean isValid = true;
-		if(empresa.getNome().length() < 1){
+		if(ramal.getNome().length() < 1){
 			isValid = false;
 			msgs.add("O campo Nome não pode estar vazio.");
 		}
@@ -99,7 +110,7 @@ public class EmpresaRamalBean implements Serializable{
         FacesContext context = FacesContext.getCurrentInstance();                
         context.addMessage(null, new FacesMessage(msg,""));          
     }
-    	
+
 	public int getControlaCadastro() {
 		return controlaCadastro;
 	}
@@ -108,23 +119,51 @@ public class EmpresaRamalBean implements Serializable{
 		this.controlaCadastro = controlaCadastro;
 	}
 
-	public EmpresaRamal getEmpresa() {
-		return empresa;
+	public Ramal getRamal() {
+		return ramal;
 	}
 
-	public void setEmpresa(EmpresaRamal empresa) {
-		this.empresa = empresa;
+	public void setRamal(Ramal ramal) {
+		this.ramal = ramal;
 	}
 
-	public List<EmpresaRamal> getEmpresas() {
-		return empresas;
+	public List<Ramal> getRamais() {
+		return ramais;
 	}
 
-	public void setEmpresas(List<EmpresaRamal> empresas) {
-		this.empresas = empresas;
+	public void setRamais(List<Ramal> ramais) {
+		this.ramais = ramais;
 	}
-	
-	
-	
-	
+
+	public DeptoRamal getDepto() {
+		return depto;
+	}
+
+	public void setDepto(DeptoRamal depto) {
+		this.depto = depto;
+	}
+
+	public List<DeptoRamal> getDeptos() {
+		return deptos;
+	}
+
+	public void setDeptos(List<DeptoRamal> deptos) {
+		this.deptos = deptos;
+	}
+
+	public List<String> getMsgs() {
+		return msgs;
+	}
+
+	public void setMsgs(List<String> msgs) {
+		this.msgs = msgs;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
 }

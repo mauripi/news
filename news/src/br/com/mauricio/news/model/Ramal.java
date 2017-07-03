@@ -6,12 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PersistenceUnit;
 
 /**
 *
-* @author MAURICIO CRUZ
+* @author MAURICIO CRUZ and CAROLINE MARQUES
 */
 @PersistenceUnit(unitName="news")
 @Entity(name="ramal")
@@ -23,7 +24,7 @@ public class Ramal implements Serializable {
 	@Id
 	private Integer id;
 	
-	@Column(length=100,nullable=false)
+	@Column(length=100)
 	private String nome;
 	
 	@Column(length=100)
@@ -31,12 +32,15 @@ public class Ramal implements Serializable {
 	
 	private String cargo;
 	
-	@OneToOne
-	private EmpresaRamal empresa;
+	@ManyToOne
+	@JoinColumn(name = "depto_id")
+	private DeptoRamal depto;
 	
 	private String telefone;
 	
-	private Integer ramal;
+	private Integer ramalint;
+	
+	private Integer ramalext;
 
 	public Integer getId() {
 		return id;
@@ -70,12 +74,12 @@ public class Ramal implements Serializable {
 		this.cargo = cargo;
 	}
 
-	public EmpresaRamal getEmpresa() {
-		return empresa;
+	public DeptoRamal getDepto() {
+		return depto;
 	}
 
-	public void setEmpresa(EmpresaRamal empresa) {
-		this.empresa = empresa;
+	public void setDepto(DeptoRamal depto) {
+		this.depto = depto;
 	}
 
 	public String getTelefone() {
@@ -86,12 +90,20 @@ public class Ramal implements Serializable {
 		this.telefone = telefone;
 	}
 
-	public Integer getRamal() {
-		return ramal;
+	public Integer getRamalint() {
+		return ramalint;
 	}
 
-	public void setRamal(Integer ramal) {
-		this.ramal = ramal;
+	public void setRamalint(Integer ramalint) {
+		this.ramalint = ramalint;
+	}
+
+	public Integer getRamalext() {
+		return ramalext;
+	}
+
+	public void setRamalext(Integer ramalext) {
+		this.ramalext = ramalext;
 	}
 
 	public static long getSerialversionuid() {
@@ -103,11 +115,12 @@ public class Ramal implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((cargo == null) ? 0 : cargo.hashCode());
+		result = prime * result + ((depto == null) ? 0 : depto.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((empresa == null) ? 0 : empresa.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + ((ramal == null) ? 0 : ramal.hashCode());
+		result = prime * result + ((ramalext == null) ? 0 : ramalext.hashCode());
+		result = prime * result + ((ramalint == null) ? 0 : ramalint.hashCode());
 		result = prime * result + ((telefone == null) ? 0 : telefone.hashCode());
 		return result;
 	}
@@ -126,15 +139,15 @@ public class Ramal implements Serializable {
 				return false;
 		} else if (!cargo.equals(other.cargo))
 			return false;
+		if (depto == null) {
+			if (other.depto != null)
+				return false;
+		} else if (!depto.equals(other.depto))
+			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
 		} else if (!email.equals(other.email))
-			return false;
-		if (empresa == null) {
-			if (other.empresa != null)
-				return false;
-		} else if (!empresa.equals(other.empresa))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -146,10 +159,15 @@ public class Ramal implements Serializable {
 				return false;
 		} else if (!nome.equals(other.nome))
 			return false;
-		if (ramal == null) {
-			if (other.ramal != null)
+		if (ramalext == null) {
+			if (other.ramalext != null)
 				return false;
-		} else if (!ramal.equals(other.ramal))
+		} else if (!ramalext.equals(other.ramalext))
+			return false;
+		if (ramalint == null) {
+			if (other.ramalint != null)
+				return false;
+		} else if (!ramalint.equals(other.ramalint))
 			return false;
 		if (telefone == null) {
 			if (other.telefone != null)
@@ -159,4 +177,5 @@ public class Ramal implements Serializable {
 		return true;
 	}
 
+	
 }

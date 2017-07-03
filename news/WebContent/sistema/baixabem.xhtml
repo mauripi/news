@@ -79,7 +79,7 @@
 						<p:ajax event="change" listener="#{baixabemMB.carregaCentroCustosDaFilial}" update="cst"/>
 					</p:selectOneMenu>									
 					<h:outputLabel value="Centro de Custo"/>
-					<p:selectOneMenu id="cst" value="#{baixabemMB.baixabem.ccusto}" converter="ccustoConverter" style="width:130px;" disabled="#{baixabemMB.controlaCadastro == 0}">
+					<p:selectOneMenu id="cst" value="#{baixabemMB.cCusto}" converter="ccustoConverter" style="width:130px;" disabled="#{baixabemMB.controlaCadastro == 0}">
 						<f:selectItems value="#{baixabemMB.custosFilial}" var="c" itemLabel="#{c.nome}" itemValue="#{c}" />
 					</p:selectOneMenu>						
 					<h:outputLabel value="Tipo de Baixa"/>

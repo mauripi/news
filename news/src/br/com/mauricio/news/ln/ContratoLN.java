@@ -38,15 +38,17 @@ public class ContratoLN implements Serializable {
         return "Contrato removido!";
     }
 
-    public List<Contrato> list(Login userLogado) {
+    public List<Contrato> list(Login userLogado, int ativo) {
+    	boolean isAtivo=true;
+    	if(ativo==1) isAtivo=false;
         ContratoDao cdao = new ContratoDao(manager);
         String codigo = userLogado.getCusto().getCodigo();
         List<Contrato> list = new ArrayList<Contrato>();
         if(codigo.equals("30006")||codigo.equals("30018")||codigo.equals("30016")||userLogado.getChapa().equals("000755")){
-            list = cdao.listaContratosAtivos();
+            list = cdao.listaContratosAtivos(isAtivo);
         }else{
             List<String> custos = Arrays.asList("30034", "30071", "30107");
-            list = cdao.listaContratosByCCusto(custos);
+            list = cdao.listaContratosByCCusto(custos,isAtivo);
         }
         return list;
     }
@@ -96,7 +98,7 @@ public class ContratoLN implements Serializable {
 
     public List<Contrato> listAtivo(){
     	ContratoDao dao = new ContratoDao(manager);
-		return dao.listaContratosAtivos();
+		return dao.listaContratosAtivos(true);
     }
  
     

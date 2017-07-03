@@ -60,7 +60,7 @@ public class ProximosAvisoContratoJob  implements Job {
 		List<Contrato> list = new ArrayList<Contrato>();
 		List<Contrato> listAviso = new ArrayList<Contrato>();
 		ContratoDao dao = new ContratoDao(manager);
-		list = dao.listaContratosAtivos();
+		list = dao.listaContratosAtivos(true);
         manager.close();
         factory.close();		
 		for(Contrato c : list){

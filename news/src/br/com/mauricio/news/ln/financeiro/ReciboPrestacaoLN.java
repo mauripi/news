@@ -53,7 +53,7 @@ public class ReciboPrestacaoLN implements Serializable{
 		    ServletOutputStream servletOutputStream=httpServletResponse.getOutputStream();  
 		    JasperPrint jasperPrint = JasperFillManager.fillReport(reportFile.getPath(),param, jrds); 
 		    JasperExportManager.exportReportToPdfStream(jasperPrint, servletOutputStream);  
-		    FacesContext.getCurrentInstance().responseComplete();  		
+		    FacesContext.getCurrentInstance().responseComplete();  	
 	    }catch(Exception e){
 	    	System.out.println(e.getLocalizedMessage());
 	    }

@@ -24,7 +24,14 @@
 
 	<h:form id="formtb" > 
 	 	<br></br>                    
-		<br></br>
+	    <h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
+	        <p:outputLabel for="filtro" value="Listar contratos:" />
+	        <p:selectOneRadio id="filtro" value="#{contratoVisaoMB.isInativo}">
+	            <f:selectItem itemLabel="Ativos" itemValue="0" />
+	            <f:selectItem itemLabel="Inativos" itemValue="1" />
+	            <p:ajax event="change" listener="#{contratoVisaoMB.listar}" update=":formtb"/>
+	        </p:selectOneRadio>
+	    </h:panelGrid>
 	    <p:dataTable id="tb" var="c" value="#{contratoVisaoMB.listAll}"  rows="15" paginator="true" paginatorPosition="bottom"
 	    	selectionMode="single" selection="#{contratoVisaoMB.contrato}" rowKey="#{c.id}" emptyMessage="">
 

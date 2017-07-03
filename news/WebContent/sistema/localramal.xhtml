@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Local Ramal</f:facet>
+
+	<h:form id="formtb" >
+		<br></br>
+		<p:panelGrid columns="2">
+			<p:commandButton  icon="ui-icon-plus" value="Novo Local" title="Novo"  action="#{localramalMB.novo}"
+				 update=":formCad" oncomplete="PF('dgCad').show();"/>
+		</p:panelGrid>			 
+	 	<br/><br/>
+	    <p:dataTable id="pst" var="l" value="#{localramalMB.locais}" selectionMode="single" style="width:50%;" rows="15" 
+	    	paginator="true" paginatorPosition="bottom" selection="#{localramalMB.local}" rowKey="#{l.id}" emptyMessage="">
+			
+			<p:ajax event="rowSelect" listener="#{localramalMB.selecao}" update=":formCad" oncomplete="PF('dgCad').show();"/>
+	        <p:column headerText="Local da Empresa" width="35%" sortBy="#{l.nome}" filterBy="#{l.nome}" filterMatchMode="contains"> 
+	            <h:outputText value="#{l.nome}" />
+	        </p:column>
+	        <p:column headerText="Empresa" width="35%" sortBy="#{l.empresa.nome}" filterBy="#{l.empresa.nome}" filterMatchMode="contains">
+	            <h:outputText value="#{l.empresa.nome}"  />
+	        </p:column>
+	        <p:column style="width:32px;text-align: center">
+	            <p:commandButton update=":formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+	                <f:setPropertyActionListener value="#{l}" target="#{localramalMB.local}" />
+	            </p:commandButton>
+	        </p:column>	        
+	        
+	    </p:dataTable>				
+	</h:form>
+</p:panel>
+
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Locais" resizable="false" >
+<h:form id="formCad">
+	<p:panelGrid columns="2">	
+		<p:outputLabel value="Empresa:"/>
+		<p:selectOneMenu value="#{localramalMB.empresa}"  converter="empresaRamalConverter">
+		 	<f:selectItems value="#{localramalMB.empresas}" var="c" itemLabel="#{c.nome}" itemValue="#{c}" />
+		</p:selectOneMenu>
+		<p:outputLabel value="Nome do Local:"/>
+		<p:inputText value="#{localramalMB.local.nome}" size="15" required="true" requiredMessage="O campo Nome não pode estar vazio"/>
+		
+	</p:panelGrid>
+	<br></br>
+	<p:panelGrid columns="2">
+		<p:commandButton value="Gravar" action="#{localramalMB.grava}" update=":formMsg,:formCad,:formtb" icon="ui-icon-check" 
+			onstart="PF('status').hide()" onsuccess="PF('status').hide()" disabled="#{localramalMB.controlaCadastro == 0}"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{localramalMB.limpaCadastro}" 
+			onclick="PF('dgCad').hide()" update=":formCad" disabled="#{localramalMB.controlaCadastro == 0}"/>					
+	</p:panelGrid>																				
+	
+
+</h:form>
+
+</p:dialog>
+
+<p:dialog widgetVar="status" appendTo="@(body)"  modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloading.gif" />
+</p:dialog>
+
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{localramalMB.local.id} - #{localramalMB.local.nome}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{localramalMB.exclui}"  icon="ui-icon-check" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar"  icon="ui-icon-cancel" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="6000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

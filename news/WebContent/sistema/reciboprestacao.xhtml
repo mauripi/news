@@ -5,7 +5,6 @@
 		xmlns:h="http://xmlns.jcp.org/jsf/html"  
    		xmlns:f="http://xmlns.jcp.org/jsf/core" 
     	xmlns:p="http://primefaces.org/ui"   	
-    	xmlns:b="http://bootsfaces.net/ui"
     	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     	
 <h:head>
@@ -19,44 +18,41 @@
 <ui:composition template="templates/geral.xhtml">
 <ui:define name="titulo">RECORD NEWS - Financeiro</ui:define> 
 <ui:define name="conteudo">
-
+<p:panel class="conteudo">
+<f:facet name="header">Recido da Prestações de Contas</f:facet>
 <h:form id="formCad">
-	<p:panel header="Recido da Prestações de Contas" style="width:900px; " >
-		<p:panelGrid columns="1" >
-		    <b:inputText id="mybid" class="mybid-example" value="#{reciboPrestacaoMB.id}" label="Número da Prestação:" >
-		        <f:facet name="append">
-		            <b:commandButton look="primary" value="Localizar" ajax="true" actionListener="#{reciboPrestacaoMB.prestacaoSelecionada}" update=":formCad,:formMsg"/>
-		        </f:facet>
-		    </b:inputText>		  		    
+		<p:outputLabel value="Digite o número da Prestação" for="mybid"/>
+		<p:panelGrid columns="2">
+		    <p:inputText id="mybid" class="mybid-example" value="#{reciboPrestacaoMB.id}" label="Número da Prestação:" styleClass="recibo"/>
+		    <p:commandButton look="primary" value="Localizar" ajax="true" actionListener="#{reciboPrestacaoMB.prestacaoSelecionada}" update=":formCad,:formMsg"  styleClass="recibo"/>		  		    
 		</p:panelGrid>
-
-		<b:well>
-			<b:panelGrid columns="1" >
-				<b:inputText value="#{reciboPrestacaoMB.prestacao.id}" disabled="true" label="Prestação Nro.:"/>
-				<b:inputText value="#{reciboPrestacaoMB.prestacao.dataadiantamento}" disabled="true" label="Data do Adiantamento:">
+		<div class="ui-fluid">
+			<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
+				<p:inputText value="#{reciboPrestacaoMB.prestacao.id}" disabled="true" label="Prestação Nro.:" styleClass="recibo"/>
+				<p:inputText value="#{reciboPrestacaoMB.prestacao.dataadiantamento}" disabled="true" label="Data do Adiantamento:" styleClass="recibo">
 					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
-				</b:inputText>
-				<b:inputText value="#{reciboPrestacaoMB.prestacao.colaborador.nome}" disabled="true" label="Colaborador:"/>
-				<b:inputText value="#{reciboPrestacaoMB.prestacao.valoradiantado}" disabled="true" label="Valor Adiantado:">
+				</p:inputText>
+				<p:inputText value="#{reciboPrestacaoMB.prestacao.colaborador.nome}" disabled="true" label="Colaborador:"  styleClass="recibo"/>
+				<p:inputText value="#{reciboPrestacaoMB.prestacao.valoradiantado}" disabled="true" label="Valor Adiantado:"  styleClass="recibo">
 					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-				</b:inputText>
-				<b:inputText value="#{reciboPrestacaoMB.totalRestituir}" disabled="true" label="Valor do Recibo:">
+				</p:inputText>
+				<p:inputText value="#{reciboPrestacaoMB.totalRestituir}" disabled="true" label="Valor do Recibo:"  styleClass="recibo">
 					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
-				</b:inputText>				
-				<b:inputText value="#{reciboPrestacaoMB.motivoDespesa}" label="Motivo da Despesa:"/>
-				<b:inputText value="#{reciboPrestacaoMB.dataRecibo}"  label="Data do Recibo:">
+				</p:inputText>				
+				<p:inputText value="#{reciboPrestacaoMB.motivoDespesa}" label="Motivo da Despesa:"  styleClass="recibo"/>
+				<p:inputText value="#{reciboPrestacaoMB.dataRecibo}"  label="Data do Recibo:"  styleClass="recibo">
 					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
-				</b:inputText>
-			</b:panelGrid>
-		</b:well>
-		
-		<b:commandButton look="primary" value="Imprimir" ajax="true" disabled="#{reciboPrestacaoMB.totalRestituir le 0}"
+				</p:inputText>
+			</p:panelGrid>
+		</div>	
+		<br></br>	
+		<p:commandButton value="Imprimir" ajax="false" disabled="#{reciboPrestacaoMB.totalRestituir le 0}"
 			actionListener="#{reciboPrestacaoMB.imprimir}" update=":formCad"  onclick="this.form.target='_blank'" />
 		
 		
 			
-	</p:panel>
 </h:form>
+</p:panel>
 
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="4000"/> 

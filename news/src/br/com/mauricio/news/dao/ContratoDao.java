@@ -30,23 +30,23 @@ public class ContratoDao {
         cb = this.manager.getCriteriaBuilder();
     }
         
-    public List<Contrato> listaContratosAtivos() {
+    public List<Contrato> listaContratosAtivos(boolean ativo) {
         CriteriaQuery<Contrato> query = cb.createQuery(Contrato.class);
         Root<Contrato> root = query.from(Contrato.class);        
         Path<Boolean> path = root.get("ativo");        
-        Predicate predicate = cb.equal(path, true);
+        Predicate predicate = cb.equal(path, ativo);
         Order id = cb.desc(root.get("id"));
         query.where(predicate).orderBy(id);
         TypedQuery<Contrato> typedQuery = manager.createQuery(query);        
         return typedQuery.getResultList();    
     }
 
-    public List<Contrato> listaContratosByCCusto(List<String> custos) {
+    public List<Contrato> listaContratosByCCusto(List<String> custos,boolean ativo) {
         CriteriaQuery<Contrato> query = cb.createQuery(Contrato.class);
         Root<Contrato> root = query.from(Contrato.class);        
         Path<Boolean> path1 = root.get("ativo");
         Path<String> pathCc = root.<Login>get("usuario").<CCusto>get("custo").<String>get("codigo");        
-        Predicate predicate1 = cb.equal(path1, true);
+        Predicate predicate1 = cb.equal(path1, ativo);
         Predicate predicate2 = cb.isTrue(pathCc.in(custos));        
         query.where(predicate1,predicate2);
         TypedQuery<Contrato> typedQuery = manager.createQuery(query);        

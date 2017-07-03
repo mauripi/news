@@ -16,6 +16,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
@@ -53,6 +54,8 @@ public class ContratoBean implements Serializable {
     private String anexo;
     private List<String> allEmailsCadastrados = new ArrayList<String>();
     private String pathPdfAnexo="";
+    private int isInativo = 0;
+    private ContratoLN ln = new ContratoLN();
     
     @PostConstruct
     public void init(){
@@ -60,6 +63,7 @@ public class ContratoBean implements Serializable {
         usuarioLogado();
         listar();
         listarTipos();
+        listarEmailsCadastrados();
         emails = new ArrayList<String>();
         emailAgendamento = "";
     }
@@ -76,12 +80,17 @@ public class ContratoBean implements Serializable {
     }
 
     public void listar(){
-        ContratoLN ln = new ContratoLN();
-        contratos = ln.list(userLogado);
-        allEmailsCadastrados = new ArrayList<String>();
-        allEmailsCadastrados = ln.emailsCadastrados();
+        ln = new ContratoLN();
+        contratos = ln.list(userLogado,isInativo);
+
     }
 
+    private void listarEmailsCadastrados(){
+    	ln = new ContratoLN();
+        allEmailsCadastrados = new ArrayList<String>();
+        allEmailsCadastrados = ln.emailsCadastrados();   	
+    }
+    
     public void novo(){
         contrato = new Contrato();
         controlaCadastro=1;
@@ -97,7 +106,7 @@ public class ContratoBean implements Serializable {
             msg = "Nenhum registro selecionado para exclusão.";
             mensagens();            
         }else{
-        	ContratoLN ln = new ContratoLN();
+        	ln = new ContratoLN();
             msg = ln.delete(contrato);
             mensagens();
             limpaCadastro();
@@ -136,11 +145,9 @@ public class ContratoBean implements Serializable {
     }
        
     public void limpaCadastro(){
-        contrato = new Contrato();
-        allEmailsCadastrados = new ArrayList<String>();
         anexos = new ArrayList<String>();
         controlaCadastro=0;
-        
+        init();
     }
 
     public void selecao(){
@@ -154,7 +161,7 @@ public class ContratoBean implements Serializable {
     }
 
     public void removeAnexo(){
-        ContratoLN ln = new ContratoLN();
+        ln = new ContratoLN();
         msg=ln.removeAnexo(contrato,anexo);
         anexos.remove(anexo);
         mensagens();
@@ -164,7 +171,7 @@ public class ContratoBean implements Serializable {
     public void onRowSelect(SelectEvent event) {
         contrato = (Contrato) event.getObject(); 
         stringToList();
-        ContratoLN ln = new ContratoLN();
+        ln = new ContratoLN();
         anexos = ln.getAnexos(contrato);
         tipoContrato = contrato.getTipocontrato();
         emailAgendamento="";
@@ -173,7 +180,7 @@ public class ContratoBean implements Serializable {
     }
   
     public void contratoSelecionado(Contrato c) {
-        ContratoLN ln = new ContratoLN();
+        ln = new ContratoLN();
         anexos = ln.getAnexos(c);
         tipoContrato = c.getTipocontrato();
     }   
@@ -275,7 +282,7 @@ public class ContratoBean implements Serializable {
     }
     
     public void handleFileUpload(FileUploadEvent event){
-        ContratoLN ln = new ContratoLN();
+        ln = new ContratoLN();
         if(contrato.getId()==null){
             gln = new GenericLN<Contrato>();
             contrato.setTipocontrato(tipoContrato);
@@ -310,6 +317,11 @@ public class ContratoBean implements Serializable {
     	return "";
     }
 
+    public Date dataPrimeiroAviso(Date fim,Integer diasAviso){
+    	if(diasAviso!=null)
+    		return new DateTime(fim).minusDays(diasAviso).toDate();
+    	return null;
+    }
     //--------------------------GETTERS E SETTERS ----------------------------------
     public Date getToday() {
         return new Date();
@@ -454,5 +466,26 @@ public class ContratoBean implements Serializable {
     public void setPathPdfAnexo(String pathPdfAnexo) {
         this.pathPdfAnexo = pathPdfAnexo;
     }
+
+	public List<String> getMsgs() {
+		return msgs;
+	}
+
+	public void setMsgs(List<String> msgs) {
+		this.msgs = msgs;
+	}
+
+	public int getIsInativo() {
+		return isInativo;
+	}
+
+	public void setIsInativo(int isInativo) {
+		this.isInativo = isInativo;
+	}
+
+	public ContratoLN getLn() {
+		return ln;
+	}
+
 
 }

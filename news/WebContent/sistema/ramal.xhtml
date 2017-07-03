@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Departamentos do Ramal</f:facet>
+
+	<h:form id="formtb" >
+		<br></br>
+		<p:panelGrid columns="2">
+			<p:commandButton  icon="ui-icon-plus" value="Novo Ramal" title="Novo"  action="#{ramalMB.novo}"
+				 update=":formCad" oncomplete="PF('dgCad').show();"/>
+		</p:panelGrid>			 
+	 	<br/><br/>
+	    <p:dataTable id="pst" var="l" value="#{ramalMB.ramais}" selectionMode="single"  rows="15" resizableColumns="true"
+	    	paginator="true" paginatorPosition="bottom" selection="#{ramalMB.ramal}" rowKey="#{l.id}" emptyMessage="">
+			
+			<p:ajax event="rowSelect" listener="#{ramalMB.selecao}" update=":formCad" oncomplete="PF('dgCad').show();"/>
+			
+			<p:column headerText="Nome" sortBy="#{l.nome}" filterBy="#{l.nome}" filterMatchMode="contains"> 
+	            <h:outputText value="#{l.nome}" />
+	        </p:column>
+	        <p:column headerText="Cargo">
+	            <h:outputText value="#{l.cargo}"  />
+	        </p:column>
+	        <p:column headerText="Email" filterBy="#{l.email}" filterMatchMode="contains"  width="5px" >
+	            <h:outputText value="#{l.email}"  />
+	        </p:column>
+	        <p:column headerText="Telefone"> 
+	            <h:outputText value="#{l.telefone}" />
+	        </p:column>
+	        <p:column headerText="Ramal Interno" >
+	            <h:outputText value="#{l.ramalint}"  />
+	        </p:column>
+	        <p:column headerText="Ramal Externo" >
+	            <h:outputText value="#{l.ramalext}"  />
+	        </p:column>	        
+	        <p:column headerText="Departamento"  sortBy="#{l.depto.nome}" filterBy="#{l.depto.nome}" filterMatchMode="contains"> 
+	            <h:outputText value="#{l.depto.nome}" />
+	        </p:column>
+	        <p:column headerText=" Local da Empresa"  sortBy="#{l.depto.local.nome}" filterBy="#{l.depto.local.nome}" filterMatchMode="contains">
+	            <h:outputText value="#{l.depto.local.nome}"  />
+	        </p:column>
+	        <p:column headerText=" Empresa"  sortBy="#{l.depto.local.empresa.nome}" filterBy="#{l.depto.local.empresa.nome}" filterMatchMode="contains">
+	            <h:outputText value="#{l.depto.local.empresa.nome}"  />
+	        </p:column>
+	        <p:column style="width:32px;text-align: center">
+	            <p:commandButton update=":formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+	                <f:setPropertyActionListener value="#{l}" target="#{ramalMB.ramal}" />
+	            </p:commandButton>
+	        </p:column>	          
+	    </p:dataTable>				
+	</h:form>
+</p:panel>
+
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Locais" resizable="false" >
+<h:form id="formCad">
+	<p:panelGrid columns="2">	
+		<p:outputLabel value="Departamento:"/>
+		<p:selectOneMenu value="#{ramalMB.depto}"  converter="deptoRamalConverter">
+		 	<f:selectItems value="#{ramalMB.deptos}" var="c" itemLabel="#{c.nome} - #{c.local.empresa.nome}"  itemValue="#{c}" />
+		</p:selectOneMenu>
+		<p:outputLabel value="Nome:"/>
+		<p:inputText value="#{ramalMB.ramal.nome}" size="30" />
+		<p:outputLabel value="Cargo:"/>
+		<p:inputText value="#{ramalMB.ramal.cargo}" size="30" />
+		<p:outputLabel value="Email:"/>
+		<p:inputText value="#{ramalMB.ramal.email}" size="30"/>
+		<p:outputLabel value="Telefone:"/>
+		<p:inputText value="#{ramalMB.ramal.telefone}" size="30"/>
+		<p:outputLabel value="Ramal Interno:"/>
+		<p:inputText value="#{ramalMB.ramal.ramalint}" size="30"/>
+		<p:outputLabel value="Ramal Externo:"/>
+		<p:inputText value="#{ramalMB.ramal.ramalext}" size="30"/>		
+	</p:panelGrid>
+	<br></br>
+	<p:panelGrid columns="2">
+		<p:commandButton value="Gravar" action="#{ramalMB.grava}" update=":formMsg,:formCad,:formtb" icon="ui-icon-check" 
+			onstart="PF('status').hide()" onsuccess="PF('status').hide()" disabled="#{ramalMB.controlaCadastro == 0}"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{ramalMB.limpaCadastro}" 
+			onclick="PF('dgCad').hide()" update=":formCad" disabled="#{ramalMB.controlaCadastro == 0}"/>					
+	</p:panelGrid>																				
+	
+
+</h:form>
+
+</p:dialog>
+
+<p:dialog widgetVar="status" appendTo="@(body)"  modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloading.gif" />
+</p:dialog>
+
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{ramalMB.ramal.id} - #{ramalMB.ramal.nome}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{ramalMB.exclui}"  icon="ui-icon-check" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar"  icon="ui-icon-cancel" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="6000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

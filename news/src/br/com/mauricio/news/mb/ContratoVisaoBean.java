@@ -38,12 +38,13 @@ public class ContratoVisaoBean implements Serializable {
     private String anexo;
     private String pesquisa;
     private String pathPdfAnexo="";
+    private int isInativo = 0;
     
     @PostConstruct
     public void init(){
         contrato = new Contrato();
-        listar();
         usuarioLogado();
+        listar();
     }
 
 	private void usuarioLogado(){
@@ -52,9 +53,9 @@ public class ContratoVisaoBean implements Serializable {
         userLogado = (Login) sessao.getAttribute("login");
     }
 
-    private void listar(){
+    public void listar(){
         ContratoLN ln = new ContratoLN();
-        listAll = ln.listAtivo();
+        listAll = ln.list(userLogado,isInativo);
     }
 
     public void pesquisar(){
@@ -197,6 +198,14 @@ public class ContratoVisaoBean implements Serializable {
 
 	public void setPathPdfAnexo(String pathPdfAnexo) {
 		this.pathPdfAnexo = pathPdfAnexo;
+	}
+
+	public int getIsInativo() {
+		return isInativo;
+	}
+
+	public void setIsInativo(int isInativo) {
+		this.isInativo = isInativo;
 	}
 	
 }

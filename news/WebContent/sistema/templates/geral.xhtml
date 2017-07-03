@@ -63,6 +63,8 @@
         <p:submenu label="Diretoria" >
        		<p:menuitem value="Consolidado" action="consolidado?faces-redirect=true" rendered="#{acessoBean.temAcessoConsolidado}" />
         	<p:separator rendered="#{acessoBean.temAcessoConsolidado}"/>
+        	<p:menuitem value="Contratos" action="contratovisao?faces-redirect=true" />
+        	<p:separator rendered="#{acessoBean.temAcessoContrato}"/>
         	<p:menuitem value="Custos Mensais" action="fluxodiario?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}" />
         	<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>
         	<p:menuitem value="Despesas de Transporte" action="gastotranspconsolidado?faces-redirect=true" rendered="#{acessoBean.temAcessoControleTransporte}" />
@@ -101,7 +103,9 @@
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>
        		<p:menuitem value="Importar Planilha de Custos" action="importarfluxodiario?faces-redirect=true" rendered="#{acessoBean.temAcessoImportarFluxoDiario}"/>
        		<p:separator/>
-       		<p:menuitem value="Prestação de Contas" action="prestacao?faces-redirect=true"  />     
+       		<p:menuitem value="Prestação de Contas" action="prestacao?faces-redirect=true"  />   
+       		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>  
+       		<p:menuitem value="Recibo da Prestação de Contas" action="reciboprestacao?faces-redirect=true"  />  
         </p:submenu>
     
      	<p:submenu label="RH">
@@ -116,17 +120,17 @@
        		<p:menuitem value="Informe de IR" action="impostoderenda?faces-redirect=true" />
        		<p:separator/>
        		<p:menuitem value="Holerite" action="holerite?faces-redirect=true" />
+       		<p:separator/>
+       		<p:menuitem value="Ramais" action="ramalvisao?faces-redirect=true"/>
         </p:submenu>
         
         <p:submenu label="TI">
-        		<p:menuitem value="Adm de Usuário" action="usuario?faces-redirect=true" rendered="#{acessoBean.temAcessoPainelChamado}"/>
-        		<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
-        		<p:menuitem value="Alterar Senha" action="trocarsenha?faces-redirect=true"/>
-        	<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
+       		<p:menuitem value="Adm de Usuário" action="usuario?faces-redirect=true" rendered="#{acessoBean.temAcessoPainelChamado}"/>
+       		<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
+       		<p:menuitem value="Alterar Senha" action="trocarsenha?faces-redirect=true"/>
+       		<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
        		<p:submenu label="Cadastros" rendered="#{acessoBean.temAcessoAtendentes}">
        			<p:menuitem value="Atendente" action="atendente?faces-redirect=true" />
-       			<p:separator/>
-       			<p:menuitem value="Empresa/Ramal" action="empresaramal?faces-redirect=true" />
        			<p:separator/>
        			<p:menuitem value="Equipamento" action="equipamento?faces-redirect=true" />
        			<p:separator/>
@@ -134,9 +138,19 @@
        			<p:separator/>
        			<p:menuitem value="Local de Equipamento" action="localequipamento?faces-redirect=true" />
        			<p:separator/>
+       			<p:submenu label="Ramais" rendered="#{acessoBean.temAcessoPainelChamado}">
+	       			<p:menuitem value="Empresa" action="empresaramal?faces-redirect=true" />
+       				<p:separator/>
+       				<p:menuitem value="Local" action="localramal?faces-redirect=true"/>
+	       			<p:separator/>
+       				<p:menuitem value="Depto" action="deptoramal?faces-redirect=true"/>
+	       			<p:separator/>
+	       			<p:menuitem value="Ramal" action="ramal?faces-redirect=true"/>
+       			</p:submenu>
+       			<p:separator/>
        			<p:menuitem value="Tipo de Solicitação" action="areasolicitacao?faces-redirect=true" />
        		</p:submenu>
-       		<p:separator  />
+       		<p:separator/>
        		<p:menuitem value="Help Desk" action="solicitacao?faces-redirect=true" />
        		<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
        		<p:submenu label="Solicitações"  rendered="#{acessoBean.temAcessoPainelChamado}">

@@ -33,7 +33,7 @@ public class TesteVetorh {
 		List<Contrato> listComVlrDespesa = new ArrayList<Contrato>();		
 		
 		ContratoDao dao = new ContratoDao(manager);
-		listAll = dao.listaContratosAtivos();
+		listAll = dao.listaContratosAtivos(true);
         manager.close();
         factory.close();		
        

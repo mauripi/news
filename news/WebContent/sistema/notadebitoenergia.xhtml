@@ -28,16 +28,44 @@
 		</p:panelGrid>		 
 	 	<br></br>                    
 		<br></br>
-		<p:dataTable id="tbdesp" var="d" value="#{notadebitoMB.debitos}" selectionMode="single" 
-	     	selection="#{notadebitoMB.debitoSel}" emptyMessage="" paginator="true" paginatorPosition="bottom" rowKey="#{d.id}" rows="15">
+		<p:dataTable id="tbdesp" var="d" value="#{notadebitoMB.debitos}" selectionMode="single" widgetVar="tbdesp" sortBy="#{d.ano},#{d.mes}"
+	     	selection="#{notadebitoMB.debitoSel}" emptyMessage=""  rowKey="#{d.id}">
+	     	
 			<p:ajax event="rowSelect" listener="#{notadebitoMB.selecao}" update=":formCad"  oncomplete="PF('dgCad').show();" />
 			
-	        <p:column headerText="Mes" width="5%"  filterBy="#{d.mes}"  filterMatchMode="contains" style="text-align: center">
-	            <h:outputText value="#{d.mes}" />
-	        </p:column>
 	        <p:column headerText="Ano" width="5%" filterBy="#{d.ano}"  filterMatchMode="contains" style="text-align: center">
+	            <f:facet name="filter">
+	                <p:selectOneMenu onchange="PF('tbdesp').filter()" >
+	                    <f:selectItem itemLabel="" itemValue="#{null}" noSelectionOption="true" />
+	                    <f:selectItem itemLabel="2016" itemValue="2016" />
+	                    <f:selectItem itemLabel="2017" itemValue="2017" />
+	                    <f:selectItem itemLabel="2018" itemValue="2018" />
+	                </p:selectOneMenu>
+	            </f:facet>	        
+	        
 	            <h:outputText value="#{d.ano}" />
 	        </p:column>	        			
+	        
+	        <p:column headerText="Mes" width="5%"  filterBy="#{d.mes}" filterMatchMode="exact" style="text-align: center">
+	            <f:facet name="filter">
+	                <p:selectOneMenu onchange="PF('tbdesp').filter()" >
+	                    <f:selectItem itemLabel="" itemValue="#{null}" noSelectionOption="true" />
+	                    <f:selectItem itemLabel="Jan" itemValue="1" />
+	                    <f:selectItem itemLabel="Fev" itemValue="2" />
+	                    <f:selectItem itemLabel="Mar" itemValue="3" />
+	                    <f:selectItem itemLabel="Abr" itemValue="4" />
+	                    <f:selectItem itemLabel="Mai" itemValue="5" />
+	                    <f:selectItem itemLabel="Jun" itemValue="6" />
+	                    <f:selectItem itemLabel="Jul" itemValue="7" />
+	                    <f:selectItem itemLabel="Ago" itemValue="8" />
+	                    <f:selectItem itemLabel="Set" itemValue="9" />
+	                    <f:selectItem itemLabel="Out" itemValue="10" />
+	                    <f:selectItem itemLabel="Nov" itemValue="11" />
+	                    <f:selectItem itemLabel="Dec" itemValue="12" />
+	                </p:selectOneMenu>
+	            </f:facet>	        
+	            <h:outputText value="#{d.mes}" />
+	        </p:column>
 	        <p:column headerText="Local" width="40%" filterBy="#{d.mengloc.nome}"  filterMatchMode="contains">
 	            <h:outputText value="#{d.mengloc.nome}" />
 	        </p:column>              	 
@@ -46,11 +74,21 @@
 					<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
 				</h:outputText>	
 		    </p:column>
-		    <p:column style="width:32px;text-align: center">
+		    <p:column style="width:32px;text-align: center" headerText="Remover">
 	            <p:commandButton update=":formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
 	                <f:setPropertyActionListener value="#{d}" target="#{notadebitoMB.debito}" />
 	            </p:commandButton>
-	        </p:column>	 	   	               	        
+	        </p:column>	
+	        <p:summaryRow>
+	            <p:column colspan="3" style="text-align:right">
+	                <h:outputText value="Total do mês  #{d.mes}/#{d.ano}" />
+	            </p:column>
+	            <p:column  colspan="2" style="text-align:center">
+	                <h:outputText value="#{notadebitoMB.total(d.ano,d.mes)}">
+	                    <f:convertNumber type="currency" currencySymbol="R$" />
+	                </h:outputText>
+	            </p:column>
+	        </p:summaryRow>	         	   	               	        
 	    </p:dataTable>
 	</h:form>
 </p:panel>

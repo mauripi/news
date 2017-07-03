@@ -53,7 +53,7 @@ public class BaixaBemBean implements Serializable {
 	private Double totalCompra;
 	private Double totalResidual;
 	private Boolean isVenda=false;
-	
+	private CCusto cCusto;
 	
 	@PostConstruct
 	public void init(){
@@ -83,7 +83,7 @@ public class BaixaBemBean implements Serializable {
 		for(CCusto c:centroCustos)
 			if(baixabem.getFilial().getId()==c.getFilial().getId())
 				custosFilial.add(c);
-		baixabem.setCcusto(custosFilial.get(0));
+		cCusto = custosFilial.get(0);
 	}
 	
 	public void listar(){
@@ -240,7 +240,7 @@ public class BaixaBemBean implements Serializable {
 			isValid = false;
 			msgs.add("Informe o data da baixa.");
 		}
-		
+		baixabem.setCcusto(cCusto);
 		return isValid;		
 	}
 	
@@ -301,7 +301,7 @@ public class BaixaBemBean implements Serializable {
 		itens = baixabem.getItens();
 		totalCompra = new Double("0.0");
 		totalResidual = new Double("0.0");
-		
+		cCusto = baixabem.getCcusto();
 		for(ItemBaixaBem i:itens){
 			if(i.getNumpla().contains("-00")){
 				String scod[] = i.getNumpla().split("-");
@@ -522,6 +522,14 @@ public class BaixaBemBean implements Serializable {
 
 	public void setIsVenda(Boolean isVenda) {
 		this.isVenda = isVenda;
+	}
+
+	public CCusto getcCusto() {
+		return cCusto;
+	}
+
+	public void setcCusto(CCusto cCusto) {
+		this.cCusto = cCusto;
 	}
 
 }

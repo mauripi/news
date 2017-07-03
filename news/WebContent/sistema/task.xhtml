@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Projetos</f:facet>
+
+	<h:form id="form" >
+	    <p:menuButton value="Opções">
+	        <p:menuitem value="Abrir Projeto" icon="ui-icon-folder-open" actionListener="#{taskMB.listarProjetos}"
+	        	oncomplete="PF('abrir').show()" update=":formAbrir"/>
+	            <p:separator />
+	        <p:menuitem value="Novo Projeto"  icon="ui-icon-plus" actionListener="#{taskMB.novo}"
+	        	oncomplete="PF('novo').show()" update=":formNovo"/>
+	    </p:menuButton>
+	    <br/><br/><br/>
+	    
+	    
+	    <p:organigram id="organigram" rendered="#{taskMB.rootNode != null}"
+	                   widgetVar="organigram"
+	                   value="#{taskMB.rootNode}"
+	                   selection="#{taskMB.selection}"
+	                   var="node">
+	 
+	        <p:ajax event="dragdrop" process="@this" update=":formMsg" listener="#{taskMB.nodeDragDropListener}" />
+	        <p:ajax event="select" process="@this" update=":formMsg" listener="#{taskMB.nodeSelectListener}" />
+	        <p:ajax event="contextmenu" process="@this" />
+	        <p:ajax event="collapse" process="@this" update=":formMsg" listener="#{taskMB.nodeCollapseListener}" />
+	        <p:ajax event="expand" process="@this" update=":formMsg" listener="#{taskMB.nodeExpandListener}" />
+	 
+	        <p:organigramNode>
+	            <h:outputText value="#{node.data.titulo}" />
+	        </p:organigramNode>
+	 
+	        <p:organigramNode type="root" style="border-radius: 2px;">
+	            <h:outputText value="#{node.data.titulo}" />
+	        </p:organigramNode>
+	 
+	        <p:organigramNode type="division"
+	                          icon="ui-icon-document"
+	                          iconPos="left">
+	            <h:outputText value="#{node.data.titulo}"/>
+	        </p:organigramNode>
+	    </p:organigram>
+
+	    <p:contextMenu for="organigram" nodeType="division">
+	        <p:menuitem value="Adicionar Tarefa"
+	                    icon="ui-icon-plus"
+	                    oncomplete="PF('addDivisionDialog').show(); return false;"  
+	                    actionListener="#{taskMB.novaTask}"
+	                    update=":formtarefa"/>
+	        <p:menuitem value="Remover Tarefa"
+	                    update="organigram :formMsg"
+	                    icon="ui-icon-close"
+	                    actionListener="#{taskMB.removeTask()}" />
+	    </p:contextMenu>
+
+	</h:form>
+</p:panel>
+
+<p:dialog widgetVar="novo" appendTo="@(body)" header="Novo Projeto" modal="true">
+	<h:form id="formNovo">
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Nome do Projeto" />
+			<p:inputText value="#{taskMB.projeto.titulo}" />			
+			<h:outputLabel value="Descrição do Projeto" />
+			<p:inputTextarea value="#{taskMB.projeto.descricao}" cols="40" rows="2"/>
+			
+		</p:panelGrid>
+		
+		<p:panelGrid columns="2" layout="grid">
+			<p:commandButton value="Gravar" icon="ui-icon-check" actionListener="#{taskMB.criarNovoProjeto}" update=":form"/>
+			<p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="PF('novo').hide()" />
+		</p:panelGrid>
+	</h:form>
+</p:dialog>
+ 
+<p:dialog id="addDivisionDialog" widgetVar="addDivisionDialog" header="Adicionar Tarefa">
+	 <h:form id="formtarefa"> 
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Título" />
+			<p:inputText value="#{taskMB.task.titulo}" />			
+			<h:outputLabel value="Descrição" />
+			<p:inputTextarea value="#{taskMB.task.descricao}" cols="40" rows="2"/>			
+		</p:panelGrid>
+	 	<p:commandButton process="@parent" update=":form" value="Adicionar"
+	                         actionListener="#{taskMB.addTask('division')}" oncomplete="PF('addDivisionDialog').hide();"/>
+	 </h:form>
+</p:dialog>  
+
+<p:dialog widgetVar="abrir" appendTo="@(body)" header="Abrir Projeto" modal="true">
+	<h:form id="formAbrir">
+		<p:dataTable var="t" value="#{taskMB.projetos}" >
+			
+			<p:column headerText="Id">
+				<h:outputText value="#{t.id}"/>
+			</p:column>
+			
+			<p:column headerText="Título">
+				<h:outputText value="#{t.titulo}"/>
+			</p:column>
+			
+	        <p:column style="width:32px;text-align: center">
+	             <p:commandButton update=":form" oncomplete="PF('abrir').hide()" icon="ui-icon-pencil" title="Abrir">
+	                <f:setPropertyActionListener value="#{t}" target="#{taskMB.task}" />
+	            </p:commandButton>
+	        </p:column>			
+		</p:dataTable>
+	
+	</h:form>
+</p:dialog>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="6000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

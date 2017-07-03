@@ -3,7 +3,6 @@ package br.com.mauricio.news.mb.engenharia;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -149,6 +148,10 @@ public class NotaDebitoBean  implements Serializable {
             if(menglocs.get(i).getNome().toLowerCase().contains(query.toLowerCase()))
                 filtered.add(menglocs.get(i));              
         return filtered;
+    }
+    
+    public double total(int ano, int mes){
+		return debitos.stream().filter(o->o.getAno().equals(ano) && o.getMes().equals(mes) ).map(d -> d.getValor()).mapToDouble(Double::doubleValue).sum();  	
     }
     
 	public void mensagens(){
