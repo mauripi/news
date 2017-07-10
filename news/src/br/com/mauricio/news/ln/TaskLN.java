@@ -1,4 +1,8 @@
 package br.com.mauricio.news.ln;
+/**
+*
+* @author MAURICIO CRUZ and CAROLINE MARQUES
+*/
 
 import java.io.Serializable;
 import java.util.List;

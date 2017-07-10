@@ -211,10 +211,10 @@
 				<p:inputTextarea maxlength="300" rows="3" cols="40" autoResize="false" value="#{contratoMB.contrato.mensagemEmail}" />													        	
 	        </p:panelGrid>
 	        <p:outputLabel value="Adicionar e-mail:"/>
-	        <p:autoComplete id="enveml"  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}"  autocomplete="true" forceSelection="true"
-	        		 disabled="#{contratoMB.contrato.diasAviso eq null}" size="35" />
-			<p:commandButton id="cmdeml" value="Incluir" update="emlst,:formMsg" icon="ui-icon-mail-closed" 
-				action="#{contratoMB.addEmail}" disabled="#{contratoMB.contrato.diasAviso eq null}"/>
+	        <p:autoComplete id="enveml"  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}" 
+	        		 disabled="#{contratoMB.contrato.diasAviso eq null}" size="35"/>
+			<p:commandButton id="cmdeml" value="Incluir" action="#{contratoMB.addEmail}" update="enveml,emlst,:formMsg" icon="ui-icon-mail-closed" 
+				 disabled="#{contratoMB.contrato.diasAviso eq null}"/>
 
 		    <p:dataTable id="emlst" value="#{contratoMB.emails}" var="e"  emptyMessage=""  style="width:70%;" 
 							    	   		paginatorPosition="bottom" paginator="true" rows="4" >

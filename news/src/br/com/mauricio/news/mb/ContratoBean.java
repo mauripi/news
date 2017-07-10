@@ -255,7 +255,7 @@ public class ContratoBean implements Serializable {
         }   
          return isValid;        
     }
-   
+       
     public void addEmail() {
         if(ValidaEmail.validar(emailAgendamento)){
             emails.add(emailAgendamento);           

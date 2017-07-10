@@ -1,4 +1,8 @@
 package br.com.mauricio.news.mb;
+/**
+*
+* @author MAURICIO CRUZ and CAROLINE MARQUES
+*/
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,37 +17,28 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 
 import br.com.mauricio.news.ln.GenericLN;
-import br.com.mauricio.news.model.Ramal;
-import br.com.mauricio.news.model.DeptoRamal;
 import br.com.mauricio.news.model.Login;
+import br.com.mauricio.news.model.UserProject;
 
-/**
-*
-* @author MAURICIO CRUZ and CAROLINE MARQUES
-*/
-@ManagedBean (name="ramalMB")
 @ViewScoped
-public class RamalBean implements Serializable {
-
+@ManagedBean(name="userProjectMB")
+public class UserProjectBean implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private int controlaCadastro = 0;
-	private Ramal ramal;
-	private List<Ramal> ramais;
-	private DeptoRamal depto;
-	private List<DeptoRamal> deptos;
+	private UserProject userProject;
+	private List<UserProject> users;
 	private List<Login> userlogins;
 	private Login usu;
+	private int controlaCadastro = 0;
 	private List<String> msgs;
 	private String msg;
 	
-
 	@PostConstruct
 	public void init(){
 		lista();
-		listaDeptos();
+		listaLogin();
 	}
-		
+	
     public List<Login> completeText(String query) {
         List<Login> results = new ArrayList<Login>();
         for(Login l:userlogins) 
@@ -51,9 +46,9 @@ public class RamalBean implements Serializable {
         		results.add(l);     
         return results;
     }
-	
+		
 	public void novo(){
-		ramal = new Ramal();
+		userProject = new UserProject();
 		controlaCadastro = 1;
 	}
 
@@ -62,49 +57,48 @@ public class RamalBean implements Serializable {
 	}
 
 	public void lista(){
-		GenericLN<Ramal> gln = new GenericLN<Ramal>();
-		ramais = gln.listWithoutRemoved("ramal", "id");
+		GenericLN<UserProject> gln = new GenericLN<UserProject>();
+		users = gln.listWithoutRemoved("userproject", "nome");
 	}	
 	
-	public void listaDeptos(){
-		GenericLN<DeptoRamal> gln = new GenericLN<DeptoRamal>();
-		deptos = gln.listWithoutRemoved("deptoramal", "id");
+	public void listaLogin(){
+		GenericLN<Login> gln = new GenericLN<Login>();
+		userlogins = gln.listWithoutRemoved("login", "id");
 	}	
 	
 	public void exclui (){
-		GenericLN<Ramal> gln = new GenericLN<Ramal>();
-		msg = gln.remove(gln.find(new Ramal(), ramal.getId()));
+		GenericLN<UserProject> gln = new GenericLN<UserProject>();
+		msg = gln.remove(gln.find(new UserProject(), userProject.getId()));
 		mensagens();
 		lista();
 	}
 	
 	public void limpaCadastro(){
-		ramal = new Ramal();
+		userProject = new UserProject();
 		controlaCadastro = 0;
 		lista();
 	}
 	
 	public void grava(){
-		ramal.setDepto(depto);
-		GenericLN<Ramal> gln = new GenericLN<Ramal>();
+		userProject.setUsersystem(usu);
+		GenericLN<UserProject> gln = new GenericLN<UserProject>();
 		if(validar()){
-			if(controlaCadastro==1) msg = gln.add(ramal);
-			if(controlaCadastro==2) msg = gln.update(ramal);
-			
+			if(controlaCadastro==1) msg = gln.add(userProject);
+			if(controlaCadastro==2) msg = gln.update(userProject);
 			mensagens();
 			limpaCadastro();
 		}
 	}
 	
 	public void selecao(SelectEvent event){
-		ramal=(Ramal) event.getObject();
-		depto=ramal.getDepto();
+		userProject=(UserProject) event.getObject();
+		usu=userProject.getUsersystem();
 		edita();
 	}
 	
 	private boolean validar() {
 		boolean isValid = true;
-		if(ramal.getNome().length() < 1){
+		if(userProject.getNome().length() < 1){
 			isValid = false;
 			msgs.add("O campo Nome não pode estar vazio.");
 		}
@@ -122,82 +116,51 @@ public class RamalBean implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();                
         context.addMessage(null, new FacesMessage(msg,""));          
     }
+	
 
-	public int getControlaCadastro() {
-		return controlaCadastro;
+	public UserProject getUserProject() {
+		return userProject;
 	}
-
-	public void setControlaCadastro(int controlaCadastro) {
-		this.controlaCadastro = controlaCadastro;
+	public void setUserProject(UserProject userProject) {
+		this.userProject = userProject;
 	}
-
-	public Ramal getRamal() {
-		return ramal;
+	public List<UserProject> getUsers() {
+		return users;
 	}
-
-	public void setRamal(Ramal ramal) {
-		this.ramal = ramal;
+	public void setUsers(List<UserProject> users) {
+		this.users = users;
 	}
-
-	public List<Ramal> getRamais() {
-		return ramais;
-	}
-
-	public void setRamais(List<Ramal> ramais) {
-		this.ramais = ramais;
-	}
-
-	public DeptoRamal getDepto() {
-		return depto;
-	}
-
-	public void setDepto(DeptoRamal depto) {
-		this.depto = depto;
-	}
-
-	public List<DeptoRamal> getDeptos() {
-		return deptos;
-	}
-
-	public void setDeptos(List<DeptoRamal> deptos) {
-		this.deptos = deptos;
-	}
-
 	public List<Login> getUserlogins() {
 		return userlogins;
 	}
-
 	public void setUserlogins(List<Login> userlogins) {
 		this.userlogins = userlogins;
 	}
-
 	public Login getUsu() {
 		return usu;
 	}
-
 	public void setUsu(Login usu) {
 		this.usu = usu;
 	}
-
+	public int getControlaCadastro() {
+		return controlaCadastro;
+	}
+	public void setControlaCadastro(int controlaCadastro) {
+		this.controlaCadastro = controlaCadastro;
+	}
 	public List<String> getMsgs() {
 		return msgs;
 	}
-
 	public void setMsgs(List<String> msgs) {
 		this.msgs = msgs;
 	}
-
 	public String getMsg() {
 		return msg;
 	}
-
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-
 }

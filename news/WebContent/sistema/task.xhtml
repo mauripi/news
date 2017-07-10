@@ -73,16 +73,37 @@
 	</h:form>
 </p:panel>
 
-<p:dialog widgetVar="novo" appendTo="@(body)" header="Novo Projeto" modal="true">
+<p:dialog widgetVar="novo" appendTo="@(body)" header="Novo Projeto" modal="true" width="600px" height="500px">
 	<h:form id="formNovo">
+	<p:tabView >
+	<p:tab title="Identificação">
 		<p:panelGrid columns="2">
-			<h:outputLabel value="Nome do Projeto" />
-			<p:inputText value="#{taskMB.projeto.titulo}" />			
-			<h:outputLabel value="Descrição do Projeto" />
+			<h:outputLabel value="Nome do Projeto:" />
+			<p:inputText value="#{taskMB.projeto.titulo}" size="38"/>			
+			<h:outputLabel value="Descrição do Projeto:"/>
 			<p:inputTextarea value="#{taskMB.projeto.descricao}" cols="40" rows="2"/>
-			
 		</p:panelGrid>
-		
+	</p:tab>
+	<p:tab title="Período">
+		<p:panelGrid columns="2">
+			<h:outputLabel value="Data Início:" />
+			<p:calendar value="#{taskMB.projeto.inicio}" locale="pt_BR" pattern="dd/MM/yyyy"/>	
+			<h:outputLabel value="Data Fim:" />
+			<p:calendar value="#{taskMB.projeto.fim}" locale="pt_BR" pattern="dd/MM/yyyy"/>	
+		</p:panelGrid>
+	</p:tab>
+	<p:tab title="Aprovação">
+		<p:panelGrid columns="3">
+			<h:outputLabel value="Responsável:" />
+			<p:autoComplete id="fav"  value="#{taskMB.responsavel}" converter="loginConverter" forceSelection="true" size="38"
+				completeMethod="#{taskMB.completeText}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>
+			<h:outputLabel value=""/>		
+			<h:outputLabel value="Participantes:" />
+			<p:inputText value="#{taskMB.projeto.participantes}" size="38"/>
+			<p:commandButton icon="ui-icon-plus" actionListener="#{taskMB.criarNovoProjeto}" />
+		</p:panelGrid>
+	</p:tab>
+	</p:tabView>	
 		<p:panelGrid columns="2" layout="grid">
 			<p:commandButton value="Gravar" icon="ui-icon-check" actionListener="#{taskMB.criarNovoProjeto}" update=":form"/>
 			<p:commandButton value="Cancelar" icon="ui-icon-cancel" onclick="PF('novo').hide()" />
@@ -116,9 +137,8 @@
 			</p:column>
 			
 	        <p:column style="width:32px;text-align: center">
-	             <p:commandButton update=":form" oncomplete="PF('abrir').hide()" icon="ui-icon-pencil" title="Abrir">
-	                <f:setPropertyActionListener value="#{t}" target="#{taskMB.task}" />
-	            </p:commandButton>
+	             <p:commandButton update=":form" oncomplete="PF('abrir').hide()" 
+	             		actionListener="#{taskMB.open(t)}" icon="ui-icon-pencil" title="Abrir"/>
 	        </p:column>			
 		</p:dataTable>
 	

@@ -64,6 +64,7 @@ public class ContratoLN implements Serializable {
         String caminho = CAMINHO_PASTA_CONTRATOS + c.getId().toString() + "\\";
         String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("");
         String dest = path+"\\sistema\\tmp\\"+c.getId()+"\\";
+        SaveFile.criarPasta(dest);
         anexos.forEach(a -> SaveFile.copiar(caminho + a,dest + a));        
     }
     
