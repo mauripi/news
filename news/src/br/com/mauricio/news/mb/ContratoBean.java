@@ -233,6 +233,7 @@ public class ContratoBean implements Serializable {
 
     private boolean validaCampos(){
     	boolean isValid=true;
+    	msgs = new ArrayList<String>();
         if(contrato.getObjeto().length()<1){
             msgs.add("Informe o objeto do contrato.");
             isValid=false;

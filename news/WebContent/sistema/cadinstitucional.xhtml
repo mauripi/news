@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Cadastro Institucional</f:facet>
+
+	<h:form id="formtb" >
+		<br></br>
+		<p:panelGrid columns="2">
+			<p:commandButton  icon="ui-icon-plus" value="Novo" title="Novo"  action="#{institucionalMB.novo}"
+				 update=":formCad" oncomplete="PF('dgCad').show();"/>
+		</p:panelGrid>	
+		 			 
+	 	<br></br>                    
+		<br></br>
+	 <p:dataTable id="tb" var="c" value="#{institucionalMB.listAll}"  rows="15" paginator="true" paginatorPosition="bottom"  
+    	selectionMode="single" selection="#{institucionalMB.institucional}" rowKey="#{c}" emptyMessage="">
+    	<p:ajax event="rowSelect" listener="#{institucionalMB.selecao}" update=":formCad" oncomplete="PF('dgCad').show();"/>
+       <p:column headerText="Vídeo" width="32px;" >
+            <h:outputText value="#{c.url}"/>
+       </p:column>
+       <p:column headerText="Título" width="32px;" >
+            <h:outputText value="#{c.titulo}"/>
+       </p:column>
+       <p:column headerText="Descrição" width="62px;" >
+            <h:outputText value="#{c.descricao}"/>
+       </p:column>       
+       <p:column headerText="Status" width="22px;" >
+            <h:outputText value="#{c.status}"/>
+       </p:column>  
+     </p:dataTable>	 
+	</h:form>
+</p:panel>
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Conteúdo" resizable="false" >
+<h:form id="formCad">
+<p:panelGrid columns="2" style="vertical-align: top;">
+	<p:panelGrid columns="2">
+		<p:outputLabel value="Caminho do vídeo:" />
+		<p:inputText value="#{institucionalMB.institucional.url}" size="35" placeholder="Link do vídeo">
+			<p:ajax event="blur" update=":formCad" listener="#{institucionalMB.buscaUrl}"/>
+		</p:inputText> 
+
+		<p:outputLabel value="Título:"/>
+		<p:inputText value="#{institucionalMB.institucional.titulo}" size="35" /> 
+		
+		<p:outputLabel value="Descrição:"/>
+		<p:inputTextarea value="#{institucionalMB.institucional.descricao}" rows="8" cols="30"/>
+	</p:panelGrid>	
+	<p:panelGrid columns="1">																			
+		<iframe id="ytplayer" type="text/html" width="530" height="470" src="#{institucionalMB.url}" frameborder="0"/>
+	</p:panelGrid>
+</p:panelGrid>
+	<p:panelGrid columns="2">
+		<p:commandButton value="Gravar" action="#{institucionalMB.grava}" update=":formMsg,:formCad,:formtb" icon="ui-icon-check" 
+			onstart="PF('status').hide()" onsuccess="PF('status').hide()" />
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{institucionalMB.limpaCadastro}" 
+			onclick="PF('dgCad').hide()" update=":formCad" />					
+	</p:panelGrid>
+</h:form>
+</p:dialog>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="6000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

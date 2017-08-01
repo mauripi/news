@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-
 import br.com.mauricio.news.cnn.Conexao;
 import br.com.mauricio.news.dao.GenericDao;
 import br.com.mauricio.news.dao.financeiro.FluxoDiarioDao;

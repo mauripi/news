@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - Manutenção</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Solicitações de Manutenção</f:facet><br/>
+
+<h:form id="formtb">
+	<p:commandButton onclick="PF('dgCad').show()" action="#{pedidomanutencaoMB.novo}" value="Nova Solicitação" icon="ui-icon-plus" title="Nova Solicitação"  update=":formCad"/>
+ 	<br></br>                    
+	<br></br>
+    <p:dataTable id="tb" var="s" value="#{pedidomanutencaoMB.pedidosUsuario}" rows="20" paginator="true" paginatorPosition="bottom" emptyMessage="Não há solicitações">
+
+       <p:column headerText="Nº" width="3%">
+            <h:outputText value="#{s.id}" />
+       </p:column>	 			
+       <p:column headerText="Data de Abertura" style="width:7%;">
+             <h:outputText value="#{s.dataabertura}">
+			<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+		  </h:outputText>
+       </p:column>
+       <p:column headerText="Favorecido"  filterBy="#{s.favorecido.nome}" filterMatchMode="contains">
+            <h:outputText value="#{s.favorecido.nome}" />
+       </p:column>         
+       <p:column headerText="Departamento"  filterBy="#{s.favorecido.custo.nome}" filterMatchMode="contains">
+            <h:outputText value="#{s.favorecido.custo.nome}" />
+       </p:column>       
+       <p:column headerText="Descrição do problema" width="47%" filterBy="#{s.descricao}" filterMatchMode="contains">
+            <h:outputText value="#{s.descricao}" />
+       </p:column>	      
+       <p:column headerText="Situação">
+            <h:outputText value="#{s.concluida eq false ? 'Não Solucionado' : 'Solucionado'}" />
+       </p:column>
+ 
+       <p:column style="width:8%;text-align: center" headerText="Editar">
+             <p:commandButton update=":formCad" action="#{pedidomanutencaoMB.edita}" icon="ui-icon-pencil" title="Editar" oncomplete="PF('dgCad').show()" >
+                <f:setPropertyActionListener value="#{s}" target="#{pedidomanutencaoMB.pedido}" />
+            </p:commandButton>
+       </p:column>              
+    </p:dataTable>
+
+</h:form>
+</p:panel>
+
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Solicitação" resizable="false" >
+<h:form id="formCad" style="width:120 %;">
+
+<div class="ui-grid ui-grid-responsive">
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-12">
+        
+			<div class="ui-grid ui-grid-responsive">
+			    <div class="ui-grid-row">
+			        <div class="ui-grid-col-12">
+						<h:panelGrid columns="1"  >	
+							<h:outputLabel value="Favorecido"/>
+			     			<p:autoComplete id="fav"  value="#{pedidomanutencaoMB.favorecido}" converter="loginConverter" forceSelection="true" size="50" maxResults="15"
+			     						completeMethod="#{pedidomanutencaoMB.completeText}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>
+						</h:panelGrid>	        
+			        </div>
+			    </div>
+			</div>
+		
+
+			<div class="ui-grid ui-grid-responsive">
+			    <div class="ui-grid-row"> 
+			        <div class="ui-grid-col-6">
+						<h:panelGrid columns="1"  >
+							<h:outputLabel value="Data"/>
+							<p:calendar value="#{pedidomanutencaoMB.pedido.dataabertura}"  maxdate="#{pedidomanutencaoMB.today}" locale="pt_BR" pattern="dd/MM/yyyy"  />
+						</h:panelGrid>						
+					</div>
+			        <div class="ui-grid-col-6">
+						<h:panelGrid columns="1"  >
+							<h:outputLabel value="Hora"/>								
+							<p:calendar id="time" value="#{pedidomanutencaoMB.pedido.horaabertura}" pattern="HH:mm" timeOnly="true" locale="pt_BR"  />															
+						</h:panelGrid>						
+					</div>
+			    </div>
+			</div>
+			
+
+			<br></br>
+			<h:panelGrid columns="1" style="widht:100%;" >
+				<h:outputLabel value="Descrição do problema"/>
+				<p:inputTextarea id="descricao" value="#{pedidomanutencaoMB.pedido.descricao}" rows="3" autoResize="" cols="50"
+					maxlength="1000" required="true" counter="display" counterTemplate="restam {0} caracteres." requiredMessage="Obrigatório preenchimento da descrição."/>
+				<h:outputText id="display" />	
+
+			</h:panelGrid>	
+		
+		</div>
+    </div>
+</div>
+<p:panelGrid columns="2"  layout="grid" >
+	<p:commandButton value="Enviar" action="#{pedidomanutencaoMB.gravar}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
+	<p:commandButton value="Cancelar" action="#{pedidomanutencaoMB.limpaCadastro}"  oncomplete="PF('dgCad').hide()"/>
+</p:panelGrid>
+</h:form>
+</p:dialog>
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="5000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+
+
+</h:body>	
+
+</html>

@@ -37,6 +37,8 @@ public class UserProjectBean implements Serializable{
 	public void init(){
 		lista();
 		listaLogin();
+		userProject = new UserProject();
+		usu = new Login();
 	}
 	
     public List<Login> completeText(String query) {

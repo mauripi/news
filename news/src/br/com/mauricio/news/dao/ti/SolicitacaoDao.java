@@ -27,7 +27,8 @@ public class SolicitacaoDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Solicitacao> listByUsuario(Login usuario){		
-		return this.manager.createQuery(" FROM solicitacao WHERE solicitante= :usuario or favorecido= :usuario order by id desc").setParameter("usuario", usuario).getResultList();
+		return this.manager.createQuery("SELECT distinct s FROM solicitacao s left join fetch s.historicos"
+				+ " WHERE s.solicitante= :usuario or s.favorecido= :usuario order by s.id desc").setParameter("usuario", usuario).getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -37,7 +38,7 @@ public class SolicitacaoDao {
 		status.add(StatusSolicitacao.FINALIZADA);
 		status.add(StatusSolicitacao.RESOLVIDA);
 		
-		String sql=" SELECT s FROM solicitacao s WHERE "
+		String sql=" SELECT distinct s FROM solicitacao s left join fetch s.historicos WHERE "
 				+ "s not in (SELECT s FROM solicitacao s JOIN s.historicos h WHERE h.status in (:status)) ";
 		
 		return this.manager.createQuery(sql)
@@ -49,13 +50,9 @@ public class SolicitacaoDao {
 		List<StatusSolicitacao> status = new ArrayList<StatusSolicitacao>() ;
 		status.add(StatusSolicitacao.CANCELADA);
 		status.add(StatusSolicitacao.FINALIZADA);
-		status.add(StatusSolicitacao.RESOLVIDA);
-		
-		String sql="SELECT s FROM solicitacao s "
-				+ "JOIN s.historicos h WHERE h.status in (:status) ";
-		
-		return this.manager.createQuery(sql)
-				.setParameter("status", status).getResultList();
+		status.add(StatusSolicitacao.RESOLVIDA);		
+		String sql="SELECT distinct s  FROM solicitacao s left join fetch s.historicos h WHERE h.status in (:status) ";		
+		return this.manager.createQuery(sql).setParameter("status", status).getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -64,18 +61,17 @@ public class SolicitacaoDao {
 		status.add(StatusSolicitacao.CANCELADA);
 		status.add(StatusSolicitacao.FINALIZADA);
 		
-		String sql=" SELECT s FROM solicitacao s WHERE "
+		String sql=" SELECT distinct s FROM solicitacao s left join fetch s.historicos WHERE "
 				+ "s not in (SELECT s FROM solicitacao s JOIN s.historicos h WHERE h.status in (:status)) ";
 		
-		return this.manager.createQuery(sql)
-				.setParameter("status", status).getResultList();
+		return this.manager.createQuery(sql).setParameter("status", status).getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public List<Solicitacao> listResolvidas() {
 		List<StatusSolicitacao> status = new ArrayList<StatusSolicitacao>();
 		status.add(StatusSolicitacao.RESOLVIDA);
-		String sql="SELECT s FROM solicitacao s JOIN s.historicos h WHERE h.status in (:status) ";		
+		String sql="SELECT distinct s  FROM solicitacao s left join fetch s.historicos h WHERE h.status in (:status) ";		
 		return this.manager.createQuery(sql).setParameter("status", status).getResultList();
 	}
 
@@ -83,7 +79,7 @@ public class SolicitacaoDao {
 	public List<Solicitacao> listResolvidas(int startingAt, int maxPerPage) {
 		List<StatusSolicitacao> status = new ArrayList<StatusSolicitacao>();
 		status.add(StatusSolicitacao.RESOLVIDA);
-		String sql="SELECT s FROM solicitacao s JOIN s.historicos h WHERE h.status in (:status) ";		
+		String sql="SELECT distinct s  FROM solicitacao s left join fetch s.historicos h WHERE h.status in (:status) ";		
 		return this.manager.createQuery(sql).setParameter("status", status).setFirstResult(startingAt).setMaxResults(maxPerPage).getResultList();
 	}	
 
@@ -94,8 +90,8 @@ public class SolicitacaoDao {
 		status.add(StatusSolicitacao.FINALIZADA);
 		status.add(StatusSolicitacao.RESOLVIDA);
 		
-		String sql=" SELECT s FROM solicitacao s WHERE "
-				+ "s not in (SELECT s FROM solicitacao s JOIN s.historicos h WHERE h.status in (:status)) ";
+		String sql=" SELECT distinct s  FROM solicitacao s WHERE "
+				+ "s not in (SELECT s FROM solicitacao s left join fetch s.historicos h WHERE h.status in (:status)) ";
 		
 		return this.manager.createQuery(sql).setFirstResult(startingAt).setMaxResults(maxPerPage)
 				.setParameter("status", status).getResultList();

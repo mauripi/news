@@ -107,7 +107,24 @@
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>  
        		<p:menuitem value="Recibo da Prestação de Contas" action="reciboprestacao?faces-redirect=true"  />  
         </p:submenu>
-    
+
+        <p:submenu label="Manutenção" rendered="false">
+       		<p:menuitem value="Realizar Solicitação" action="pedidomanutencao?faces-redirect=true" />
+       		<p:menuitem value="Gerenciar Solicitações" action="pedidomanutencaoatendimento?faces-redirect=true" /> 
+        </p:submenu>
+
+        <p:submenu label="Marketing" >
+       		<p:menuitem value="Arquivos PDF" action="cadarquivopdf?faces-redirect=true" />
+       		<p:separator/>
+       		<p:menuitem value="Institucional" action="cadinstitucional?faces-redirect=true" />
+       		<p:separator/>
+       		<p:menuitem value="Equipes" action="cadequipe?faces-redirect=true" /> 
+       		<p:separator/>
+       		<p:menuitem value="Saiu na Mídia" action="cadsaiunamidia?faces-redirect=true" /> 
+        </p:submenu>
+       
+       	<p:menuitem value="Projetos" action="task?faces-redirect=true" rendered="false"/>
+           
      	<p:submenu label="RH">
      		<p:menuitem value="Cadastro de Usuário" action="criarusuario?faces-redirect=true" rendered="#{acessoBean.temAcessoUsuario}" />
      		<p:separator rendered="#{acessoBean.temAcessoUsuario}"/>
@@ -120,6 +137,8 @@
        		<p:menuitem value="Informe de IR" action="impostoderenda?faces-redirect=true" />
        		<p:separator/>
        		<p:menuitem value="Holerite" action="holerite?faces-redirect=true" />
+       		<p:separator/>
+       		<p:menuitem value="Normas e Procedimentos" action="manualvisao?faces-redirect=true" />
        		<p:separator/>
        		<p:menuitem value="Ramais" action="ramalvisao?faces-redirect=true"/>
         </p:submenu>

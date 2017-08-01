@@ -81,15 +81,13 @@
 		<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{userProjectMB.limpaCadastro}" 
 			onclick="PF('dgCad').hide()" update=":formCad" disabled="#{userProjectMB.controlaCadastro == 0}"/>					
 	</p:panelGrid>																				
-	
-
 </h:form>
-
 </p:dialog>
 
 <p:dialog widgetVar="status" appendTo="@(body)"  modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
     <p:graphicImage value="img/ajaxloading.gif" />
 </p:dialog>
+
 
 
 <p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão" resizable="false" >

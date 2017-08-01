@@ -59,14 +59,15 @@
     <param-name>primefaces.THEME</param-name>
     <param-value>aristo</param-value><!-- flick cupertino glass-x-->
   </context-param>
-  <filter>
-    <filter-name>primeUploadFilter</filter-name>
-    <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>primeUploadFilter</filter-name>
-    <servlet-name>Faces Servlet</servlet-name>
-  </filter-mapping>
+<filter>
+  <filter-name>FileUploadFilter</filter-name>
+  <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+</filter>
+ 
+<filter-mapping>
+  <filter-name>FileUploadFilter</filter-name>
+  <servlet-name>FacesServlet</servlet-name>
+</filter-mapping>
 	<context-param>  
 	  <param-name>com.sun.faces.disableVersionTracking</param-name>  
 	  <param-value>true</param-value>  

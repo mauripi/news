@@ -127,7 +127,7 @@ public class FluxoDiarioDao {
 				if(nextRow.getCell(his)!=null)
 					f.setHistorico(nextRow.getCell(his).toString());
 				if(nextRow.getCell(itipo)!=null)
-					f.setTipo(nextRow.getCell(itipo).toString());
+					f.setTipo(nextRow.getCell(itipo).toString().replaceAll(" ","").replaceAll("  ", ""));
 		        
 				Object oEnt = nextRow.getCell(ent);
 				if(oEnt!=null){

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - Manutenção</ui:define>
+<ui:define name="conteudo">
+
+<p:panel>
+<f:facet name="header">Solicitações em Aberto</f:facet>
+	<h:form id="formtb">	
+	    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+	        <p:outputLabel for="filt" value="Filtrar:" />
+	        <p:selectOneRadio id="filt" value="#{pedidomanutencaoMB.filtro}">
+	        	<p:ajax event="change" process="@this" update=":formtb:tb"  listener="#{pedidomanutencaoMB.listar}"/>
+	            <f:selectItem itemLabel="ABERTA" itemValue="false" />
+	            <f:selectItem itemLabel="CONCLUÍDAS" itemValue="true" />
+	        </p:selectOneRadio>
+	    </h:panelGrid>
+
+	    <h:panelGrid columns="6" style="margin-bottom:10px" cellpadding="5">	        
+	        <p:selectBooleanCheckbox value="#{pedidomanutencaoMB.filial1}">
+	            <p:ajax update=":formtb:tb"  listener="#{pedidomanutencaoMB.listarPorFilial}"/>
+	        </p:selectBooleanCheckbox>
+	        <p:outputLabel value="Matriz" />
+	        <p:selectBooleanCheckbox value="#{pedidomanutencaoMB.filial2}">
+	            <p:ajax update=":formtb:tb"  listener="#{pedidomanutencaoMB.listarPorFilial}"/>
+	        </p:selectBooleanCheckbox>
+	        <p:outputLabel value="Araraquara" />  
+	    </h:panelGrid>
+		<br></br>   			
+	    <p:dataTable id="tb" var="s" value="#{pedidomanutencaoMB.pedidos}"  
+	    	selectionMode="single" selection="#{pedidomanutencaoMB.pedido}" rowKey="#{s}" emptyMessage="">
+
+        	<p:ajax event="rowSelect" listener="#{pedidomanutencaoMB.onRowSelect}" update=":formMsg,:formCad" oncomplete="PF('dgCad').show()" />
+
+	       <p:column headerText="Nº" width="4%">
+	            <h:outputText value="#{s.id}" />
+	       </p:column>	 			
+	       <p:column headerText="Abertura" style="width:12%;">
+              <h:outputText value="#{s.dataabertura}">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			  </h:outputText>
+           </p:column>
+	       <p:column headerText="Hora" style="width:7%;">
+              <h:outputText value="#{s.horaabertura}">
+				<f:convertDateTime pattern="HH:mm" locale="pt_BR"/>
+			  </h:outputText>
+           </p:column>           
+	        <p:column headerText="Solicitante" width="25%">
+	            <h:outputText value="#{s.solicitante.nome}" />
+	        </p:column>	   
+	        <p:column headerText="Favorecido" width="25%">
+	            <h:outputText value="#{s.favorecido.nome}" />
+	        </p:column>	  	        
+	        <p:column headerText="Descrição do problema" width="57%">
+	            <h:outputText value="#{s.descricao}" />
+	        </p:column>	   	        	           
+	     
+	    </p:dataTable>
+	</h:form>
+</p:panel>	
+
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Solicitação" resizable="false" >
+<h:form id="formCad" style="width:550px;">
+
+
+        <p:fieldset>
+			<p:panelGrid columns="1"  >	
+				<p:outputLabel value="Favorecido:"/>
+     			<h:outputText value="#{pedidomanutencaoMB.pedido.favorecido}" />
+			</p:panelGrid>	        
+			<p:panelGrid columns="2"  >
+				<p:outputLabel value="Data Abertura:"/>
+				<p:outputLabel value="Hora Abertura:"/>	
+	            <h:outputText value="#{pedidomanutencaoMB.pedido.dataabertura}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+				</h:outputText>
+	            <h:outputText value="#{pedidomanutencaoMB.pedido.horaabertura}">
+					<f:convertDateTime pattern="hh:mm" locale="pt_BR"/>
+				</h:outputText>											
+			</p:panelGrid>						
+			<br></br>
+			<p:panelGrid columns="1" >
+				<p:outputLabel value="Descrição do problema:"/>
+				<h:outputLabel value="#{pedidomanutencaoMB.pedido.descricao}"/>
+			</p:panelGrid>	
+		</p:fieldset><br/>
+
+<p:panelGrid columns="2"  >
+	<p:commandButton value="Enviar" action="#{pedidomanutencaoMB.gravar}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
+	<p:commandButton value="Cancelar" action="#{pedidomanutencaoMB.limpaCadastro}"  oncomplete="PF('dgCad').hide()"/>
+</p:panelGrid>
+</h:form>
+</p:dialog>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+
+<script type="text/javascript">
+function start() {
+    PF('statusDialog').show();
+}
+ 
+function stop() {
+    PF('statusDialog').hide();
+}
+</script>
+</h:body>	
+
+</html>

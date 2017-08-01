@@ -25,13 +25,11 @@
 <h:form>
 	<p:panelGrid columns="1">
 		<h:outputText value="Selecione o arquivo."/>
-	    <p:fileUpload fileUploadListener="#{fluxodiarioMB.handleFileUpload}" mode="advanced" 
-	    	dragDropSupport="false" sizeLimit="1000000" fileLimit="1" 
-	    	label="Selecionar" uploadLabel="Importar" cancelLabel="Cancelar"/>
+		<p:fileUpload fileUploadListener="#{fluxodiarioMB.handleFileUpload}"  mode="advanced" dragDropSupport="false"
+		             invalidFileMessage="Somente arquivos .xls ou .xlsx" multiple="false"
+		             fileLimit="1" allowTypes="/(\.|\/)(xls|xlsx)$/" label="Selecionar" uploadLabel="Importar" cancelLabel="Cancelar"/>	    	
 	</p:panelGrid>
-</h:form>	
-<br></br>
-<br></br>
+</h:form>
 <h:form>
 	<p:panelGrid columns="2">
 		<h:outputLabel value="Mês:" style="padding-rigth : 15px;"/>
@@ -104,22 +102,43 @@
 	</p:panelGrid>	
 	<br></br>
 	<p:panelGrid columns="1" >
-		<p:commandButton value="Gravar" icon="ui-icon-check" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);"  action="#{fluxodiarioMB.importar}" update=":formMsg, down"/>
+		<p:commandButton value="Gravar" icon="ui-icon-check" ajax="false" action="#{fluxodiarioMB.importar}" update=":formMsg"/>
 	</p:panelGrid>
 	<br/><br/>
 </h:form>	
 	
 </p:panel>
 
-<p:dialog modal="false" widgetVar="statusDialog" header="Aguarde..." draggable="false" closable="false" resizable="false"  >
+
+<p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+    <f:facet name="default">
+        <h:outputText value="Status: StandBy" />
+    </f:facet>
+ 
+    <f:facet name="start">
+        <p:graphicImage value="img/ajaxloadingbar.gif" />
+    </f:facet>
+ 
+    <f:facet name="complete">
+        <h:outputText value="Status: Completed" />
+    </f:facet>
+</p:ajaxStatus>
+ 
+<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+ 
+<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
     <p:graphicImage value="img/ajaxloadingbar.gif" />
 </p:dialog>
+
+
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="8000"/> 
 </h:form>
 
 </ui:define>
 </ui:composition>	
+
+
 </h:body>	
 
 </html>

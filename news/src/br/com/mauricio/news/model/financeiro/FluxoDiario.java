@@ -21,7 +21,7 @@ public class FluxoDiario implements Serializable{
 	private Date data;
 	@Column(length=50)  
 	private String documento;
-	@Column(length=300)  
+	@Column(length=600)  
 	private String historico;
 	private Double entrada;
 	private Double saida;

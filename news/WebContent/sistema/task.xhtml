@@ -82,26 +82,34 @@
 			<p:inputText value="#{taskMB.projeto.titulo}" size="38"/>			
 			<h:outputLabel value="Descrição do Projeto:"/>
 			<p:inputTextarea value="#{taskMB.projeto.descricao}" cols="40" rows="2"/>
-		</p:panelGrid>
-	</p:tab>
-	<p:tab title="Período">
-		<p:panelGrid columns="2">
+			<h:outputLabel value="Responsável:" />
+			<p:autoComplete id="resp"  value="#{taskMB.responsavel}" converter="loginConverter" forceSelection="true" size="38"
+				completeMethod="#{taskMB.autoCompleteResponsavel}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>			
 			<h:outputLabel value="Data Início:" />
 			<p:calendar value="#{taskMB.projeto.inicio}" locale="pt_BR" pattern="dd/MM/yyyy"/>	
 			<h:outputLabel value="Data Fim:" />
 			<p:calendar value="#{taskMB.projeto.fim}" locale="pt_BR" pattern="dd/MM/yyyy"/>	
 		</p:panelGrid>
 	</p:tab>
-	<p:tab title="Aprovação">
-		<p:panelGrid columns="3">
-			<h:outputLabel value="Responsável:" />
-			<p:autoComplete id="fav"  value="#{taskMB.responsavel}" converter="loginConverter" forceSelection="true" size="38"
-				completeMethod="#{taskMB.completeText}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>
-			<h:outputLabel value=""/>		
+	<p:tab title="Participantes">
+	<p:panelGrid columns="1">	
+			<p:commandButton  icon="ui-icon-plus" value="Novo" title="Novo"  oncomplete="PF('dgCad').show();" action="#{taskMB.novoParticipante}"/>
+	</p:panelGrid><br/>
+			<p:separator/><br/>
+		<p:panelGrid columns="3">	
 			<h:outputLabel value="Participantes:" />
-			<p:inputText value="#{taskMB.projeto.participantes}" size="38"/>
-			<p:commandButton icon="ui-icon-plus" actionListener="#{taskMB.criarNovoProjeto}" />
+			<p:autoComplete id="part"  value="#{taskMB.participante}" placeholder="Digite o nome do participante" converter="userprojectConverter" forceSelection="true" size="38"
+				completeMethod="#{taskMB.autoCompleteParticpante}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>
+			<p:commandButton icon="ui-icon-check" actionListener="#{taskMB.addParticipante}" update="dtlst" /><br/>
 		</p:panelGrid>
+		<p:dataList id="dtlst" value="#{taskMB.participantes}" var="u"  itemType="none" paginator="true" rows="10" styleClass="paginated">
+	        <f:facet name="header">Participantes </f:facet>	
+	        <h:outputText value="#{u.nome}" style="display:inline-block"/>
+	        
+             <p:commandLink  update="dtlst"  title="Remover" styleClass="ui-icon ui-icon-trash"  style="float:left;margin-right:10px">
+                <p:collector value="#{u}" removeFrom="#{taskMB.participantes}" />
+            </p:commandLink >	        	        	
+		</p:dataList>
 	</p:tab>
 	</p:tabView>	
 		<p:panelGrid columns="2" layout="grid">
@@ -110,7 +118,34 @@
 		</p:panelGrid>
 	</h:form>
 </p:dialog>
- 
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Usuários do Projeto" resizable="false" >
+<h:form id="formCad">
+	<p:panelGrid columns="2">
+		<p:outputLabel value="Usuário do Sistema:"/>
+		<p:autoComplete id="fav"  value="#{taskMB.usu}" converter="loginConverter" forceSelection="true" size="38"
+			completeMethod="#{taskMB.autoCompleteResponsavel}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}">
+            <p:ajax event="itemSelect" listener="#{taskMB.onItemSelect}" update="nomepart,emapart"/>
+        </p:autoComplete>
+		<p:outputLabel value="Participante do Projeto:"/>
+		<p:inputText id="nomepart" value="#{taskMB.participante.nome}" size="38"/>
+		<p:outputLabel value="Email:"/>
+		<p:inputText id="emapart" value="#{taskMB.participante.email}" size="38"/>	
+		<p:outputLabel value="Telefone:"/>
+		<p:inputText value="#{taskMB.participante.tel}" size="28"/>
+		<p:outputLabel value="Celular:"/>
+		<p:inputText value="#{taskMB.participante.cel}" size="28"/>	
+	</p:panelGrid>
+	<br></br>
+	<p:panelGrid columns="2">
+		<p:commandButton value="Gravar" action="#{taskMB.salvarUsuario}" icon="ui-icon-check" 
+			oncomplete="PF('dgCad').hide()" update=":formNovo"/>
+		<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{taskMB.novoParticipante}" 
+			onclick="PF('dgCad').hide()" update=":formNovo"/>					
+	</p:panelGrid>																				
+</h:form>
+</p:dialog>
+
 <p:dialog id="addDivisionDialog" widgetVar="addDivisionDialog" header="Adicionar Tarefa">
 	 <h:form id="formtarefa"> 
 		<p:panelGrid columns="2">

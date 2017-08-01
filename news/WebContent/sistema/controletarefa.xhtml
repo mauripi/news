@@ -24,6 +24,10 @@
 		<p:panelGrid columns="2">
 			<p:commandButton  icon="ui-icon-plus" value="Nova Atividade" title="Novo"  action="#{controletarefaMB.novo}"
 				 update=":formCad" oncomplete="PF('dgCad').show();"/>
+		    <h:commandLink id="excel" title="Exportar para Excel">
+		        <p:graphicImage value="img/excel.png" />       
+		        <p:dataExporter type="xls" target="tbItens" fileName="fluxodedemandas" />
+		    </h:commandLink>				 
 		</p:panelGrid>	 			 
 	 	<br></br>                    	
 	    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
@@ -37,43 +41,43 @@
 	    </h:panelGrid>
  		  
 	    <p:dataTable id="tbItens" var="trf" widgetVar="tarefasTb" value="#{controletarefaMB.tarefasFiltradas}" selectionMode="single" emptyMessage=""
-	    	selection="#{controletarefaMB.tarefa}" rowKey="#{trf.id}" >
+	    	selection="#{controletarefaMB.tarefa}" rowKey="#{trf.id}">
 	    		        
-	        <p:column headerText="Id"  style="width:5%;" sortBy="#{trf.id}">
+	        <p:column headerText="Id"  style="width:5%;font-size: large;" sortBy="#{trf.id}">
 	            <h:outputText value="#{trf.id}" />
 	        </p:column>
-	        <p:column headerText="Atividade" style="width:30%;"  filterBy="#{trf.atividade}"  filterMatchMode="contains">
+	        <p:column headerText="Atividade" style="width:30%;font-size: large;"  filterBy="#{trf.atividade}"  filterMatchMode="contains">
 	            <h:outputText value="#{trf.atividade}" />
 	        </p:column>
-	        <p:column headerText="Responsável" style="width:12%;"  filterBy="#{trf.responsavel}"  filterMatchMode="contains">
+	        <p:column headerText="Responsável" style="width:12%;font-size: large;"  filterBy="#{trf.responsavel}"  filterMatchMode="contains">
 	            <h:outputText value="#{trf.responsavel}" />
 	        </p:column>
-	        <p:column headerText="Inicio" style="width:10%;" sortBy="#{trf.datainicio}">
+	        <p:column headerText="Inicio" style="width:10%;font-size: large;" sortBy="#{trf.datainicio}">
 				<h:outputText value="#{trf.datainicio}">
 					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 				</h:outputText>
 	         </p:column>
-	         <p:column headerText="Conclusão" style="width:10%;" sortBy="#{trf.datafim}">
+	         <p:column headerText="Conclusão" style="width:10%;font-size: large;" sortBy="#{trf.datafim}">
 				<h:outputText value="#{trf.datafim}">
 					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 				</h:outputText>
 	         </p:column> 
-			<p:column headerText="Orçamento" style="text-align: right;width:10%;" sortBy="#{trf.valor}" >
+			<p:column headerText="Orçamento" style="text-align: right;width:10%;font-size: large;" sortBy="#{trf.valor}" >
 				<h:outputText value="#{controletarefaMB.simboloMoeda(trf.moeda)}"/>
 				<h:outputText value="#{trf.valor}">
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" />	           																
 				</h:outputText>				
 			</p:column>	         
-	        <p:column headerText="Progresso" style="width:15%;">
+	        <p:column headerText="Progresso" style="width:15%;" exportable="false">
 	            <p:progressBar value="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim)}" labelTemplate="#{controletarefaMB.calculaProgresso(trf.datainicio,trf.datafim)}%" displayOnly="true"/>
 	        </p:column>	 
-	        <p:column headerText="Observações" style="width:30%;"  >
+	        <p:column headerText="Observações" style="width:30%;font-size: large;"  >
 	            <h:outputText value="#{trf.observacao}" />
 	        </p:column>	    
-	        <p:column headerText="Status da Aprovação" style="width:19%;">
+	        <p:column headerText="Status da Aprovação" style="width:19%;" >
 	        	 <p:inputSwitch value="#{trf.aprovado}" onLabel="Aprovado" offLabel="Não Aprovado" disabled="true" style="text-align: center;"/>
 	        </p:column>          
-	        <p:column  width="68px;">
+	        <p:column  width="68px;font-size: large;" exportable="false">
 	             <p:commandButton actionListener="#{controletarefaMB.edita}" icon="ui-icon-pencil" update=":formCad" oncomplete="PF('dgCad').show();">
 	             	<f:setPropertyActionListener value="#{trf}" target="#{controletarefaMB.tarefa}" />
 	             </p:commandButton>

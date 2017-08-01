@@ -32,12 +32,12 @@ public class GenericDao<T> implements Serializable{
 
 	public void save(T t){
 		manager.persist(t);
-		manager.flush();		
+		manager.flush();
 	}
 
 	public void saveList(List<T> list){
 	   for (T t : list) 
-		  manager.persist(t);		   
+		  manager.persist(t);	
 	}
 	
 	public void update(T t){
