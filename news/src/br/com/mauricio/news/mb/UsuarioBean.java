@@ -51,7 +51,7 @@ public class UsuarioBean implements Serializable {
 	@PostConstruct
 	public void init(){
 		LoginLN ac = new LoginLN();
-		this.logins = ac.listaUsuarios("nome");
+		this.logins = ac.listAtivos();
 		listarFiliais();
 		todosModulos = listAllModulos();
 		CCustoDao daoc = new CCustoDao();

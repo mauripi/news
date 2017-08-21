@@ -24,13 +24,13 @@ public class PedidoManutencaoDao {
 	
 	@SuppressWarnings("unchecked")
 	public List<PedidoManutencao> listarAbertos(Boolean filtro){	
-		String sql=" SELECT distinct p FROM pedidomanutencao p left join fetch p.interacoes WHERE p.concluida = :concluida ";	
+		String sql="FROM pedidomanutencao p WHERE p.concluida = :concluida ";	
 		return this.manager.createQuery(sql).setParameter("concluida", filtro).getResultList();
 	}	
 	
 	@SuppressWarnings("unchecked")
 	public List<PedidoManutencao> listByUsuario(Login usuario){	
-		String sql=" SELECT distinct p FROM pedidomanutencao p left join fetch p.interacoes WHERE"
+		String sql=" FROM pedidomanutencao p WHERE"
 				+ " p.solicitante= :usuario or p.favorecido= :usuario order by p.id desc" ;	
 		return this.manager.createQuery(sql).setParameter("usuario", usuario).getResultList();
 	}		

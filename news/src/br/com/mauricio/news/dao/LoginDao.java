@@ -121,4 +121,12 @@ public class LoginDao {
 		return this.manager.createQuery(" From login where nome like :query").setParameter("query", "'%"+query+"%'").getResultList();	
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Login> listAtivos(){
+		int removido = 0;
+		return this.manager.createQuery(" From login where ativo = :ativo and removido= :remove order by nome")
+				.setParameter("ativo", true)				
+				.setParameter("remove",removido)
+				.getResultList();	
+	}
 }

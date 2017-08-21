@@ -52,6 +52,7 @@ public class TaskBean implements Serializable{
     public void init(){
     	listarTodosParticipantes();
     	listarTodosUsuarios();
+
     }
     
     private void listarTodosParticipantes() {
@@ -127,7 +128,9 @@ public class TaskBean implements Serializable{
         rootNode.setSelectable(true);
         selection = rootNode;
         save(projeto);
-        novaTask();
+    	task = new Task();
+    	task.setPretask(null);
+    	participantes = new ArrayList<UserProject>();
       }
  
     public void listarProjetos(){
@@ -163,10 +166,12 @@ public class TaskBean implements Serializable{
         OrganigramNode currentSelection = OrganigramHelper.findTreeNode(rootNode, selection);
         Task pai=null;
         if(currentSelection!=null){
-	        if(currentSelection.getType().equals("root"))
+	        if(currentSelection.getType().equals("root")){
 	        	pai = projeto;
-	        else
-	        	pai = (Task) currentSelection.getData();        	
+        	}else{
+	        	pai = (Task) currentSelection.getData();
+	        	System.out.println("ggggggggggggggg"+ pai.getId());
+        	}
         }else{
         	pai=projeto;
         	currentSelection=rootNode;

@@ -117,6 +117,11 @@ public class LoginLN implements Serializable{
 		return dao.findUserByQuery(query);		
 	}
 	
+	public List<Login> listAtivos(){
+		LoginDao dao = new LoginDao();
+		return dao.listAtivos();		
+	}
+	
 	public String reiniciarSenha(Login l){
 		l.setTrocarSenha(1);
 		l.setDataAlteracao(new Date(System.currentTimeMillis()));

@@ -61,6 +61,27 @@ public class PedidoManutencaoBean implements Serializable{
 		pedido.setHoraabertura(new Date());
 		favorecido = usuarioLogado;
 	}
+	
+	public void atender(){
+		GenericLN<PedidoManutencao> gln = new GenericLN<PedidoManutencao>();
+		pedido.setDataatendimento(new Date());
+		pedido.setHoraatendimento(new Date());
+		pedido.setSolucao("");
+		msg = gln.update(pedido);
+		if(msg.equals("Atualizado com sucesso."))
+			msg = "Solicitação em atendimento";
+		mensagens();
+	}
+	
+	public void concluir(){
+		GenericLN<PedidoManutencao> gln = new GenericLN<PedidoManutencao>();
+		pedido.setDatafechamento(new Date());
+		pedido.setHorafechamento(new Date());
+		pedido.setConcluida(true);
+		msg = gln.update(pedido);
+		listar();
+		mensagens();
+	}
 
 	public void edita(){
 		dataabertura = pedido.getDataabertura();

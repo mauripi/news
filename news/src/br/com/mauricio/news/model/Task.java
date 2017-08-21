@@ -51,7 +51,7 @@ public class Task implements Serializable{
 	private List<UserProject> participantes;
 	@OneToOne
 	private Login lider;	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(name="tarefas", joinColumns={@JoinColumn(name="task_id")}, inverseJoinColumns={@JoinColumn(name="pretask_id")})
 	private Set<Task> tasks = new HashSet<>();
@@ -85,6 +85,10 @@ public class Task implements Serializable{
 		return pretask;
 	}
 	public void setPretask(Task pretask) {
+		if(tasks.isEmpty())
+			tasks = new HashSet<Task>();
+		if(pretask != null)
+			tasks.add(pretask);
 		this.pretask = pretask;
 	}
 	public String getDescricao() {

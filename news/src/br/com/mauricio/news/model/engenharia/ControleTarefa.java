@@ -39,7 +39,7 @@ public class ControleTarefa implements Serializable{
 	private String atividade;
 	@Column(length=100)
 	private String responsavel;
-	@Column(length=2000)
+	@Column(length=4000)
 	private String observacao;
 	@Type(type = "org.hibernate.type.NumericBooleanType")
 	private Boolean aprovado=false;

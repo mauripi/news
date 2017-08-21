@@ -69,7 +69,9 @@
 	        <p:column headerText="Descrição do problema" width="57%">
 	            <h:outputText value="#{s.descricao}" />
 	        </p:column>	   	        	           
-	     
+	        <p:column headerText="Solução" width="57%">
+	            <h:outputText value="#{s.solucao}" />
+	        </p:column>		     
 	    </p:dataTable>
 	</h:form>
 </p:panel>	
@@ -79,30 +81,43 @@
 <h:form id="formCad" style="width:550px;">
 
 
-        <p:fieldset>
-			<p:panelGrid columns="1"  >	
-				<p:outputLabel value="Favorecido:"/>
-     			<h:outputText value="#{pedidomanutencaoMB.pedido.favorecido}" />
-			</p:panelGrid>	        
-			<p:panelGrid columns="2"  >
-				<p:outputLabel value="Data Abertura:"/>
-				<p:outputLabel value="Hora Abertura:"/>	
-	            <h:outputText value="#{pedidomanutencaoMB.pedido.dataabertura}">
-					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
-				</h:outputText>
-	            <h:outputText value="#{pedidomanutencaoMB.pedido.horaabertura}">
-					<f:convertDateTime pattern="hh:mm" locale="pt_BR"/>
-				</h:outputText>											
-			</p:panelGrid>						
-			<br></br>
-			<p:panelGrid columns="1" >
-				<p:outputLabel value="Descrição do problema:"/>
-				<h:outputLabel value="#{pedidomanutencaoMB.pedido.descricao}"/>
-			</p:panelGrid>	
-		</p:fieldset><br/>
+  	<p:fieldset>
+		<p:panelGrid columns="1"  >	
+			<p:outputLabel value="Favorecido:"/>
+    			<h:outputText value="#{pedidomanutencaoMB.pedido.favorecido}" />
+		</p:panelGrid><br></br>	        
+		<p:panelGrid columns="4"  >
+			<p:outputLabel value="Data Abertura:"/>
+            <h:outputText value="#{pedidomanutencaoMB.pedido.dataabertura}">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			</h:outputText>
+			<p:outputLabel value="Data Atendimento:"/>
+			<h:outputText value="#{pedidomanutencaoMB.pedido.dataatendimento}">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			</h:outputText>
+			<p:outputLabel value="Hora Abertura:"/>	
+            <h:outputText value="#{pedidomanutencaoMB.pedido.horaabertura}">
+				<f:convertDateTime pattern="hh:mm" locale="pt_BR"/>
+			</h:outputText>			
+			<p:outputLabel value="Hora Atendimento:"/>
+            <h:outputText value="#{pedidomanutencaoMB.pedido.horaatendimento}">
+				<f:convertDateTime pattern="hh:mm" locale="pt_BR"/>
+			</h:outputText>											
+		</p:panelGrid>						
+		<br></br>
+		<p:panelGrid columns="1" >
+			<p:outputLabel value="Descrição do problema:"/>
+			<h:outputLabel value="#{pedidomanutencaoMB.pedido.descricao}"/>
+			<p:outputLabel value="Solução:"/>
+			<p:inputTextarea cols="60" rows="7" value="#{pedidomanutencaoMB.pedido.solucao}" disabled="#{pedidomanutencaoMB.pedido.dataatendimento == null}" required="true" requiredMessage="Preencha o campo"/>
+		</p:panelGrid>	
+	</p:fieldset><br/>
+		
 
-<p:panelGrid columns="2"  >
-	<p:commandButton value="Enviar" action="#{pedidomanutencaoMB.gravar}" update=":formCad,:formMsg,:formtb" oncomplete="PF('dgCad').hide()"/>
+<p:panelGrid columns="3"  >
+	<p:commandButton value="Atender" action="#{pedidomanutencaoMB.atender}" update=":formCad,:formMsg,:formtb" disabled="#{pedidomanutencaoMB.pedido.dataatendimento != null}" />
+	<p:commandButton value="Concluir" action="#{pedidomanutencaoMB.concluir}" disabled="#{pedidomanutencaoMB.pedido.dataatendimento == null || pedidomanutencaoMB.pedido.datafechamento != null}"
+			update=":formCad,:formMsg,:formtb" />
 	<p:commandButton value="Cancelar" action="#{pedidomanutencaoMB.limpaCadastro}"  oncomplete="PF('dgCad').hide()"/>
 </p:panelGrid>
 </h:form>
