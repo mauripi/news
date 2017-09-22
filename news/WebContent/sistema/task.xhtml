@@ -22,7 +22,7 @@
 
 	<h:form id="form" >
 	    <p:menuButton value="Opções">
-	        <p:menuitem value="Abrir Projeto" icon="ui-icon- folder-open" actionListener="#{taskMB.listarProjetos}"
+	        <p:menuitem value="Abrir Projeto" icon="ui-icon-folder-open" actionListener="#{taskMB.listarProjetos}"
 	        	oncomplete="PF('abrir').show()" update=":formAbrir"/>
 	            <p:separator />
 	        <p:menuitem value="Novo Projeto"  icon="ui-icon-plus" actionListener="#{taskMB.novo}"
@@ -100,7 +100,7 @@
 			<h:outputLabel value="Participantes:" />
 			<p:autoComplete id="part"  value="#{taskMB.participante}" placeholder="Digite o nome do participante" converter="userprojectConverter" forceSelection="true" size="38"
 				completeMethod="#{taskMB.autoCompleteParticpante}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>
-			<p:commandButton icon="ui-icon-check" actionListener="#{taskMB.addParticipante}" update="dtlst" /><br/>
+			<p:commandButton icon="ui-icon-check" actionListener="#{taskMB.addParticipante}" update="dtlst,part" /><br/>
 		</p:panelGrid>
 		<p:dataList id="dtlst" value="#{taskMB.participantes}" var="u"  itemType="none" paginator="true" rows="10" styleClass="paginated">
 	        <f:facet name="header">Participantes </f:facet>	

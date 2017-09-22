@@ -52,7 +52,6 @@ public class TaskBean implements Serializable{
     public void init(){
     	listarTodosParticipantes();
     	listarTodosUsuarios();
-
     }
     
     private void listarTodosParticipantes() {
@@ -86,7 +85,6 @@ public class TaskBean implements Serializable{
 			gln.add(participante);
 			listarTodosParticipantes();
 		}
- 
     }
     
     public List<UserProject> autoCompleteParticpante(String query) {
@@ -107,12 +105,12 @@ public class TaskBean implements Serializable{
 
     public void novoParticipante(){
     	participante = new UserProject();
-    	usu = new Login();
-    	
+    	usu = new Login();   	
     }
     
     public void addParticipante(){
     	participantes.add(participante);
+    	participante = new UserProject();
     }
   
     public void onItemSelect(SelectEvent event) {
@@ -151,8 +149,10 @@ public class TaskBean implements Serializable{
     private void save(Task t){
     	GenericLN<Task> gln = new GenericLN<Task>();
     	Task pai = null;
-    	if(t.getPretask()!=null)
-    		pai = gln.find(new Task(), t.getPretask().getId());
+ 
+    	if(t.getPretask() != null)
+    		pai = gln.find(new Task(), t.getPretask().getId()); 
+
     	t.setPretask(pai);
     	gln.add(t);    	
     }
@@ -166,12 +166,10 @@ public class TaskBean implements Serializable{
         OrganigramNode currentSelection = OrganigramHelper.findTreeNode(rootNode, selection);
         Task pai=null;
         if(currentSelection!=null){
-	        if(currentSelection.getType().equals("root")){
+	        if(currentSelection.getType().equals("root"))
 	        	pai = projeto;
-        	}else{
+        	else
 	        	pai = (Task) currentSelection.getData();
-	        	System.out.println("ggggggggggggggg"+ pai.getId());
-        	}
         }else{
         	pai=projeto;
         	currentSelection=rootNode;

@@ -101,10 +101,20 @@
 
 		<p:tab id="patrimonios" title="Patrimônios">	
 			<p:panel header="Patrimônios">
-				<p:messages autoUpdate="true"/>	
+				<p:messages autoUpdate="true"/>
+				<p:panelGrid columns="2">
+					<h:outputLabel value="Permitir baixa sem Plaqueta    (Este campo deverá se autorizado pela Contabilidade)"/>
+					<p:selectBooleanCheckbox value="#{baixabemMB.permiteBaixa}">
+            			<p:ajax update=":formCad:painelTab:descricao,:formCad:painelTab:codBem" process="@this" event="change"/>
+        			</p:selectBooleanCheckbox>
+        		</p:panelGrid>
+        		<p:panelGrid columns="2" id="descricao"  >
+        			<h:outputLabel value="Descrição do Patrimônio" rendered="#{baixabemMB.permiteBaixa}"/>
+        			<p:inputText value="#{baixabemMB.descricao}" rendered="#{baixabemMB.permiteBaixa}" size="40"/>
+				</p:panelGrid>	
 				<p:panelGrid columns="3" >
 					<h:outputLabel value="Nº Patrimônio"/>
-					<p:inputText value="#{baixabemMB.codigo}" maxlength="6" size="12" disabled="#{baixabemMB.controlaCadastro == 0}" />				
+					<p:inputText id="codBem" value="#{baixabemMB.codigo}" maxlength="6" size="12" disabled="#{baixabemMB.controlaCadastro == 0 || baixabemMB.permiteBaixa }"/>				
 					<p:commandButton value="Adicionar" action="#{baixabemMB.encontrarBem}" update=":formMsg,:formCad"  onstart="PF('status').show()" onsuccess="PF('status').hide()" disabled="#{baixabemMB.controlaCadastro == 0}"/>
 				</p:panelGrid>
 				<p:panelGrid columns="2" id="dados" rendered="false">

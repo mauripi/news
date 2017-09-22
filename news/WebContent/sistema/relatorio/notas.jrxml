@@ -21,7 +21,7 @@
 	<detail>
 		<band height="16" splitType="Stretch">
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="7" y="0" width="54" height="15" uuid="027783f5-7bed-46c8-8e2e-6724a2c8df2b">
+				<reportElement x="5" y="0" width="54" height="15" uuid="027783f5-7bed-46c8-8e2e-6724a2c8df2b">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -29,7 +29,7 @@
 				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00#">
-				<reportElement x="121" y="0" width="58" height="15" uuid="63ea7848-ea9c-42bd-987b-b103986f3819">
+				<reportElement x="133" y="0" width="56" height="15" uuid="63ea7848-ea9c-42bd-987b-b103986f3819">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -37,7 +37,7 @@
 				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="72" y="0" width="48" height="15" uuid="fc75d052-34fa-40d7-8b38-810390c0e4f2">
+				<reportElement x="61" y="0" width="67" height="15" uuid="fc75d052-34fa-40d7-8b38-810390c0e4f2">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -45,7 +45,7 @@
 				<textFieldExpression><![CDATA[$F{documento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="200" y="0" width="340" height="15" uuid="be4571f8-8963-42f2-88ff-e355b54375cd">
+				<reportElement x="191" y="0" width="349" height="15" uuid="be4571f8-8963-42f2-88ff-e355b54375cd">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -62,10 +62,10 @@
 				<reportElement x="190" y="0" width="1" height="15" uuid="88d790f6-72f6-45c0-bd54-770f86a3f46f"/>
 			</line>
 			<line>
-				<reportElement x="120" y="0" width="1" height="15" uuid="0ef35e6c-8e14-416c-9739-61f069bd74f9"/>
+				<reportElement x="128" y="0" width="1" height="15" uuid="0ef35e6c-8e14-416c-9739-61f069bd74f9"/>
 			</line>
 			<line>
-				<reportElement x="67" y="0" width="1" height="15" uuid="66937d07-2443-4e65-a7fc-7d21b879b070"/>
+				<reportElement x="60" y="0" width="1" height="15" uuid="66937d07-2443-4e65-a7fc-7d21b879b070"/>
 			</line>
 			<line>
 				<reportElement x="558" y="0" width="1" height="15" uuid="15ab7ab9-d091-4b16-a5ad-38924c0019c5"/>

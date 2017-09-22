@@ -119,7 +119,8 @@
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://rms03:1433;databaseName=Sapiens_homo;" />
 			<property name="javax.persistence.jdbc.user" value="sa" />			
 			<property name="javax.persistence.jdbc.password" value="xptohb3s%lrbe" />
-
+			<property name="hibernate.type" value="ERROR" />
+			<property name="logging.level" value="ERROR"/>
 		</properties>
 	</persistence-unit>			
 </persistence>

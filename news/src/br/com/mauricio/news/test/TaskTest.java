@@ -25,6 +25,7 @@ public class TaskTest {
 		t1.setInicio(new Date(2017,1,1));
 		t1.setFim(new Date(2017,12,31));
 		t1.setPretask(null);
+		
 
 		manager.persist(t1);
 		
@@ -33,6 +34,7 @@ public class TaskTest {
 		t2.setInicio(new Date(2017,1,1));
 		t2.setFim(new Date(2017,12,31));
 		t2.setPretask(t1);
+		
 		
 		manager.persist(t2);
 

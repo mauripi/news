@@ -51,9 +51,9 @@ public class Task implements Serializable{
 	private List<UserProject> participantes;
 	@OneToOne
 	private Login lider;	
-	@OneToMany(cascade=CascadeType.ALL)
-	@LazyCollection(LazyCollectionOption.FALSE)
-    @JoinTable(name="tarefas", joinColumns={@JoinColumn(name="task_id")}, inverseJoinColumns={@JoinColumn(name="pretask_id")})
+ 	@OneToMany
+ 	@LazyCollection(LazyCollectionOption.FALSE)
+     @JoinTable(name="tarefas", joinColumns={@JoinColumn(name="task_id")}, inverseJoinColumns={@JoinColumn(name="pretask_id")})
 	private Set<Task> tasks = new HashSet<>();
 
 	
@@ -85,11 +85,9 @@ public class Task implements Serializable{
 		return pretask;
 	}
 	public void setPretask(Task pretask) {
-		if(tasks.isEmpty())
-			tasks = new HashSet<Task>();
-		if(pretask != null)
-			tasks.add(pretask);
 		this.pretask = pretask;
+		if(pretask != null)
+			pretask.getTasks().add(this);
 	}
 	public String getDescricao() {
 		return descricao;
@@ -122,6 +120,7 @@ public class Task implements Serializable{
 		this.lider = lider;
 	}
 	public Set<Task> getTasks() {
+		
 		return tasks;
 	}
 	public void setTasks(Set<Task> tasks) {
@@ -142,7 +141,6 @@ public class Task implements Serializable{
 		result = prime * result + ((lider == null) ? 0 : lider.hashCode());
 		result = prime * result + ((participantes == null) ? 0 : participantes.hashCode());
 		result = prime * result + ((pretask == null) ? 0 : pretask.hashCode());
-		result = prime * result + ((tasks == null) ? 0 : tasks.hashCode());
 		result = prime * result + ((titulo == null) ? 0 : titulo.hashCode());
 		result = prime * result + ((valor == null) ? 0 : valor.hashCode());
 		return result;

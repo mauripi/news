@@ -54,6 +54,7 @@ public class BaixaBemBean implements Serializable {
 	private Double totalResidual;
 	private Boolean isVenda=false;
 	private CCusto cCusto;
+	private Boolean permiteBaixa = false;
 	
 	@PostConstruct
 	public void init(){
@@ -67,6 +68,7 @@ public class BaixaBemBean implements Serializable {
 		listar();		
 	}
 	
+		
 	private void listarCentrosDeCustos(){
 		GenericLN<CCusto> cgln= new GenericLN<CCusto>();
 		centroCustos = cgln.listWithoutRemoved("ccusto", "filial,nome");
@@ -120,45 +122,63 @@ public class BaixaBemBean implements Serializable {
 	}
 
 	public void encontrarBem(){
-		BaixaBemLN ln = new BaixaBemLN();
-		patrimonios = ln.getPatrimonios(codigo, data);
-		if(patrimonios.size()<1){
-			msg = "Nenhum registro encontrado para este número de patrimônio. ";
-			baixabem.setDataaquisicao(null);
-			baixabem.setDescricaoBem("");
-			baixabem.setVlraquisicao(null);
-			baixabem.setVlrresidual(null);
-			mensagens();	
-		}else{
-			for(Patrimonio p: patrimonios){
-				if(p.getNumpla().contains("-00")){
-					baixabem.setDataaquisicao(p.getDataqi());
-					baixabem.setDescricaoBem(p.getDesbem());
-					baixabem.setVlraquisicao(p.getVlrbas());
-					baixabem.setVlrresidual(p.getVlrres());
-					baixabem.setPatrimonio(p.getCodbem());
+		if (!permiteBaixa){
+			BaixaBemLN ln = new BaixaBemLN();
+			patrimonios = ln.getPatrimonios(codigo, data);
+			if(patrimonios.size()<1){
+				msg = "Nenhum registro encontrado para este número de patrimônio. ";
+				baixabem.setDataaquisicao(null);
+				baixabem.setDescricaoBem("");
+				baixabem.setVlraquisicao(null);
+				baixabem.setVlrresidual(null);
+				mensagens();	
+			}else{
+				for(Patrimonio p: patrimonios){
+					if(p.getNumpla().contains("-00")){
+						baixabem.setDataaquisicao(p.getDataqi());
+						baixabem.setDescricaoBem(p.getDesbem());
+						baixabem.setVlraquisicao(p.getVlrbas());
+						baixabem.setVlrresidual(p.getVlrres());
+						baixabem.setPatrimonio(p.getCodbem());
+					}
 				}
+				totalCompra = new Double("0.0");
+				totalResidual = new Double("0.0");
+				for(Patrimonio p: patrimonios){
+					ItemBaixaBem item = new ItemBaixaBem();
+					item.setDescricao(p.getDesbem());
+					item.setNotafiscal(p.getNumdoc());
+					item.setPatrimonio(p.getCodbem());
+					item.setNomeFornecedor(p.getNomfor());
+					item.setNumpla(p.getNumpla());
+					item.setVlraquisicao(p.getVlrbas());
+					item.setVlrresidual(p.getVlrres());
+					item.setQuantidade(new Double("0"));
+					item.setDataaquisicao(p.getDataqi());
+					item.setDatavenda(data);
+					item.setBaixabem(baixabem);
+					totalCompra = totalCompra+p.getVlrbas();
+					totalResidual = totalResidual+p.getVlrres();
+					itens.add(item);
+				}
+				patrimonios = new ArrayList<Patrimonio>();
 			}
-			totalCompra = new Double("0.0");
-			totalResidual = new Double("0.0");
-			for(Patrimonio p: patrimonios){
-				ItemBaixaBem item = new ItemBaixaBem();
-				item.setDescricao(p.getDesbem());
-				item.setNotafiscal(p.getNumdoc());
-				item.setPatrimonio(p.getCodbem());
-				item.setNomeFornecedor(p.getNomfor());
-				item.setNumpla(p.getNumpla());
-				item.setVlraquisicao(p.getVlrbas());
-				item.setVlrresidual(p.getVlrres());
-				item.setQuantidade(new Double("0"));
-				item.setDataaquisicao(p.getDataqi());
-				item.setDatavenda(data);
-				item.setBaixabem(baixabem);
-				totalCompra = totalCompra+p.getVlrbas();
-				totalResidual = totalResidual+p.getVlrres();
-				itens.add(item);
-			}
-			patrimonios = new ArrayList<Patrimonio>();
+		}else{
+			ItemBaixaBem item = new ItemBaixaBem();
+			item.setDescricao(descricao);
+			item.setNotafiscal("---");
+			item.setPatrimonio("---");
+			item.setNomeFornecedor("---");
+			item.setNumpla("---");
+			item.setVlraquisicao(new Double("0"));
+			item.setVlrresidual(new Double("0"));
+			item.setQuantidade(new Double("1"));
+			item.setDataaquisicao(null);
+			item.setDatavenda(data);
+			item.setBaixabem(baixabem);
+			itens.add(item);
+			descricao = "";
+			permiteBaixa = false;
 		}
 	}
 	
@@ -530,6 +550,16 @@ public class BaixaBemBean implements Serializable {
 
 	public void setcCusto(CCusto cCusto) {
 		this.cCusto = cCusto;
+	}
+
+
+	public Boolean getPermiteBaixa() {
+		return permiteBaixa;
+	}
+
+
+	public void setPermiteBaixa(Boolean permiteBaixa) {
+		this.permiteBaixa = permiteBaixa;
 	}
 
 }

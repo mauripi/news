@@ -32,7 +32,7 @@
 	    <p:dataTable id="lic" var="l" value="#{licencaMB.licencas}" selectionMode="single" 
 	     	selection="#{licencaMB.licSel}" rowKey="#{l.id}" emptyMessage="">
 			<p:ajax event="rowSelect" listener="#{licencaMB.selecao}" update=":formCad" oncomplete="PF('dgCad').show();"/>
-	        <p:column headerText="Descrição" width="40%">
+	        <p:column headerText="Descrição" width="40%" filterBy="#{l.descricao}"  filterMatchMode="contains">
 	            <h:outputText value="#{l.descricao}" />
 	        </p:column>
 	        <p:column headerText="Chave" width="20%">
