@@ -42,7 +42,7 @@ public class BemDao {
 		
 		String sql1 ="SELECT b.codbem,b.desbem,b.dataqi,b.vlrbas,nomfor,numdoc,l.numpla "
 				+ "FROM e670bem b inner join e670loc l on (l.codbem=b.codbem) "
-				+ "WHERE SUBSTRING(l.numpla, 1, 6)= :codigo "
+				+ "WHERE b.sitpat<>'I' and SUBSTRING(l.numpla, 1, 6)= :codigo "
 				+ "group by b.codbem,b.desbem,b.dataqi,b.vlrbas,nomfor,numdoc,l.numpla "
 				+ "order by l.numpla";
 
@@ -92,7 +92,7 @@ public class BemDao {
 		String sql1 ="select "
 				+ "b.codbem,b.desbem,b.dataqi,b.vlrbas,nomfor,numdoc,l.numpla "
 				+ "FROM e670bem b inner join e670loc l on (l.codbem=b.codbem) "
-				+ "WHERE SUBSTRING(l.numpla, 1, 6)= :codigo "
+				+ "WHERE b.sitpat<>'I' and SUBSTRING(l.numpla, 1, 6)= :codigo "
 				+ "group by b.codbem,b.desbem,b.dataqi,b.vlrbas,nomfor,numdoc,l.numpla "
 				+ "order by l.numpla";
 		

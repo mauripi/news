@@ -103,7 +103,7 @@
 			<p:panel header="Patrimônios">
 				<p:messages autoUpdate="true"/>
 				<p:panelGrid columns="2">
-					<h:outputLabel value="Permitir baixa sem Plaqueta    (Este campo deverá se autorizado pela Contabilidade)"/>
+					<h:outputLabel value="Permitir baixa sem Plaqueta    (Este campo deverá ser autorizado pela Contabilidade)"/>
 					<p:selectBooleanCheckbox value="#{baixabemMB.permiteBaixa}">
             			<p:ajax update=":formCad:painelTab:descricao,:formCad:painelTab:codBem" process="@this" event="change"/>
         			</p:selectBooleanCheckbox>

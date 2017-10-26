@@ -27,31 +27,34 @@ import br.com.mauricio.news.util.SendMail;
 public class ProximosAvisoContratoJob  implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		System.out.println(new DateTime() +" => Iniciando processo automático para envio email contrato Proximos Aviso..."); 
-		String CAMINHO_PASTA_CONTRATOS = "C:\\ARQUIVOS_CONTRATOS\\";
 		List<Contrato> list = getList();
 		if(list.size()==0){
 			System.out.println("Não há emails a serem enviados.");
 		}else{	
 			System.out.println(list.size() + " emails a serem enviados.");
-			for(Contrato c:list){
-		        HtmlEmail email = new HtmlEmail();  		
-		        String cid;
-				try {
-					cid = email.embed(new File(CAMINHO_PASTA_CONTRATOS+"img//img-not-logo.png"));
-			        email.setHtmlMsg(emailAviso(cid,c));   
-			        List<String> listTo = EmailUtil.stringToListSeparadoPorVirgula(c.getEmailsAviso());
-			        for(int i=0;i<listTo.size();i++)
-			        	email.addTo(listTo.get(i));  
-			        email.setSubject("Aviso de término de contrato"); 		
-			        SendMail.sendHtml(email);
-				} catch (EmailException e) {
-					System.out.println(e.getLocalizedMessage());
-					e.printStackTrace();
-				}    
-			}
+			list.forEach(c -> enviar(c));
 		}
         System.out.println(new DateTime() +" => Finalizando processo automático para envio email contrato Proximos Aviso..."); 
 	}
+
+	private void enviar(Contrato c){
+		String CAMINHO_PASTA_CONTRATOS = "C:\\ARQUIVOS_CONTRATOS\\";
+        HtmlEmail email = new HtmlEmail();  		
+        String cid;
+		try {
+			cid = email.embed(new File(CAMINHO_PASTA_CONTRATOS+"img//img-not-logo.png"));
+	        email.setHtmlMsg(emailAviso(cid,c));   
+	        List<String> listTo = EmailUtil.stringToListSeparadoPorVirgula(c.getEmailsAviso());
+
+	        for(int i=0;i<listTo.size();i++)
+	        	email.addTo(listTo.get(i));  
+	        email.setSubject("Aviso de término de contrato"); 		
+	        SendMail.sendHtml(email);
+		} catch (EmailException e) {
+			System.out.println(e.getLocalizedMessage());
+			e.printStackTrace();
+		}    
+	}	
 	
 	private static List<Contrato> getList(){
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("news");
@@ -67,7 +70,12 @@ public class ProximosAvisoContratoJob  implements Job {
 			if(c.getDiasAviso()!=null){
 				if(c.getRepetirAviso()!=null){
 					LocalDate data = new LocalDate(c.getFim()).minusDays(c.getDiasAviso()).plusDays(c.getRepetirAviso());
-					if(data.compareTo(new LocalDate())==0) listAviso.add(c);					
+					if(data.compareTo(new LocalDate())==0){
+						listAviso.forEach(x -> {
+							if(x.getId()!=c.getId())
+								listAviso.add(c);
+						});						
+					}					
 				}
 			}
 		}

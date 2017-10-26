@@ -99,6 +99,8 @@ public class LancamentoContabilDao {
 		return relacionamento;
 	}
 
+	
+	
 	public void atualizaOrcamentoBaseSenior(Set<ContaValorTotalFilial> orcadoMensalPorFilial, Map<Integer, Integer> contaClassificacao){
 		System.out.println(" =========     INÍCIO DA ATUALIZAÇÃO/INSERÇÃO DO ORÇAMENTO ============== ");
 		System.out.println("");
@@ -121,11 +123,10 @@ public class LancamentoContabilDao {
 						.setParameter("mesano", dataBanco).setParameter("ctared", ctared)
 						.getSingleResult();
 				String mesano = montaData(i+1);
-				if(count.equals( 0L ))
-					iserirOrcamento(codfil, mesano, ctared, clacta, vlrorc);
-				else
-					update(codfil, mesano, ctared, vlrorc);
-	                     
+				
+				if(count.equals( 0 )) iserirOrcamento(codfil, mesano, ctared, clacta, vlrorc);
+				else update(codfil, mesano, ctared, vlrorc);
+
 			}
 		});
 		fechaConexao();
@@ -140,11 +141,17 @@ public class LancamentoContabilDao {
 		double debmes = new Double("0.0");
 		double cremes = new Double("0.0");
 		double salmes = new Double("0.0");
-		
+
 		StringBuilder sb = new StringBuilder();
-		sb.append("INSERT INTO topic (codemp,codfil,mesano,ctared,clacta,anasin,qtdpos,debcal,crecal,debmes,cremes,salmes,vlrorc) VALUES( ");
-		sb.append(codemp).append(",").append(codfil).append(",").append(mesano).append(",");
-		sb.append(ctared).append(",").append(clacta).append(",").append(anasin).append(",");
+		sb.append("INSERT INTO e650pma (codemp,codfil,mesano,ultlot,ultlct,ultcnv,temlct,temlrt,temlca,temlra,temrat,indest) VALUES( ");
+		sb.append(codemp).append(",").append(codfil).append(",'").append(mesano).append("',0,0,0,'N','N','N','N','S','S'").append(")");
+		escrever(sb.toString());
+		
+		
+		sb = new StringBuilder();
+		sb.append("INSERT INTO e650sal (codemp,codfil,mesano,ctared,clacta,anasin,qtdpos,debcal,crecal,debmes,cremes,salmes,vlrorc) VALUES( ");
+		sb.append(codemp).append(",").append(codfil).append(",'").append(mesano).append("',");
+		sb.append(ctared).append(",").append(clacta).append(",'").append(anasin).append("',");
 		sb.append(qtdpos).append(",").append(debcal).append(",").append(crecal).append(",");
 		sb.append(debmes).append(",").append(cremes).append(",").append(salmes).append(",");
 		sb.append(vlrorc).append(")");
@@ -176,8 +183,8 @@ public class LancamentoContabilDao {
 		sb.append(ctared).append(",'30006','22712',0.00,");
 		sb.append(vlrorc).append(",100.0000,'1900-12-31 00:00:00.000',0);");
 		escrever(sb.toString());
+		
 	}
-
 	
 	private String montaData(Integer i){
 		String data="2017-01-01 00:00:00.000";

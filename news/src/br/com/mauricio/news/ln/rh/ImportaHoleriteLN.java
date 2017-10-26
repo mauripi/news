@@ -151,11 +151,6 @@ public class ImportaHoleriteLN implements Serializable {
 	}
 	
 	public Boolean validateMonthYearPeriod(String mes, String ano, Integer period){
-		System.out.println(mes);
-		System.out.println(ano);
-		System.out.println(period);
-		System.out.println("");
-		bases.forEach(x -> System.out.println(x.getPeriodo()));
 		Boolean erro=false;
 		for(Base b:bases)
 			if(b.getAno()!=Integer.parseInt(ano)||b.getMes()!=Integer.parseInt(mes)||b.getPeriodo()!=getPeriod(period))
@@ -182,6 +177,9 @@ public class ImportaHoleriteLN implements Serializable {
 			case 32:
 				i=3;
 				break;
+			case 12:
+				i=12;
+				break;				
 			case 14:
 				i=14;
 				break;

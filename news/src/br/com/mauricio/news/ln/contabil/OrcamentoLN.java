@@ -51,7 +51,8 @@ public class OrcamentoLN implements Serializable {
 	private Set<OrcamentoSig> orcamentoSig = new HashSet<OrcamentoSig>();
 	private BigDecimal negativo = new BigDecimal("-1");
 	private Set<ContaValorTotalFilial> orcadoMensalPorFilial = new HashSet<ContaValorTotalFilial>();
-	
+	private int contador=0;
+	private int contadorFilial=0;
 
 	private EntityManager manager;
 	
@@ -94,7 +95,9 @@ public class OrcamentoLN implements Serializable {
 			calculaMediaTotaisFiliais();					
 			carregaArquivoOrcamento("C:\\sap\\sig2.xlsx");		
 			
-			orcamentoSig.forEach(x -> {
+			//relacionamento.stream().filter(x-> x.getCtasig().equals(5002)).forEach(x-> System.out.println(x.getCtared()));
+			
+			orcamentoSig.stream().forEach(x -> {
 				try{ 
 					orcamento.add(calculaValoresDoSistema(x.getConta()));
 				}catch(NoSuchElementException e){
@@ -211,6 +214,7 @@ public class OrcamentoLN implements Serializable {
 	}
 	
 	private List<Integer> contasRelacionadas(int cantaSig){
+		relacionamento.stream().filter(c -> c.getCtasig().equals(cantaSig) && medias.containsKey(c.getCtared())).forEach(x-> System.out.println(x.getCtared()));
 		return relacionamento.stream()
 			.filter(c -> c.getCtasig().equals(cantaSig) && medias.containsKey(c.getCtared()))
 			.map(map->map.getCtared())
@@ -224,23 +228,46 @@ public class OrcamentoLN implements Serializable {
 		pai.setPersis(new BigDecimal("100.0"));
 		
 		List<Integer> contas = contasRelacionadas(cantaSig);
-
 		BigDecimal mediaTotal = contas.stream().map(c -> medias.get(c)).reduce(BigDecimal::add).get();
+
 		pai.setVlrsis(mediaTotal);
-		
+		int quantidadeDeContasContabeis = contas.size();
+
+		contador=0;
 		contas.forEach(c -> {
+			BigDecimal percentualFinal = BigDecimal.ZERO;
+			contador++;
+
 			ValorSig filho = new ValorSig();
 			filho.setParentes(new ArrayList<ValorSig>());
 			filho.setChave(c);
 			filho.setVlrsis(medias.get(c));
-			filho.setPersis(filho.getVlrsis().divide(pai.getVlrsis(), 4, RoundingMode.HALF_UP));
+		
+			if(contador<=quantidadeDeContasContabeis){ //ajuste para a última conta
+				filho.setPersis(filho.getVlrsis().divide(pai.getVlrsis(), 4, RoundingMode.HALF_UP));	
+				System.out.println("filho hbyjnhyny" + filho.getPersis());
+			}else{
+				percentualFinal = new BigDecimal("1.0").subtract(pai.getParentes().stream().map( v -> v.getPersis()).reduce(BigDecimal::add).get());
+				filho.setPersis(percentualFinal);
+				System.out.println("qualquer coisa " + percentualFinal);
+			}
 
-			consolidadoPorFilial.stream().filter(cf -> cf.getCtared().equals(filho.getChave()))
-				.forEach(cf -> {				
+			contadorFilial=0;
+			consolidadoPorFilial.stream().filter(cf -> cf.getCtared().equals(filho.getChave()))		
+				.forEach(cf -> {
+					contadorFilial++;
+					int qtdFiliais = (int) consolidadoPorFilial.stream().filter(cfx -> cfx.getCtared().equals(filho.getChave())).count();
 					ValorSig neto = new ValorSig();
 					neto.setChave(cf.getFilrat());
-					neto.setVlrsis((Arrays.stream(cf.getTotais()).reduce(BigDecimal::add).get()).divide(divisor, 2, RoundingMode.HALF_UP).multiply(negativo));
-					neto.setPersis(neto.getVlrsis().divide(filho.getVlrsis(), 4, RoundingMode.HALF_UP));
+					neto.setVlrsis((Arrays.stream(cf.getTotais()).reduce(BigDecimal::add).get()).divide(divisor, 2, RoundingMode.HALF_UP).multiply(negativo));		
+					
+					if(contadorFilial <= qtdFiliais){
+						neto.setPersis(neto.getVlrsis().divide(filho.getVlrsis(), 4, RoundingMode.HALF_UP));
+					}else{
+					//	System.out.println(cf.getCtared());
+//System.out.println(filho.getParentes().stream().map( v -> v.getPersis()).reduce(BigDecimal::add).get());
+						neto.setPersis(new BigDecimal("1.0").subtract(filho.getParentes().stream().map( v -> v.getPersis()).reduce(BigDecimal::add).get()));
+					}
 					filho.getParentes().add(neto);
 				});
 			
@@ -278,7 +305,7 @@ public class OrcamentoLN implements Serializable {
 		Connection connection;
 		try {
 			connection = fillo.getConnection(caminho);
-			String strQuery="Select * from plan5 ";
+			String strQuery="Select * from plan7 ";
 			Recordset recordset=connection.executeQuery(strQuery);
 					
 			while(recordset.next()){
