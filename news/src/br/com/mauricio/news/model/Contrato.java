@@ -51,7 +51,7 @@ public class Contrato implements Serializable{
 	@JoinColumn(name="mclifor_id")
 	private MCLIFOR mclifor;
 	private Integer diasAviso;
-	private Integer avigpm;
+	private Date avigpm;
 	private Integer repetirAviso;
 	private String assuntoEmail;
 	private String mensagemEmail;
@@ -60,6 +60,7 @@ public class Contrato implements Serializable{
 	private String responsavel;
 	@Column(length=1000)
 	private String observacao;
+	private Integer deptoRespons;
 
 	
 	public Integer getId() {
@@ -140,10 +141,10 @@ public class Contrato implements Serializable{
 	public void setDiasAviso(Integer diasAviso) {
 		this.diasAviso = diasAviso;
 	}
-	public Integer getAvigpm() {
+	public Date getAvigpm() {
 		return avigpm;
 	}
-	public void setAvigpm(Integer avigpm) {
+	public void setAvigpm(Date avigpm) {
 		this.avigpm = avigpm;
 	}
 	public Integer getRepetirAviso() {
@@ -182,6 +183,12 @@ public class Contrato implements Serializable{
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
+	public Integer getDeptoRespons() {
+		return deptoRespons;
+	}
+	public void setDeptoRespons(Integer deptoRespons) {
+		this.deptoRespons = deptoRespons;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -189,37 +196,27 @@ public class Contrato implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((assuntoEmail == null) ? 0 : assuntoEmail.hashCode());
+		result = prime * result + ((assuntoEmail == null) ? 0 : assuntoEmail.hashCode());
 		result = prime * result + ((ativo == null) ? 0 : ativo.hashCode());
 		result = prime * result + ((avigpm == null) ? 0 : avigpm.hashCode());
-		result = prime * result
-				+ ((diasAviso == null) ? 0 : diasAviso.hashCode());
-		result = prime * result
-				+ ((emailsAviso == null) ? 0 : emailsAviso.hashCode());
+		result = prime * result + ((deptoRespons == null) ? 0 : deptoRespons.hashCode());
+		result = prime * result + ((diasAviso == null) ? 0 : diasAviso.hashCode());
+		result = prime * result + ((emailsAviso == null) ? 0 : emailsAviso.hashCode());
 		result = prime * result + ((fim == null) ? 0 : fim.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((inicio == null) ? 0 : inicio.hashCode());
 		result = prime * result + ((mclifor == null) ? 0 : mclifor.hashCode());
-		result = prime * result
-				+ ((mensagemEmail == null) ? 0 : mensagemEmail.hashCode());
+		result = prime * result + ((mensagemEmail == null) ? 0 : mensagemEmail.hashCode());
 		result = prime * result + ((objeto == null) ? 0 : objeto.hashCode());
-		result = prime * result
-				+ ((observacao == null) ? 0 : observacao.hashCode());
+		result = prime * result + ((observacao == null) ? 0 : observacao.hashCode());
 		result = prime * result + ((origem == null) ? 0 : origem.hashCode());
-		result = prime * result
-				+ ((repetirAviso == null) ? 0 : repetirAviso.hashCode());
-		result = prime * result
-				+ ((responsavel == null) ? 0 : responsavel.hashCode());
-		result = prime * result
-				+ ((tipoValor == null) ? 0 : tipoValor.hashCode());
-		result = prime * result
-				+ ((tipocontrato == null) ? 0 : tipocontrato.hashCode());
+		result = prime * result + ((repetirAviso == null) ? 0 : repetirAviso.hashCode());
+		result = prime * result + ((responsavel == null) ? 0 : responsavel.hashCode());
+		result = prime * result + ((tipoValor == null) ? 0 : tipoValor.hashCode());
+		result = prime * result + ((tipocontrato == null) ? 0 : tipocontrato.hashCode());
 		result = prime * result + ((usuario == null) ? 0 : usuario.hashCode());
-		result = prime * result
-				+ ((valorMensal == null) ? 0 : valorMensal.hashCode());
-		result = prime * result
-				+ ((valorTotal == null) ? 0 : valorTotal.hashCode());
+		result = prime * result + ((valorMensal == null) ? 0 : valorMensal.hashCode());
+		result = prime * result + ((valorTotal == null) ? 0 : valorTotal.hashCode());
 		return result;
 	}
 	@Override
@@ -245,6 +242,11 @@ public class Contrato implements Serializable{
 			if (other.avigpm != null)
 				return false;
 		} else if (!avigpm.equals(other.avigpm))
+			return false;
+		if (deptoRespons == null) {
+			if (other.deptoRespons != null)
+				return false;
+		} else if (!deptoRespons.equals(other.deptoRespons))
 			return false;
 		if (diasAviso == null) {
 			if (other.diasAviso != null)
@@ -346,5 +348,4 @@ public class Contrato implements Serializable{
 				+ data + " " + tipoValor + " " + valorTotal + " "
 				+ valorMensal + " " + mclifor + " " + responsavel + " " + observacao;
 	}
-	
 }

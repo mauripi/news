@@ -65,7 +65,7 @@
 		<p:autoComplete id="fav"  value="#{adiantamentoMB.favorecido}" converter="loginConverter" forceSelection="true" size="50"
 			completeMethod="#{adiantamentoMB.completeText}" effect="fade" var="l" itemLabel="#{l.nome}" itemValue="#{l}"/>
         <h:outputLabel value="Data do Adiantamento"/>			
-		<p:calendar value="#{adiantamentoMB.adiantamento.data}"  maxdate="#{adiantamentoMB.today}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" disabled="true"/>								
+		<p:calendar value="#{adiantamentoMB.adiantamento.data}"  maxdate="#{adiantamentoMB.today}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" />								
         <h:outputLabel value="Valor"/>			
 		<p:inputText value="#{adiantamentoMB.adiantamento.valor}" size="10" disabled="#{adiantamentoMB.controlaCadastro==0}" >
 		 	 <f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	

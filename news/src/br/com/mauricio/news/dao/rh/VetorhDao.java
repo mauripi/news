@@ -34,7 +34,7 @@ public class VetorhDao{
 		this.manager_vetorh = abrirConexao();
 		
 		String sql ="select year(c.perref) as ano, f.numcad, f.codeve, e.deseve,MONTH(c.perref) as mes, "
-				+ "CASE WHEN c.tipcal=11 THEN 2  WHEN c.tipcal=31 THEN 3 WHEN c.tipcal=32 THEN 3 WHEN c.tipcal=14 THEN 14 WHEN c.tipcal=92 THEN 92 END as periodo,"
+				+ "CASE WHEN c.tipcal=11 THEN 2  WHEN c.tipcal=31 THEN 3 WHEN c.tipcal=32 THEN 3 WHEN c.tipcal=12 THEN 12 WHEN c.tipcal=14 THEN 14 WHEN c.tipcal=92 THEN 92 END as periodo,"
 				+ "f.refeve,CASE WHEN e.tipeve=1 THEN 'P' WHEN e.tipeve=2 THEN 'P' WHEN e.tipeve=3 THEN 'D' END as PD, "
 				+ "f.valeve from r046ver f inner join r044cal c on (f.codcal=c.codcal) "
 				+ "inner join r008evc e on (f.codeve=e.codeve) "

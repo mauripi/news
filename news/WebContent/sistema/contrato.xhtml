@@ -186,9 +186,8 @@
 						 converterMessage="Dias para aviso deve conter somente números.">
 					<p:ajax event="blur" listener="#{contratoMB.onBlurDiasAviso}" update="enveml,cmdeml"/>
 				</p:inputMask>		  
-				<p:outputLabel value="Dias aviso IGP-M"/>
-				<p:inputMask id="avsigpm" maxlength="3" value="#{contratoMB.contrato.avigpm}"  type="number"  
-						 converterMessage="Dias para aviso deve conter somente números."/>
+				<p:outputLabel value="Dia de aviso IGP-M"/>
+				<p:calendar id="avsigpm" value="#{contratoMB.contrato.avigpm}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" mindate="#{contratoMB.contrato.inicio}"/>								
 				<p:outputLabel value="Repetir envio:"/>	
 		        <p:selectOneMenu value="#{contratoMB.contrato.repetirAviso}" >
 		        	<f:selectItem itemLabel="Não repetir" itemValue="0" />

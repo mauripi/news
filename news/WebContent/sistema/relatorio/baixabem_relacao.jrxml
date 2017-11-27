@@ -13,35 +13,35 @@
 	</background>
 	<detail>
 		<band height="35">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="40" y="0" width="57" height="20" uuid="103b5a13-c6c0-4cfc-8234-91a498655248"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numpla}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="108" y="0" width="191" height="35" uuid="176e37d4-fd0d-49ef-9dfa-b7a387f8104e"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="300" y="0" width="81" height="20" uuid="390ae7a3-543c-45c4-9bd4-6249837beff9"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dataaquisicao}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="387" y="0" width="67" height="20" uuid="c9960601-e8a5-4656-afde-a6c52a17ccd2"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vlraquisicao}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00">
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
 				<reportElement x="467" y="0" width="62" height="20" uuid="dcd9b9ae-ad19-486b-8094-1bf3458a14bb"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>

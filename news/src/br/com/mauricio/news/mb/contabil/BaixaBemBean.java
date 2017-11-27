@@ -164,6 +164,8 @@ public class BaixaBemBean implements Serializable {
 				patrimonios = new ArrayList<Patrimonio>();
 			}
 		}else{
+			baixabem.setDescricaoBem(descricao);
+			baixabem.setPatrimonio("000000-00");
 			ItemBaixaBem item = new ItemBaixaBem();
 			item.setDescricao(descricao);
 			item.setNotafiscal("---");

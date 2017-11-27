@@ -120,6 +120,11 @@ public class ContratoBean implements Serializable {
             contrato.setEmailsAviso(listToString(emails));
             contrato.setTipocontrato(tipoContrato);
             contrato.setUsuario(userLogado);
+            if(contrato.getDeptoRespons()==null){
+	            contrato.setDeptoRespons(1);
+	            if(userLogado.getCusto().getCodigo().equals("30034")||userLogado.getCusto().getCodigo().equals("30071")||userLogado.getCusto().getCodigo().equals("30107"))
+	                contrato.setDeptoRespons(2);
+            }
             msg = gln.update(contrato);            
             mensagens();
             listar();
@@ -287,7 +292,10 @@ public class ContratoBean implements Serializable {
         if(contrato.getId()==null){
             gln = new GenericLN<Contrato>();
             contrato.setTipocontrato(tipoContrato);
-            contrato.setUsuario(userLogado);                        
+            contrato.setUsuario(userLogado);
+            contrato.setDeptoRespons(1);
+            if(userLogado.getCusto().equals("30034")||userLogado.getCusto().equals("30071")||userLogado.getCusto().equals("30107"))
+                contrato.setDeptoRespons(2);            
             gln.addT(contrato);
         }
         ln.recebeArquivoUpload(event,contrato);

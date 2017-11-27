@@ -25,14 +25,15 @@
 		<p:panelGrid columns="2">
 			<p:commandButton  icon="ui-icon-plus" value="Nova Baixa de Patrimônio" title="Novo"  action="#{baixabemMB.novo}"
 				 update=":formCad" oncomplete="PF('dgCad').show();"/>
-			<p:commandButton icon="ui-icon-print" value="Imprimir" ajax="false" action="${baixabemMB.imprimir}" disabled="#{baixabemMB.baixabem.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
+			<p:commandButton icon="ui-icon-print" value="Imprimir" ajax="false"
+			 action="${baixabemMB.imprimir}" disabled="#{baixabemMB.baixabem.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
 		</p:panelGrid>	 			 
 	 	<br></br>                    
 		<br></br>
 	    <p:dataTable id="tb" var="bem" value="#{baixabemMB.baixabens}" rows="10" paginator="true" selectionMode="single" 
 	     			selection="#{baixabemMB.baixabem}" rowKey="#{bem.id}" emptyMessage="">
 
-			<p:ajax event="rowSelect" listener="#{baixabemMB.selecao}" update=":formCad"  oncomplete="PF('dgCad').show();"/>
+			<p:ajax event="rowSelect" listener="#{baixabemMB.selecao}" update=":formCad,:formtb"  oncomplete="PF('dgCad').show();"/>
 
 	        <p:column headerText="Registro" >
 	            <h:outputText value="#{bem.id}" />
@@ -181,7 +182,7 @@
 	<br></br>
 	<p:panelGrid columns="2">
 		<p:commandButton value="Gravar" action="#{baixabemMB.grava}" update=":formMsg,:formCad" icon="ui-icon-check" 
-			onstart="PF('status').hide()" onsuccess="PF('status').hide()" disabled="#{baixabemMB.controlaCadastro == 0}"/>
+			 ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" disabled="#{baixabemMB.controlaCadastro == 0}"/>
 		<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{baixabemMB.limpaCadastro}" 
 			onclick="PF('dgCad').hide()" update=":formCad" disabled="#{baixabemMB.controlaCadastro == 0}"/>					
 	</p:panelGrid>																				
@@ -203,14 +204,17 @@
 
 			<f:facet name="footer">
 				<p:panelGrid columns="2">
-					<p:commandButton value="Sim" action="#{baixabemMB.exclui}"  icon="ui-icon-check" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Sim" action="#{baixabemMB.exclui}"  icon="ui-icon-check"  ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" 
+					 update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
 					<p:commandButton value="Cancelar"  icon="ui-icon-cancel" onclick="PF('delDialog').hide()"/> 
 				</p:panelGrid>		
 			</f:facet>
 		</p:panel>
 	</h:form>	
 </p:dialog>
-
+<p:dialog modal="false" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false"  >
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
 <h:form id="formMsg">                      
     <p:growl id="msg" showDetail="true" life="6000"/> 
 </h:form>
