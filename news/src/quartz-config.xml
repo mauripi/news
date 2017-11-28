@@ -40,6 +40,23 @@ org.quartz.threadPool.threadCount = 0 -->
 				<cron-expression>0 0 9 * * ?</cron-expression>
 			</cron>
 		</trigger>	
+
+		<job>
+			<name>AvisoIGPMContratoJob</name>
+			<group>News</group>
+			<description>Aviso de IGPM de contrato</description>
+			<job-class>br.com.mauricio.news.agendamento.AvisoIGPMContratoJob</job-class>
+		</job>
+
+		<trigger>
+			<cron>
+				<name>avisoIGPMContratoJob</name>
+				<job-name>AvisoIGPMContratoJob</job-name>
+				<job-group>News</job-group>
+				<cron-expression>0 30 8 * * ?</cron-expression>
+			</cron>
+		</trigger>	
+
 		
 		<job>
 			<name>ProximosAvisoContratoJob</name>

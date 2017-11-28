@@ -87,7 +87,7 @@
 	</h:form>
 </p:panel>	
 
-<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" width="800" height="600">
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro" resizable="false" width="800" height="630">
 
 <h:form id="formCad">
 	<p:tabView  > 
@@ -140,7 +140,12 @@
 				<p:outputLabel value="Responsável:"/>
 				<p:inputText id="resp" value="#{contratoMB.contrato.responsavel}" placeholder="Responsavel do contrato" size="45"/>
 		        <p:outputLabel value="Contrato Ativo:"/>
-		        <p:selectBooleanCheckbox value="#{contratoMB.contrato.ativo}" />								
+		        <p:selectBooleanCheckbox value="#{contratoMB.contrato.ativo}" />
+		        <p:outputLabel value="Departamento Responsável:"/>
+		        <p:selectOneMenu id="dpr" value="#{contratoMB.contrato.deptoRespons}"  style="width:130px;">
+		            <f:selectItem itemLabel="Depto Compras" itemValue="1"/>
+		            <f:selectItem itemLabel="Depto Engenharia" itemValue="2"/>
+		        </p:selectOneMenu>			        								
 			</p:panelGrid>
         </p:tab>	
 
@@ -186,8 +191,6 @@
 						 converterMessage="Dias para aviso deve conter somente números.">
 					<p:ajax event="blur" listener="#{contratoMB.onBlurDiasAviso}" update="enveml,cmdeml"/>
 				</p:inputMask>		  
-				<p:outputLabel value="Dia de aviso IGP-M"/>
-				<p:calendar id="avsigpm" value="#{contratoMB.contrato.avigpm}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" mindate="#{contratoMB.contrato.inicio}"/>								
 				<p:outputLabel value="Repetir envio:"/>	
 		        <p:selectOneMenu value="#{contratoMB.contrato.repetirAviso}" >
 		        	<f:selectItem itemLabel="Não repetir" itemValue="0" />
@@ -202,13 +205,8 @@
 		            <f:selectItem itemLabel="Quinze dias" itemValue="15" />
 		            <f:selectItem itemLabel="Vinte dias" itemValue="20" />					            				            
 		        </p:selectOneMenu> 
-				<p:outputLabel value="Assunto do e-mail"/>	
-				<p:inputText value="#{contratoMB.contrato.assuntoEmail}" />	
 	        </p:panelGrid>	
-	        <p:panelGrid columns="1">
-				<p:outputLabel value="Mensagem do e-mail:"/>	
-				<p:inputTextarea maxlength="300" rows="3" cols="40" autoResize="false" value="#{contratoMB.contrato.mensagemEmail}" />													        	
-	        </p:panelGrid>
+
 	        <p:outputLabel value="Adicionar e-mail:"/>
 	        <p:autoComplete id="enveml"  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}" 
 	        		 disabled="#{contratoMB.contrato.diasAviso eq null}" size="35"/>
@@ -216,9 +214,9 @@
 				 disabled="#{contratoMB.contrato.diasAviso eq null}"/>
 
 		    <p:dataTable id="emlst" value="#{contratoMB.emails}" var="e"  emptyMessage=""  style="width:70%;" 
-							    	   		paginatorPosition="bottom" paginator="true" rows="4" >
+						 scrollable="true" scrollHeight="120" >
 		        <f:facet name="header">
-		            Enviar email para:
+		            Enviar avisos de término para:
 		        </f:facet>
 		        <p:column style="width:90%">
 		        	<h:outputText value="#{e}" style="display:inline-block"/>
@@ -229,7 +227,32 @@
 			            <h:outputText value="#{e}" />
 			        </p:commandLink>					        
 		        </p:column>	
-		    </p:dataTable>	            
+		    </p:dataTable>
+		    
+           	<p:panelGrid columns="2">	  
+				<p:outputLabel value="Dia de aviso IGP-M"/>
+				<p:calendar id="avsigpm" value="#{contratoMB.contrato.avigpm}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" mindate="#{contratoMB.contrato.inicio}"/>								
+			</p:panelGrid>		    	            
+	        <p:outputLabel value="Adicionar e-mail IGPM:"/>
+	        <p:autoComplete id="envemligpm"  value="#{contratoMB.emailAgendamentoIGPM}" completeMethod="#{contratoMB.completeEmailIGPM}" 
+	        		 disabled="#{contratoMB.contrato.avigpm eq null}" size="35"/>
+			<p:commandButton id="cmdemligpm" value="Incluir" action="#{contratoMB.addEmailIGPM}" update="envemligpm,emlstigpm,:formMsg" icon="ui-icon-mail-closed" 
+				 disabled="#{contratoMB.contrato.diasAviso eq null}"/>
+
+		    <p:dataTable id="emlstigpm" value="#{contratoMB.emailsIGPM}" var="e"  emptyMessage=""  style="width:70%;" scrollable="true" scrollHeight="110" >
+		        <f:facet name="header">
+		            Enviar aviso IGPM para:
+		        </f:facet>
+		        <p:column style="width:90%">
+		        	<h:outputText value="#{e}" style="display:inline-block"/>
+		        </p:column>
+		        <p:column style="width:10%;">
+			        <p:commandLink update=":formCad"  title="Remover" styleClass="ui-icon ui-icon-trash" >
+			        	<p:collector value="#{e}" removeFrom="#{contratoMB.emailsIGPM}" unique="true"/>
+			            <h:outputText value="#{e}" />
+			        </p:commandLink>					        
+		        </p:column>	
+		    </p:dataTable>
         </p:tab>
 
         <p:tab id="obs" title="Observações" ><br/>		            	

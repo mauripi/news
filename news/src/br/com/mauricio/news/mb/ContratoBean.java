@@ -47,12 +47,15 @@ public class ContratoBean implements Serializable {
     private String msg;
     private List<String> msgs;
     private List<String> emails;
+    private List<String> emailsIGPM;
     private String emailAgendamento;
+    private String emailAgendamentoIGPM;
     private boolean skip;
     private MCLIFOR mclifor;    
     private List<String> anexos;
     private String anexo;
     private List<String> allEmailsCadastrados = new ArrayList<String>();
+    private List<String> allEmailsCadastradosIGPM = new ArrayList<String>();
     private String pathPdfAnexo="";
     private int isInativo = 0;
     private ContratoLN ln = new ContratoLN();
@@ -65,7 +68,9 @@ public class ContratoBean implements Serializable {
         listarTipos();
         listarEmailsCadastrados();
         emails = new ArrayList<String>();
+        emailsIGPM = new ArrayList<String>();
         emailAgendamento = "";
+        emailAgendamentoIGPM = "";
     }
     
     private void listarTipos(){
@@ -88,7 +93,9 @@ public class ContratoBean implements Serializable {
     private void listarEmailsCadastrados(){
     	ln = new ContratoLN();
         allEmailsCadastrados = new ArrayList<String>();
-        allEmailsCadastrados = ln.emailsCadastrados();   	
+        allEmailsCadastrados = ln.emailsCadastrados("emailsAviso");
+        allEmailsCadastradosIGPM = new ArrayList<String>();
+        allEmailsCadastrados = ln.emailsCadastrados("emailsAvisoIGPM");
     }
     
     public void novo(){
@@ -118,6 +125,7 @@ public class ContratoBean implements Serializable {
         if(validaCampos()){
             gln = new GenericLN<Contrato>();
             contrato.setEmailsAviso(listToString(emails));
+            contrato.setEmailsAvisoIGPM(listToString(emailsIGPM));
             contrato.setTipocontrato(tipoContrato);
             contrato.setUsuario(userLogado);
             if(contrato.getDeptoRespons()==null){
@@ -148,7 +156,15 @@ public class ContratoBean implements Serializable {
             else
                 emails = new ArrayList<String>();                    
     }
-       
+
+    private void stringToListIGPM(){
+        if(contrato!=null)
+            if(contrato.getEmailsAvisoIGPM() != null && contrato.getEmailsAvisoIGPM().length()>0)
+                emailsIGPM = Arrays.stream(contrato.getEmailsAvisoIGPM().split(",")).collect(Collectors.toList());
+            else
+            	emailsIGPM = new ArrayList<String>();                    
+    }
+    
     public void limpaCadastro(){
         anexos = new ArrayList<String>();
         controlaCadastro=0;
@@ -176,10 +192,12 @@ public class ContratoBean implements Serializable {
     public void onRowSelect(SelectEvent event) {
         contrato = (Contrato) event.getObject(); 
         stringToList();
+        stringToListIGPM();
         ln = new ContratoLN();
         anexos = ln.getAnexos(contrato);
         tipoContrato = contrato.getTipocontrato();
         emailAgendamento="";
+        emailAgendamentoIGPM="";
         edita();
         setaPrimeiraAba();
     }
@@ -221,6 +239,10 @@ public class ContratoBean implements Serializable {
     public List<String> completeEmail(String query) {
         return allEmailsCadastrados.stream().filter(x -> x.toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList()); 
     }
+ 
+    public List<String> completeEmailIGPM(String query) {
+        return allEmailsCadastradosIGPM.stream().filter(x -> x.toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList()); 
+    }    
     
     public void chooseCliFor() {
         Map<String,Object> options = new HashMap<String, Object>();
@@ -272,6 +294,16 @@ public class ContratoBean implements Serializable {
         }
     }    
 
+    public void addEmailIGPM() {
+        if(ValidaEmail.validar(emailAgendamentoIGPM)){
+            emailsIGPM.add(emailAgendamentoIGPM);           
+            emailAgendamentoIGPM="";  
+        }else{
+            msg="Informe um e-mail válido";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(msg,msg)); 
+        }
+    }
+    
     public void cliforSelect(SelectEvent event){
     	contrato.setMclifor((MCLIFOR) event.getObject());
     }
@@ -494,6 +526,30 @@ public class ContratoBean implements Serializable {
 
 	public ContratoLN getLn() {
 		return ln;
+	}
+
+	public String getEmailAgendamentoIGPM() {
+		return emailAgendamentoIGPM;
+	}
+
+	public void setEmailAgendamentoIGPM(String emailAgendamentoIGPM) {
+		this.emailAgendamentoIGPM = emailAgendamentoIGPM;
+	}
+
+	public List<String> getEmailsIGPM() {
+		return emailsIGPM;
+	}
+
+	public void setEmailsIGPM(List<String> emailsIGPM) {
+		this.emailsIGPM = emailsIGPM;
+	}
+
+	public List<String> getAllEmailsCadastradosIGPM() {
+		return allEmailsCadastradosIGPM;
+	}
+
+	public void setAllEmailsCadastradosIGPM(List<String> allEmailsCadastradosIGPM) {
+		this.allEmailsCadastradosIGPM = allEmailsCadastradosIGPM;
 	}
 
 

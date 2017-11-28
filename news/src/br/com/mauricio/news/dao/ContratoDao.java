@@ -53,10 +53,10 @@ public class ContratoDao {
         return typedQuery.getResultList();
     }
     
-    public List<String> emailsCadastrados(){
+    public List<String> emailsCadastrados(String campo){
         CriteriaQuery<Contrato> query = cb.createQuery(Contrato.class);  
         Root<Contrato> root = query.from(Contrato.class); 
-        query.where(cb.notEqual(root.get("emailsAviso"),""),cb.isNotNull(root.get("emailsAviso")));
+        query.where(cb.notEqual(root.get(campo),""),cb.isNotNull(root.get(campo)));
 
         TypedQuery<Contrato> typedQuery = manager.createQuery(query);        
         List<Contrato> cs = typedQuery.getResultList();            
@@ -64,6 +64,7 @@ public class ContratoDao {
             .map(c -> c.getEmailsAviso().split(",")).flatMap(Arrays::stream).collect(Collectors.toSet());
         return new ArrayList<String>(emails);    
     }
+
     
     @SuppressWarnings("unchecked")
     public List<Contrato> listPrimeiroAviso() {
@@ -72,4 +73,14 @@ public class ContratoDao {
         Date hoje = DateUtil.hoje();
         return manager.createQuery(sql).setParameter("ativo", ativo).setParameter("hoje", hoje).getResultList();    
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<Contrato> listAvisoIGPM() {
+        Boolean ativo=true;
+        String sql=" from contrato where avigpm= :hoje and ativo= :ativo";
+        Date hoje = DateUtil.hoje();
+        return manager.createQuery(sql).setParameter("ativo", ativo).setParameter("hoje", hoje).getResultList();    
+    }    
+    
+    
 }

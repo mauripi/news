@@ -56,6 +56,7 @@ public class Contrato implements Serializable{
 	private String assuntoEmail;
 	private String mensagemEmail;
 	private String emailsAviso;
+	private String emailsAvisoIGPM;
 	@Column(length=40)
 	private String responsavel;
 	@Column(length=1000)
@@ -171,6 +172,12 @@ public class Contrato implements Serializable{
 	public void setEmailsAviso(String emailsAviso) {
 		this.emailsAviso = emailsAviso;
 	}
+	public String getEmailsAvisoIGPM() {
+		return emailsAvisoIGPM;
+	}
+	public void setEmailsAvisoIGPM(String emailsAvisoIGPM) {
+		this.emailsAvisoIGPM = emailsAvisoIGPM;
+	}
 	public String getResponsavel() {
 		return responsavel;
 	}
@@ -202,6 +209,7 @@ public class Contrato implements Serializable{
 		result = prime * result + ((deptoRespons == null) ? 0 : deptoRespons.hashCode());
 		result = prime * result + ((diasAviso == null) ? 0 : diasAviso.hashCode());
 		result = prime * result + ((emailsAviso == null) ? 0 : emailsAviso.hashCode());
+		result = prime * result + ((emailsAvisoIGPM == null) ? 0 : emailsAvisoIGPM.hashCode());
 		result = prime * result + ((fim == null) ? 0 : fim.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((inicio == null) ? 0 : inicio.hashCode());
@@ -257,6 +265,11 @@ public class Contrato implements Serializable{
 			if (other.emailsAviso != null)
 				return false;
 		} else if (!emailsAviso.equals(other.emailsAviso))
+			return false;
+		if (emailsAvisoIGPM == null) {
+			if (other.emailsAvisoIGPM != null)
+				return false;
+		} else if (!emailsAvisoIGPM.equals(other.emailsAvisoIGPM))
 			return false;
 		if (fim == null) {
 			if (other.fim != null)
@@ -335,6 +348,7 @@ public class Contrato implements Serializable{
 			return false;
 		return true;
 	}
+	
 	@Override
 	public String toString() {
 		String data = "";
