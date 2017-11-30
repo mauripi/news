@@ -61,9 +61,9 @@ public class Contrato implements Serializable{
 	private String responsavel;
 	@Column(length=1000)
 	private String observacao;
+	@Column(length=1000)
+	private String observacaoIGPM;	
 	private Integer deptoRespons;
-
-	
 	public Integer getId() {
 		return id;
 	}
@@ -190,6 +190,12 @@ public class Contrato implements Serializable{
 	public void setObservacao(String observacao) {
 		this.observacao = observacao;
 	}
+	public String getObservacaoIGPM() {
+		return observacaoIGPM;
+	}
+	public void setObservacaoIGPM(String observacaoIGPM) {
+		this.observacaoIGPM = observacaoIGPM;
+	}
 	public Integer getDeptoRespons() {
 		return deptoRespons;
 	}
@@ -217,6 +223,7 @@ public class Contrato implements Serializable{
 		result = prime * result + ((mensagemEmail == null) ? 0 : mensagemEmail.hashCode());
 		result = prime * result + ((objeto == null) ? 0 : objeto.hashCode());
 		result = prime * result + ((observacao == null) ? 0 : observacao.hashCode());
+		result = prime * result + ((observacaoIGPM == null) ? 0 : observacaoIGPM.hashCode());
 		result = prime * result + ((origem == null) ? 0 : origem.hashCode());
 		result = prime * result + ((repetirAviso == null) ? 0 : repetirAviso.hashCode());
 		result = prime * result + ((responsavel == null) ? 0 : responsavel.hashCode());
@@ -306,6 +313,11 @@ public class Contrato implements Serializable{
 				return false;
 		} else if (!observacao.equals(other.observacao))
 			return false;
+		if (observacaoIGPM == null) {
+			if (other.observacaoIGPM != null)
+				return false;
+		} else if (!observacaoIGPM.equals(other.observacaoIGPM))
+			return false;
 		if (origem == null) {
 			if (other.origem != null)
 				return false;
@@ -348,7 +360,6 @@ public class Contrato implements Serializable{
 			return false;
 		return true;
 	}
-	
 	@Override
 	public String toString() {
 		String data = "";
@@ -362,4 +373,5 @@ public class Contrato implements Serializable{
 				+ data + " " + tipoValor + " " + valorTotal + " "
 				+ valorMensal + " " + mclifor + " " + responsavel + " " + observacao;
 	}
+
 }

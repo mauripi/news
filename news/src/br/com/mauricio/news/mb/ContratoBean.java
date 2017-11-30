@@ -93,9 +93,8 @@ public class ContratoBean implements Serializable {
     private void listarEmailsCadastrados(){
     	ln = new ContratoLN();
         allEmailsCadastrados = new ArrayList<String>();
-        allEmailsCadastrados = ln.emailsCadastrados("emailsAviso");
-        allEmailsCadastradosIGPM = new ArrayList<String>();
-        allEmailsCadastrados = ln.emailsCadastrados("emailsAvisoIGPM");
+        allEmailsCadastrados.addAll(ln.emailsCadastrados("emailsAviso"));
+        allEmailsCadastrados.addAll(ln.emailsCadastrados("emailsAvisoIGPM"));
     }
     
     public void novo(){
@@ -239,11 +238,7 @@ public class ContratoBean implements Serializable {
     public List<String> completeEmail(String query) {
         return allEmailsCadastrados.stream().filter(x -> x.toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList()); 
     }
- 
-    public List<String> completeEmailIGPM(String query) {
-        return allEmailsCadastradosIGPM.stream().filter(x -> x.toLowerCase().contains(query.toLowerCase())).collect(Collectors.toList()); 
-    }    
-    
+
     public void chooseCliFor() {
         Map<String,Object> options = new HashMap<String, Object>();
         options.put("resizable", false);

@@ -234,7 +234,7 @@
 				<p:calendar id="avsigpm" value="#{contratoMB.contrato.avigpm}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" mindate="#{contratoMB.contrato.inicio}"/>								
 			</p:panelGrid>		    	            
 	        <p:outputLabel value="Adicionar e-mail IGPM:"/>
-	        <p:autoComplete id="envemligpm"  value="#{contratoMB.emailAgendamentoIGPM}" completeMethod="#{contratoMB.completeEmailIGPM}" 
+	        <p:autoComplete id="envemligpm"  value="#{contratoMB.emailAgendamentoIGPM}" completeMethod="#{contratoMB.completeEmail}" 
 	        		 disabled="#{contratoMB.contrato.avigpm eq null}" size="35"/>
 			<p:commandButton id="cmdemligpm" value="Incluir" action="#{contratoMB.addEmailIGPM}" update="envemligpm,emlstigpm,:formMsg" icon="ui-icon-mail-closed" 
 				 disabled="#{contratoMB.contrato.diasAviso eq null}"/>
@@ -258,8 +258,12 @@
         <p:tab id="obs" title="Observações" ><br/>		            	
 			<p:panelGrid columns="1" >
 				<p:outputLabel value="Observações:"/>
-				<p:inputTextarea maxlength="1000" rows="20" cols="75" autoResize="false" value="#{contratoMB.contrato.observacao}"/>
+				<p:inputTextarea maxlength="1000" rows="5" cols="75" autoResize="false" value="#{contratoMB.contrato.observacao}"/>
 			</p:panelGrid>
+			<p:panelGrid columns="1" >
+				<p:outputLabel value="Observações IGPM:"/>
+				<p:inputTextarea maxlength="1000" rows="5" cols="75" autoResize="false" value="#{contratoMB.contrato.observacaoIGPM}"/>
+			</p:panelGrid>			
         </p:tab>					        		        	        					
 	</p:tabView>
 		<p:panelGrid columns="2" >
