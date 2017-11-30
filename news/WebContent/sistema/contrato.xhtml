@@ -208,8 +208,7 @@
 	        </p:panelGrid>	
 
 	        <p:outputLabel value="Adicionar e-mail:"/>
-	        <p:autoComplete id="enveml"  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}" 
-	        		 disabled="#{contratoMB.contrato.diasAviso eq null}" size="35"/>
+	        <p:autoComplete id="enveml"  value="#{contratoMB.emailAgendamento}" completeMethod="#{contratoMB.completeEmail}" size="35"/>
 			<p:commandButton id="cmdeml" value="Incluir" action="#{contratoMB.addEmail}" update="enveml,emlst,:formMsg" icon="ui-icon-mail-closed" 
 				 disabled="#{contratoMB.contrato.diasAviso eq null}"/>
 
@@ -234,8 +233,7 @@
 				<p:calendar id="avsigpm" value="#{contratoMB.contrato.avigpm}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" mindate="#{contratoMB.contrato.inicio}"/>								
 			</p:panelGrid>		    	            
 	        <p:outputLabel value="Adicionar e-mail IGPM:"/>
-	        <p:autoComplete id="envemligpm"  value="#{contratoMB.emailAgendamentoIGPM}" completeMethod="#{contratoMB.completeEmail}" 
-	        		 disabled="#{contratoMB.contrato.avigpm eq null}" size="35"/>
+	        <p:autoComplete id="envemligpm"  value="#{contratoMB.emailAgendamentoIGPM}" completeMethod="#{contratoMB.completeEmail}" size="35"/>
 			<p:commandButton id="cmdemligpm" value="Incluir" action="#{contratoMB.addEmailIGPM}" update="envemligpm,emlstigpm,:formMsg" icon="ui-icon-mail-closed" 
 				 disabled="#{contratoMB.contrato.diasAviso eq null}"/>
 
