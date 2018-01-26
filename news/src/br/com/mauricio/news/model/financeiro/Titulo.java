@@ -16,9 +16,15 @@ public class Titulo {
 	private Date vencOriginal;
 	private Date vencAtual;
 	private Date provPagto;
+	private Date datemi;
 	private Integer clsflx;
 	private String oritit;
-	private String codtns;
+	private String codtns;	
+	private String codbar;
+	private String codban;
+	private String codage;
+	private String ccbfor;
+	
 	
 	public String getNumtit() {
 		return numtit;
@@ -103,6 +109,36 @@ public class Titulo {
 	}
 	public void setCodtns(String codtns) {
 		this.codtns = codtns;
+	}
+	public Date getDatemi() {
+		return datemi;
+	}
+	public void setDatemi(Date datemi) {
+		this.datemi = datemi;
+	}
+	public String getCodbar() {
+		return codbar;
+	}
+	public void setCodbar(String codbar) {
+		this.codbar = codbar;
+	}
+	public String getCodban() {
+		return codban;
+	}
+	public void setCodban(String codban) {
+		this.codban = codban;
+	}
+	public String getCodage() {
+		return codage;
+	}
+	public void setCodage(String codage) {
+		this.codage = codage;
+	}
+	public String getCcbfor() {
+		return ccbfor;
+	}
+	public void setCcbfor(String ccbfor) {
+		this.ccbfor = ccbfor;
 	}
 	
 }

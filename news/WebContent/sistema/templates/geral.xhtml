@@ -99,7 +99,7 @@
         <p:submenu label="Financeiro">
        		<p:menuitem value="Adiantamento de Despesas" action="adiantamento?faces-redirect=true" />
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>
-			<p:menuitem value="Classificação de Títulos - Fluxo de Caixa" action="classificatitulo?faces-redirect=true"  /> 
+			<p:menuitem value="Classificação de Títulos - Fluxo de Caixa" action="classificatitulo?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
 			<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
        		<p:menuitem value="Custos Mensais" action="fluxodiario?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}" />
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>

@@ -21,8 +21,6 @@
 			<property name="hibernate.use_sql_comments" value="false" />
 			<property name="hibernate.type" value="ERROR" />
 			<property name="logging.level" value="ERROR"/>
-
-
 			<property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
 
 	        

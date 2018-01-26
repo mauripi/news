@@ -11,7 +11,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
 
-
 </h:head>
    	
 <h:body>
@@ -22,56 +21,42 @@
 
 <f:facet name="header">Classificação de Titulos - Fluxo de Caixa</f:facet>
 
-<h:form id="formtb" >
+<h:form id="formtb" onkeypress="return event.keyCode != 13">
 
-    <h:panelGrid columns="5" style="margin-bottom:10px" cellpadding="5">
+    <h:panelGrid columns="6" style="margin-bottom:10px" cellpadding="5">
         <p:outputLabel for="data1" value="Data Inicial:" />
 		<p:calendar id="data1" value="#{fluxoclassificaMB.dataInicial}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" required="true" requiredMessage="Informe data inicial"/>								
         <p:outputLabel for="data2" value="Data Inicial:" />
 		<p:calendar id="data2" value="#{fluxoclassificaMB.dataFinal}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" required="true" requiredMessage="Informe data inicial"/>								
-		<p:commandButton value="Buscar" icon="ui-icon-check" action="#{fluxoclassificaMB.buscarTitulos}" update=":formtb" />
+
+        <p:selectOneRadio id="opcao" value="#{fluxoclassificaMB.opcao}">
+        	<p:ajax update=":formtb" event="valueChange"/>
+            <f:selectItem itemLabel="CP / CR" itemValue="1" />
+            <f:selectItem itemLabel="Tesouraria" itemValue="2" />
+        </p:selectOneRadio>
+	    
+		<p:commandButton value="Buscar" icon="ui-icon-check" action="#{fluxoclassificaMB.buscar}"  update=":formtb" />
 
     </h:panelGrid>
 	    
-	<p:dataTable var="t" value="#{fluxoclassificaMB.titulos}" widgetVar="titTable" editable="true" emptyMessage="Sem registro">
+	<p:dataTable var="t" value="#{fluxoclassificaMB.titulos}" widgetVar="titTable" id="titTable"
+		editable="true" emptyMessage="Sem registro"  filteredValue="#{fluxoclassificaMB.titulosFiltrados}"  rendered="#{fluxoclassificaMB.opcao eq 1}">
 		
-		<p:ajax event="rowEdit" listener="#{fluxoclassificaMB.onRowEdit}" />
-		
-        <f:facet name="header">
-            <p:outputPanel>
-                <h:outputText value="Busca em qualquer campo:" />
-                <p:inputText id="globalFilter" onkeyup="PF('titTable').filter()" style="width:150px" placeholder="Digite a informação"/>
-            </p:outputPanel>
-        </f:facet>
-	
-	    <p:column  headerText="Origem" style="text-align:center;" width="40px;" filterBy="#{t.oritit}" filterMatchMode="exact">
-            <f:facet name="filter">
-                <p:selectOneMenu onchange="PF('titTable').filter()" >
-                    <f:selectItem itemLabel="" itemValue="#{null}" noSelectionOption="true" />
-                    <f:selectItem itemLabel="CP" itemValue="CP"  />
-                    <f:selectItem itemLabel="CR" itemValue="CR" />
-                </p:selectOneMenu>
-            </f:facet>	    
+		<p:ajax event="rowEdit" listener="#{fluxoclassificaMB.onRowEditTitulo}" update=":formMsg"/>
+
+	    <p:column  headerText="Origem" style="text-align:center;" filterStyle="width:35px;" width="35px;" filterBy="#{t.oritit}"  filterMatchMode="contains" >    
 	        <h:outputText value="#{t.oritit}" />
 	    </p:column>
 	    	
-	    <p:column headerText="Título" width="80px;" style="text-align:center;" filterBy="#{t.numtit}"  filterMatchMode="contains">
+	    <p:column headerText="Título" width="70px;" filterStyle="width:70px;" style="text-align:center;" filterBy="#{t.numtit}"  filterMatchMode="contains">
 	        <h:outputText value="#{t.numtit}" />
 	    </p:column>
 	 
-	    <p:column headerText="Filial" width="30px;" style="text-align:center;" filterBy="#{t.codfil}" filterMatchMode="exact">
-	        <f:facet name="filter">
-                <p:selectOneMenu onchange="PF('titTable').filter()" >
-                    <f:selectItem itemLabel="" itemValue="#{null}" noSelectionOption="true" />
-                    <f:selectItem itemLabel="1" itemValue="1"  />
-                    <f:selectItem itemLabel="2" itemValue="2" />
-                    <f:selectItem itemLabel="3" itemValue="3" />
-                </p:selectOneMenu>
-            </f:facet>
+	    <p:column headerText="Filial" width="25px;" filterStyle="width:25px;" style="text-align:center;" filterBy="#{t.codfil}" filterMatchMode="exact">
 	        <h:outputText value="#{t.codfil}" />
 	    </p:column>
 	 
-	    <p:column headerText="Tipo Tít." style="text-align:center;" width="40px;" filterStyle="width:40px;" filterBy="#{t.codtpt}"  filterMatchMode="contains" >
+	    <p:column headerText="Tipo Tít." style="text-align:center;" width="30px;" filterStyle="width:30px;" filterBy="#{t.codtpt}"  filterMatchMode="contains" >
 	        <h:outputText value="#{t.codtpt}" />
 	    </p:column>
 
@@ -79,17 +64,17 @@
 	        <h:outputText value="#{t.codtns}" />
 	    </p:column>
 	    	 
-	    <p:column headerText="Cliente / Fornecedor" width="200px;" filterStyle="width:200px;" filterBy="#{t.nomclifor}"  filterMatchMode="contains"> 
+	    <p:column headerText="Cliente / Fornecedor" width="150px;" filterStyle="width:150px;" filterBy="#{t.nomclifor}"  filterMatchMode="contains"> 
 	        <h:outputText value="#{t.codclifor} - #{t.nomclifor}" />
 	    </p:column>
 
-        <p:column headerText="Venc.Original" width="60px;" style="text-align:center;" filterStyle="width:60px;" filterBy="#{t.vencOriginal}"  filterMatchMode="contains">
+        <p:column headerText="Venc Original" width="60px;" style="text-align:center;" filterStyle="width:60px;" filterBy="#{t.vencOriginal}"  filterMatchMode="contains">
 	        <h:outputText value="#{t.vencOriginal}">
 				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
 			</h:outputText>			
         </p:column>		    
 	    
-        <p:column headerText="Venc.Prorrogado" width="60px;" style="text-align:center;" filterStyle="width:60px;" filterBy="#{t.vencAtual}"  filterMatchMode="contains">
+        <p:column headerText="Venc Prorrogado" width="60px;" style="text-align:center;" filterStyle="width:60px;" filterBy="#{t.vencAtual}"  filterMatchMode="contains">
 	        <p:cellEditor>
                <f:facet name="output">
 	        		<h:outputText value="#{t.vencAtual}">
@@ -115,13 +100,13 @@
            </p:cellEditor>
         </p:column>		    
 
-		<p:column headerText="Valor Original" style="text-align:right; width:50px;" filterStyle="width:50px;" filterBy="#{t.vlrori}"  filterMatchMode="contains">
+		<p:column headerText="Valor Original" style="text-align:right; width:70px;" filterStyle="width:70px;" filterBy="#{t.vlrori}"  filterMatchMode="contains">
 			<h:outputText value="#{t.vlrori}">
 				<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>	           																
 			</h:outputText>				
 		</p:column>						
 
-		<p:column headerText="Valor Aberto" style="text-align:right; width:50px;" filterStyle="width:50px;" filterBy="#{t.vlrabe}"  filterMatchMode="contains">
+		<p:column headerText="Valor Aberto" style="text-align:right; width:70px;" filterStyle="width:70px;" filterBy="#{t.vlrabe}"  filterMatchMode="contains">
 			<h:outputText value="#{t.vlrabe}">
 				<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>	           																
 			</h:outputText>				
@@ -133,8 +118,37 @@
                <f:facet name="input"><p:inputText value="#{t.obstit}" style="width:100%" label="Observação"/></f:facet>
            </p:cellEditor>
 	    </p:column>
+
+
+		<p:column headerText="Cod Barra" width="100px;" style="text-align:center;" >
+	        <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{t.codbar}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{t.codbar}" style="width:100%" label="Cod.Barra" /></f:facet>
+           </p:cellEditor>
+	    </p:column>
 	    
-	    <p:column headerText="Classificação" style="text-align:center;" filterStyle="width:55px;" width="55px;" filterBy="#{t.clsflx}"  filterMatchMode="contains" >
+		<p:column headerText="Cod Banco" width="50px;" style="text-align:center;">
+	        <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{t.codban}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{t.codban}" style="width:100%" label="Cod.Banco" maxlength="3"/></f:facet>
+           </p:cellEditor>
+	    </p:column>	    
+	    
+		<p:column headerText="Cod Agência" width="50px;" style="text-align:center;">
+	        <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{t.codage}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{t.codage}" style="width:100%" label="Cod.Agência"  maxlength="7"/></f:facet>
+           </p:cellEditor>
+	    </p:column>	 
+	       
+		<p:column headerText="Conta Forn." width="60px;" style="text-align:center;">
+	        <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{t.ccbfor}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{t.ccbfor}" style="width:100%" label="ContaForn"  maxlength="14"/></f:facet>
+           </p:cellEditor>
+	    </p:column>		    
+	    
+	    <p:column headerText="Classificação" style="text-align:center;" filterStyle="width:65px;" width="65px;" filterBy="#{t.clsflx}"  filterMatchMode="contains" >
 	          <p:cellEditor>
 	              <f:facet name="output"><h:outputText value="#{t.clsflx}" /></f:facet>
 	              <f:facet name="input">
@@ -151,14 +165,83 @@
        
 	</p:dataTable>
 
+	<p:dataTable var="m" value="#{fluxoclassificaMB.movimentos}" widgetVar="movTable" id="movTable"
+			editable="true" emptyMessage="Sem registro"  filteredValue="#{fluxoclassificaMB.movimentosFiltrados}" rendered="#{fluxoclassificaMB.opcao eq 2}">
+		
+		<p:ajax event="rowEdit" listener="#{fluxoclassificaMB.onRowEditMovimento}" update=":formMsg"/>
+
+	    <p:column  headerText="Conta" style="text-align:center;" filterStyle="width:55px;" width="55px;" filterBy="#{m.numcco}"  filterMatchMode="contains" >    
+	        <h:outputText value="#{m.numcco}" />
+	    </p:column>
+
+	    <p:column headerText="Filial" width="30px;" filterStyle="width:30px;" style="text-align:center;" filterBy="#{m.codfil}" filterMatchMode="exact">
+	        <h:outputText value="#{m.codfil}" />
+	    </p:column>
+	    	    	
+        <p:column headerText="Data" width="60px;" style="text-align:center;" filterStyle="width:60px;" filterBy="#{m.datmov}"  filterMatchMode="contains">
+	        <h:outputText value="#{m.datmov}">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			</h:outputText>			
+        </p:column>		    
+        
+	    <p:column headerText="Sequencia Mov." width="30px;" filterStyle="width:30px;" style="text-align:center;" filterBy="#{m.seqmov}" filterMatchMode="exact">
+	        <h:outputText value="#{m.seqmov}" />
+	    </p:column>
+	    
+	    <p:column headerText="Transação" style="text-align:center;" width="35px;" filterStyle="width:35px;" filterBy="#{m.codtns}"  filterMatchMode="contains" >
+	        <h:outputText value="#{m.codtns}" />
+	    </p:column>
+	    
+	    <p:column headerText="Documento" width="80px;" style="text-align:center;" filterBy="#{m.docmov}"  filterMatchMode="contains">
+	        <h:outputText value="#{m.docmov}" />
+	    </p:column>
+	 
+		<p:column headerText="Histórico" width="250px;" filterStyle="width:250px;" filterBy="#{m.hismov}"  filterMatchMode="contains">
+	        <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{m.hismov}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{m.hismov}" style="width:100%" label="Histórico"/></f:facet>
+           </p:cellEditor>
+	    </p:column>
+
+		<p:column headerText="Valor do Movimento" style="text-align:right; width:50px;" filterStyle="width:50px;" filterBy="#{m.vlrmov}"  filterMatchMode="contains">
+			<h:outputText value="#{m.vlrmov}">
+				<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>	           																
+			</h:outputText>				
+		</p:column>						
+
+	    <p:column headerText="Deb / Cred" style="text-align:center;" width="40px;" filterStyle="width:40px;" filterBy="#{m.debcre}"  filterMatchMode="contains" >
+	        <h:outputText value="#{m.debcre}" />
+	    </p:column>	
+
+	    <p:column headerText="Classificação" style="text-align:center;" filterStyle="width:55px;" width="55px;" filterBy="#{m.clsflx}"  filterMatchMode="contains" >
+	          <p:cellEditor>
+	              <f:facet name="output"><h:outputText value="#{m.clsflx}" /></f:facet>
+	              <f:facet name="input">
+	                  <h:selectOneMenu value="#{m.clsflx}" style="width:100%"> 
+	                      <f:selectItems value="#{fluxoclassificaMB.classificacao.entrySet()}" var="c" itemLabel="#{c.key} - #{c.value}" itemValue="#{c.key}" />
+	                  </h:selectOneMenu>
+	              </f:facet>
+	          </p:cellEditor>	        
+	    </p:column>		    
+
+       <p:column style="width:32px">
+           <p:rowEditor />
+       </p:column>
+       
+	</p:dataTable>
+
 </h:form>
 
 </p:panel> 
 
+<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
+<p:dialog modal="false"  appendTo="@(body)"  widgetVar="statusDialog" header="Aguarde..." draggable="false" closable="false" resizable="false"  >
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
 
 <h:form id="formMsg">                      
-    <p:growl id="msg" showDetail="true" life="4000"/> 
+    <p:growl id="msg" showDetail="true" life="7000"/> 
 </h:form>
 </ui:define>
 </ui:composition>	

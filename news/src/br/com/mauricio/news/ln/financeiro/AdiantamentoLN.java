@@ -110,10 +110,10 @@ public class AdiantamentoLN implements Serializable{
 		gerarRelatorio(adto);
 		List<String> dest = new ArrayList<String>();
 
-		dest.add("lrnascimento@recordnews.com.br");
+		dest.add("amaria@recordnews.com.br");
 		dest.add("ecoletto@recordnews.com.br");
 		dest.add("eksouza@recordnews.com.br ");
-		dest.add("ctsouza@recordnews.com.br");
+		/*dest.add("ctsouza@recordnews.com.br");*/
 
 		
 		if(ValidaEmail.validar(adto.getFavorecido().getEmail()))

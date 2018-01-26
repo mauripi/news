@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import br.com.mauricio.news.dao.financeiro.TítuloDao;
+import br.com.mauricio.news.dao.financeiro.FluxoClassificacaoDao;
 import br.com.mauricio.news.model.financeiro.Titulo;
 
 public class TituloTest {
@@ -18,7 +18,7 @@ public class TituloTest {
 		d1 = df.parse("05/12/2017");
 		d2 = df.parse("30/12/2017");
 		
-		TítuloDao dao = new TítuloDao();
+		FluxoClassificacaoDao dao = new FluxoClassificacaoDao();
 		List<Titulo> titulos = dao.buscarTitulos(d1, d2);
 		
 		titulos.forEach(t -> System.out.println(t.getOritit() + " - " + t.getCodtns() + " => " + t.getNomclifor()));
