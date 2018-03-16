@@ -24,7 +24,7 @@ public class ConsolidadoBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer mes=0;
-	private Integer ano=2016;
+	private Integer ano=2018;
 	private String msg;
 	private String descricaoRazao;
 	private Double totalRazao=0.0;

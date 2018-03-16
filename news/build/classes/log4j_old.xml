@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration debug="true"
+	xmlns:log4j='http://jakarta.apache.org/log4j/'>
+
+
+  <appender name="DB" class="ch.qos.logback.classic.db.DBAppender">
+    <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+      <driverClass>com.microsoft.sqlserver.jdbc.SQLServerDriver</driverClass>
+      <url>jdbc:sqlserver://localhost:1433;instanceName=SQLEXPRESS;databaseName=intranet;useNTLMv2=tru‌​e;domain=redemulher</url>
+      <user>sa</user>
+      <password>consolador</password>
+    </connectionSource>
+  </appender>
+  
+  <root level="DEBUG" >
+    <appender-ref ref="DB" />
+  </root>
+
+</log4j:configuration>

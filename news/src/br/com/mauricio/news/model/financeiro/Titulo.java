@@ -24,7 +24,8 @@ public class Titulo {
 	private String codban;
 	private String codage;
 	private String ccbfor;
-	
+	private String nomapr;
+	private Date datapr;
 	
 	public String getNumtit() {
 		return numtit;
@@ -139,6 +140,18 @@ public class Titulo {
 	}
 	public void setCcbfor(String ccbfor) {
 		this.ccbfor = ccbfor;
+	}
+	public String getNomapr() {
+		return nomapr;
+	}
+	public void setNomapr(String nomapr) {
+		this.nomapr = nomapr;
+	}
+	public Date getDatapr() {
+		return datapr;
+	}
+	public void setDatapr(Date datapr) {
+		this.datapr = datapr;
 	}
 	
 }

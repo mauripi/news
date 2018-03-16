@@ -63,7 +63,7 @@
         <p:submenu label="Diretoria" >
        		<p:menuitem value="Consolidado" action="consolidado?faces-redirect=true" rendered="#{acessoBean.temAcessoConsolidado}" />
         	<p:separator rendered="#{acessoBean.temAcessoConsolidado}"/>
-        	<p:menuitem value="Contratos" action="contratovisao?faces-redirect=true" />
+        	<p:menuitem value="Contratos" action="contratovisao?faces-redirect=true" rendered="#{acessoBean.temAcessoContrato}"/>
         	<p:separator rendered="#{acessoBean.temAcessoContrato}"/>
         	<p:menuitem value="Custos Mensais" action="fluxodiario?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}" />
         	<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>
@@ -99,14 +99,16 @@
         <p:submenu label="Financeiro">
        		<p:menuitem value="Adiantamento de Despesas" action="adiantamento?faces-redirect=true" />
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>
-			<p:menuitem value="Classificação de Títulos - Fluxo de Caixa" action="classificatitulo?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
+			<p:menuitem value="Classificação Fluxo de Caixa" action="classificatitulo?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
 			<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
        		<p:menuitem value="Custos Mensais" action="fluxodiario?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}" />
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>
        		<p:menuitem value="Importar Planilha de Custos" action="importarfluxodiario?faces-redirect=true" rendered="#{acessoBean.temAcessoImportarFluxoDiario}"/>
        		<p:separator/>
        		<p:menuitem value="Prestação de Contas" action="prestacao?faces-redirect=true"  />   
-       		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>  
+       		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>
+       		<p:menuitem value="Projetado x Realizado" action="downloadprojetadorealizado?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}" />
+       		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
        		<p:menuitem value="Recibo da Prestação de Contas" action="reciboprestacao?faces-redirect=true"  />  
        		
         </p:submenu>

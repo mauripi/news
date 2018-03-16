@@ -23,7 +23,7 @@ public class FluxoClassificacaoDao {
 	//sapiens_homo
 	//sapiens_prod
 	private EntityManager abrirConexao(){
-		this.factory = Persistence.createEntityManagerFactory("sapiens_homo");
+		this.factory = Persistence.createEntityManagerFactory("sapiens_prod");
 		this.manager = this.factory.createEntityManager();
 		this.manager.getTransaction().begin();
 		return this.manager;
@@ -66,7 +66,7 @@ public class FluxoClassificacaoDao {
 		    .setParameter("numtit", titulo.getNumtit())
 		    .setParameter("codtpt", titulo.getCodtpt())
 		    .setParameter("codclifor", titulo.getCodclifor())
-		    .setParameter("codbar", titulo.getCodbar())
+		    .setParameter("codbar", titulo.getCodbar().replace(" ", ""))
 		    .executeUpdate();
 		}else{
 			 manager.createNativeQuery(sql)
@@ -79,7 +79,7 @@ public class FluxoClassificacaoDao {
 		    .setParameter("numtit", titulo.getNumtit())
 		    .setParameter("codtpt", titulo.getCodtpt())
 		    .setParameter("codclifor", titulo.getCodclifor())
-		    .setParameter("codbar", titulo.getCodbar())
+		    .setParameter("codbar", titulo.getCodbar().replace(" ", ""))
 		    .setParameter("codban", titulo.getCodban())
 		    .setParameter("codage", titulo.getCodage())
 		    .setParameter("ccbfor", titulo.getCcbfor())
@@ -126,10 +126,16 @@ public class FluxoClassificacaoDao {
 	}
 
 	private void getContasPagar(Date d1, Date d2) {
-		String sql = "SELECT numtit,codfil,codtpt,E095FOR.codfor,nomfor,vlrori,vlrabe,obstcp,"
-				+ " vctori as venc_original,vctpro as venc_atual,datppt as prov_pagto,usu_clsflx,codtns,datemi,E501TCP.codbar,E501TCP.codban,E501TCP.codage,E501TCP.ccbfor"
-				+ " FROM E501TCP, E095FOR WHERE E501TCP.CODFOR=E095FOR.CODFOR and E501TCP.datppt BETWEEN :d1 and :d2 and "
-				+ " E501TCP.sittit NOT IN ('CA','LS') order by E501TCP.datppt";
+
+		String sql = " SELECT numtit,E501TCP.codfil,codtpt,E095FOR.codfor,nomfor,E501TCP.vlrori,vlrabe,obstcp,vctori as venc_original,vctpro as venc_atual,datppt as prov_pagto, "
+		+ " usu_clsflx,codtns,E501TCP.datemi,E501TCP.codbar,E501TCP.codban,E501TCP.codage,E501TCP.ccbfor,r910usu.nomcom as nomapr,e614usu.datapr as datapr FROM E501TCP " 
+		+ " Left join E095FOR ON (E501TCP.CODFOR=E095FOR.CODFOR) "
+		+ " LEFT JOIN e440ipc ON (E501TCP.filnfc = E440IPC.codfil AND E501TCP.fornfc = E440IPC.codfor AND E501TCP.numnfc = E440IPC.numnfc AND E501TCP.snfnfc = E440IPC.codsnf AND E440IPC.seqipc=1) "
+		+ " LEFT JOIN e440isc ON (E501TCP.filnfc = E440ISC.codfil AND E501TCP.fornfc = E440ISC.codfor AND E501TCP.numnfc = E440ISC.numnfc AND E501TCP.snfnfc = E440ISC.codsnf AND E440ISC.seqisc=1) "
+		+ " LEFT JOIN e420ocp ON ((e440ipc.numocp = e420ocp.numocp AND e440ipc.filocp = e420ocp.codfil ) OR (e440isc.numocp = e420ocp.numocp AND e440isc.filocp = e420ocp.codfil)) "
+		+ " lEFT JOIN e614usu ON (e420ocp.numapr = e614usu.numapr) LEFT JOIN r910usu ON (e614usu.usuapr = r910usu.codent) "
+		+ " WHERE E501TCP.datppt BETWEEN :d1 and :d2 and E501TCP.sittit NOT IN ('CA','LS') order by E501TCP.datppt ";	
+
 		
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = manager.createNativeQuery(sql).setParameter("d1", d1).setParameter("d2", d2).getResultList();
@@ -157,12 +163,15 @@ public class FluxoClassificacaoDao {
 			tit.setCodban(o[15].toString());
 			tit.setCodage(o[16].toString());
 			tit.setCcbfor(o[17].toString());
+			if (o[18]!=null)
+				tit.setNomapr(primeiroNome(o[18].toString()));
+			if (o[19]!=null)
+				tit.setDatapr((Date) o[19]);
 			tit.setOritit("CP");
 			titulos.add(tit);
 		}	
 	}
-	
-	
+
 	public List<Movimento> buscarMovimentos(Date d1,Date d2){
 		abrirConexao();
 		getMovimentos(d1,d2);		
@@ -190,7 +199,7 @@ public class FluxoClassificacaoDao {
 
 	private void getMovimentos(Date d1, Date d2) {
 		String sql = "SELECT numcco,datmov,seqmov,codtns,docmov,hismov,vlrmov,debcre,usu_clsflx,codfil "
-				+ " FROM E600MCC WHERE sitmcc='A' AND datmov BETWEEN :d1 AND :d2 ";
+				+ " FROM E600MCC WHERE sitmcc='A' AND orimcc='OU' AND datmov BETWEEN :d1 AND :d2 ";
 		
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = manager.createNativeQuery(sql).setParameter("d1", d1).setParameter("d2", d2).getResultList();
@@ -214,7 +223,21 @@ public class FluxoClassificacaoDao {
 		}		
 	}
 
-	
+	private String primeiroNome(String nome){
+		String primeiroNome = "";
+		for (int i=0;i<nome.length();i++){
+			if ((i==0) && (nome.substring(i, i+1).equalsIgnoreCase(" "))){
+				System.out.println("Erro: Nome digitado iniciado com tecla ESPAÇO.");
+				break;
+			}
+			else if (!nome.substring(i, i+1).equalsIgnoreCase(" ")){
+				primeiroNome += nome.substring(i, i+1);
+			}
+			else
+				break;
+		}
+		return primeiroNome;
+	}
 	
 	public EntityManagerFactory getFactory() {
 		return factory;

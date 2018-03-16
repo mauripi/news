@@ -31,7 +31,7 @@
 		<h:message for="mes" style="color:red"  />
 		<h:outputLabel value="Ano" style="padding-rigth: 15px;"/>
 		<p:inputText value="#{sigMB.ano}" id="ano" maxlength="4" size="10" required="true" validatorMessage="Permitido a partir de 2015 a 2019" requiredMessage="Informe o Ano">
-			<f:validateRegex pattern="201[5-7]" for="ano"/>
+			<f:validateRegex pattern="201[5-9]" for="ano"/>
 		</p:inputText>
 		<h:message for="ano" style="color:red" />
 	</p:panelGrid>

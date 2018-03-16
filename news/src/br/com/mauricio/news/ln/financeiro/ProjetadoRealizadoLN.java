@@ -1,13 +1,18 @@
-package br.com.mauricio.news.test;
+package br.com.mauricio.news.ln.financeiro;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -17,44 +22,38 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
 import br.com.mauricio.news.dao.financeiro.ProjetadoRealizadoDao;
 import br.com.mauricio.news.model.financeiro.Previsto;
 import br.com.mauricio.news.model.financeiro.Realizado;
+import br.com.mauricio.news.util.SaveFile;
 
-public class TituloTest {
+public class ProjetadoRealizadoLN implements Serializable {
 	
-	private static final String FILE_NAME = "C://ARQUIVOS_INTRANET//FINANCEIRO//MyFirstExcel.xlsx";
-	private static Map<Integer,String> cls = new HashMap<Integer,String>();
-	static CellStyle cellStyle;
-	static CreationHelper createHelper;
-	static int totreg = 0;
+	private static final long serialVersionUID = 1L;
+	private ProjetadoRealizadoDao dao;
+	private static final String FILE_NAME = "C://ARQUIVOS_INTRANET//FINANCEIRO//ProjetadoRealizado.xlsx";
+	private Map<Integer,String> cls = new HashMap<Integer,String>();
+	private CellStyle cellStyle;
+	private CreationHelper createHelper;
+	private int totreg = 0;
 	
-	public static void main(String[] args) throws ParseException, IOException {
-		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		Date d1=null;
-		Date d2=null;
-		d1 = df.parse("01/01/2018");
-		d2 = df.parse("30/01/2018");
 	
-		ProjetadoRealizadoDao dao = new ProjetadoRealizadoDao();
+	public void gerarArquivoProjetadoRealizado(Date d1,Date d2) throws IOException{
+		dao = new ProjetadoRealizadoDao();
 		List<Previsto> previstos = dao.buscarPrevisto(d1, d2);
 		List<Realizado> realizados = dao.buscarRealizado(d1, d2);
 		cls = dao.buscarClassificacao();
-		
+        totreg = previstos.size();
+        if(realizados.size()>totreg) totreg = realizados.size();
+        criaPlanilha(previstos,realizados);
+        retornarArquivo();
+	}
 	
-		
+	private void criaPlanilha(List<Previsto> previstos,List<Realizado> realizados){
         XSSFWorkbook workbook = new XSSFWorkbook();
         
         cellStyle = workbook.createCellStyle();
         createHelper = workbook.getCreationHelper();
-
-        totreg = previstos.size();
-        if(realizados.size()>totreg)
-        	totreg = realizados.size();
-        
         cls.forEach((k,v) -> criarSheet(workbook,v));
         cls.forEach((k,v) -> criaCabecalho(k,workbook.getSheetAt(k-1),previstos.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList()),realizados.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList())));               
         cls.forEach((k,v) -> criaPrevisto(workbook.getSheetAt(k-1),previstos.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList())));
@@ -69,18 +68,74 @@ public class TituloTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        System.out.println("Done");		
 	}
-		
-	private static void criarSheet(XSSFWorkbook workbook, String v) {
+	
+	private void criarSheet(XSSFWorkbook workbook, String v) {
 		XSSFSheet sheet = workbook.createSheet(v);		
         for(int i=1;i<totreg;i++)
         	sheet.createRow(i);        
+	}	
+	
+	private void criaCabecalho(Integer k, XSSFSheet sheet,List<Previsto> previstos, List<Realizado> realizados){
+		Row row = sheet.getRow(10);
+		Cell cell = row.createCell(0);
+		sheet.addMergedRegion(new CellRangeAddress(10,10,0,4));
+		cell.setCellValue("Total de Recebimentos Previstos - " + cls.get(k));
+		row = sheet.createRow(11);
+		cell = row.createCell(0);
+		cell.setCellValue("Data Emissão Fatura/N.Fiscal");	
+		cell = row.createCell(1);
+		cell.setCellValue("Número do Documento");
+		cell = row.createCell(2);			
+		cell.setCellValue("Data Vencimento");			
+		cell = row.createCell(3);
+		cell.setCellValue("Nome do Cliente");
+		cell = row.createCell(4);
+		cell.setCellValue("Histórico");
+		cell = row.createCell(5);
+		cell.setCellValue("Valor");
+		
+		row = sheet.getRow(10);
+		if(k < 9){			
+			cell = row.createCell(7);
+			sheet.addMergedRegion(new CellRangeAddress(10,10,7,11));
+			cell.setCellValue("Total de Recebimentos Realizado  - " + cls.get(k));
+			row = sheet.getRow(11);				
+			cell = row.createCell(7);
+			cell.setCellValue("Data Emissão Fatura/N.Fiscal");					
+			cell = row.createCell(8);
+			cell.setCellValue("Número do Documento");			
+			cell = row.createCell(9);			
+			cell.setCellValue("Data Vencimento");	
+			cell = row.createCell(10);			
+			cell.setCellValue("Data  Efetivo Recebimento");				
+			cell = row.createCell(11);
+			cell.setCellValue("Nome do Cliente");				
+			cell = row.createCell(12);
+			cell.setCellValue("Valor");					
+		}else{
+			cell = row.createCell(7);
+			sheet.addMergedRegion(new CellRangeAddress(10,10,7,12));
+			cell.setCellValue("Total de Pagamentos Realizado  - " + cls.get(k));
+			row = sheet.getRow(11);	
+			cell = row.createCell(7);
+			cell.setCellValue("Data Emissão Fatura/N.Fiscal");					
+			cell = row.createCell(8);
+			cell.setCellValue("Número do Documento");			
+			cell = row.createCell(9);			
+			cell.setCellValue("Data Vencimento");	
+			cell = row.createCell(10);			
+			cell.setCellValue("Data Efetivo Pagto");				
+			cell = row.createCell(11);
+			cell.setCellValue("Nome do Cliente");
+			cell = row.createCell(12);
+			cell.setCellValue("Historico");				
+			cell = row.createCell(13);
+			cell.setCellValue("Valor");					
+		}		
 	}
 
-
-	private static void criaPrevisto(XSSFSheet sheet,List<Previsto> previstos){
+	private void criaPrevisto(XSSFSheet sheet,List<Previsto> previstos){
 		int rowNum = 12;
 		Row row = sheet.getRow(rowNum++);
 
@@ -110,7 +165,7 @@ public class TituloTest {
 		}
 	}
 
-	private static void criaRealizado(XSSFSheet sheet,List<Realizado> realizados){
+	private void criaRealizado(XSSFSheet sheet,List<Realizado> realizados){
 		int rowNum = 12;
 		Row row = sheet.getRow(rowNum++);	
 		if(realizados.size()>0){
@@ -168,65 +223,12 @@ public class TituloTest {
 		}
 	}
 
-	private static void criaCabecalho(Integer k, XSSFSheet sheet,List<Previsto> previstos, List<Realizado> realizados){
-
-		Row row = sheet.getRow(10);
-
-		Cell cell = row.createCell(0);
-		sheet.addMergedRegion(new CellRangeAddress(10,10,0,4));
-		cell.setCellValue("Total de Recebimentos Previstos - " + cls.get(k));
-		row = sheet.createRow(11);
-		cell = row.createCell(0);
-		cell.setCellValue("Data Emissão Fatura/N.Fiscal");	
-		cell = row.createCell(1);
-		cell.setCellValue("Número do Documento");
-		cell = row.createCell(2);			
-		cell.setCellValue("Data Vencimento");			
-		cell = row.createCell(3);
-		cell.setCellValue("Nome do Cliente");
-		cell = row.createCell(4);
-		cell.setCellValue("Histórico");
-		cell = row.createCell(5);
-		cell.setCellValue("Valor");
-		
-		row = sheet.getRow(10);
-		if(k < 9){			
-			cell = row.createCell(7);
-			sheet.addMergedRegion(new CellRangeAddress(10,10,7,11));
-			cell.setCellValue("Total de Recebimentos Realizado  - " + cls.get(k));
-			row = sheet.getRow(11);				
-			cell = row.createCell(7);
-			cell.setCellValue("Data Emissão Fatura/N.Fiscal");					
-			cell = row.createCell(8);
-			cell.setCellValue("Número do Documento");			
-			cell = row.createCell(9);			
-			cell.setCellValue("Data Vencimento");	
-			cell = row.createCell(10);			
-			cell.setCellValue("Data  Efetivo Recebimento");				
-			cell = row.createCell(11);
-			cell.setCellValue("Nome do Cliente");				
-			cell = row.createCell(12);
-			cell.setCellValue("Valor");					
-		}else{
-			cell = row.createCell(7);
-			sheet.addMergedRegion(new CellRangeAddress(10,10,7,12));
-			cell.setCellValue("Total de Pagamentos Realizado  - " + cls.get(k));
-			row = sheet.getRow(11);	
-			cell = row.createCell(7);
-			cell.setCellValue("Data Emissão Fatura/N.Fiscal");					
-			cell = row.createCell(8);
-			cell.setCellValue("Número do Documento");			
-			cell = row.createCell(9);			
-			cell.setCellValue("Data Vencimento");	
-			cell = row.createCell(10);			
-			cell.setCellValue("Data Efetivo Pagto");				
-			cell = row.createCell(11);
-			cell.setCellValue("Nome do Cliente");
-			cell = row.createCell(12);
-			cell.setCellValue("Historico");				
-			cell = row.createCell(13);
-			cell.setCellValue("Valor");					
-		}
-		
+	public void retornarArquivo() throws IOException{
+		ServletContext sContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();	
+		File folder = new File(sContext.getRealPath("/resource/financ"));
+        if (!folder.exists()) folder.mkdirs();
+		String destino= sContext.getRealPath("/resource/financ") + File.separator + "ProjetadoRealizado.xlsx";
+        File origem = new File(FILE_NAME);
+        SaveFile.criaArquivo(origem, destino);
 	}
 }

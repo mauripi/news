@@ -206,8 +206,8 @@ public class BaixaBemBean implements Serializable {
 			if(controlaCadastro==2)					
 				msg = gln.update(baixabem);
 			
-			gerarRelatorio();
-			enviaEmail(baixabem);
+			gerarInformacao();
+			
 			mensagens();
 			listar();
 			limpaCadastro();	
@@ -218,12 +218,19 @@ public class BaixaBemBean implements Serializable {
 		}
 	}
 	
+	public void gerarInformacao() {
+		gerarRelatorio();
+		enviaEmail(baixabem);		
+	}
+
+
 	public void selectTipoVenda(){
 		isVenda = false;
 		if(tipoBaixa!=null)
 			if(tipoBaixa==TipoBaixa.VENDA)
 				isVenda=true;
 	}
+	
 	
 	private boolean validaCampos(){
 		msgs= new ArrayList<String>();
