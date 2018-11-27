@@ -26,6 +26,7 @@ import br.com.mauricio.news.model.contabil.BaixaBem;
 import br.com.mauricio.news.model.contabil.ItemBaixaBem;
 import br.com.mauricio.news.model.contabil.Patrimonio;
 import br.com.mauricio.news.model.contabil.TipoBaixa;
+import net.sf.jasperreports.engine.JRException;
 
 @ManagedBean(name="baixabemMB")
 @ViewScoped
@@ -34,6 +35,7 @@ public class BaixaBemBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private BaixaBem baixabem = new BaixaBem();
 	private BaixaBem baixabemSel = new BaixaBem();
+	private Double quantidade;
 	private GenericLN<BaixaBem> gln = new GenericLN<BaixaBem>();
 	private List<BaixaBem> baixabens = new ArrayList<BaixaBem>();
 	private List<ItemBaixaBem> itens = new ArrayList<ItemBaixaBem>();
@@ -70,8 +72,8 @@ public class BaixaBemBean implements Serializable {
 	
 		
 	private void listarCentrosDeCustos(){
-		GenericLN<CCusto> cgln= new GenericLN<CCusto>();
-		centroCustos = cgln.listWithoutRemoved("ccusto", "filial,nome");
+		BaixaBemLN cgln= new BaixaBemLN();
+		centroCustos = cgln.listCustos();
 	}
 	
 	private void listarFiliais(){
@@ -89,7 +91,7 @@ public class BaixaBemBean implements Serializable {
 	}
 	
 	public void listar(){
-		if(usuario.getChapa().equals("000746")||usuario.getChapa().equals("000772")||usuario.getChapa().equals("000755")||usuario.getChapa().equals("000763")){
+		if(usuario.getChapa().equals("000746")||usuario.getChapa().equals("000772")||usuario.getId().equals(91)||usuario.getChapa().equals("000763")){
 			gln = new GenericLN<BaixaBem>();
 			baixabens = gln.listWithoutRemoved("baixabem", "id desc");
 		}else{
@@ -146,6 +148,7 @@ public class BaixaBemBean implements Serializable {
 				totalResidual = new Double("0.0");
 				for(Patrimonio p: patrimonios){
 					ItemBaixaBem item = new ItemBaixaBem();
+					item.setQuantidade(quantidade);
 					item.setDescricao(p.getDesbem());
 					item.setNotafiscal(p.getNumdoc());
 					item.setPatrimonio(p.getCodbem());
@@ -153,7 +156,6 @@ public class BaixaBemBean implements Serializable {
 					item.setNumpla(p.getNumpla());
 					item.setVlraquisicao(p.getVlrbas());
 					item.setVlrresidual(p.getVlrres());
-					item.setQuantidade(new Double("0"));
 					item.setDataaquisicao(p.getDataqi());
 					item.setDatavenda(data);
 					item.setBaixabem(baixabem);
@@ -167,6 +169,7 @@ public class BaixaBemBean implements Serializable {
 			baixabem.setDescricaoBem(descricao);
 			baixabem.setPatrimonio("000000-00");
 			ItemBaixaBem item = new ItemBaixaBem();
+			item.setQuantidade(quantidade);
 			item.setDescricao(descricao);
 			item.setNotafiscal("---");
 			item.setPatrimonio("---");
@@ -174,7 +177,6 @@ public class BaixaBemBean implements Serializable {
 			item.setNumpla("---");
 			item.setVlraquisicao(new Double("0"));
 			item.setVlrresidual(new Double("0"));
-			item.setQuantidade(new Double("1"));
 			item.setDataaquisicao(null);
 			item.setDatavenda(data);
 			item.setBaixabem(baixabem);
@@ -277,11 +279,32 @@ public class BaixaBemBean implements Serializable {
 		BaixaBemLN bln = new BaixaBemLN();
 		bln.sendEmail(b);
 	}
+	
+	public void enviarEmail(){
+		gerarRelatorio();
+		enviaEmail(baixabem);
+	}
+	
 
 	private void enviaEmailBemExcluido(BaixaBem b) {
 		BaixaBemLN bln = new BaixaBemLN();
 		bln.enviarEmailExclusao(b);
 	}	
+	
+	public void imprimir(){
+		RelBaixaBemLN rel = new RelBaixaBemLN();
+		try {
+			rel.imprimir(baixabem);
+		} catch (IOException e) {
+			msg = msg + " Mas não foi possivel gerar relatório.";
+			mensagens();
+			e.printStackTrace();
+		} catch (JRException e) {
+			msg = msg + " Mas não foi possivel gerar relatório.";
+			mensagens();
+			e.printStackTrace();
+		}		
+	}
 
 	public void gerarRelatorio() {
 		RelBaixaBemLN rel = new RelBaixaBemLN();
@@ -569,6 +592,15 @@ public class BaixaBemBean implements Serializable {
 
 	public void setPermiteBaixa(Boolean permiteBaixa) {
 		this.permiteBaixa = permiteBaixa;
+	}
+
+	public Double getQuantidade() {
+		return quantidade;
+	}
+
+
+	public void setQuantidade(Double quantidade) {
+		this.quantidade = quantidade;
 	}
 
 }

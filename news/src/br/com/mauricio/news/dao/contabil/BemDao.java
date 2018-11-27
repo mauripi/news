@@ -39,7 +39,6 @@ public class BemDao {
 		int mes=dt.getMonthOfYear()-1;
 		int ano =dt.getYear();
 		
-		
 		String sql1 ="SELECT b.codbem,b.desbem,b.dataqi,b.vlrbas,nomfor,numdoc,l.numpla "
 				+ "FROM e670bem b inner join e670loc l on (l.codbem=b.codbem) "
 				+ "WHERE b.sitpat<>'I' and SUBSTRING(l.numpla, 1, 6)= :codigo "

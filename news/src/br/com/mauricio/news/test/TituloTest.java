@@ -31,13 +31,14 @@ public class TituloTest {
 	static CellStyle cellStyle;
 	static CreationHelper createHelper;
 	static int totreg = 0;
+	static int posicao =0;
 	
 	public static void main(String[] args) throws ParseException, IOException {
 		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		Date d1=null;
 		Date d2=null;
-		d1 = df.parse("01/01/2018");
-		d2 = df.parse("30/01/2018");
+		d1 = df.parse("01/10/2018");
+		d2 = df.parse("30/11/2018");
 	
 		ProjetadoRealizadoDao dao = new ProjetadoRealizadoDao();
 		List<Previsto> previstos = dao.buscarPrevisto(d1, d2);
@@ -55,10 +56,38 @@ public class TituloTest {
         if(realizados.size()>totreg)
         	totreg = realizados.size();
         
+        /*     cls.forEach((k,v) -> criarSheet(workbook,v));
+       System.out.println("Total registros: "+totreg);
+        
+        for (Map.Entry<Integer, String> entry : cls.entrySet()) {
+        	posicao++;
+        	System.out.println("Key : " + entry.getKey() + " value : " + entry.getValue());
+        	int k =entry.getKey();
+        	criaCabecalho(k,workbook.getSheetAt(posicao-1),previstos,realizados,posicao);
+        	System.out.println("");
+         }
+        */
+        //cls.forEach((k,v) -> criaCabecalho(k,workbook.getSheetAt(k),previstos.stream().filter(p -> p.getCtared()==k).collect(Collectors.toList()),realizados.stream().filter(p -> p.getCtared()==k).collect(Collectors.toList())));               
+     /*   cls.forEach((k,v) -> criaPrevisto(workbook.getSheetAt(k),previstos.stream().filter(p -> p.getCtared()==k).collect(Collectors.toList())));
+        cls.forEach((k,v) -> criaRealizado(workbook.getSheetAt(k),realizados.stream().filter(p -> p.getCtared()==k).collect(Collectors.toList())));
+        */
         cls.forEach((k,v) -> criarSheet(workbook,v));
-        cls.forEach((k,v) -> criaCabecalho(k,workbook.getSheetAt(k-1),previstos.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList()),realizados.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList())));               
-        cls.forEach((k,v) -> criaPrevisto(workbook.getSheetAt(k-1),previstos.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList())));
-        cls.forEach((k,v) -> criaRealizado(workbook.getSheetAt(k-1),realizados.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList())));
+        posicao =0;
+        cls.forEach((k,v) -> {  posicao++;
+        						criaCabecalho(k,workbook.getSheetAt(posicao-1),previstos.stream().filter(p -> p.getCtared()==k).collect(Collectors.toList()),realizados.stream().filter(p -> p.getCtared()==k).collect(Collectors.toList()),posicao);
+        					});               
+        posicao =0;
+        cls.forEach((k,v) -> {
+        	 					posicao++;
+        						criaPrevisto(workbook.getSheetAt(posicao-1),previstos.stream().filter(p -> p.getCtared()==k).collect(Collectors.toList()));
+        					});
+        posicao =0;
+        cls.forEach((k,v) -> {
+        						posicao++;
+        						criaRealizado(workbook.getSheetAt(posicao-1),realizados.stream().filter(p -> p.getCtared()==k).collect(Collectors.toList()));
+        					});
+       
+        
         
         try {
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
@@ -114,7 +143,7 @@ public class TituloTest {
 		int rowNum = 12;
 		Row row = sheet.getRow(rowNum++);	
 		if(realizados.size()>0){
-			int c = realizados.get(0).getClsflx();
+			int c = realizados.get(0).getCtared();
 			if(c < 9){
 				for(Realizado r: realizados){
 					cellStyle.getDataFormatString();					
@@ -129,7 +158,7 @@ public class TituloTest {
 					cell.setCellStyle(cellStyle);					
 					cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy"));
 					cell = row.createCell(9);				
-					cell.setCellValue(r.getVctpro());
+					cell.setCellValue(r.getDatmov());
 					cell.setCellStyle(cellStyle);
 					cell = row.createCell(10);				
 					cell.setCellValue(r.getDatmov());
@@ -155,7 +184,7 @@ public class TituloTest {
 					cell.setCellStyle(cellStyle);					
 					cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy"));
 					cell = row.createCell(9);				
-					cell.setCellValue(r.getVctpro());
+					cell.setCellValue(r.getDatmov());
 					cell.setCellStyle(cellStyle);
 					cell = row.createCell(10);				
 					cell.setCellValue(r.getDatmov());
@@ -168,7 +197,7 @@ public class TituloTest {
 		}
 	}
 
-	private static void criaCabecalho(Integer k, XSSFSheet sheet,List<Previsto> previstos, List<Realizado> realizados){
+	private static void criaCabecalho(Integer k, XSSFSheet sheet,List<Previsto> previstos, List<Realizado> realizados,int posicao){
 
 		Row row = sheet.getRow(10);
 
@@ -190,7 +219,7 @@ public class TituloTest {
 		cell.setCellValue("Valor");
 		
 		row = sheet.getRow(10);
-		if(k < 9){			
+		if(posicao < 9){			
 			cell = row.createCell(7);
 			sheet.addMergedRegion(new CellRangeAddress(10,10,7,11));
 			cell.setCellValue("Total de Recebimentos Realizado  - " + cls.get(k));

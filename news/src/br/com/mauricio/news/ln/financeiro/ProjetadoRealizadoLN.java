@@ -32,16 +32,18 @@ public class ProjetadoRealizadoLN implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private ProjetadoRealizadoDao dao;
 	private static final String FILE_NAME = "C://ARQUIVOS_INTRANET//FINANCEIRO//ProjetadoRealizado.xlsx";
-	private Map<Integer,String> cls = new HashMap<Integer,String>();
+	private static Map<Integer,String> cls = new HashMap<Integer,String>();
 	private CellStyle cellStyle;
 	private CreationHelper createHelper;
 	private int totreg = 0;
+	private int posicao = 0;
 	
 	
 	public void gerarArquivoProjetadoRealizado(Date d1,Date d2) throws IOException{
 		dao = new ProjetadoRealizadoDao();
 		List<Previsto> previstos = dao.buscarPrevisto(d1, d2);
 		List<Realizado> realizados = dao.buscarRealizado(d1, d2);
+
 		cls = dao.buscarClassificacao();
         totreg = previstos.size();
         if(realizados.size()>totreg) totreg = realizados.size();
@@ -54,10 +56,23 @@ public class ProjetadoRealizadoLN implements Serializable {
         
         cellStyle = workbook.createCellStyle();
         createHelper = workbook.getCreationHelper();
+
         cls.forEach((k,v) -> criarSheet(workbook,v));
-        cls.forEach((k,v) -> criaCabecalho(k,workbook.getSheetAt(k-1),previstos.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList()),realizados.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList())));               
-        cls.forEach((k,v) -> criaPrevisto(workbook.getSheetAt(k-1),previstos.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList())));
-        cls.forEach((k,v) -> criaRealizado(workbook.getSheetAt(k-1),realizados.stream().filter(p -> p.getClsflx()==k).collect(Collectors.toList())));
+        posicao =0;
+        cls.forEach((k,v) -> {  posicao++;
+        						criaCabecalho(k,workbook.getSheetAt(posicao-1),previstos.stream().filter(p -> p.getCtared().equals(k)).collect(Collectors.toList()),realizados.stream().filter(p -> p.getCtared()==k).collect(Collectors.toList()),posicao);
+        					});               
+        posicao =0;
+        cls.forEach((k,v) -> {
+        	 					posicao++;
+        						criaPrevisto(workbook.getSheetAt(posicao-1),previstos.stream().filter(p -> p.getCtared().equals(k)).collect(Collectors.toList()));
+        					});
+        posicao =0;
+         
+        cls.forEach((k,v) -> {
+        						posicao++;
+        						criaRealizado(workbook.getSheetAt(posicao-1),realizados.stream().filter(p -> p.getCtared().equals(k)).collect(Collectors.toList()));
+        					});
         
         try {
             FileOutputStream outputStream = new FileOutputStream(FILE_NAME);
@@ -75,7 +90,71 @@ public class ProjetadoRealizadoLN implements Serializable {
         for(int i=1;i<totreg;i++)
         	sheet.createRow(i);        
 	}	
+
+	private static void criaCabecalho(Integer k, XSSFSheet sheet,List<Previsto> previstos, List<Realizado> realizados,int posicao){
+
+		Row row = sheet.getRow(10);
+
+		Cell cell = row.createCell(0);
+		sheet.addMergedRegion(new CellRangeAddress(10,10,0,4));
+		cell.setCellValue("Total de Recebimentos Previstos - " + cls.get(k));
+		row = sheet.createRow(11);
+		cell = row.createCell(0);
+		cell.setCellValue("Data Emissão Fatura/N.Fiscal");	
+		cell = row.createCell(1);
+		cell.setCellValue("Número do Documento");
+		cell = row.createCell(2);			
+		cell.setCellValue("Data Vencimento");			
+		cell = row.createCell(3);
+		cell.setCellValue("Nome do Cliente");
+		cell = row.createCell(4);
+		cell.setCellValue("Histórico");
+		cell = row.createCell(5);
+		cell.setCellValue("Valor");
+		
+		row = sheet.getRow(10);
+		if(posicao < 101){			
+			cell = row.createCell(7);
+			sheet.addMergedRegion(new CellRangeAddress(10,10,7,11));
+			cell.setCellValue("Total de Recebimentos Realizado  - " + cls.get(k)); 
+			row = sheet.getRow(11);				
+			cell = row.createCell(7);
+			cell.setCellValue("Data Emissão Fatura/N.Fiscal");					
+			cell = row.createCell(8);
+			cell.setCellValue("Número do Documento");			
+			cell = row.createCell(9);			
+			cell.setCellValue("Data Vencimento");	
+			cell = row.createCell(10);			
+			cell.setCellValue("Data  Efetivo Recebimento");				
+			cell = row.createCell(11);
+			cell.setCellValue("Nome do Cliente");				
+			cell = row.createCell(12);
+			cell.setCellValue("Valor");					
+		}else{
+			cell = row.createCell(7);
+			sheet.addMergedRegion(new CellRangeAddress(10,10,7,12));
+			cell.setCellValue("Total de Pagamentos Realizado  - " + cls.get(k));
+			row = sheet.getRow(11);	
+			cell = row.createCell(7);
+			cell.setCellValue("Data Emissão Fatura/N.Fiscal");					
+			cell = row.createCell(8);
+			cell.setCellValue("Número do Documento");			
+			cell = row.createCell(9);			
+			cell.setCellValue("Data Vencimento");	
+			cell = row.createCell(10);			
+			cell.setCellValue("Data Efetivo Pagto");				
+			cell = row.createCell(11);
+			cell.setCellValue("Nome do Cliente");
+			cell = row.createCell(12);
+			cell.setCellValue("Historico");				
+			cell = row.createCell(13);
+			cell.setCellValue("Valor");					
+		}
+		
+	}
 	
+	
+	/*
 	private void criaCabecalho(Integer k, XSSFSheet sheet,List<Previsto> previstos, List<Realizado> realizados){
 		Row row = sheet.getRow(10);
 		Cell cell = row.createCell(0);
@@ -135,6 +214,7 @@ public class ProjetadoRealizadoLN implements Serializable {
 		}		
 	}
 
+*/
 	private void criaPrevisto(XSSFSheet sheet,List<Previsto> previstos){
 		int rowNum = 12;
 		Row row = sheet.getRow(rowNum++);
@@ -168,9 +248,12 @@ public class ProjetadoRealizadoLN implements Serializable {
 	private void criaRealizado(XSSFSheet sheet,List<Realizado> realizados){
 		int rowNum = 12;
 		Row row = sheet.getRow(rowNum++);	
+
 		if(realizados.size()>0){
-			int c = realizados.get(0).getClsflx();
-			if(c < 9){
+			int c = realizados.get(0).getCtared();
+			
+			if(c < 101){
+				
 				for(Realizado r: realizados){
 					cellStyle.getDataFormatString();					
 					Cell cell = row.createCell(7);				
@@ -184,7 +267,7 @@ public class ProjetadoRealizadoLN implements Serializable {
 					cell.setCellStyle(cellStyle);					
 					cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy"));
 					cell = row.createCell(9);				
-					cell.setCellValue(r.getVctpro());
+					cell.setCellValue(r.getDatmov());
 					cell.setCellStyle(cellStyle);
 					cell = row.createCell(10);				
 					cell.setCellValue(r.getDatmov());
@@ -194,7 +277,8 @@ public class ProjetadoRealizadoLN implements Serializable {
 					row = sheet.getRow(rowNum++);	
 				}
 			}else{
-				for(Realizado r: realizados){
+
+				for(Realizado r: realizados){				
 					cellStyle.getDataFormatString();					
 					Cell cell = row.createCell(7);				
 					cell.setCellValue("");	
@@ -210,7 +294,7 @@ public class ProjetadoRealizadoLN implements Serializable {
 					cell.setCellStyle(cellStyle);					
 					cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd/MM/yyyy"));
 					cell = row.createCell(9);				
-					cell.setCellValue(r.getVctpro());
+					cell.setCellValue(r.getDatmov());
 					cell.setCellStyle(cellStyle);
 					cell = row.createCell(10);				
 					cell.setCellValue(r.getDatmov());

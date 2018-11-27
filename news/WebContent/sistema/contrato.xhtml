@@ -22,20 +22,35 @@
 
 
 <p:panel>
-<f:facet name="header">Controle de Contratos</f:facet>
+<f:facet name="header">Controle de Contratos</f:facet> 
 	<h:form id="formtb">	
-		<br></br>   
-		<p:commandButton onclick="PF('dgCad').show()" icon="ui-icon-plus" action="#{contratoMB.novo}" value="Novo Contrato" title="Novo"  update=":formCad"/>
-
-	    <h:panelGrid columns="3" style="margin-bottom:10px" cellpadding="5">
-	        <p:outputLabel for="filtro" value="Listar contratos:" />
-	        <p:selectOneRadio id="filtro" value="#{contratoMB.isInativo}">
-	            <f:selectItem itemLabel="Ativos" itemValue="0" />
-	            <f:selectItem itemLabel="Inativos" itemValue="1" />
-	            <p:ajax event="change" listener="#{contratoMB.listar}" update=":formtb"/>
-	        </p:selectOneRadio>
-	    </h:panelGrid>
-  			
+		<h:panelGrid columns="1">   
+			<p:commandButton onclick="PF('dgCad').show()" icon="ui-icon-plus" action="#{contratoMB.novo}" value="Novo Contrato" title="Novo"  update=":formCad"/>
+		</h:panelGrid>
+		<h:panelGrid columns="4">
+			<p:fieldset>
+			    <h:panelGrid columns="3" cellpadding="5">
+			        <p:outputLabel for="filtro" value="Listar contratos:" />
+			        <p:selectOneRadio id="filtro" value="#{contratoMB.isInativo}">
+			            <f:selectItem itemLabel="Ativos" itemValue="0" />
+			            <f:selectItem itemLabel="Inativos" itemValue="1" />
+			            <p:ajax event="change" listener="#{contratoMB.listar}" update=":formtb"/>
+			        </p:selectOneRadio>
+			    </h:panelGrid>
+			</p:fieldset>
+			<p:fieldset>
+			    <h:panelGrid columns="3" cellpadding="5">
+			        <p:outputLabel for="respons" value="Responsável dos contratos:" />
+			        <p:selectOneRadio id="respons" value="#{contratoMB.responsavel}">
+			            <f:selectItem itemLabel="Compras" itemValue="1" />
+			            <f:selectItem itemLabel="Engenaria" itemValue="2" />
+			            <f:selectItem itemLabel="Elaine" itemValue="3" />
+			            <p:ajax event="change" listener="#{contratoMB.listarFilto}" update=":formtb"/> 
+			        </p:selectOneRadio>	        
+			    </h:panelGrid>
+			</p:fieldset>
+		</h:panelGrid>
+		<br></br>  			
 	    <p:dataTable id="tb" var="c" value="#{contratoMB.contratos}"  rows="15" paginator="true" paginatorPosition="bottom"
 	    	selectionMode="single" selection="#{contratoMB.contrato}" rowKey="#{c.id}" emptyMessage="">
 
@@ -145,6 +160,7 @@
 		        <p:selectOneMenu id="dpr" value="#{contratoMB.contrato.deptoRespons}"  style="width:130px;">
 		            <f:selectItem itemLabel="Depto Compras" itemValue="1"/>
 		            <f:selectItem itemLabel="Depto Engenharia" itemValue="2"/>
+		            <f:selectItem itemLabel="Elaine" itemValue="3"/>
 		        </p:selectOneMenu>			        								
 			</p:panelGrid>
         </p:tab>	

@@ -65,13 +65,13 @@
 <p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" width="900" height="600" header="Cadastro de Baixa de Patrinmônios" resizable="false" >
 	<h:form id="formCad">
 	    <p:panel >
-			<p:panelGrid columns="5">	
+			<p:panelGrid columns="6">	
 				<h:outputLabel value="Registro nro.:" />
 				<h:outputLabel value="Filial"/>
 				<h:outputLabel value="Centro de Custo"/>
 				<h:outputLabel value="Tipo de Baixa"/>
 				<h:outputLabel value="Data da Baixa"/>
-				
+				<h:outputLabel value="Valor de Venda" />
 				<h:outputLabel value="#{baixabemMB.baixabem.id}" />		
 				<p:selectOneMenu id="fil" value="#{baixabemMB.baixabem.filial}" converter="filialConverter" style="width:130px;" disabled="#{baixabemMB.controlaCadastro == 0}">
 					<f:selectItems value="#{baixabemMB.filiais}" var="f" itemLabel="#{f.nome}" itemValue="#{f}" />
@@ -83,17 +83,13 @@
 				<p:selectOneMenu id="cat" value="#{baixabemMB.tipoBaixa}"  style="width:100px;" disabled="#{baixabemMB.controlaCadastro == 0}" >
 					<f:selectItem itemLabel="#{baixabemMB.tipoBaixa}" itemValue="#{baixabemMB.tipoBaixa}" />
 					<f:selectItems value="#{baixabemMB.tiposBaixa}"/>
-					<p:ajax event="change" update=":formCad" listener="#{baixabemMB.selectTipoVenda}"/>
+					<p:ajax event="change" update="txtVlr" listener="#{baixabemMB.selectTipoVenda}"/>
 				</p:selectOneMenu>
 				<p:calendar value="#{baixabemMB.data}"  locale="pt_BR" pattern="dd/MM/yyyy" size="12" disabled="#{baixabemMB.controlaCadastro == 0}" />
-		
-	
-			</p:panelGrid>
-			<p:panelGrid columns="1">
-				<h:outputLabel value="Valor de Venda" rendered="#{baixabemMB.isVenda}"/>
-				<p:inputText value="#{baixabemMB.baixabem.vlrvenda}" size="9" disabled="#{baixabemMB.controlaCadastro == 0}" rendered="#{baixabemMB.isVenda}">	
+				<p:inputText id="txtVlr" value="#{baixabemMB.baixabem.vlrvenda}" size="9" disabled="#{baixabemMB.controlaCadastro == 0 || !baixabemMB.isVenda}">	
 				 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           															 	
-				</p:inputText>	
+				</p:inputText>		
+	
 			</p:panelGrid>
 			<br></br>
 			<p:separator />
@@ -108,10 +104,13 @@
 	      			<h:outputLabel value="Descrição do Patrimônio" rendered="#{baixabemMB.permiteBaixa}"/>
 	      			<p:inputText value="#{baixabemMB.descricao}" rendered="#{baixabemMB.permiteBaixa}" size="40"/>
 			</p:panelGrid>	
-			<p:panelGrid columns="3" >
+			<p:panelGrid columns="2" >
 				<h:outputLabel value="Nº Patrimônio"/>
 				<p:inputText id="codBem" value="#{baixabemMB.codigo}" maxlength="6" size="12" disabled="#{baixabemMB.controlaCadastro == 0 || baixabemMB.permiteBaixa }"/>				
+				<h:outputLabel value="Quantidade"/>
+				<p:inputText id="qtd" value="#{baixabemMB.quantidade}" size="5"/>
 				<p:commandButton value="Adicionar" action="#{baixabemMB.encontrarBem}" update=":formMsg,:formCad"  onstart="PF('status').show()" onsuccess="PF('status').hide()" disabled="#{baixabemMB.controlaCadastro == 0}"/>
+				<h:outputLabel value=""/>
 			</p:panelGrid>
 			<p:panelGrid columns="2" id="dados" rendered="false">
 				<h:outputLabel value="Data da Aquisição"/>
@@ -129,13 +128,18 @@
 			</p:panelGrid>
 			<br></br>
 			<p:dataTable id="tbItens" var="i" value="#{baixabemMB.itens}" emptyMessage="Nenhum item adicionado." >
-			    <p:column headerText="Código" width="12%">
+			    <p:column headerText="Código" width="16%">
 			        <h:outputText value="#{i.patrimonio}" />
 			    </p:column>
-			    <p:column headerText="Plaqueta" width="12%">
+			    <p:column headerText="Plaqueta" width="16%">
 			        <h:outputText value="#{i.numpla}" />
-			    </p:column>				 
-			    <p:column headerText="Descrição">
+			    </p:column>	
+				 <p:column headerText="Qtd" width="8%">
+			        <h:outputText value="#{i.quantidade}">
+			        	<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" />
+			        </h:outputText>
+			    </p:column>	
+			    <p:column headerText="Descrição" width="30%">
 			        <h:outputText value="#{i.descricao}" />
 			    </p:column>
 		        <p:column headerText="Aquisição" style="width:15%;">
@@ -175,7 +179,7 @@
 			<p:commandButton value="Cancelar" icon="ui-icon-cancel"  action="#{baixabemMB.limpaCadastro}" 
 				onclick="PF('dgCad').hide()" update=":formCad" disabled="#{baixabemMB.controlaCadastro == 0}"/>					
 			<p:commandButton icon="ui-icon-print" value="Imprimir" ajax="false"
-			  action="#{baixabemMB.gerarInformacao}" disabled="#{baixabemMB.baixabem.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
+			  action="#{baixabemMB.imprimir}" disabled="#{baixabemMB.baixabem.id==null}" onclick="this.form.target='_blank'" update=":formMsg" />
 		
 		</p:panelGrid>																				
 		

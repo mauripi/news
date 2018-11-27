@@ -354,7 +354,7 @@
 				<text><![CDATA[Líquido à Receber ->]]></text>
 			</staticText>
 			<textField pattern="###0.00" isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="457" y="26" width="75" height="22" backcolor="#999999" uuid="d92e3313-56d2-4816-9280-0979474159bd"/>
+				<reportElement mode="Opaque" x="457" y="26" width="75" height="22" backcolor="#FFFFFF" uuid="d92e3313-56d2-4816-9280-0979474159bd"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>

@@ -5,34 +5,14 @@ import java.util.Date;
 
 
 public class Previsto {
-	private String retour;
-	private BigDecimal vlrour;	
-	private Integer qtdpar;
+
 	private String numtit;
 	private Date vctpro;
 	private String nomclifor;
 	private String obstit;
 	private BigDecimal vlrabe;
-	private Integer clsflx;
+	private Integer ctared;
 
-	public String getRetour() {
-		return retour;
-	}
-	public void setRetour(String retour) {
-		this.retour = retour;
-	}
-	public BigDecimal getVlrour() {
-		return vlrour;
-	}
-	public void setVlrour(BigDecimal vlrour) {
-		this.vlrour = vlrour;
-	}
-	public Integer getQtdpar() {
-		return qtdpar;
-	}
-	public void setQtdpar(Integer qtdpar) {
-		this.qtdpar = qtdpar;
-	}
 	public String getNumtit() {
 		return numtit;
 	}
@@ -63,11 +43,11 @@ public class Previsto {
 	public void setVlrabe(BigDecimal vlrabe) {
 		this.vlrabe = vlrabe;
 	}
-	public Integer getClsflx() {
-		return clsflx;
+	public Integer getCtared() {
+		return ctared;
 	}
-	public void setClsflx(Integer clsflx) {
-		this.clsflx = clsflx;
+	public void setCtared(Integer ctared) {
+		this.ctared = ctared;
 	}
 
 }

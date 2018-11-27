@@ -49,7 +49,10 @@
 	        </p:column>
 	        <p:column headerText="Ramal Externo" >
 	            <h:outputText value="#{l.ramalext}"  />
-	        </p:column>	        
+	        </p:column>	     
+	        <p:column headerText="Centro de Custo"  sortBy="#{l.ccusto.codigo}" filterBy="#{l.ccusto}" filterMatchMode="contains"> 
+	            <h:outputText value="#{l.ccusto.codigo} - #{l.ccusto.nome}" />
+	        </p:column>   
 	        <p:column headerText="Departamento"  sortBy="#{l.depto.nome}" filterBy="#{l.depto.nome}" filterMatchMode="contains"> 
 	            <h:outputText value="#{l.depto.nome}" />
 	        </p:column>
@@ -72,12 +75,16 @@
 <p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" header="Cadastro de Locais" resizable="false" >
 <h:form id="formCad">
 	<p:panelGrid columns="2">	
+		<p:outputLabel value="Nome:"/>
+		<p:inputText value="#{ramalMB.ramal.nome}" size="30" />
 		<p:outputLabel value="Departamento:"/>
 		<p:selectOneMenu value="#{ramalMB.depto}"  converter="deptoRamalConverter">
 		 	<f:selectItems value="#{ramalMB.deptos}" var="c" itemLabel="#{c.nome} - #{c.local.empresa.nome}"  itemValue="#{c}" />
 		</p:selectOneMenu>
-		<p:outputLabel value="Nome:"/>
-		<p:inputText value="#{ramalMB.ramal.nome}" size="30" />
+		<p:outputLabel value="Centro de Custo" />
+		<p:selectOneMenu value="#{ramalMB.ccusto}" converter="ccustoConverter">
+		 	<f:selectItems value="#{ramalMB.ccustos}" var="c" itemLabel="#{c.codigo} - #{c.nome}"  itemValue="#{c}"  />
+		</p:selectOneMenu>
 		<p:outputLabel value="Cargo:"/>
 		<p:inputText value="#{ramalMB.ramal.cargo}" size="30" />
 		<p:outputLabel value="Email:"/>

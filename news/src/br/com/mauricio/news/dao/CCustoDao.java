@@ -22,7 +22,7 @@ public class CCustoDao {
 	}
 	@SuppressWarnings("unchecked")
 	public List<CCusto> list(){		
-		return this.manager.createQuery("From ccusto order by id").getResultList();		
+		return this.manager.createQuery("From ccusto where codigo not in ('30008','30009','30015','30016','30045','30046','30052','30053','30089','30090','30082','30083') order by filial,nome").getResultList();		
 	}
 
 }

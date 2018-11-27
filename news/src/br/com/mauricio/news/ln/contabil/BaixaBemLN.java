@@ -12,9 +12,11 @@ import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 
 import br.com.mauricio.news.cnn.Conexao;
+import br.com.mauricio.news.dao.CCustoDao;
 import br.com.mauricio.news.dao.GenericDao;
 import br.com.mauricio.news.dao.contabil.BaixaBemDao;
 import br.com.mauricio.news.dao.contabil.BemDao;
+import br.com.mauricio.news.model.CCusto;
 import br.com.mauricio.news.model.Login;
 import br.com.mauricio.news.model.contabil.BaixaBem;
 import br.com.mauricio.news.model.contabil.Patrimonio;
@@ -79,8 +81,7 @@ public class BaixaBemLN implements Serializable {
 
 	public void sendEmail(BaixaBem bem){
 		List<String> destinatarios = new ArrayList<String>();
-/*		destinatarios.add("acorrea@recordnews.com.br");
-		destinatarios.add("flettieri@recordnews.com.br");*/
+		
 		destinatarios.add("contabilidade@recordnews.com.br");
 
 		if(ValidaEmail.validar(bem.getSolicitante().getEmail()))
@@ -113,6 +114,10 @@ public class BaixaBemLN implements Serializable {
 		filesInFolder.forEach(a -> SaveFile.copiar(caminhoOrigem + File.separator + a, caminhoDestino + File.separator + a));
 	}
 
+	public List<CCusto> listCustos(){
+		CCustoDao cDao = new CCustoDao();
+		return cDao.list();
+	}
 	
 	public GenericDao<BaixaBem> getDao() {
 		return dao;

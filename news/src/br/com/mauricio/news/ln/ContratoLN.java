@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -38,18 +37,41 @@ public class ContratoLN implements Serializable {
         return "Contrato removido!";
     }
 
-    public List<Contrato> list(Login userLogado, int ativo) {
+    public List<Contrato> list(Login userLogado, int ativo ) {
     	boolean isAtivo=true;
     	if(ativo==1) isAtivo=false;
         ContratoDao cdao = new ContratoDao(manager);
-        String codigo = userLogado.getCusto().getCodigo();
         List<Contrato> list = new ArrayList<Contrato>();
-        if(codigo.equals("30006")||codigo.equals("30018")||codigo.equals("30016")||userLogado.getChapa().equals("000755")){
-            list = cdao.listaContratosAtivos(isAtivo);
-        }else{
-            List<String> custos = Arrays.asList("30034", "30071", "30107");
-            list = cdao.listaContratosByCCusto(custos,isAtivo);
-        }
+        
+		switch (userLogado.getId()) {
+		case 116:
+			list = cdao.listaContratosAtivosPorResponsavel(isAtivo, 1);
+			break;
+		case 88:
+			list = cdao.listaContratosAtivos(isAtivo);
+			break;		
+		case 106:
+			list = cdao.listaContratosAtivosPorResponsavel(isAtivo, 2);
+			break;
+		case 91:
+			System.out.println(manager.getTransaction().toString());
+			System.out.println(manager.getClass().getName());			
+			list = cdao.listaContratosAtivos(isAtivo);
+			break;
+		case 411:
+			list = cdao.listaContratosAtivos(isAtivo);
+			break;	
+		case 418:
+			list = cdao.listaContratosAtivos(isAtivo);
+			break;			
+		case 117:
+			list = cdao.listaContratosAtivos(isAtivo);
+			break;			
+		default:
+			list =  new ArrayList<Contrato>();
+			break;
+		}
+
         return list;
     }
 

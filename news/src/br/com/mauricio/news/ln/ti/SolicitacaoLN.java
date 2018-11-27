@@ -317,10 +317,7 @@ public class SolicitacaoLN implements Serializable {
 		String assunto = "Solicitação nro. "+solicitacao.getId();
 		List<String> dests = new ArrayList<String>();
 		
-		dests.add("afigueredo@recordnews.com.br");
-		dests.add("cmarques@recordnews.com.br");
-		dests.add("jfranca@recordnews.com.br");
-		dests.add("maucruz@news.rederecord.com.br");
+		dests.add("suporte_ti@recordnews.com.br");
 		
 		if(solicitacao.getSolicitante().getId()!=solicitacao.getFavorecido().getId()){
 			if(ValidaEmail.validar(solicitacao.getFavorecido().getEmail()))

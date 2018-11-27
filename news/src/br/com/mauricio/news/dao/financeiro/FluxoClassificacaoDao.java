@@ -128,7 +128,7 @@ public class FluxoClassificacaoDao {
 	private void getContasPagar(Date d1, Date d2) {
 
 		String sql = " SELECT numtit,E501TCP.codfil,codtpt,E095FOR.codfor,nomfor,E501TCP.vlrori,vlrabe,obstcp,vctori as venc_original,vctpro as venc_atual,datppt as prov_pagto, "
-		+ " usu_clsflx,codtns,E501TCP.datemi,E501TCP.codbar,E501TCP.codban,E501TCP.codage,E501TCP.ccbfor,r910usu.nomcom as nomapr,e614usu.datapr as datapr FROM E501TCP " 
+		+ " E501TCP.usu_clsflx,E501TCP.codtns,E501TCP.datemi,E501TCP.codbar,E501TCP.codban,E501TCP.codage,E501TCP.ccbfor,r910usu.nomcom as nomapr,e614usu.datapr as datapr FROM E501TCP " 
 		+ " Left join E095FOR ON (E501TCP.CODFOR=E095FOR.CODFOR) "
 		+ " LEFT JOIN e440ipc ON (E501TCP.filnfc = E440IPC.codfil AND E501TCP.fornfc = E440IPC.codfor AND E501TCP.numnfc = E440IPC.numnfc AND E501TCP.snfnfc = E440IPC.codsnf AND E440IPC.seqipc=1) "
 		+ " LEFT JOIN e440isc ON (E501TCP.filnfc = E440ISC.codfil AND E501TCP.fornfc = E440ISC.codfor AND E501TCP.numnfc = E440ISC.numnfc AND E501TCP.snfnfc = E440ISC.codsnf AND E440ISC.seqisc=1) "
@@ -199,7 +199,7 @@ public class FluxoClassificacaoDao {
 
 	private void getMovimentos(Date d1, Date d2) {
 		String sql = "SELECT numcco,datmov,seqmov,codtns,docmov,hismov,vlrmov,debcre,usu_clsflx,codfil "
-				+ " FROM E600MCC WHERE sitmcc='A' AND orimcc='OU' AND datmov BETWEEN :d1 AND :d2 ";
+				+ " FROM E600MCC WHERE sitmcc='A' AND datmov BETWEEN :d1 AND :d2 ";
 		
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = manager.createNativeQuery(sql).setParameter("d1", d1).setParameter("d2", d2).getResultList();

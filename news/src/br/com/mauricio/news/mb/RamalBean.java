@@ -13,7 +13,9 @@ import javax.faces.context.FacesContext;
 import org.primefaces.event.SelectEvent;
 
 import br.com.mauricio.news.ln.GenericLN;
+import br.com.mauricio.news.ln.ti.RamalLN;
 import br.com.mauricio.news.model.Ramal;
+import br.com.mauricio.news.model.CCusto;
 import br.com.mauricio.news.model.DeptoRamal;
 import br.com.mauricio.news.model.Login;
 
@@ -36,15 +38,24 @@ public class RamalBean implements Serializable {
 	private Login usu;
 	private List<String> msgs;
 	private String msg;
+	private CCusto ccusto;
+	private List<CCusto> ccustos = new ArrayList<CCusto>();
 	
 
 	@PostConstruct
 	public void init(){
 		lista();
 		listaDeptos();
+		listaCCustos();
 	}
 		
-    public List<Login> completeText(String query) {
+    private void listaCCustos() {
+		GenericLN<CCusto> gln = new GenericLN<CCusto>();
+		ccustos = gln.listWithoutRemoved("ccusto", "id");
+		
+	}
+
+	public List<Login> completeText(String query) {
         List<Login> results = new ArrayList<Login>();
         for(Login l:userlogins) 
         	if(l.getNome().toLowerCase().contains(query.toLowerCase()))
@@ -72,8 +83,9 @@ public class RamalBean implements Serializable {
 	}	
 	
 	public void exclui (){
-		GenericLN<Ramal> gln = new GenericLN<Ramal>();
-		msg = gln.remove(gln.find(new Ramal(), ramal.getId()));
+		RamalLN ln = new RamalLN();
+		msg = ln.excluir(ramal);
+		System.out.println(msg);
 		mensagens();
 		lista();
 	}
@@ -88,6 +100,7 @@ public class RamalBean implements Serializable {
 		ramal.setDepto(depto);
 		GenericLN<Ramal> gln = new GenericLN<Ramal>();
 		if(validar()){
+			ramal.setCcusto(ccusto);
 			if(controlaCadastro==1) msg = gln.add(ramal);
 			if(controlaCadastro==2) msg = gln.update(ramal);
 			
@@ -99,6 +112,7 @@ public class RamalBean implements Serializable {
 	public void selecao(SelectEvent event){
 		ramal=(Ramal) event.getObject();
 		depto=ramal.getDepto();
+		ccusto=ramal.getCcusto();
 		edita();
 	}
 	
@@ -195,9 +209,27 @@ public class RamalBean implements Serializable {
 		this.msg = msg;
 	}
 
+	public CCusto getCcusto() {
+		return ccusto;
+	}
+
+	public void setCcusto(CCusto ccusto) {
+		this.ccusto = ccusto;
+	}
+
+	public List<CCusto> getCcustos() {
+		return ccustos;
+	}
+
+	public void setCcustos(List<CCusto> ccustos) {
+		this.ccustos = ccustos;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+
 
 
 }

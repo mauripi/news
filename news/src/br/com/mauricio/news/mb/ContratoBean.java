@@ -40,6 +40,7 @@ public class ContratoBean implements Serializable {
     private Contrato contratoSel = new Contrato();
     private GenericLN<Contrato> gln = new GenericLN<Contrato>();
     private List<Contrato> contratos = new ArrayList<Contrato>();
+    private List<Contrato> contratosAll = new ArrayList<Contrato>();
     private List<TipoContrato> tipoContratos = new ArrayList<TipoContrato>();
     private TipoContrato tipoContrato = new TipoContrato();
     private Login userLogado = new Login();
@@ -58,6 +59,7 @@ public class ContratoBean implements Serializable {
     private List<String> allEmailsCadastradosIGPM = new ArrayList<String>();
     private String pathPdfAnexo="";
     private int isInativo = 0;
+    private Integer responsavel = 0;
     private ContratoLN ln = new ContratoLN();
     
     @PostConstruct
@@ -87,7 +89,11 @@ public class ContratoBean implements Serializable {
     public void listar(){
         ln = new ContratoLN();
         contratos = ln.list(userLogado,isInativo);
-
+        contratosAll = contratos;
+    }
+    
+    public void listarFilto(){
+    	contratos = contratosAll.stream().filter(c -> c.getDeptoRespons().equals(responsavel)).collect(Collectors.toList());
     }
 
     private void listarEmailsCadastrados(){
@@ -167,6 +173,7 @@ public class ContratoBean implements Serializable {
     public void limpaCadastro(){
         anexos = new ArrayList<String>();
         controlaCadastro=0;
+        responsavel = 0;
         init();
     }
 
@@ -199,6 +206,7 @@ public class ContratoBean implements Serializable {
         emailAgendamentoIGPM="";
         edita();
         setaPrimeiraAba();
+        responsavel=contrato.getDeptoRespons();
     }
   
     public void contratoSelecionado(Contrato c) {
@@ -547,5 +555,20 @@ public class ContratoBean implements Serializable {
 		this.allEmailsCadastradosIGPM = allEmailsCadastradosIGPM;
 	}
 
+	public Integer getResponsavel() {
+		return responsavel;
+	}
 
+	public void setResponsavel(Integer responsavel) {
+		this.responsavel = responsavel;
+	}
+
+	public List<Contrato> getContratosAll() {
+		return contratosAll;
+	}
+
+	public void setContratosAll(List<Contrato> contratosAll) {
+		this.contratosAll = contratosAll;
+	}
+	
 }

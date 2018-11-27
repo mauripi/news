@@ -6,24 +6,17 @@ import java.util.Date;
 
 public class Realizado {
 	private String numtit;
-	private Date vctpro;
 	private Date datmov;
 	private String nomclifor;
 	private String obstit;
 	private BigDecimal vlrliq;
-	private Integer clsflx;
+	private Integer ctared;
 
 	public String getNumtit() {
 		return numtit;
 	}
 	public void setNumtit(String numtit) {
 		this.numtit = numtit;
-	}
-	public Date getVctpro() {
-		return vctpro;
-	}
-	public void setVctpro(Date vctpro) {
-		this.vctpro = vctpro;
 	}
 	public Date getDatmov() {
 		return datmov;
@@ -49,11 +42,12 @@ public class Realizado {
 	public void setVlrliq(BigDecimal vlrliq) {
 		this.vlrliq = vlrliq;
 	}
-	public Integer getClsflx() {
-		return clsflx;
+	public Integer getCtared() {
+		return ctared;
 	}
-	public void setClsflx(Integer clsflx) {
-		this.clsflx = clsflx;
+	public void setCtared(Integer ctared) {
+		this.ctared = ctared;
 	}
+
 	
 }

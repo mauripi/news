@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PersistenceUnit;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Type;
 
@@ -34,7 +36,9 @@ public class Contrato implements Serializable{
 	@OneToOne
 	@JoinColumn(name="tipocontrato_id")	
 	private TipoContrato tipocontrato;
+	@Temporal(TemporalType.DATE)
 	private Date inicio;
+	@Temporal(TemporalType.DATE)
 	private Date fim;
 	private Integer tipoValor=0;
 	@Column(nullable = false,columnDefinition="double precision default '0.0'")	
@@ -51,6 +55,7 @@ public class Contrato implements Serializable{
 	@JoinColumn(name="mclifor_id")
 	private MCLIFOR mclifor;
 	private Integer diasAviso;
+	@Temporal(TemporalType.DATE)
 	private Date avigpm;
 	private Integer repetirAviso;
 	private String assuntoEmail;

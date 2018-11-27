@@ -2,6 +2,7 @@ package br.com.mauricio.news.agendamento;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.LogManager;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -22,6 +23,7 @@ import br.com.mauricio.news.model.ti.SolicitacaoResolvida;
 
 public class FinalizarSolicitacaoResolvidaJob  implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
+		LogManager.getLogManager().reset();
 		System.out.println(new DateTime() + " - Iniciando processo automático para finalizar solicitações....");
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("news");
 		EntityManager manager = factory.createEntityManager();

@@ -27,7 +27,9 @@ public class BaseDao{
 	
 	@SuppressWarnings("unchecked")
 	public List<Base> listaPorUsuario(Login l,int ano){
-	    Query query = this.manager.createQuery("From base b WHERE b.chapa in ( select chapa from login where cpf= :cpf ) and b.ano= :ano order by b.ano,b.mes desc");
+	    Query query = this.manager.createQuery("From base b WHERE b.chapa in ( select chapa from login where cpf= :cpf ) and b.ano= :ano "
+	    		+ " and b.periodo in ( select v.periodo from vencimento v where v.mes=b.mes and v.ano=b.ano and v.chapa=b.chapa)"
+	    		+ " order by b.ano,b.mes desc");
 	    query.setParameter("cpf",l.getCpf());
 	    query.setParameter("ano",ano);
 		return query.getResultList();		

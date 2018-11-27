@@ -41,6 +41,19 @@ public class ContratoDao {
         return typedQuery.getResultList();    
     }
 
+    public List<Contrato> listaContratosAtivosPorResponsavel(boolean ativo,int respons) {
+        CriteriaQuery<Contrato> query = cb.createQuery(Contrato.class);
+        Root<Contrato> root = query.from(Contrato.class);        
+        Path<Boolean> path = root.get("ativo");        
+        Predicate predicate = cb.equal(path, ativo);
+        Path<Integer> path2 = root.get("deptoRespons");        
+        Predicate predicate2 = cb.equal(path2, respons);
+        Order id = cb.desc(root.get("id"));
+        query.where(predicate,predicate2).orderBy(id);
+        TypedQuery<Contrato> typedQuery = manager.createQuery(query);        
+        return typedQuery.getResultList();    
+    }
+    
     public List<Contrato> listaContratosByCCusto(List<String> custos,boolean ativo) {
         CriteriaQuery<Contrato> query = cb.createQuery(Contrato.class);
         Root<Contrato> root = query.from(Contrato.class);        

@@ -36,28 +36,21 @@ public class ProjetadoRealizadoDao {
 	
 	public List<Previsto> buscarPrevisto(Date d1,Date d2){
 		abrirConexao();
-		String sql = "select retour,vlrour,qtdpar,numtit,vctpro,nomfor,obstcp,vlrabe,usu_clsflx"
-				+ " FROM USU_VPREVISTO WHERE vctpro BETWEEN :d1 and :d2 and usu_clsflx > 0 ORDER BY vctpro";				
+		String sql = "select numtit,data,sum(valor) as valor,apecli,obstcr,ctared,ctafin,codtns from USU_VNEWFLUXO where status='PROJETADO' "
+				+ "	and data BETWEEN :d1 and :d2 group by numtit,data,apecli,obstcr,ctared,ctafin,codtns ORDER BY data";				
 		
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = manager.createNativeQuery(sql).setParameter("d1", d1).setParameter("d2", d2).getResultList();
 
 		for(Object[] o : list){
 			Previsto pre = new Previsto();
-			pre.setRetour(o[0].toString());
-			if(o[1] != null) pre.setVlrour(new BigDecimal(o[1].toString()));				
-			else pre.setVlrour(BigDecimal.ZERO);
-			if(o[2] != null) pre.setQtdpar(Integer.parseInt(o[2].toString()));			
-			else pre.setQtdpar(0);								
-			pre.setNumtit(o[3].toString());
-			pre.setVctpro((Date) o[4]);
-			pre.setNomclifor(o[5].toString());
-			pre.setObstit(o[6].toString());
-			pre.setVlrabe(new BigDecimal(o[7].toString()));
-			if(pre.getRetour().equals("S") && pre.getVlrour().compareTo(BigDecimal.ZERO)==1 && pre.getQtdpar()>0)
-				pre.setVlrabe(pre.getVlrabe().subtract(pre.getVlrour().divide(new BigDecimal(pre.getQtdpar()))));			
-			if(o[8] != null) pre.setClsflx(Integer.parseInt(o[8].toString()));		
-			else pre.setClsflx(0);				
+								
+			pre.setNumtit(o[0].toString());
+			pre.setVctpro((Date) o[1]);
+			pre.setVlrabe(new BigDecimal(o[2].toString()));
+			pre.setNomclifor(o[3].toString());
+			pre.setObstit(o[4].toString());
+			if(o[5] != null) pre.setCtared(Integer.parseInt(o[5].toString()));					
 			previstos.add(pre);
 		}				
 		fechaConexao();		
@@ -67,20 +60,20 @@ public class ProjetadoRealizadoDao {
 	
 	public List<Realizado> buscarRealizado(Date d1,Date d2){
 		abrirConexao();
-		String sql = "select numtit,vctpro,datmov,nomcli,obsmcr,vlrliq,usu_clsflx FROM USU_VRealizado WHERE datmov BETWEEN :d1 and :d2 and usu_clsflx > 0 ORDER BY datmov";						
+		String sql = "select numtit,data,sum(valor) as valor,apecli,obstcr,ctared,ctafin,codtns from USU_VNEWFLUXO where status='REALIZADO' "
+				+ " and data BETWEEN :d1 and :d2 group by numtit,data,apecli,obstcr,ctared,ctafin,codtns ORDER BY data";						
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = manager.createNativeQuery(sql).setParameter("d1", d1).setParameter("d2", d2).getResultList();
 
 		for(Object[] o : list){
 			Realizado r = new Realizado();
 			r.setNumtit(o[0].toString());
-			r.setVctpro((Date) o[1]);
-			r.setDatmov((Date) o[2]);
+			r.setDatmov((Date) o[1]);
+			r.setVlrliq(new BigDecimal(o[2].toString()));
 			r.setNomclifor(o[3].toString());
 			r.setObstit(o[4].toString());
-			r.setVlrliq(new BigDecimal(o[5].toString()));
-			if(o[6] != null) r.setClsflx(Integer.parseInt(o[6].toString()));		
-			else r.setClsflx(0);				
+			if(o[5] != null) r.setCtared(Integer.parseInt(o[5].toString()));		
+				
 			realizados.add(r);
 		}			
 		fechaConexao();		
@@ -92,7 +85,7 @@ public class ProjetadoRealizadoDao {
 		abrirConexao();
 		Map<Integer,String> cls = new HashMap<Integer,String>();
 		@SuppressWarnings("unchecked")
-		List<Object[]> list = manager.createNativeQuery("select usu_codcls as id,usu_descls as nome from usu_tclsflx order by id").getResultList();
+		List<Object[]> list = manager.createNativeQuery("select ctared,descta from e043pcm where codmpc=2001 and clacta>100 order by ctared").getResultList();
 		fechaConexao();
 		list.forEach(c -> cls.put(Integer.parseInt(c[0].toString()), c[1].toString()));
 		return cls;		

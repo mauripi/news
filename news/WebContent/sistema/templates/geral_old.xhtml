@@ -1,4 +1,4 @@
-﻿<html 	xmlns="http://www.w3.org/1999/xhtml"
+<html 	xmlns="http://www.w3.org/1999/xhtml"
     	xmlns:f="http://xmlns.jcp.org/jsf/core"
    		xmlns:h="http://xmlns.jcp.org/jsf/html"
     	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"   
@@ -36,7 +36,7 @@
 	<hr></hr>
 	
 	  <p:menubar class="menu-geral">
-        <p:submenu label= "Contratos" >
+        <p:submenu label= "Compras" >
             <p:submenu label="Contratos" rendered="#{acessoBean.temAcessoContrato}">
                 <p:menuitem value="Cadastro" action="contrato?faces-redirect=true"  />
                 <p:separator/>
@@ -75,6 +75,12 @@
         </p:submenu>
         	
         <p:submenu label="Engenharia">
+        	<p:submenu label="Contratos" rendered="#{acessoBean.temAcessoContrato}">
+        		<p:menuitem value="Cadastro" action="contrato?faces-redirect=true" />
+        		<p:separator rendered="#{acessoBean.temAcessoContrato}"/>
+        		<p:menuitem value="Tipo de Contratos" action="tipocontrato?faces-redirect=true" />
+        	</p:submenu >
+        	<p:separator action="contrato?faces-redirect=true"  rendered="#{acessoBean.temAcessoContrato}"/>
         	<p:menuitem value="Controle de Sinal" action="controlesinal?faces-redirect=true" rendered="#{acessoBean.temAcessoControleSinal}"/>
         	<p:separator rendered="#{acessoBean.temAcessoControleSinal}"/>
         	<p:menuitem value="Fluxo de Demandas" action="controletarefa?faces-redirect=true" rendered="#{acessoBean.temAcessoControleTarefa}"/>
@@ -179,8 +185,6 @@
        		</p:submenu>
        		<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
        		<p:menuitem value="Procedimentos" action="uploadproc?faces-redirect=true"  rendered="#{acessoBean.temAcessoPainelChamado}" /> 
-       		<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
-       		<p:menuitem value="Importar Fatura" action="importarfaturaembratel?faces-redirect=true"  rendered="#{acessoBean.temAcessoPainelChamado}" />       
         </p:submenu>
         
         <p:submenu label="Transportes" >

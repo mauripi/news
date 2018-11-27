@@ -29,6 +29,7 @@ import br.com.mauricio.news.ln.financeiro.FluxoDiarioLN;
 import br.com.mauricio.news.model.financeiro.CampoPlanilha;
 import br.com.mauricio.news.model.financeiro.Custo;
 import br.com.mauricio.news.model.financeiro.FluxoDiario;
+import br.com.mauricio.news.util.SaveFile;
 
 @ManagedBean(name="fluxodiarioMB")
 @SessionScoped
@@ -53,6 +54,8 @@ public class FluxoDiarioBean implements Serializable {
 	private String campoSai="E";
 	private String campoSal="F";
 	private String campoTipo="G";	
+	private static final String CAMINHO_PARA_SALVAR_ARQUIVO_IMPORTADO = "C:\\Windows\\Temp\\financeiro\\";
+
 	
 	@PostConstruct
 	public void init(){
@@ -227,12 +230,12 @@ public class FluxoDiarioBean implements Serializable {
     	CampoPlanilha c = carregaCampos();
     	if(is!=null){
 	    	if(mes!=0&&ano!=0){
-	    		FluxoDiarioLN ln = new FluxoDiarioLN();    
-		    	msg = ln.recebeArquivoUpload(is,nomeArquivo);
+	    		msg = SaveFile.recebeArquivoUpload(is,nomeArquivo, CAMINHO_PARA_SALVAR_ARQUIVO_IMPORTADO);
 		    	if(msg!=""){
 		    		msg = "Arquivo não importado. Ocorreu erro no recebimento do arquivo.";
 		    		mensagens();
 		    	}else{
+		    		FluxoDiarioLN ln = new FluxoDiarioLN();
 		    		msg = ln.importarArquivoBD(nomeArquivo,c,mes,ano);
 		        	if(msg!="")
 		        		mensagens();

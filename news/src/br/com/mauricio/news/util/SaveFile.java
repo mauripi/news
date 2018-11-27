@@ -124,4 +124,32 @@ public class SaveFile {
 		
 	}
 	
+	public static String recebeArquivoUpload(InputStream is, String nomeArquivo, String caminho){
+        FileOutputStream os = null;
+        String erro = "Ocorreu erro ao receber o arquivo.";
+        try {
+        	criarPasta(caminho);
+            File file = new File(caminho + nomeArquivo);                   
+            os = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+            erro = "";
+        } catch (FileNotFoundException e) {
+			System.out.println("Erro localizado em: SaveFile.recebeArquivoUpload() catch (FileNotFoundException e)" + e.getLocalizedMessage());
+		} catch (IOException e) {
+			System.out.println("Erro localizado em: SaveFile.recebeArquivoUpload()  catch (IOException e) " + e.getLocalizedMessage());
+		} finally {
+			if(os!=null)
+				try {
+					os.close();
+				} catch (IOException e) {
+					System.out.println("Erro localizado em: SaveFile.recebeArquivoUpload() finally os.close()  " + e.getLocalizedMessage());
+				}
+        }
+		return erro;
+	}
+
 }

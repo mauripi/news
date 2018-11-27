@@ -22,99 +22,83 @@ public class Ramal implements Serializable {
 
 	@GeneratedValue
 	@Id
-	private Integer id;
-	
+	private Integer id;	
 	@Column(length=100)
-	private String nome;
-	
+	private String nome;	
 	@Column(length=100)
-	private String email;
-	
-	private String cargo;
-	
+	private String email;	
+	private String cargo;	
 	@ManyToOne
 	@JoinColumn(name = "depto_id")
-	private DeptoRamal depto;
-	
-	private String telefone;
-	
-	private Integer ramalint;
-	
+	private DeptoRamal depto;	
+	private String telefone;	
+	private Integer ramalint;	
 	private Integer ramalext;
+	@ManyToOne
+	@JoinColumn(name = "ccusto_id")
+	private CCusto ccusto;
 
+	
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 	public String getNome() {
 		return nome;
 	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 	public String getCargo() {
 		return cargo;
 	}
-
 	public void setCargo(String cargo) {
 		this.cargo = cargo;
 	}
-
 	public DeptoRamal getDepto() {
 		return depto;
 	}
-
 	public void setDepto(DeptoRamal depto) {
 		this.depto = depto;
 	}
-
 	public String getTelefone() {
 		return telefone;
 	}
-
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-
 	public Integer getRamalint() {
 		return ramalint;
 	}
-
 	public void setRamalint(Integer ramalint) {
 		this.ramalint = ramalint;
 	}
-
 	public Integer getRamalext() {
 		return ramalext;
 	}
-
 	public void setRamalext(Integer ramalext) {
 		this.ramalext = ramalext;
 	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public CCusto getCcusto() {
+		return ccusto;
 	}
-
+	public void setCcusto(CCusto ccusto) {
+		this.ccusto = ccusto;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((cargo == null) ? 0 : cargo.hashCode());
+		result = prime * result + ((ccusto == null) ? 0 : ccusto.hashCode());
 		result = prime * result + ((depto == null) ? 0 : depto.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -124,7 +108,6 @@ public class Ramal implements Serializable {
 		result = prime * result + ((telefone == null) ? 0 : telefone.hashCode());
 		return result;
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -138,6 +121,11 @@ public class Ramal implements Serializable {
 			if (other.cargo != null)
 				return false;
 		} else if (!cargo.equals(other.cargo))
+			return false;
+		if (ccusto == null) {
+			if (other.ccusto != null)
+				return false;
+		} else if (!ccusto.equals(other.ccusto))
 			return false;
 		if (depto == null) {
 			if (other.depto != null)
@@ -177,5 +165,4 @@ public class Ramal implements Serializable {
 		return true;
 	}
 
-	
 }

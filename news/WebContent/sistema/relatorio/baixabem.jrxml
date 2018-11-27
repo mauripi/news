@@ -3,7 +3,7 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="326"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -99,29 +99,29 @@
 				<reportElement x="42" y="182" width="492" height="20" uuid="3c41eb86-039c-4071-9496-4f2bb915643e"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="42" y="247" width="75" height="14" uuid="4833fec1-0616-495c-b4ba-1df67958ef04"/>
+				<reportElement x="42" y="247" width="36" height="14" uuid="4833fec1-0616-495c-b4ba-1df67958ef04"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Nº Patrimônio]]></text>
+				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="111" y="247" width="123" height="14" uuid="ccf167de-669b-474e-90e4-be0a7f68240b"/>
+				<reportElement x="138" y="247" width="183" height="14" uuid="ccf167de-669b-474e-90e4-be0a7f68240b"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Descrição do Patrimônio]]></text>
+				<text><![CDATA[Descrição]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="309" y="247" width="77" height="14" uuid="f1b2d1b5-b15a-467d-92e7-9256a9cc7503"/>
+				<reportElement x="380" y="236" width="55" height="25" uuid="f1b2d1b5-b15a-467d-92e7-9256a9cc7503"/>
 				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Data Aquisição]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="389" y="247" width="78" height="14" uuid="18b32226-f478-4bc3-8027-e09c59302a66"/>
-				<textElement>
+				<reportElement x="435" y="236" width="56" height="25" uuid="18b32226-f478-4bc3-8027-e09c59302a66"/>
+				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Valor Aquisição]]></text>
@@ -148,8 +148,8 @@
 				<text><![CDATA[Centro de Custos:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="467" y="247" width="71" height="14" uuid="e7a8fe61-d50e-46b7-82ab-7965555478d3"/>
-				<textElement>
+				<reportElement x="491" y="236" width="43" height="25" uuid="e7a8fe61-d50e-46b7-82ab-7965555478d3"/>
+				<textElement textAlignment="Center">
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Valor Residual]]></text>
@@ -183,6 +183,20 @@
 			<line>
 				<reportElement x="42" y="264" width="492" height="1" uuid="7a62a257-2e23-476e-84f5-1baaf7937d74"/>
 			</line>
+			<staticText>
+				<reportElement x="354" y="247" width="26" height="14" uuid="414fb11a-b627-4892-857d-ff8e2d88dfea"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qtd]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="87" y="247" width="45" height="17" uuid="e7706c1e-b3f5-4edd-a918-16710e917a8a"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Plaqueta]]></text>
+			</staticText>
 		</band>
 	</title>
 	<detail>
@@ -200,20 +214,7 @@
 	<lastPageFooter>
 		<band height="257">
 			<staticText>
-				<reportElement x="428" y="192" width="108" height="60" uuid="7a2bbf3f-7b90-4b95-97a3-159f7e5e027a"/>
-				<box>
-					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font isBold="true" isUnderline="false"/>
-				</textElement>
-				<text><![CDATA[Diretor Geral]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="285" y="192" width="143" height="60" uuid="6e93e8df-f255-4292-b8f0-f9c39b9233d9"/>
+				<reportElement x="364" y="192" width="170" height="60" uuid="6e93e8df-f255-4292-b8f0-f9c39b9233d9"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -226,7 +227,7 @@
 				<text><![CDATA[Gerência Executiva]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="145" y="192" width="140" height="60" uuid="081b940c-28fb-4376-9e23-0dab14d1756d"/>
+				<reportElement x="195" y="192" width="169" height="60" uuid="081b940c-28fb-4376-9e23-0dab14d1756d"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -239,7 +240,7 @@
 				<text><![CDATA[Gestor da Área]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="44" y="192" width="101" height="60" uuid="146d9638-9e0f-4159-bfa4-58e4f8e83c2f"/>
+				<reportElement x="44" y="192" width="151" height="60" uuid="146d9638-9e0f-4159-bfa4-58e4f8e83c2f"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -249,7 +250,7 @@
 				<textElement textAlignment="Center">
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Favorecido]]></text>
+				<text><![CDATA[Solicitante]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="44" y="46" width="492" height="136" uuid="123f50d9-067a-464c-8824-1a8206e0c69b"/>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Importação de Fatura da Embratel</f:facet>
+
+
+<h:form>
+	<p:panelGrid columns="1">
+		
+		<h:outputText value="Número da fatura."/>
+		<p:inputText id="resp" value="#{consumoembratelMB.fatura}" size="15" required="true" requiredMessage="Informe o número da fatura."/>
+		<h:outputText value="Selecione o arquivo."/>
+		<p:fileUpload fileUploadListener="#{consumoembratelMB.handleFileUpload}"  mode="advanced" dragDropSupport="false"
+		             invalidFileMessage="Somente arquivos .txt" multiple="false"
+		             fileLimit="1" allowTypes="/(\.|\/)(txt|TXT)$/" label="Selecionar" uploadLabel="Importar" cancelLabel="Cancelar"/>	    	
+	</p:panelGrid>
+</h:form>
+<h:form>
+	<p:panelGrid columns="1" >
+		<p:commandButton value="Gravar" icon="ui-icon-check" ajax="false" action="#{consumoembratelMB.importarFatura}" update=":formMsg"/>
+	</p:panelGrid>
+</h:form>	
+	
+</p:panel>
+
+
+<p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+    <f:facet name="default">
+        <h:outputText value="Status: StandBy" />
+    </f:facet>
+ 
+    <f:facet name="start">
+        <p:graphicImage value="img/ajaxloadingbar.gif" />
+    </f:facet>
+ 
+    <f:facet name="complete">
+        <h:outputText value="Status: Completed" />
+    </f:facet>
+</p:ajaxStatus>
+ 
+<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+ 
+<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+
+
+</h:body>	
+
+</html>

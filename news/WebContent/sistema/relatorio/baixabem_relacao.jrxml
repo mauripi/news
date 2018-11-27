@@ -1,49 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="baixabem_relacao" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ca602984-fd9c-410b-98df-54838cddfe31">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="17"/>
+	<property name="ireport.x" value="109"/>
 	<property name="ireport.y" value="0"/>
 	<field name="numpla" class="java.lang.String"/>
 	<field name="descricao" class="java.lang.String"/>
 	<field name="dataaquisicao" class="java.util.Date"/>
 	<field name="vlraquisicao" class="java.lang.Double"/>
 	<field name="vlrresidual" class="java.lang.Double"/>
+	<field name="patrimonio" class="java.lang.String"/>
+	<field name="quantidade" class="java.lang.Double"/>
 	<detail>
 		<band height="11" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement x="40" y="0" width="57" height="11" uuid="103b5a13-c6c0-4cfc-8234-91a498655248"/>
+				<reportElement x="87" y="0" width="48" height="11" uuid="103b5a13-c6c0-4cfc-8234-91a498655248"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{numpla}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="108" y="0" width="191" height="11" uuid="176e37d4-fd0d-49ef-9dfa-b7a387f8104e"/>
+				<reportElement stretchType="RelativeToBandHeight" x="135" y="0" width="215" height="11" uuid="176e37d4-fd0d-49ef-9dfa-b7a387f8104e"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement x="300" y="0" width="81" height="11" uuid="390ae7a3-543c-45c4-9bd4-6249837beff9"/>
+				<reportElement x="382" y="0" width="43" height="11" uuid="390ae7a3-543c-45c4-9bd4-6249837beff9"/>
 				<textElement textAlignment="Center">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dataaquisicao}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="387" y="0" width="67" height="11" uuid="c9960601-e8a5-4656-afde-a6c52a17ccd2"/>
+				<reportElement x="434" y="0" width="47" height="11" uuid="c9960601-e8a5-4656-afde-a6c52a17ccd2"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vlraquisicao}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
-				<reportElement x="467" y="0" width="62" height="11" uuid="dcd9b9ae-ad19-486b-8094-1bf3458a14bb"/>
+				<reportElement x="486" y="0" width="44" height="11" uuid="dcd9b9ae-ad19-486b-8094-1bf3458a14bb"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{vlrresidual}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="42" y="0" width="45" height="11" uuid="c5a31178-4b36-4521-bfd1-d9c4e131412d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{patrimonio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="350" y="0" width="26" height="11" uuid="c3c762ad-f813-485a-adc7-877a39ea6ff2"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
