@@ -71,8 +71,8 @@ public class MovimentoBemLN implements Serializable {
 	public void enviarEmail(MovimentoBem m, String caminho){
 		List<String> destinatarios = new ArrayList<String>();
 		
-		destinatarios.add("acorrea@recordnews.com.br");
-		destinatarios.add("flettieri@recordnews.com.br");
+		destinatarios.add("mnunes@recordnews.com.br");		
+		destinatarios.add("contabilidade@recordnews.com.br");
 	
 		if(ValidaEmail.validar(m.getSolicitante().getEmail()))
 			destinatarios.add(m.getSolicitante().getEmail());
@@ -143,8 +143,8 @@ public class MovimentoBemLN implements Serializable {
 
  	public void enviarEmailExclusao(MovimentoBem m) {
 		List<String> destinatarios = new ArrayList<String>();
-		destinatarios.add("acorrea@recordnews.com.br");
-		destinatarios.add("flettieri@recordnews.com.br");
+		destinatarios.add("mnunes@recordnews.com.br");		
+		destinatarios.add("contabilidade@recordnews.com.br");
 		if(ValidaEmail.validar(m.getSolicitante().getEmail()))
 			destinatarios.add(m.getSolicitante().getEmail());
 		List<File> anexos = new ArrayList<File>();

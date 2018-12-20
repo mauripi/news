@@ -45,7 +45,7 @@ public class ConsumoEmbratelLN implements Serializable {
 	}
 
 	public boolean faturaJaExiste(String fatura) {
-		consumoDao = new ConsumoEmbratelDao();
+		consumoDao = new ConsumoEmbratelDao(manager);
 		return consumoDao.faturaJaExiste(fatura);
 	}
 }

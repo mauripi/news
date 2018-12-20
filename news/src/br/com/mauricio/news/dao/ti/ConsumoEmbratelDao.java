@@ -116,8 +116,7 @@ public class ConsumoEmbratelDao implements Serializable {
 	
 	@SuppressWarnings("unchecked")
 	public boolean faturaJaExiste(String fatura) {
-	    List<ConsumoEmbratel> list = this.manager.createQuery(" From consumoembratel Where fatura= :fatura ").
-				setParameter("fatura", fatura).getResultList();
+	    List<ConsumoEmbratel> list = this.manager.createQuery(" From consumoembratel Where fatura= :fatura ").setParameter("fatura", fatura).getResultList();
 	    return !list.isEmpty();
 	}
 }
