@@ -14,18 +14,19 @@ public class TesteGravacaoConsumo {
 	public static void main(String[] args) {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("news");
 		EntityManager manager = factory.createEntityManager();
-		String arquivo = "C:\\FAT_181221000124.txt";
-		String fatura = "181221000124";
+		String arquivo = "C:\\FAT_190421000132.txt";
+		String fatura = "190421000132";
 		
 		manager.getTransaction().begin();
 		
 		ConsumoEmbratelLN ln = new ConsumoEmbratelLN(manager);
 		//ln.carregaArquivo(arquivo, fatura);
-		//ln.rateio(fatura).forEach((x,y)->System.out.println(x + " - " + y));
+		//ln.rateioFinal(fatura);
+		ln.rateioFinal(fatura).forEach((x)->System.out.println(x.getCcusto() + ";" +x.valorFormatado()));
 		//System.out.println(ln.faturaJaExiste(fatura));
-		Map<String,BigDecimal> rateio = ln.rateio(fatura);
+		//Map<String,BigDecimal> rateio = ln.rateio(fatura);
 		
-		rateio.forEach((x,y) -> System.out.println(x + ";" + y));
+	//	rateio.forEach((x,y) -> System.out.println(x + ";" + y));
 		
 		manager.getTransaction().commit();
 		

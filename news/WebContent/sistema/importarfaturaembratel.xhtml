@@ -26,14 +26,13 @@
 	<p:panelGrid columns="1">
 		
 		<h:outputText value="Número da fatura."/>
-		<p:inputText id="resp" value="#{consumoembratelMB.fatura}" size="15" required="true" requiredMessage="Informe o número da fatura."/>
+		<p:inputText id="resp" value="#{consumoembratelMB.fatura}" size="15" required="true" requiredMessage="Informe o número da fatura2."/>
 		<h:outputText value="Selecione o arquivo."/>
 		<p:fileUpload fileUploadListener="#{consumoembratelMB.handleFileUpload}"  mode="advanced" dragDropSupport="false"
 		             invalidFileMessage="Somente arquivos .txt" multiple="false"
 		             fileLimit="1" allowTypes="/(\.|\/)(txt|TXT)$/" label="Selecionar" uploadLabel="Importar" cancelLabel="Cancelar"/>	    	
 	</p:panelGrid>
-</h:form>
-<h:form>
+
 	<p:panelGrid columns="1" >
 		<p:commandButton value="Gravar" icon="ui-icon-check" ajax="false" action="#{consumoembratelMB.importarFatura}" update=":formMsg"/>
 	</p:panelGrid>
@@ -44,7 +43,7 @@
 
 <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
     <f:facet name="default">
-        <h:outputText value="Status: StandBy" />
+        <h:outputText value=" " />
     </f:facet>
  
     <f:facet name="start">

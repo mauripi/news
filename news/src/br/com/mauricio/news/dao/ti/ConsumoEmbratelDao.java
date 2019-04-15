@@ -13,6 +13,8 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 import br.com.mauricio.news.cnn.Conexao;
 import br.com.mauricio.news.model.ti.ConsumoEmbratel;
+import br.com.mauricio.news.model.ti.ConsumoEmbratelDesconto;
+import br.com.mauricio.news.model.ti.RateioFinalEmbratel;
 
 public class ConsumoEmbratelDao implements Serializable {
 
@@ -34,7 +36,18 @@ public class ConsumoEmbratelDao implements Serializable {
 			while ((linha = br.readLine()) != null) {
 				
 				String tipoDoRegistro = linha.substring(95, 141);
-				
+
+				ConsumoEmbratel consumo = new ConsumoEmbratel();
+				consumo.setFatura(fatura);
+				consumo.setServico(linha.substring(2, 6));
+				consumo.setSequencia(pegaSequencia(linha));
+				consumo.setRamal(pegaRamal(linha));
+				if(tipoDoRegistro.contains("DESCONTO")) 					
+					consumo.setValor(pegaValor(linha).multiply(new BigDecimal("-1")));
+				else				
+					consumo.setValor(pegaValor(linha));
+				consumos.add(consumo);				
+/*				
 				if(!tipoDoRegistro.contains("DESCONTO")) {					
 					ConsumoEmbratel consumo = new ConsumoEmbratel();
 					consumo.setFatura(fatura);
@@ -43,6 +56,7 @@ public class ConsumoEmbratelDao implements Serializable {
 					consumo.setValor(pegaValor(linha));
 					consumos.add(consumo);
 				}
+*/				
 			}			
 			
 		} catch (IOException e) {
@@ -109,6 +123,29 @@ public class ConsumoEmbratelDao implements Serializable {
 		return rateio;		
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<RateioFinalEmbratel> rateioFinal(String fatura){
+		if(!manager.isOpen())
+			abreConexao();
+
+		String sql = "SELECT codigo,valor,tipo,servico,filial_id FROM rateioembratel where fatura= :fatura order by tipo,filial_id";
+		List<Object[]> list = manager.createNativeQuery(sql).setParameter("fatura", fatura).getResultList();
+		List<RateioFinalEmbratel> rats = new ArrayList<RateioFinalEmbratel>();
+		
+		for(Object[] o:list){
+			RateioFinalEmbratel rat = new RateioFinalEmbratel();
+			
+			rat.setCcusto(o[0].toString());
+			rat.setValor(new BigDecimal(o[1].toString()));
+			rat.setTipo(o[2].toString());
+			rat.setServico(o[3].toString());
+			rat.setFilial((int) o[4]);
+			rats.add(rat);
+			//System.out.println(rat.getCcusto() + " ## " + rat.getValor() );
+		}
+		return rats;		
+	}	
+	
 	private void abreConexao(){
 		Conexao c = new Conexao();
 		this.manager = c.getEntityManager();
@@ -118,5 +155,36 @@ public class ConsumoEmbratelDao implements Serializable {
 	public boolean faturaJaExiste(String fatura) {
 	    List<ConsumoEmbratel> list = this.manager.createQuery(" From consumoembratel Where fatura= :fatura ").setParameter("fatura", fatura).getResultList();
 	    return !list.isEmpty();
+	}
+	
+	public List<ConsumoEmbratelDesconto> carregaDescontoArquivo(String arquivo, String fatura) {
+		String linha="";
+		List<ConsumoEmbratelDesconto> descontos = new ArrayList<ConsumoEmbratelDesconto>();
+		try {
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(new FileReader(arquivo));
+			
+			while ((linha = br.readLine()) != null) {
+				
+				String tipoDoRegistro = linha.substring(95, 141);
+				
+				if(tipoDoRegistro.contains("DESCONTO")) {					
+					ConsumoEmbratelDesconto desconto = new ConsumoEmbratelDesconto();
+					desconto.setFatura(fatura);
+					desconto.setSequencia(pegaSequencia(linha));
+					desconto.setRamal(pegaRamal(linha));
+					desconto.setValor(pegaValor(linha));
+					descontos.add(desconto);
+				}
+			}			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("");
+
+		return descontos;		
+
 	}
 }

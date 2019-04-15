@@ -104,7 +104,8 @@
        		<p:menuitem value="Projetado x Realizado" action="downloadprojetadorealizado?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}" />
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
        		<p:menuitem value="Recibo da Prestação de Contas" action="reciboprestacao?faces-redirect=true"  />  
-       		
+        	<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
+       		<p:menuitem value="Avisos do Fluxo de Caixa" action="fluxocaixa?faces-redirect=true"  />        		
         </p:submenu>
 
         <p:submenu label="Manutenção" rendered="false">
@@ -180,7 +181,12 @@
        		<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
        		<p:menuitem value="Procedimentos" action="uploadproc?faces-redirect=true"  rendered="#{acessoBean.temAcessoPainelChamado}" /> 
        		<p:separator  rendered="#{acessoBean.temAcessoPainelChamado}"/>
-       		<p:menuitem value="Importar Fatura" action="importarfaturaembratel?faces-redirect=true"  rendered="#{acessoBean.temAcessoPainelChamado}" />       
+       		<p:submenu label="Rateio Embratel"  rendered="#{acessoBean.temAcessoPainelChamado}">
+       			<p:menuitem value="Importar Fatura" action="importarfaturaembratel?faces-redirect=true"  />
+       			<p:separator/>
+       			<p:menuitem value="Listar" action="rateioembratel?faces-redirect=true"/>
+       		</p:submenu>       		
+       		       
         </p:submenu>
         
         <p:submenu label="Transportes" >

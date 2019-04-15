@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - TI</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Rateio da Fatura Embratel</f:facet>
+
+
+<h:form>
+	<p:panelGrid columns="2">
+		
+		<h:outputText value="Número da fatura."/>
+		<p:inputText id="resp" value="#{consumoembratelMB.fatura}" size="15" required="true" requiredMessage="Informe o número da fatura2."/>
+	    	
+	</p:panelGrid>
+
+	<p:panelGrid columns="1" >
+		<p:commandButton value="Gerar"  action="#{consumoembratelMB.listar}" update=":formMsg,mtz,aqa,zft"/>
+	</p:panelGrid>
+	
+	<p:dataTable var="r" value="#{consumoembratelMB.rateiosMtz}" id="mtz" style="width: 20%" sortBy="#{r.filial}">
+		<f:facet name="header">VPE Matriz</f:facet>
+	    <p:column headerText="Centro de Custo">
+	        <h:outputText value="#{r.ccusto}" />
+	    </p:column>
+	 
+	    <p:column headerText="Valor">
+     		<h:outputText value="#{r.valor}" style="float: right;">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>         			
+     		</h:outputText> 
+	    </p:column>	 
+        <p:summaryRow>
+            <p:column colspan="1" style="text-align:right">
+                <h:outputText value="Total:" />
+            </p:column>
+            <p:column>
+                <h:outputText value="#{consumoembratelMB.totalMtz}" style="float:right">
+                    <f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>  
+                </h:outputText>
+            </p:column>
+        </p:summaryRow>	 
+	</p:dataTable>
+	<p></p>
+	<p:dataTable var="r" value="#{consumoembratelMB.rateiosAqa}" id="aqa" style="width: 20%" sortBy="#{r.filial}">
+	   <f:facet name="header">VPE Araraquara</f:facet>
+	    <p:column headerText="Centro de Custo">
+	        <h:outputText value="#{r.ccusto}" />
+	    </p:column>
+	 
+	    <p:column headerText="Valor">
+     		<h:outputText value="#{r.valor}" style="float: right;">
+				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>         			
+     		</h:outputText> 
+	    </p:column>	 
+        <p:summaryRow>
+            <p:column colspan="1" style="text-align:right">
+                <h:outputText value="Total:" />
+            </p:column>
+            <p:column>
+                <h:outputText value="#{consumoembratelMB.totalAqa}" style="float:right">
+                    <f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>    
+                </h:outputText>
+            </p:column>
+        </p:summaryRow>	 
+	</p:dataTable>
+	<p></p>
+	<p:dataTable var="r" value="#{consumoembratelMB.rateiosZft}" id="zft" style="width: 20%" sortBy="#{r.filial}">
+		<f:facet name="header">ZFT</f:facet>
+	    <p:column headerText="Centro de Custo">
+	        <h:outputText value="#{r.ccusto}" />
+	    </p:column>
+	 
+	    <p:column headerText="Valor">
+     		<h:outputText value="#{r.valor}" style="float: right;">
+				<f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>           			
+     		</h:outputText> 
+	    </p:column>
+        <p:summaryRow>
+            <p:column colspan="1" style="text-align:right">
+                <h:outputText value="Total:" />
+            </p:column>
+            <p:column>
+                <h:outputText value="#{consumoembratelMB.totalZft}"  style="float:right">
+                    <f:convertNumber type="currency" minFractionDigits="2" maxFractionDigits="2" currencySymbol="R$ "/>    
+                </h:outputText>
+            </p:column>
+        </p:summaryRow>	    	 
+	</p:dataTable>		
+</h:form>	
+	
+</p:panel>
+
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+
+
+</h:body>	
+
+</html>

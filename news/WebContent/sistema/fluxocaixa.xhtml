@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://xmlns.jcp.org/jsf/html"  
+   		xmlns:f="http://xmlns.jcp.org/jsf/core" 
+   		xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    	xmlns:p="http://primefaces.org/ui">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - Financeiro</ui:define>
+<ui:define name="conteudo">
+
+
+<p:panel>
+<f:facet name="header">Manutenção de Avisos do Fluxo de Caixa</f:facet> 
+	<h:form id="formtb">	
+		<h:panelGrid columns="1">   
+			<p:commandButton onclick="PF('dgCad').show()" icon="ui-icon-plus" action="#{fluxocaixaMB.novo}" value="Novo Aviso" title="Novo"  update=":formCad"/>
+		</h:panelGrid>
+
+		<br></br>  			
+	    <p:dataTable id="tb" var="f" value="#{fluxocaixaMB.movimentos}"  rows="15" paginator="true" paginatorPosition="bottom"
+	    	selectionMode="single" selection="#{fluxocaixaMB.fluxo}" rowKey="#{f.id}" emptyMessage="">
+
+         <p:ajax event="rowSelect" listener="#{fluxocaixaMB.onRowSelect}" update=":formMsg,:formCad" oncomplete="PF('dgCad').show();"/>
+
+	       <p:column headerText="Titulo"  width="100px;" sortBy="#{f.numtit}" filterMatchMode="contains">
+	            <h:outputText value="#{f.numtit}" />
+	       </p:column>	 
+	        <p:column headerText="Data" width="50px;" sortBy="#{f.data}">
+              <h:outputText value="#{f.data}">
+				 <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			  </h:outputText>
+            </p:column>		       
+	       <p:column headerText="Classificação" width="200px;" filterBy="#{f.desctared}"  filterMatchMode="contains">
+	            <h:outputText value="#{f.desctared}" />
+	       </p:column>	
+	       <p:column headerText="Observação" width="30%" filterBy="#{f.observacao}"  filterMatchMode="contains">
+	            <h:outputText value="#{f.observacao}" />
+	       </p:column>	        	       	
+	       <p:column headerText="Tipo" width="30%" filterBy="#{f.prorea}"  filterMatchMode="contains">
+	            <h:outputText value="#{f.prorea}" />
+	       </p:column>
+			<p:column headerText="Valor" style="text-align: right;width:15%;">
+				<h:outputText value="#{f.valor}">
+					<f:convertNumber  minFractionDigits="2" maxFractionDigits="2" type="currency"/>	           																
+				</h:outputText>				
+			</p:column>						
+	
+
+	        <p:column style="width:70px;text-align: center">
+	            <p:commandButton update=":formCad,:formDel" oncomplete="PF('delDialog').show()" icon="ui-icon-trash" title="Remover">
+	                <f:setPropertyActionListener value="#{f}" target="#{fluxocaixaMB.fluxo}" />
+	            </p:commandButton>	        
+	        </p:column>	
+	    </p:dataTable>
+	</h:form>
+</p:panel>	
+
+<p:dialog id="dgCad" widgetVar="dgCad" appendTo="@(body)" modal="true" visible="#{!fluxocaixaMB.valido}"
+	header="Cadastro" resizable="false" width="500" height="330">
+
+	<h:form id="formCad">
+		<p:panelGrid columns="2" >
+			<p:outputLabel value="Título:"/>
+			<p:inputText value="#{fluxocaixaMB.fluxo.numtit}"/>
+			<p:outputLabel value="Cliente/Fornecedor:"/>
+			<p:inputText value="#{fluxocaixaMB.fluxo.clifor}" size="40"/>			
+			<p:outputLabel for="dt" value="Data:"/>		        
+			<p:calendar id="dt" value="#{fluxocaixaMB.data}" locale="pt_BR" pattern="dd/MM/yyyy" size="11" />				
+			<p:outputLabel value="Classificação:"/>
+	        <p:selectOneMenu id="cls" value="#{fluxocaixaMB.classificacao}"  style="width:180px;"
+	        		 converter="classificacaofluxocaixaConverter">
+	            <f:selectItems value="#{fluxocaixaMB.classificacoes}" var="c" itemLabel="#{c.descta}" itemValue="#{c}" />
+	        </p:selectOneMenu>			
+			<p:outputLabel value="Observação:"/>
+			<p:inputTextarea maxlength="250" rows="3" cols="35" autoResize="false" value="#{fluxocaixaMB.fluxo.observacao}"/>
+			<p:outputLabel value="Tipo:"/>
+	        <p:selectOneMenu value="#{fluxocaixaMB.fluxo.prorea}" >
+	            <f:selectItem itemLabel="PROJETADO" itemValue="PROJETADO" />
+	            <f:selectItem itemLabel="REALIZADO" itemValue="REALIZADO" />
+	        </p:selectOneMenu>
+			<p:outputLabel value="Valor:"/>
+			<p:inputText value="#{fluxocaixaMB.fluxo.valor}" size="10"  >
+			 	<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>												 	
+			</p:inputText>	        			        
+		</p:panelGrid>
+		<p:panelGrid columns="2" >
+			<p:commandButton value="Gravar" icon="ui-icon-check" action="#{fluxocaixaMB.gravar}" update=":formCad,:formMsg,:formtb, dgCad"  />
+			<p:commandButton value="Cancelar"  icon="ui-icon-cancel" oncomplete="PF('dgCad').hide()"/>
+		</p:panelGrid>
+	</h:form>
+
+</p:dialog>
+
+
+<p:dialog id="delDialog" widgetVar="delDialog" appendTo="@(body)" modal="true" header="Exclusão de Contrato" resizable="false" >
+	<h:form id="formDel">
+		<p:panel header="Exclusão">
+			<p><span>Tem certeza que quer excluir o registro #{fluxocaixaMB.fluxo.numtit} - #{fluxocaixaMB.fluxo.clifor}</span></p>
+
+			<f:facet name="footer">
+				<p:panelGrid columns="2">
+					<p:commandButton value="Sim" action="#{fluxocaixaMB.remover}" update=":formMsg,:formCad,:formtb" oncomplete="PF('delDialog').hide()"/>
+					<p:commandButton value="Cancelar" onclick="PF('delDialog').hide()"/> 
+				</p:panelGrid>		
+			</f:facet>
+		</p:panel>
+	</h:form>	
+</p:dialog>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+</ui:define>
+</ui:composition>	
+
+
+<script type="text/javascript">
+function start() {
+    PF('statusDialog').show();
+}
+ 
+function stop() {
+    PF('statusDialog').hide();
+}
+</script>
+</h:body>	
+
+</html>

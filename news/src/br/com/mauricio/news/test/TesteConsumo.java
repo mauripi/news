@@ -18,7 +18,7 @@ public class TesteConsumo {
 	
 	public static void main(String[] args) {
 		try {
-			br = new BufferedReader(new FileReader("C:\\FAT_181121000124.txt"));
+			br = new BufferedReader(new FileReader("C:\\FAT_190321000130.txt"));
 			while ((linha = br.readLine()) != null) {
 
 				
