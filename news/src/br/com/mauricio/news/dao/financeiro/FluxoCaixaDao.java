@@ -18,7 +18,7 @@ public class FluxoCaixaDao {
 
 	
 	private EntityManager abrirConexao(){
-		this.factory = Persistence.createEntityManagerFactory("sapiens_homo");
+		this.factory = Persistence.createEntityManagerFactory("sapiens_prod");
 		this.manager = this.factory.createEntityManager();
 		this.manager.getTransaction().begin();
 		return this.manager;
@@ -32,8 +32,8 @@ public class FluxoCaixaDao {
 	public List<FluxoCaixa>  listar(){
 		abrirConexao();
 		String sql ="select id,usu_ctafin,usu_data,usu_valor,usu_codtns, "
-				+ "usu_codccu,usu_observacao,usu_ctared,usu_prorea,usu_numtit, "
-				+ "usu_clifor,usu_desctared,usu_desccu,usu_desctafin,usu_orilct from usu_tfluxo where usu_orilct='M' ";
+				+ "usu_codccu,usu_obsmov,usu_ctared,usu_prorea,usu_numtit, "
+				+ "usu_clifor,usu_desred,usu_desccu,usu_desfin,usu_orilct from usu_tfluxo where usu_orilct='M' ";
 		
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = manager.createNativeQuery(sql).getResultList();
@@ -66,8 +66,8 @@ public class FluxoCaixaDao {
 		try{
 		abrirConexao();
 		String query = "insert into usu_tfluxo "
-				+ "(usu_ctafin,usu_data,usu_valor,usu_codtns,usu_codccu,usu_observacao,usu_ctared,usu_prorea,usu_numtit,"
-				+ "usu_clifor,usu_desctared,usu_desccu,usu_desctafin,usu_orilct) "
+				+ "(usu_ctafin,usu_data,usu_valor,usu_codtns,usu_codccu,usu_obsmov,usu_ctared,usu_prorea,usu_numtit,"
+				+ "usu_clifor,usu_desred,usu_desccu,usu_desfin,usu_orilct) "
 				+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		manager.createNativeQuery(query)
@@ -85,8 +85,8 @@ public class FluxoCaixaDao {
 	public void alterar(FluxoCaixa f){
 		abrirConexao();
 		String query = " UPDATE usu_tfluxo "
-				+ "SET usu_ctafin=?, usu_data=?, usu_valor=?,usu_codtns=?,usu_codccu=?,usu_observacao=?,usu_ctared=?,usu_prorea=?,"
-				+"		usu_numtit=?,usu_clifor=?,usu_desctared=?,usu_desccu=?, usu_desctafin=?,usu_orilct=? "
+				+ "SET usu_ctafin=?, usu_data=?, usu_valor=?,usu_codtns=?,usu_codccu=?,usu_obsmov=?,usu_ctared=?,usu_prorea=?,"
+				+"		usu_numtit=?,usu_clifor=?,usu_desred=?,usu_desccu=?, usu_desfin=?,usu_orilct=? "
 				+"		WHERE id = ?; ";
 		manager.createNativeQuery(query)
 		   .setParameter(1, f.getCtafin()).setParameter(2, f.getData()).setParameter(3, f.getValor()).setParameter(4, f.getCodtns()).setParameter(5, f.getCodccu())
