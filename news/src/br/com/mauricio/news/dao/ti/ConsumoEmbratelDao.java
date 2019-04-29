@@ -47,16 +47,7 @@ public class ConsumoEmbratelDao implements Serializable {
 				else				
 					consumo.setValor(pegaValor(linha));
 				consumos.add(consumo);				
-/*				
-				if(!tipoDoRegistro.contains("DESCONTO")) {					
-					ConsumoEmbratel consumo = new ConsumoEmbratel();
-					consumo.setFatura(fatura);
-					consumo.setSequencia(pegaSequencia(linha));
-					consumo.setRamal(pegaRamal(linha));
-					consumo.setValor(pegaValor(linha));
-					consumos.add(consumo);
-				}
-*/				
+			
 			}			
 			
 		} catch (IOException e) {

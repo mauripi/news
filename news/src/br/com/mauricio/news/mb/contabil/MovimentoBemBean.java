@@ -68,7 +68,8 @@ public class MovimentoBemBean implements Serializable {
 	}
 	
 	public void listar(){		
-		if(usuario.getChapa().equals("000746")||usuario.getChapa().equals("000772")||usuario.getChapa().equals("000755")||usuario.getChapa().equals("000763")){
+		if(usuario.getChapa().equals("000746")||usuario.getChapa().equals("000747")||usuario.getChapa().equals("000688")||usuario.getChapa().equals("000917")
+				||usuario.getChapa().equals("000755")||usuario.getChapa().equals("000763")){
 			gln = new GenericLN<MovimentoBem>();
 			movimentos =  gln.listWithoutRemoved("movimentobem", "id desc");
 		}else{

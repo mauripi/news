@@ -103,8 +103,8 @@
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/>
        		<p:menuitem value="Projetado x Realizado" action="downloadprojetadorealizado?faces-redirect=true" rendered="#{acessoBean.temAcessoFluxoDiario}" />
        		<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
-       		<p:menuitem value="Recibo da Prestação de Contas" action="reciboprestacao?faces-redirect=true"  />  
-        	<p:separator rendered="#{acessoBean.temAcessoFluxoDiario}"/> 
+       		<p:menuitem value="Recibo da Prestação de Contas" action="reciboprestacao?faces-redirect=true"  rendered="false"/>  
+        	<p:separator rendered="false" /> 
        		<p:menuitem value="Avisos do Fluxo de Caixa" action="fluxocaixa?faces-redirect=true"  />        		
         </p:submenu>
 
@@ -123,7 +123,11 @@
        		<p:separator/>
        		<p:menuitem value="Saiu na Mídia" action="cadsaiunamidia?faces-redirect=true" /> 
         </p:submenu>
-       
+
+        <p:submenu label="OPEC">
+       		<p:menuitem value="Vetrix" action="vetrix?faces-redirect=true" />
+        </p:submenu>
+               
        	<p:menuitem value="Projetos" action="task?faces-redirect=true" rendered="false"/>
            
      	<p:submenu label="RH">

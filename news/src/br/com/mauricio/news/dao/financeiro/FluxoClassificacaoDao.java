@@ -40,7 +40,7 @@ public class FluxoClassificacaoDao {
 		getContasPagar(d1,d2);
 		
 		fechaConexao();		
-		System.out.println("========== TítuloDao.buscarTitulos gerado com "+ titulos.size()+" registros ===============");
+		/*System.out.println("========== TítuloDao.buscarTitulos gerado com "+ titulos.size()+" registros ===============");*/
 		return titulos;
 	}
 
@@ -94,7 +94,7 @@ public class FluxoClassificacaoDao {
 	private void getContasReceber(Date d1, Date d2) {
 		String sql = "SELECT numtit,codfil,codtpt,E085CLI.codcli,nomcli,vlrori,vlrabe,obstcr,vctori as venc_original,"
 				+ " vctpro as venc_atual,datppt as prov_pagto,usu_clsflx,codtns,datemi,codbar "
-				+ " FROM E301TCR, E085CLI WHERE E301TCR.CODCLI=E085CLI.CODCLI and E301TCR.datppt BETWEEN :d1 and :d2 and "
+				+ " FROM E301TCR, E085CLI WHERE E301TCR.CODCLI=E085CLI.CODCLI and E301TCR.datppt BETWEEN :d1 and :d2 and vlrabe>0 and "
 				+ " E301TCR.sittit  NOT IN ('CA','LS') order by E301TCR.datppt";
 		
 		@SuppressWarnings("unchecked")
@@ -134,7 +134,7 @@ public class FluxoClassificacaoDao {
 		+ " LEFT JOIN e440isc ON (E501TCP.filnfc = E440ISC.codfil AND E501TCP.fornfc = E440ISC.codfor AND E501TCP.numnfc = E440ISC.numnfc AND E501TCP.snfnfc = E440ISC.codsnf AND E440ISC.seqisc=1) "
 		+ " LEFT JOIN e420ocp ON ((e440ipc.numocp = e420ocp.numocp AND e440ipc.filocp = e420ocp.codfil ) OR (e440isc.numocp = e420ocp.numocp AND e440isc.filocp = e420ocp.codfil)) "
 		+ " lEFT JOIN e614usu ON (e420ocp.numapr = e614usu.numapr) LEFT JOIN r910usu ON (e614usu.usuapr = r910usu.codent) "
-		+ " WHERE E501TCP.datppt BETWEEN :d1 and :d2 and E501TCP.sittit NOT IN ('CA','LS') order by E501TCP.datppt ";	
+		+ " WHERE E501TCP.datppt BETWEEN :d1 and :d2 and E501TCP.sittit NOT IN ('CA','LS') and vlrabe>0 order by E501TCP.datppt ";	
 
 		
 		@SuppressWarnings("unchecked")
@@ -176,7 +176,7 @@ public class FluxoClassificacaoDao {
 		abrirConexao();
 		getMovimentos(d1,d2);		
 		fechaConexao();		
-		System.out.println("========== MovimentoDao.buscarMovimentos gerado com "+ movimentos.size()+" registros ===============");
+		/*System.out.println("========== MovimentoDao.buscarMovimentos gerado com "+ movimentos.size()+" registros ===============");*/
 		return movimentos;
 	}
 

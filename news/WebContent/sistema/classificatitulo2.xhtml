@@ -119,6 +119,56 @@
            </p:cellEditor>
 	    </p:column>
 
+
+		<p:column headerText="Cod Barra" width="90px;" style="text-align:center;" >
+	        <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{t.codbar}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{t.codbar}" style="width:100%" label="Cod.Barra" /></f:facet>
+           </p:cellEditor>
+	    </p:column>
+	    
+		<p:column headerText="Cod Banco" width="40px;" style="text-align:center;">
+	        <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{t.codban}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{t.codban}" style="width:100%" label="Cod.Banco" maxlength="3"/></f:facet>
+           </p:cellEditor>
+	    </p:column>	    
+	    
+		<p:column headerText="Cod Agência" width="40px;" style="text-align:center;">
+	        <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{t.codage}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{t.codage}" style="width:100%" label="Cod.Agência"  maxlength="7"/></f:facet>
+           </p:cellEditor>
+	    </p:column>	 
+	       
+		<p:column headerText="Conta Forn." width="60px;" style="text-align:center;">
+	        <p:cellEditor>
+               <f:facet name="output"><h:outputText value="#{t.ccbfor}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{t.ccbfor}" style="width:100%" label="ContaForn"  maxlength="14"/></f:facet>
+           </p:cellEditor>
+	    </p:column>		    
+	    
+	    <p:column headerText="Classificação" style="text-align:center;" filterStyle="width:35px;" width="65px;" filterBy="#{t.clsflx}"  filterMatchMode="contains" >
+	          <p:cellEditor>
+	              <f:facet name="output"><h:outputText value="#{t.clsflx}" /></f:facet>
+	              <f:facet name="input">
+	                  <h:selectOneMenu value="#{t.clsflx}" style="width:100%"> 
+	                      <f:selectItems value="#{fluxoclassificaMB.classificacao.entrySet()}" var="c" itemLabel="#{c.key} - #{c.value}" itemValue="#{c.key}" />
+	                  </h:selectOneMenu>
+	              </f:facet>
+	          </p:cellEditor>	        
+	    </p:column>		    
+
+	    <p:column headerText="Aprovador" width="50px;" > 
+	        <h:outputText value="#{t.nomapr}" />
+	    </p:column>
+
+        <p:column headerText="Data Aprovação" width="50px;" style="text-align:center;" >
+	        <h:outputText value="#{t.datapr}">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+			</h:outputText>			
+        </p:column>	
+
        <p:column style="width:32px">
            <p:rowEditor />
        </p:column>
@@ -171,7 +221,18 @@
 
 	    <p:column headerText="Deb / Cred" style="text-align:center;" width="40px;" filterStyle="width:40px;" filterBy="#{m.debcre}"  filterMatchMode="contains" >
 	        <h:outputText value="#{m.debcre}" />
-	    </p:column>	   
+	    </p:column>	
+
+	    <p:column headerText="Classificação" style="text-align:center;" filterStyle="width:55px;" width="55px;" filterBy="#{m.clsflx}"  filterMatchMode="contains" >
+	          <p:cellEditor>
+	              <f:facet name="output"><h:outputText value="#{m.clsflx}" /></f:facet>
+	              <f:facet name="input">
+	                  <h:selectOneMenu value="#{m.clsflx}" style="width:100%"> 
+	                      <f:selectItems value="#{fluxoclassificaMB.classificacao.entrySet()}" var="c" itemLabel="#{c.key} - #{c.value}" itemValue="#{c.key}" />
+	                  </h:selectOneMenu>
+	              </f:facet>
+	          </p:cellEditor>	        
+	    </p:column>		    
 
        <p:column style="width:32px">
            <p:rowEditor />
