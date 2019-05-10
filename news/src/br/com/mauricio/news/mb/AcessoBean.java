@@ -73,6 +73,7 @@ public class AcessoBean implements Serializable {
 	private Boolean temAcessoControleTarefa = false; 
 	private Boolean temAcessoControleTarefaVisao = false; 
 	private Boolean temAcessoControleTransporte = false; 
+	private Boolean temAcessoVetrix = false; 
 	
 	public void entrar() throws IOException{
 		FacesContext cx = FacesContext.getCurrentInstance();
@@ -167,7 +168,9 @@ public class AcessoBean implements Serializable {
 			if(m.getNome().equals("controletarefavisao"))			
 				temAcessoControleTarefaVisao =true;	
 			if(m.getNome().equals("controletransporte"))			
-				temAcessoControleTransporte=true;							
+				temAcessoControleTransporte=true;		
+			if(m.getNome().equals("vetrix"))			
+				temAcessoVetrix=true;	
 		}
 	}
 	
@@ -621,7 +624,7 @@ public class AcessoBean implements Serializable {
 			cx.getExternalContext().redirect("gastotranspconsolidado.jsf");
 		}
 	}
-		
+	
 	public void trocarSenha(){
         Map<String,Object> options = new HashMap<String, Object>();
         options.put("modal", true);
@@ -1050,6 +1053,14 @@ public class AcessoBean implements Serializable {
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+	}
+
+	public Boolean getTemAcessoVetrix() {
+		return temAcessoVetrix;
+	}
+
+	public void setTemAcessoVetrix(Boolean temAcessoVetrix) {
+		this.temAcessoVetrix = temAcessoVetrix;
 	}
 
 

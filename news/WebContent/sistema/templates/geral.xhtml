@@ -32,7 +32,6 @@
 	  </div>
 	</div>
 	
-	
 	<hr></hr>
 	
 	  <p:menubar class="menu-geral">
@@ -58,6 +57,8 @@
         	<p:menuitem value="Movimentação de Patrimônio" action="movimentobem?faces-redirect=true"/>
         	<p:separator rendered="#{acessoBean.temAcessoControletConsolidado}"/>
         	<p:menuitem value="SIG" action="downloadsig?faces-redirect=true" rendered="#{acessoBean.temAcessoControletConsolidado}"/> 	
+        	<p:separator rendered="#{acessoBean.temAcessoControletConsolidado}"/>
+        	<p:menuitem value="Gestão de Notas Fiscais" action="gestaonotasfiscais?faces-redirect=true" rendered="#{acessoBean.temAcessoControletConsolidado}"/> 
         </p:submenu>
         
         <p:submenu label="Diretoria" >
@@ -72,6 +73,7 @@
         	<p:menuitem value="Fluxo de Demanda-Engenh" action="controletarefavisao?faces-redirect=true" rendered="#{acessoBean.temAcessoControleTarefaVisao}"/>
         	<p:separator rendered="#{acessoBean.temAcessoControleTarefaVisao}"/>
         	<p:menuitem value="Rateio de Energia" action="notadebitoenergiaconsolidado?faces-redirect=true" rendered="#{acessoBean.temAcessoControleTarefaVisao}"/>
+
         </p:submenu>
         	
         <p:submenu label="Engenharia">

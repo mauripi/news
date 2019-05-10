@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+<style type="text/css">
+    .old {
+        background-color: #fca752 !important;
+        background-image: none !important;
+        color: #000000 !important;
+    }
+</style>
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - Contabilidade</ui:define>
+<ui:define name="conteudo">
+<p:panel class="conteudo">
+<f:facet name="header">Gestão de Notas Fiscais / Contratos</f:facet>
+
+
+<h:form>
+    <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+        <p:outputLabel for="mes" value="Mês:" />
+        <p:inputNumber id="mes" value="#{gestaonotafiscaMB.mes}" decimalPlaces="0" >
+        	<p:ajax update="tb" listener="#{gestaonotafiscaMB.listarNotas}"/>
+        </p:inputNumber> 
+        <p:outputLabel for="ano" value="Ano:" />
+        <p:inputNumber id="ano" value="#{gestaonotafiscaMB.ano}" decimalPlaces="0">
+        	<p:ajax update="tb" listener="#{gestaonotafiscaMB.listarNotas}"/>
+        </p:inputNumber>       
+        <p:outputLabel for="opcao" value="Filtrar:" />
+        <p:selectOneMenu id="opcao" value="#{gestaonotafiscaMB.opcao}" style="width:125px">
+        	<p:ajax event="change" listener="#{gestaonotafiscaMB.listar}" update="tb"/>
+            <f:selectItem itemLabel="Todos" itemValue="1" />
+            <f:selectItem itemLabel="Faturados" itemValue="2" />
+            <f:selectItem itemLabel="Não Faturados" itemValue="3" />
+        </p:selectOneMenu>           
+    </h:panelGrid>
+
+	<p:dataTable id="tb" var="n" value="#{gestaonotafiscaMB.filtradas}"  rowStyleClass="#{n.status eq 'NAO_FATURADAS' ? 'old' : null}" reflow="true" >
+	    <p:column headerText="Filial" style="width:100px;text-align: center;">
+	        <h:outputText value="#{n.codfil}" />
+	    </p:column>
+	 
+	    <p:column headerText="Contrato" style="width:100px;text-align: center;">
+	        <h:outputText value="#{n.numctr}" />
+	    </p:column>
+	 
+	    <p:column headerText="Fornecedor" style="width:100px;text-align: center;">
+	        <h:outputText value="#{n.codfor}" />
+	    </p:column>
+	 
+	    <p:column headerText="Razaõ Social" style="width:300px;text-align: left;">
+	        <h:outputText value="#{n.nomfor}" />
+	    </p:column>
+	 
+	    <p:column headerText="Descrição" style="width:300px;text-align: left;">
+	        <h:outputText value="#{n.objctr}" />
+	    </p:column>	    
+	 
+	    <p:column headerText="Documento" style="width:100px;text-align: left;">
+	        <h:outputText value="#{n.numnfc}" />
+	    </p:column>	    
+	 
+         <p:column headerText="Valor" style="width:100px;text-align: right;">
+			<h:outputText value="#{n.vlrbru}">
+				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
+			</h:outputText>				
+        </p:column>
+	    	    
+	</p:dataTable>
+</h:form>	
+	
+</p:panel>
+
+
+<p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+    <f:facet name="default">
+        <h:outputText value=" " />
+    </f:facet>
+ 
+    <f:facet name="start">
+        <p:graphicImage value="img/ajaxloadingbar.gif" />
+    </f:facet>
+ 
+    <f:facet name="complete">
+        <h:outputText value="" />
+    </f:facet>
+</p:ajaxStatus>
+ 
+<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+ 
+<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
+
+
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+
+
+</h:body>	
+
+</html>

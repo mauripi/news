@@ -25,7 +25,7 @@ import br.com.mauricio.news.util.SaveFile;
 */
 @ManagedBean(name="vetrixMB")
 @ViewScoped
-public class VetrixMB implements Serializable{
+public class VetrixBean implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String arquivo;
 	private Date data;

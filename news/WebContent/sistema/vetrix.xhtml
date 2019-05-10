@@ -31,12 +31,21 @@
 		             fileLimit="1" allowTypes="/(\.|\/)(pdf)$/" label="Selecionar" uploadLabel="Importar" cancelLabel="Cancelar"/>	    	
 	</p:panelGrid>
 
-	<p:panelGrid columns="1" >
+	<p:panelGrid columns="3" >
 		<p:commandButton value="Gravar" icon="ui-icon-check" ajax="false" action="#{vetrixMB.gravar}" update=":formMsg"/>
+        <h:commandLink >
+             <p:graphicImage value="img/excel.png" width="24"/>
+             <p:dataExporter type="xls" target="tb" fileName="vetrix" />
+        </h:commandLink >
+        <h:commandLink>
+             <p:graphicImage value="img/csv.png" width="24"/>
+             <p:dataExporter type="csv" target="tb" fileName="vetrix" encoding="ISO-8859-1"/>
+        </h:commandLink>        
 	</p:panelGrid>
 	
 	
 	<p:dataTable  id="tb" var="v" value="#{vetrixMB.lista}" editable="true" editMode="cell"  style="margin-bottom:20px">
+
 	    <p:column headerText="Programa">
 	        <h:outputText value="#{v.programa}" />
 	    </p:column>
