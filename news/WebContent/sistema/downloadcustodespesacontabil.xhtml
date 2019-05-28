@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html 	xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:h="http://java.sun.com/jsf/html"  
+   		xmlns:f="http://java.sun.com/jsf/core" 
+    	xmlns:p="http://primefaces.org/ui"
+    	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico"/>
+
+
+</h:head>
+   	
+<h:body>
+<ui:composition template="templates/geral.xhtml">
+<ui:define name="titulo">RECORD NEWS - CONTABILIDADE</ui:define>
+<ui:define name="conteudo">
+
+<p:panel rendered="true" >
+<f:facet name="header">Acompanhamento de Custos Despesas</f:facet> 
+
+<h:form>
+	<p:panelGrid columns="2">	
+        <p:outputLabel for="ano" value="Ano:" />
+        <p:inputNumber id="ano" value="#{custodespesaMB.ano}" decimalPlaces="0"  />
+   	</p:panelGrid>
+	<br></br>
+	<br></br>
+	<p:commandButton value="Gerar arquivo" icon="ui-icon-folder-open" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" action="#{custodespesaMB.gerar}"  update=":formMsg, down"/>
+	<br></br>
+	<br></br>
+	<p:link id="down" value="Baixar Arquivo" href="../resource/contabil/Acompanhamento_de_Custos_Despesas.xlsx" rendered="#{custodespesaMB.gerado}" style="border: 5px solid red;padding:5px;" />
+	<br></br>
+</h:form>	
+	
+</p:panel>
+<p:dialog modal="false" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false"  >
+    <p:graphicImage value="img/ajaxloadingbar.gif" />
+</p:dialog>
+<h:form id="formMsg">                      
+    <p:growl id="msg" showDetail="true" life="8000"/> 
+</h:form>
+
+</ui:define>
+</ui:composition>	
+</h:body>	
+
+</html>

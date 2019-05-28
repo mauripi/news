@@ -153,68 +153,7 @@ public class ProjetadoRealizadoLN implements Serializable {
 		
 	}
 	
-	
-	/*
-	private void criaCabecalho(Integer k, XSSFSheet sheet,List<Previsto> previstos, List<Realizado> realizados){
-		Row row = sheet.getRow(10);
-		Cell cell = row.createCell(0);
-		sheet.addMergedRegion(new CellRangeAddress(10,10,0,4));
-		cell.setCellValue("Total de Recebimentos Previstos - " + cls.get(k));
-		row = sheet.createRow(11);
-		cell = row.createCell(0);
-		cell.setCellValue("Data Emissão Fatura/N.Fiscal");	
-		cell = row.createCell(1);
-		cell.setCellValue("Número do Documento");
-		cell = row.createCell(2);			
-		cell.setCellValue("Data Vencimento");			
-		cell = row.createCell(3);
-		cell.setCellValue("Nome do Cliente");
-		cell = row.createCell(4);
-		cell.setCellValue("Histórico");
-		cell = row.createCell(5);
-		cell.setCellValue("Valor");
-		
-		row = sheet.getRow(10);
-		if(k < 9){			
-			cell = row.createCell(7);
-			sheet.addMergedRegion(new CellRangeAddress(10,10,7,11));
-			cell.setCellValue("Total de Recebimentos Realizado  - " + cls.get(k));
-			row = sheet.getRow(11);				
-			cell = row.createCell(7);
-			cell.setCellValue("Data Emissão Fatura/N.Fiscal");					
-			cell = row.createCell(8);
-			cell.setCellValue("Número do Documento");			
-			cell = row.createCell(9);			
-			cell.setCellValue("Data Vencimento");	
-			cell = row.createCell(10);			
-			cell.setCellValue("Data  Efetivo Recebimento");				
-			cell = row.createCell(11);
-			cell.setCellValue("Nome do Cliente");				
-			cell = row.createCell(12);
-			cell.setCellValue("Valor");					
-		}else{
-			cell = row.createCell(7);
-			sheet.addMergedRegion(new CellRangeAddress(10,10,7,12));
-			cell.setCellValue("Total de Pagamentos Realizado  - " + cls.get(k));
-			row = sheet.getRow(11);	
-			cell = row.createCell(7);
-			cell.setCellValue("Data Emissão Fatura/N.Fiscal");					
-			cell = row.createCell(8);
-			cell.setCellValue("Número do Documento");			
-			cell = row.createCell(9);			
-			cell.setCellValue("Data Vencimento");	
-			cell = row.createCell(10);			
-			cell.setCellValue("Data Efetivo Pagto");				
-			cell = row.createCell(11);
-			cell.setCellValue("Nome do Cliente");
-			cell = row.createCell(12);
-			cell.setCellValue("Historico");				
-			cell = row.createCell(13);
-			cell.setCellValue("Valor");					
-		}		
-	}
 
-*/
 	private void criaPrevisto(XSSFSheet sheet,List<Previsto> previstos){
 		int rowNum = 12;
 		Row row = sheet.getRow(rowNum++);

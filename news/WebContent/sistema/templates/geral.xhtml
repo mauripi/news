@@ -46,6 +46,8 @@
         </p:submenu>
          	
         <p:submenu label="Contabilidade">
+            <p:menuitem value="Acompanhamento de Custos Despesas"  action="downloadcustodespesacontabil?faces-redirect=true"  disabled="#{!acessoBean.temAcessoControletConsolidado}" rendered="#{acessoBean.temAcessoControletConsolidado}" />
+        	<p:separator rendered="#{acessoBean.temAcessoControletConsolidado}"/>        
             <p:menuitem value="Adicionar Comentários na Conta"  action="observacaoconsolidado?faces-redirect=true"  disabled="#{!acessoBean.temAcessoControletConsolidado}" rendered="#{acessoBean.temAcessoControletConsolidado}" />
         	<p:separator rendered="#{acessoBean.temAcessoControletConsolidado}"/>
         	<p:menuitem value="Consolidado" action="consolidado?faces-redirect=true" rendered="#{acessoBean.temAcessoControletConsolidado}"/>
