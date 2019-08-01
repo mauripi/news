@@ -20,7 +20,7 @@ public class GestaoNotaFiscalDao implements Serializable{
 	private EntityManager manager;
 
 	private EntityManager abrirConexao(){
-		this.factory = Persistence.createEntityManagerFactory("sapiens_homo");
+		this.factory = Persistence.createEntityManagerFactory("sapiens_prod");
 		this.manager = this.factory.createEntityManager();
 		this.manager.getTransaction().begin();
 		return this.manager;
@@ -34,10 +34,10 @@ public class GestaoNotaFiscalDao implements Serializable{
 	public List<GestaoNotaFiscal> buscarPorCompetencia(Integer mes, Integer ano){
 		abrirConexao();
 		
-		String sql ="select codfil,numctr,qtdpar,propar,codfor,nomfor,objctr,diabas,ultgoc,'FATURADAS' as status "
+		String sql ="select codfil,numctr,qtdpar,propar,codfor,nomfor,objctr,diabas,ultgoc,'FATURADAS' as status,datven  "
 				+ "from usu_vContratos where numctr in (select numctr from usu_vNotasFiscais where YEAR(datent) = :ano and MONTH(datent) = :mes and numctr>0) "
 				+ "union all "
-				+ "select codfil,numctr,qtdpar,propar,codfor,nomfor,objctr,diabas,ultgoc,'NAO_FATURADAS' as status "
+				+ "select codfil,numctr,qtdpar,propar,codfor,nomfor,objctr,diabas,ultgoc,'NAO_FATURADAS' as status,datven  "
 				+ "from usu_vContratos where numctr not in (select numctr from usu_vNotasFiscais where YEAR(datent) = :ano and MONTH(datent) = :mes and numctr>0)";
 		
 		List<GestaoNotaFiscal> notas = new ArrayList<GestaoNotaFiscal>();
@@ -56,6 +56,7 @@ public class GestaoNotaFiscalDao implements Serializable{
 			c.setDiabas(Integer.parseInt(o[7].toString()));
 			c.setUltgoc((Date) o[8]);
 			c.setStatus(o[9].toString());
+			c.setDatven((Date) o[10]);
 
 			notas.add(c);
 		}
@@ -67,7 +68,7 @@ public class GestaoNotaFiscalDao implements Serializable{
 
 	private void carregaDadosDaNota(Integer mes, Integer ano, List<GestaoNotaFiscal> notas) {
 		List<Integer> contratos = notas.stream().map(n -> n.getNumctr()).collect(Collectors.toList());
-		String sql ="select codfil,numctr,codsnf,vlrbru,datent,numnfc,obsnfc from usu_vNotasFiscais where YEAR(datent) = :ano and MONTH(datent) = :mes and numctr in ( :contratos)";
+		String sql ="select codfil,numctr,codsnf,vlrbru,datent,numnfc,obsnfc,datppt from usu_vNotasFiscais where YEAR(datent) = :ano and MONTH(datent) = :mes and numctr in ( :contratos)";
 
 		@SuppressWarnings("unchecked")
 		List<Object[]> list = manager.createNativeQuery(sql).setParameter("mes", mes).setParameter("ano", ano).setParameter("contratos", contratos).getResultList();				
@@ -81,6 +82,7 @@ public class GestaoNotaFiscalDao implements Serializable{
 					nota.setDatent((Date) o[4]);	
 					nota.setNumnfc(Integer.parseInt(o[5].toString()));
 					nota.setObjctr(o[6].toString());
+					nota.setDatven((Date) o[7]);
 				}
 			}
 		}

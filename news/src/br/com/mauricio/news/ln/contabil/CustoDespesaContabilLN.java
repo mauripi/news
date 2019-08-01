@@ -46,6 +46,7 @@ public class CustoDespesaContabilLN implements Serializable {
 	private List<CustoDespesaContabil> tecnica = new ArrayList<CustoDespesaContabil>();
 	private List<CustoDespesaContabil> marketing = new ArrayList<CustoDespesaContabil>();
 	private List<CustoDespesaContabil> comercial = new ArrayList<CustoDespesaContabil>();
+	private List<CustoDespesaContabil> operacao = new ArrayList<CustoDespesaContabil>();
 	private List<CustoDespesaContabil> receita = new ArrayList<CustoDespesaContabil>();
 	private List<CustoDespesaContabil> contabilfin = new ArrayList<CustoDespesaContabil>();
 	private static Map<Integer,String> abas = new HashMap<Integer,String>();
@@ -55,6 +56,7 @@ public class CustoDespesaContabilLN implements Serializable {
 	private Set<CustoDespesaContabil> tecnicaSet = new HashSet<CustoDespesaContabil>();
 	private Set<CustoDespesaContabil> marketingSet = new HashSet<CustoDespesaContabil>();
 	private Set<CustoDespesaContabil> comercialSet = new HashSet<CustoDespesaContabil>();
+	private Set<CustoDespesaContabil> operacaoSet = new HashSet<CustoDespesaContabil>();
 	private Set<CustoDespesaContabil> receitaSet = new HashSet<CustoDespesaContabil>();
 	private Set<CustoDespesaContabil> contabilfinSet = new HashSet<CustoDespesaContabil>();
 	private Set<CustoDespesaContabil> consolidadoSet = new HashSet<CustoDespesaContabil>();
@@ -80,6 +82,7 @@ public class CustoDespesaContabilLN implements Serializable {
 		tecnica.addAll(tecnicaSet);
 		marketing.addAll(marketingSet);
 		comercial.addAll(comercialSet);
+		operacao.addAll(operacaoSet);
 		receita.addAll(receitaSet);
 		contabilfin.addAll(contabilfinSet);
 		
@@ -105,9 +108,10 @@ public class CustoDespesaContabilLN implements Serializable {
 	        	preencheValoresDasCelulas(workbook.getSheetAt(2),administrativo);
 	        	preencheValoresDasCelulas(workbook.getSheetAt(3),marketing);
 	        	preencheValoresDasCelulas(workbook.getSheetAt(4),comercial);
-	        	preencheValoresDasCelulas(workbook.getSheetAt(5),tecnica);
-	        	preencheValoresDasCelulas(workbook.getSheetAt(6),jornalismo);
-	        	preencheValoresDasCelulas(workbook.getSheetAt(7),contabilfin);
+	        	preencheValoresDasCelulas(workbook.getSheetAt(5),operacao);
+	        	preencheValoresDasCelulas(workbook.getSheetAt(6),tecnica);
+	        	preencheValoresDasCelulas(workbook.getSheetAt(7),jornalismo);
+	        	preencheValoresDasCelulas(workbook.getSheetAt(8),contabilfin);
 	        });
         
             FileOutputStream outputStream = new FileOutputStream(new File(FILE_NAME));
@@ -206,9 +210,10 @@ public class CustoDespesaContabilLN implements Serializable {
  		abas.put(3,"Administrativo");
  		abas.put(4,"Marketing");
  		abas.put(5,"Comercial");
- 		abas.put(6,"Técnica");
- 		abas.put(7,"Jornalismo");
- 		abas.put(8,"Contábil-Financeiro");
+ 		abas.put(6,"Operações");
+ 		abas.put(7,"Técnica");
+ 		abas.put(8,"Jornalismo");
+ 		abas.put(9,"Contábil-Financeiro");
  		totreg = consolidado.size()+50;
 	}
 
@@ -231,6 +236,9 @@ public class CustoDespesaContabilLN implements Serializable {
 						somar(marketing, c);
 					if(c.getCcusig().equals("COMERCIAL"))
 						somar(comercial, c);
+					if(c.getCcusig().equals("OPERACOES"))
+						somar(operacao, c);
+					
 				}
 			}
 		});	
@@ -286,7 +294,9 @@ public class CustoDespesaContabilLN implements Serializable {
 					if(c.getCcusig().equals("MARKETING"))
 						marketingSet.add(new CustoDespesaContabil(c.getCtasig(),c.getDescta()));
 					if(c.getCcusig().equals("COMERCIAL"))
-						comercialSet.add(new CustoDespesaContabil(c.getCtasig(),c.getDescta()));									
+						comercialSet.add(new CustoDespesaContabil(c.getCtasig(),c.getDescta()));	
+					if(c.getCcusig().equals("OPERACOES"))
+						operacaoSet.add(new CustoDespesaContabil(c.getCtasig(),c.getDescta()));					
 				}
 			}
 		});	
@@ -299,6 +309,7 @@ public class CustoDespesaContabilLN implements Serializable {
 		tecnica = tecnica.stream().sorted(Comparator.comparing(CustoDespesaContabil::getCtasig)).collect(Collectors.toCollection(ArrayList::new));
 		marketing = marketing.stream().sorted(Comparator.comparing(CustoDespesaContabil::getCtasig)).collect(Collectors.toCollection(ArrayList::new));
 		comercial = comercial.stream().sorted(Comparator.comparing(CustoDespesaContabil::getCtasig)).collect(Collectors.toCollection(ArrayList::new));
+		operacao = operacao.stream().sorted(Comparator.comparing(CustoDespesaContabil::getCtasig)).collect(Collectors.toCollection(ArrayList::new));
 		receita = receita.stream().sorted(Comparator.comparing(CustoDespesaContabil::getCtasig)).collect(Collectors.toCollection(ArrayList::new));
 		contabilfin = contabilfin.stream().sorted(Comparator.comparing(CustoDespesaContabil::getCtasig)).collect(Collectors.toCollection(ArrayList::new));
 	}

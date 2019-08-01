@@ -21,6 +21,7 @@ public class GestaoNotaFiscal implements Serializable{
 	private Integer diabas;
 	private Date ultgoc;
 	private String status;
+	private Date datven;
 	
 	public Integer getCodfil() {
 		return codfil;
@@ -109,6 +110,12 @@ public class GestaoNotaFiscal implements Serializable{
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	public Date getDatven() {
+		return datven;
+	}
+	public void setDatven(Date datven) {
+		this.datven = datven;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -117,6 +124,7 @@ public class GestaoNotaFiscal implements Serializable{
 		result = prime * result + ((codfor == null) ? 0 : codfor.hashCode());
 		result = prime * result + ((codsnf == null) ? 0 : codsnf.hashCode());
 		result = prime * result + ((datent == null) ? 0 : datent.hashCode());
+		result = prime * result + ((datven == null) ? 0 : datven.hashCode());
 		result = prime * result + ((diabas == null) ? 0 : diabas.hashCode());
 		result = prime * result + ((nomfor == null) ? 0 : nomfor.hashCode());
 		result = prime * result + ((numctr == null) ? 0 : numctr.hashCode());
@@ -157,6 +165,11 @@ public class GestaoNotaFiscal implements Serializable{
 			if (other.datent != null)
 				return false;
 		} else if (!datent.equals(other.datent))
+			return false;
+		if (datven == null) {
+			if (other.datven != null)
+				return false;
+		} else if (!datven.equals(other.datven))
 			return false;
 		if (diabas == null) {
 			if (other.diabas != null)

@@ -48,15 +48,15 @@
     </h:panelGrid>
 
 	<p:dataTable id="tb" var="n" value="#{gestaonotafiscaMB.filtradas}"  rowStyleClass="#{n.status eq 'NAO_FATURADAS' ? 'old' : null}" reflow="true" >
-	    <p:column headerText="Filial" style="width:100px;text-align: center;">
+	    <p:column headerText="Filial" style="width:30px;text-align: center;">
 	        <h:outputText value="#{n.codfil}" />
 	    </p:column>
 	 
-	    <p:column headerText="Contrato" style="width:100px;text-align: center;">
+	    <p:column headerText="Contrato" style="width:30px;text-align: center;">
 	        <h:outputText value="#{n.numctr}" />
 	    </p:column>
 	 
-	    <p:column headerText="Fornecedor" style="width:100px;text-align: center;">
+	    <p:column headerText="Fornecedor" style="width:30px;text-align: center;">
 	        <h:outputText value="#{n.codfor}" />
 	    </p:column>
 	 
@@ -68,16 +68,21 @@
 	        <h:outputText value="#{n.objctr}" />
 	    </p:column>	    
 	 
-	    <p:column headerText="Documento" style="width:100px;text-align: left;">
+	    <p:column headerText="Documento" style="width:30px;text-align: left;">
 	        <h:outputText value="#{n.numnfc}" />
 	    </p:column>	    
 	 
-         <p:column headerText="Valor" style="width:100px;text-align: right;">
+         <p:column headerText="Valor" style="width:50px;text-align: right;">
 			<h:outputText value="#{n.vlrbru}">
 				<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>	           																
 			</h:outputText>				
         </p:column>
-	    	    
+        <p:column headerText="Vencimento" width="50px;" sortBy="#{n.datven}">
+          	<h:outputText value="#{n.datven}">
+			 	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR"/>
+		  	</h:outputText>
+        </p:column>	
+            	    	    
 	</p:dataTable>
 </h:form>	
 	
