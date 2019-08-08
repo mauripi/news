@@ -90,6 +90,7 @@
 
 
 <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+	
     <f:facet name="default">
         <h:outputText value=" " />
     </f:facet>
@@ -106,6 +107,7 @@
 <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
  
 <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+	<h4>Aguarde, gerando informações...</h4>
     <p:graphicImage value="img/ajaxloadingbar.gif" />
 </p:dialog>
 

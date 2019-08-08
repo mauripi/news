@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -33,16 +31,12 @@ public class GestaoNotaFiscalDao implements Serializable{
 	
 	public List<GestaoNotaFiscal> buscarPorCompetencia(Integer mes, Integer ano){
 		abrirConexao();
-		
-		String sql ="select codfil,numctr,qtdpar,propar,codfor,nomfor,objctr,diabas,ultgoc,'FATURADAS' as status,datven  "
-				+ "from usu_vContratos where numctr in (select numctr from usu_vNotasFiscais where YEAR(datent) = :ano and MONTH(datent) = :mes and numctr>0) "
-				+ "union all "
-				+ "select codfil,numctr,qtdpar,propar,codfor,nomfor,objctr,diabas,ultgoc,'NAO_FATURADAS' as status,datven  "
-				+ "from usu_vContratos where numctr not in (select numctr from usu_vNotasFiscais where YEAR(datent) = :ano and MONTH(datent) = :mes and numctr>0)";
+
+		String sql ="select codfil,numctr,qtdpar,propar,codfor,nomfor,objctr,diabas,ultgoc,'NAO_FATURADAS' as status,datven from usu_vContratos";
 		
 		List<GestaoNotaFiscal> notas = new ArrayList<GestaoNotaFiscal>();
 		@SuppressWarnings("unchecked")
-		List<Object[]> list = manager.createNativeQuery(sql).setParameter("mes", mes).setParameter("ano", ano).getResultList();
+		List<Object[]> list = manager.createNativeQuery(sql).getResultList();
 				
 		for(Object[] o:list){
 			GestaoNotaFiscal c = new GestaoNotaFiscal();
@@ -67,22 +61,22 @@ public class GestaoNotaFiscalDao implements Serializable{
 	}
 
 	private void carregaDadosDaNota(Integer mes, Integer ano, List<GestaoNotaFiscal> notas) {
-		List<Integer> contratos = notas.stream().map(n -> n.getNumctr()).collect(Collectors.toList());
-		String sql ="select codfil,numctr,codsnf,vlrbru,datent,numnfc,obsnfc,datppt from usu_vNotasFiscais where YEAR(datent) = :ano and MONTH(datent) = :mes and numctr in ( :contratos)";
+		String sql ="select codfil,numctr,codsnf,vlrbru,datent,numnfc,obsnfc,datppt,status from usu_vNotasFiscais where YEAR(datent) = :ano and MONTH(datent) = :mes and numctr>0";
 
 		@SuppressWarnings("unchecked")
-		List<Object[]> list = manager.createNativeQuery(sql).setParameter("mes", mes).setParameter("ano", ano).setParameter("contratos", contratos).getResultList();				
+		List<Object[]> list = manager.createNativeQuery(sql).setParameter("mes", mes).setParameter("ano", ano).getResultList();				
 		for(Object[] o:list){
 			Integer codfil = Integer.parseInt(o[0].toString());
 			Integer numctr = Integer.parseInt(o[1].toString());
 			for (GestaoNotaFiscal nota : notas){
-				if(nota.getCodfil()==codfil && nota.getNumctr()==numctr){
+				if(nota.getCodfil().equals(codfil) && nota.getNumctr().equals(numctr)){
 					nota.setCodsnf(o[2].toString());
 					nota.setVlrbru(new BigDecimal(o[3].toString()));
 					nota.setDatent((Date) o[4]);	
 					nota.setNumnfc(Integer.parseInt(o[5].toString()));
 					nota.setObjctr(o[6].toString());
 					nota.setDatven((Date) o[7]);
+					nota.setStatus(o[8].toString());
 				}
 			}
 		}
